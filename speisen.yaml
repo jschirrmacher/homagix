@@ -1,0 +1,94 @@
+dishes:
+  - id: 1
+    name: Kartoffelpüree mit sauren Gurken und gegrillten Hackspießen
+    source: Kochen für 2, S. 27
+    ingredients:
+      - 1,5 kg Kartoffeln
+      - 1 Glas Gewürzgurken
+      - 750 g Rinder-Hackfleisch
+      - 3 Stk. Tomaten
+      - 2 Zehen Knoblauch
+      - 3 Stk. Zwiebeln
+
+  - id: 2
+    name: Pommes mit Gurkensalat
+    ingredients:
+      - 1 kg Pommes Frittes
+      - 1,5 Stk. Bio-Gurke
+      - 200 g Naturjoghurt
+      - 100 g Sahne
+      - 1 Pkg. TK Dill
+
+  - id: 3
+    name: Milchnudeln
+    ingredients:
+      - 500 g Farfalle
+      - 2 L H-Milch
+      - 1 Glas Apfelmus
+
+  - id: 4
+    name: Tomatensuppe mit Schnittlauch und Brot
+    ingredients:
+      - 1 L Tomatensaft
+      - 500 g Passierte Tomaten
+      - 500 g Stückige Tomaten
+      - 1 Stk. Zwiebeln
+      - 1 Pkg. TK Schnittlauch
+      - 2 Stk. Baguette
+
+  - id: 5
+    name: Bandnudeln mit Pilzen und Tomaten
+    url: https://www.rewe.de/rezepte/bandnudeln-mit-pilz-tomatenrahm/
+    ingredients:
+      - 500 g Bandnudeln
+      - 1 Bund Lauchzwiebeln
+      - 500 g Stückige Tomaten
+      - 50 g Butter
+      - 200 g Crème Fraîche
+
+  - id: 6
+    name: Spätzle mit Schinken und Zwiebeln
+    ingredients:
+      - 1 kg Spätzle
+      - 1 Pkg. Schinkenwürfel
+      - 2 Stk. Zwiebeln
+      - 150 g Geriebener Käse
+      - 1 Kopf Salat
+      - 1 Stk. Zitrone
+
+  - id: 7
+    name: Mozzarellaauflauf mit Basilikum
+    source: Aufläufe und Gratins, S. 14
+    ingredients:
+      - 500 g Mozzarella
+      - 5 Stk. Tomaten
+      - 2 Stk. Ciabatta
+      - 1 Topf Basilikum
+
+weeks:
+  eins: []
+  zwei: [1, 2, 3, 4, 5, 6, 7]
+  drei: []
+  vier: []
+  fuenf: []
+  sechs: []
+  sieben: []
+
+weekly:
+  - 5 L Milch
+  - 2 Pkg. Toastbrot
+  - 2 L Apfelsaft Naturtrüb
+  - 1 L Orangensaft
+  - 3 Stk. Butter
+  - 10 Stk. Eier
+
+monthly:
+  - 5 Glas Apfelmus
+  - 2 Glas Kirschen
+
+sometimes:
+  what:
+    - Kokosflocken
+    - Vanilleschote
+    - Weiße Pfefferkörner
+    - Schwarze Pfefferkörner
