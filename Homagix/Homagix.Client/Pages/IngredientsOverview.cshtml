@@ -29,9 +29,9 @@ else
             @foreach (var ingredient in ingredients)
             {
                 <tr class="recipe">
-                    <td>@(ingredient.amount.ToString() ?? " ")</td>
+                    <td>@(ingredient.amount?.ToString() ?? " ")</td>
                     <td>@ingredient.name</td>
-                    <td>@(ingredient.BuyEvery.ToString() ?? " ")</td>
+                    <td>@(ingredient.BuyEvery?.ToString() ?? " ")</td>
                 </tr>
             }
         </tbody>

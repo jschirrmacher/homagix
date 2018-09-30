@@ -2,6 +2,7 @@
 @using Homagix.Shared.Data
 @page "/recipes"
 @inject HttpClient Http
+@using System.Web;
 
 <html>
 <head>
@@ -33,7 +34,15 @@ else
                 <tr class="recipe" onclick="@(e => ExpandView(recipe))">
                     <td>@recipe.id</td>
                     <td>@recipe.name</td>
-                    <td>@recipe.source</td>
+                    @if (recipe.source != null && recipe.source.StartsWith("http"))
+                    {
+                        <td><a target="_blank" href="@HttpUtility.HtmlEncode(recipe.source)">
+                            @HttpUtility.HtmlEncode(recipe.source)</a></td>
+                    }
+                    else
+                    {
+                       <td>@recipe.source</td>
+                    }
                     <td>
                         @{
                             @if (recipe.selected)
