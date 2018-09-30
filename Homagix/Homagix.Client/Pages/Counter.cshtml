@@ -1,0 +1,88 @@
+﻿@page "/ingredients"
+@using Homagix.Shared
+@using Homagix.Shared.Data
+@inject HttpClient Http
+
+<html>
+<head>
+</head>
+<body>
+<h1>Recipe Overview</h1>
+
+<p>List of all the recipes.</p>
+
+@if (recipies == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Source</th>
+                <th>Ingredients</th>
+                <th>Weekplans</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var recipe in recipies)
+            {
+                <tr class="recipe" onclick="@(e => ExpandView(recipe))">
+                    <td>@recipe.id</td>
+                    <td>@recipe.name</td>
+                    <td>@recipe.source</td>
+                    <td>
+                        @{
+                            @if (recipe.selected)
+                            {
+                                <tbody>
+                                @foreach (var ingridient in recipe.ingredients)
+                                {
+                                <tr>@ingridient.ToString()</tr>
+                                }
+                                </tbody>
+                            }
+                            else
+                            {
+                                <text>@recipe.IngredientsPreview</text>
+                            }
+                        }
+                    </td>
+                    @{ 
+                        string weeks = "";
+                        foreach (var week in recipe.weekPlans)
+                        {
+                            weeks += week + ", ";
+                        }
+                        weeks = weeks.Substring(0, weeks.Length - 2);
+                    }
+                    <td>@weeks</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+</body>
+</html>
+
+@functions {
+Recipe[] recipies;
+
+protected override async Task OnInitAsync()
+{
+    recipies = await Http.GetJsonAsync<Recipe[]>("api/Recipe/Recipe");
+}
+
+void ExpandView(Recipe e)
+{
+    Console.WriteLine("test");
+    foreach (var recipe in recipies)
+    {
+        recipe.selected = false;
+    }
+    e.selected = true;
+}
+}

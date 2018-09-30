@@ -1,0 +1,16 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Homagix/Homagix.Client/bin/Debug/netstandard2.0
+/Homagix/.vs
+/Homagix/Homagix.Client/.vs
+/Homagix/Homagix.Client/obj
+/Homagix/Homagix.Server/.vs/Homagix.Server/v15
+/Homagix/Homagix.Server/bin/Debug/netcoreapp2.1
+/Homagix/Homagix.Server/obj
+/Homagix/Homagix.Shared/bin/Debug/net46
+/Homagix/Homagix.Shared/bin/Debug/netstandard1.6
+/Homagix/Homagix.Shared/obj/Debug
+/Homagix/Homagix.Shared/obj
+/.vs
