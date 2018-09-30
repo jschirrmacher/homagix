@@ -1,0 +1,51 @@
+﻿@page "/ingredients"
+@using Homagix.Shared
+@using Homagix.Shared.Data
+@inject HttpClient Http
+
+<html>
+<head>
+</head>
+<body>
+<h1>Recipe Overview</h1>
+
+<p>List of all the recipes.</p>
+
+@if (ingredients == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Amount</th>
+                <th>Name</th>
+                <th>Buy Every(days)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ingredient in ingredients)
+            {
+                <tr class="recipe">
+                    <td>@(ingredient.amount.ToString() ?? " ")</td>
+                    <td>@ingredient.name</td>
+                    <td>@(ingredient.BuyEvery.ToString() ?? " ")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+</body>
+</html>
+
+@functions {
+    Ingredient[] ingredients;
+
+    protected override async Task OnInitAsync()
+    {
+        ingredients = await Http.GetJsonAsync<Ingredient[]>("api/Ingredients/Ingredients");
+        Console.WriteLine("Data received!");
+    }
+}

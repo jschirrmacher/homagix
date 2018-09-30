@@ -140,8 +140,7 @@ namespace Homagix.Server.Data
             items = (YamlSequenceNode)mapping.Children[new YamlScalarNode("sometimes")];
             foreach (var ingredient in items)
             {
-                List<string> x = ingredient.ToString().Split(" ").ToList();
-                ingredients.Add(new Ingredient(ref x)
+                ingredients.Add(new Ingredient(ingredient.ToString(), null)
                 {
                     BuyEvery = 93
                 });

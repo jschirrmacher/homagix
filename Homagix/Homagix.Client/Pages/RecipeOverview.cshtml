@@ -38,12 +38,10 @@ else
                         @{
                             @if (recipe.selected)
                             {
-                                <tbody>
                                 @foreach (var ingridient in recipe.ingredients)
                                 {
-                                <tr>@ingridient.ToString()</tr>
+                                    <ul>@ingridient.ToString()</ul>
                                 }
-                                </tbody>
                             }
                             else
                             {
@@ -69,20 +67,20 @@ else
 </html>
 
 @functions {
-Recipe[] recipies;
+    Recipe[] recipies;
 
-protected override async Task OnInitAsync()
-{
-    recipies = await Http.GetJsonAsync<Recipe[]>("api/Recipe/Recipe");
-}
-
-void ExpandView(Recipe e)
-{
-    Console.WriteLine("test");
-    foreach (var recipe in recipies)
+    protected override async Task OnInitAsync()
     {
-        recipe.selected = false;
+        recipies = await Http.GetJsonAsync<Recipe[]>("api/Recipe/Recipe");
     }
-    e.selected = true;
-}
+
+    void ExpandView(Recipe e)
+    {
+        Console.WriteLine("test");
+        foreach (var recipe in recipies)
+        {
+            recipe.selected = false;
+        }
+        e.selected = true;
+    }
 }
