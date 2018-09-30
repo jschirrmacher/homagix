@@ -18,3 +18,8 @@
 /Homagix/Homagix.Client/bin/Debug/netcoreapp2.0
 /Homagix/Homagix.Shared/bin/Debug/netcoreapp2.1
 /Homagix/Homagix.Shared/bin/Debug/netcoreapp2.0
+/Homagix/Homagix.Client/bin/Release/netstandard2.0
+/Homagix/Homagix.Server/bin/Release/netcoreapp2.1
+/Homagix/Homagix.Server/Properties/PublishProfiles
+/Homagix/Homagix.Shared/bin/Release/netstandard1.6
+/Homagix/Homagix.Server/test.txt
