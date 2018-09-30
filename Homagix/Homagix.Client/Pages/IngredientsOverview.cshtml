@@ -46,6 +46,5 @@ else
     protected override async Task OnInitAsync()
     {
         ingredients = await Http.GetJsonAsync<Ingredient[]>("api/Ingredients/Ingredients");
-        Console.WriteLine("Data received!");
     }
 }

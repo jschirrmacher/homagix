@@ -11,6 +11,13 @@ namespace Homagix.Shared.Data
         public string id;
         public Recipe[] dishes = new Recipe[7];
 
+        public bool selected = false;
+
+        public WeekPlan()
+        {
+
+        }
+
         public WeekPlan(string ID, Recipe[] dishes)
         {
             if (dishes.Length != 7)
@@ -27,6 +34,23 @@ namespace Homagix.Shared.Data
 
             id = ID;
             this.dishes = dishes;
+        }
+
+        public string MealOverview
+        {
+            get
+            {
+                string preview = "";
+                dishes.ToList().ForEach(i => preview += i is null ? "" : "  - " + i.name);
+                try
+                {
+                    preview = preview.Substring(0, 120) + "...";
+                }
+                catch (Exception)
+                {
+                }
+                return preview;
+            }
         }
     }
 }

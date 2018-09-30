@@ -9,13 +9,13 @@ using Serilog;
 namespace Homagix.Server.Controllers
 {
     [Route("api/[controller]")]
-    public class IngredientsController : Controller
+    public class WeekPlanController : Controller
     {
         [HttpGet("[action]")]
-        public IEnumerable<Ingredient> Ingredients()
+        public IEnumerable<WeekPlan> WeekPlan()
         {
-            Log.Information("/Ingredients called");
-            return Data.Data.Ingredients;
+            Log.Information("/WeekPlan called");
+            return Data.Data.Weeks;
         }
     }
 }

@@ -14,3 +14,7 @@
 /Homagix/Homagix.Shared/obj/Debug
 /Homagix/Homagix.Shared/obj
 /.vs
+/Homagix/Homagix.Client/bin/Debug/netcoreapp2.1
+/Homagix/Homagix.Client/bin/Debug/netcoreapp2.0
+/Homagix/Homagix.Shared/bin/Debug/netcoreapp2.1
+/Homagix/Homagix.Shared/bin/Debug/netcoreapp2.0

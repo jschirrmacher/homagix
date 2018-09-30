@@ -1,0 +1,70 @@
+﻿@page "/weekplan"
+@using Homagix.Shared
+@using Homagix.Shared.Data
+@inject HttpClient Http
+
+<html>
+<head>
+</head>
+<body>
+<h1>Weekplan Overview</h1>
+
+<p>List of the different week plans.</p>
+
+@if (weekPlans == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Week</th>
+                <th>Meals</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var week in weekPlans)
+            {
+                <tr onclick="@(() => { ExpandView(week); })" class="recipe">
+                    <td>@week.id</td>
+                    @if (week.selected)
+                    {
+                        <td>
+                            @foreach (var meal in week.dishes)
+                            {
+                                <ul>@meal?.name</ul>
+                            }
+                        </td>
+                    }
+                    else
+                    {
+                        <td>@week.MealOverview</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+</body>
+</html>
+
+@functions {
+    WeekPlan[] weekPlans;
+
+    protected override async Task OnInitAsync()
+    {
+        weekPlans = await Http.GetJsonAsync<WeekPlan[]>("api/WeekPlan/WeekPlan");
+    }
+
+    void ExpandView(WeekPlan e)
+    {
+        Console.WriteLine("test");
+        foreach (var week in weekPlans)
+        {
+            week.selected = false;
+        }
+        e.selected = true;
+    }
+}
