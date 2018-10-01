@@ -13,7 +13,7 @@ dishes:
   - id: 2
     name: Pommes mit Gurkensalat
     ingredients:
-      - 1 kg Pommes Frittes
+      - 1 kg Pommes Frites
       - 1,5 Stk. Bio-Gurke
       - 200 g Naturjoghurt
       - 100 g Sahne
@@ -66,11 +66,11 @@ dishes:
       - 1 Topf Basilikum
 
   - id: 8
-    name: Schnitzel mit Pommes Frittes und Erbsen
+    name: Schnitzel mit Pommes Frites und Erbsen
     ingredients:
       - 500 g Schweineschnitzel
       - 500 g TK Erbsen
-      - 1 kg Pommes Frittes
+      - 1 kg Pommes Frites
       - 2 Stk. Eier
 
   - id: 9
