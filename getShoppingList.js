@@ -3,7 +3,11 @@ const path = require('path')
 const YAML = require('yaml')
 
 const data = YAML.parse(fs.readFileSync(path.join(__dirname, 'speisen.yaml')).toString())
-const week = 'zwei'
+if (process.argv.length < 3 || ~~process.argv[2] < 1 || ~~process.argv[2] > data.weeks.length) {
+  throw Error(`Usage: ${process.argv[0]} ${process.argv[0]} <week>
+with <week> a week number between 1 and ${data.weeks.length}`)
+}
+const week = process.argv[2] - 1
 
 const list = []
   .concat(...data.weeks[week].map(dishId => {

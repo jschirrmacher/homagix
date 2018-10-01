@@ -65,14 +65,52 @@ dishes:
       - 2 Stk. Ciabatta
       - 1 Topf Basilikum
 
+  - id: 8
+    name: Schnitzel mit Pommes Frittes und Erbsen
+    ingredients:
+      - 500 g Schweineschnitzel
+      - 500 g TK Erbsen
+      - 1 kg Pommes Frittes
+      - 2 Stk. Eier
+
+  - id: 9
+    name: Grüne Nudeln mit Schinken
+    ingredients:
+      - 500 g Grüne Bandnudeln
+      - 300 g Kasseler
+      - 200 g Sahne
+
+  - id: 10
+    name: Kirschnudelauflauf
+    ingredients:
+      - 500 g Vollkorn-Spiralnudeln
+      - 200 g Sahne
+      - 200 g Vanillesauce
+      - 2 Glas Kirschen
+
+  - id: 11
+    name: Backkartoffeln mit Gemüse
+    ingredients:
+      - 1,5 kg Kartoffeln
+      - 500 g Gemüsemischung
+
+  - id: 12
+    name: Selbstgebackenes Brot mit Salat
+    ingredients:
+      - 1 Stk. Wurzelsalat
+      - 500 g Mehl
+      - 1 Würfel Hefe
+
+  - id: 13
+    name: Risotto mit Steinpilzen
+    ingredients:
+      - 200 g Risotto-Reis
+      - 50 g Getrocknete Steinpilze
+
 weeks:
-  eins: []
-  zwei: [1, 2, 3, 4, 5, 6, 7]
-  drei: []
-  vier: []
-  fuenf: []
-  sechs: []
-  sieben: []
+  - []
+  - [1, 2, 3, 4, 5, 6, 7]
+  - [8, 9, 10, 11, 12, 13]
 
 weekly:
   - 5 L Milch
