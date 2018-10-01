@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Joachim Schirrmacher <joachimschirrmacher@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "yaml": "^1.0.0"
   }
