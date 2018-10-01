@@ -84,8 +84,9 @@ dishes:
     name: Kirschnudelauflauf
     ingredients:
       - 500 g Vollkorn-Spiralnudeln
-      - 200 g Sahne
-      - 200 g Vanillesauce
+      - 200 g Philadelphia
+      - 500 g Vanillesauce
+      - 100 g Parmesankäse
       - 2 Glas Kirschen
 
   - id: 11
