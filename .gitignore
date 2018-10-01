@@ -23,3 +23,5 @@
 /Homagix/Homagix.Server/Properties/PublishProfiles
 /Homagix/Homagix.Shared/bin/Release/netstandard1.6
 /Homagix/Homagix.Server/test.txt
+/.idea
+/node_modules/
