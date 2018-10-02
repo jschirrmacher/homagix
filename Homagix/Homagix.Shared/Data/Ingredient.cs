@@ -22,6 +22,12 @@ namespace Homagix.Shared.Data
             this.amount = amount;
         }
 
+        public static Ingredient Create(string line)
+        {
+            List<string> words = line.Split(' ').ToList();
+            return new Ingredient(ref words);
+        }
+
         public Ingredient(ref List<string> words)
         {
             amount = Amount.ConsumeAmount(ref words);
@@ -33,7 +39,7 @@ namespace Homagix.Shared.Data
 
         public override string ToString()
         {
-            return $"{amount.ToString() ?? ""} {name}";
+            return $"{amount?.ToString() ?? ""} {name}";
         }
     }
 
@@ -50,7 +56,8 @@ namespace Homagix.Shared.Data
             "Bund",
             "Pkg.",
             "Kopf",
-            "Topf"
+            "Topf",
+            "Würfel"
         };
 
         public double value;

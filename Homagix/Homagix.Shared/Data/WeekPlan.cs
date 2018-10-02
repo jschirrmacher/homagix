@@ -18,6 +18,14 @@ namespace Homagix.Shared.Data
 
         }
 
+        public WeekPlanJson JsonObject
+        {
+            get
+            {
+                return new WeekPlanJson(id, dishes.ToList().Select(r => r?.id).ToArray());
+            }
+        }
+
         public WeekPlan(string ID, Recipe[] dishes)
         {
             if (dishes.Length != 7)
@@ -51,6 +59,18 @@ namespace Homagix.Shared.Data
                 }
                 return preview;
             }
+        }
+    }
+
+    public struct WeekPlanJson
+    {
+        public string id;
+        public int?[] dishes;
+
+        public WeekPlanJson(string id, int?[] dishes)
+        {
+            this.id = id;
+            this.dishes = dishes;
         }
     }
 }

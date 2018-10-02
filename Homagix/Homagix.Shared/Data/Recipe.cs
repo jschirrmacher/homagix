@@ -27,6 +27,14 @@ namespace Homagix.Shared.Data
 
         }
 
+        public RecipeJson JsonObject
+        {
+            get
+            {
+                return new RecipeJson(id, source, name, ingredients.Select(i => i.ToString()).ToArray());
+            }
+        }
+
         public string IngredientsList
         {
             get
@@ -52,6 +60,22 @@ namespace Homagix.Shared.Data
                 }
                 return preview;
             }
+        }
+    }
+
+    public struct RecipeJson
+    {
+        public int id;
+        public string source;
+        public string name;
+        public string[] ingredients;
+
+        public RecipeJson(int id, string source, string name, string[] ingredients)
+        {
+            this.id = id;
+            this.source = source;
+            this.name = name;
+            this.ingredients = ingredients;
         }
     }
 }

@@ -13,6 +13,21 @@ namespace Homagix.Server.Controllers
     public class DataTestController : Controller
     {
         [HttpGet("[action]")]
+        public IEnumerable<string> Reload()
+        {
+            Server.Data.Data.LoadData();
+            return new List<string>() { "Reloaded!" };
+        }
+
+        [HttpGet("[action]")]
+        public IEnumerable<string> LoadYaml()
+        {
+            Server.Data.Data.LoadData(true);
+            return new List<string>() { "Reloaded yaml!" };
+        }
+
+
+        [HttpGet("[action]")]
         public IEnumerable<string> Data()
         {
             using (FileStream f = System.IO.File.Open("test.txt", FileMode.Append))
