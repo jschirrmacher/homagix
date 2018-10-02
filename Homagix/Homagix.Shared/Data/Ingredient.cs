@@ -10,6 +10,8 @@ namespace Homagix.Shared.Data
         public string name;
         public Amount amount;
         public int? BuyEvery = null;
+        public DateTime? dateBought = null;
+        public int recipeID;
 
         public Ingredient()
         {
@@ -68,6 +70,48 @@ namespace Homagix.Shared.Data
 
             return simplified;
         }
+
+        public static List<IngredientOverview> SortByName(List<Ingredient> ingredients)
+        {
+            List<IngredientOverview> overview = new List<IngredientOverview>();
+            foreach (var ingredient in ingredients)
+            {
+                if (ingredient.dateBought is null)
+                    continue;
+                var item = overview.FirstOrDefault(i => i.name == ingredient.name);
+                if (item != null)
+                {
+                    item.dates.Add(ingredient.dateBought ?? throw new Exception("Can not handle items without by date!"));
+                    item.amounts.Add(ingredient.amount);
+                }
+                else
+                {
+                    overview.Add(new IngredientOverview(ingredient.name, new List<Amount> { ingredient.amount }, 
+                        new List<DateTime> { ingredient.dateBought ?? throw new Exception("Can not hanfle itesm without date!") }));
+                }
+            }
+            return overview;
+        }
+    }
+
+    public class IngredientOverview
+    {
+        public string name;
+        public List<Amount> amounts;
+        public List<DateTime> dates;
+        public bool selected = false;
+
+        public IngredientOverview()
+        {
+
+        }
+
+        public IngredientOverview(string name, List<Amount> amounts, List<DateTime> dates)
+        {
+            this.name = name;
+            this.amounts = amounts;
+            this.dates = dates;
+        }
     }
 
     public class Amount
@@ -86,7 +130,9 @@ namespace Homagix.Shared.Data
             "Topf",
             "Würfel",
             "Packung",
-            "Tafel"
+            "Tafel",
+            "Stück",
+            "Flasche"
         };
 
         public double value;

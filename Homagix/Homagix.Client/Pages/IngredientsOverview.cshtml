@@ -11,28 +11,64 @@
 
 <p>List of all the ingridients.</p>
 
-@if (ingredients == null)
+@if (regularIngredients == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
+    <select onchange="@(e => FilterChanged(e))">
+        <option value="Bought">Bought</option>
+        <option value="Regular">Regular</option>
+    </select>
     <table class="table">
         <thead>
             <tr>
-                <th>Amount</th>
                 <th>Name</th>
-                <th>Buy Every(days)</th>
+                <th>Amount</th>
+                <th>@(selection == "Regular" ? "Buy Every(days)" : "Bought")</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var ingredient in ingredients)
+            @if (selection == "Regular")
             {
-                <tr class="recipe">
-                    <td>@(ingredient.amount?.ToString() ?? " ")</td>
+                @foreach (var ingredient in regularIngredients)
+                {
+                    <tr class="recipe">
+                        <td>@(ingredient.amount?.ToString() ?? " ")</td>
+                        <td>@ingredient.name</td>
+                        <td>@(ingredient.BuyEvery?.ToString() ?? " ")</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                @foreach (var ingredient in boughtIngredients)
+                {
+                    <tr onclick="@(e => ExpandView(ingredient))">
                     <td>@ingredient.name</td>
-                    <td>@(ingredient.BuyEvery?.ToString() ?? " ")</td>
-                </tr>
+                    @if (ingredient.selected)
+                    {
+                        <td>
+                            @foreach (var amount in ingredient.amounts)
+                            {
+                                <ul>@amount.ToString()</ul>
+                            }
+                        </td>
+                        <td>
+                            @foreach (var date in ingredient.dates)
+                            {
+                                <ul>@date.ToString("dd/MM/yyyy")</ul>
+                            }
+                        </td>
+                    }
+                    else
+                    {
+                        <td>@ingredient.amounts.Count</td>
+                        <td>--</td>
+                    }
+                    </tr>
+                }
             }
         </tbody>
     </table>
@@ -41,10 +77,32 @@ else
 </html>
 
 @functions {
-    Ingredient[] ingredients;
+    Ingredient[] regularIngredients;
+    IngredientOverview[] boughtIngredients;
 
     protected override async Task OnInitAsync()
     {
-        ingredients = await Http.GetJsonAsync<Ingredient[]>("api/Ingredients/Ingredients");
+        regularIngredients = (await Http.GetJsonAsync<Ingredient[]>("api/Ingredients/Ingredients")).Where(i => i.BuyEvery != null).ToArray();
+        boughtIngredients = await Http.GetJsonAsync<IngredientOverview[]>("api/Ingredients/BoughtIngredientsOverview");
+        selection = "Bought";
+    }
+
+
+    string selection; //Either bought or regular
+    void FilterChanged(UIChangeEventArgs args)
+    {
+        selection = (string)args.Value;
+        Console.WriteLine(selection);
+    }
+
+
+    void ExpandView(IngredientOverview e)
+    {
+        Console.WriteLine("test");
+        foreach (var ingredient in boughtIngredients)
+        {
+            ingredient.selected = false;
+        }
+        e.selected = true;
     }
 }

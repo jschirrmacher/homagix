@@ -133,7 +133,7 @@ sometimes:
 
 purchases:
   - id: 1
-    date: 2018/10/1
+    date: 2018/10/2
     recipes:  []
     ingredients:
       - 1 Packung Batterie
@@ -145,3 +145,26 @@ purchases:
       - 1 Tafel Edelbitter Schokolade
       - 1 Tafel Weiße Schokolade
       - 6 Stk. Eier
+  - id: 2
+    date: 2018/10/2
+    recipes: []
+    ingredients:
+      - 0.898 kg Birne
+      - 3 Stück Blumenzwiebel-Mischung
+      - 1 Glas Apfelmus
+      - 1 Stück Grapefruit
+      - 1 Packung Kokos
+      - 1 Stück Französischer Weichkäs
+      - 1 Packung Blumenzwiebel Herbst
+      - 1 Packung Stecknüsse
+      - 2 Stück Naan Brot
+      - 1 Flasche Sonnenblumenöl
+
+  - id: 3 #Fake
+    date: 2018/9/10
+    recipes: []
+    ingredients:
+      - 0.500 kg Birne
+      - 200 g Bananen
+      - 3 Stk. Eier
+      - 1 Flasche Sonnenblumenöl

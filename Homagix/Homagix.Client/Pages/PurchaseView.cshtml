@@ -28,7 +28,7 @@ else
 			@foreach (var purchase in purchases)
 			{
 				<tr onclick="@(() => { ExpandView(purchase); })" class="recipe">
-					<td>@purchase.time</td>
+					<td>@purchase.time.ToString("yyyy/MM/dd")</td>
 					@if (purchase.selected)
 					{
 						<td>

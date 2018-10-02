@@ -169,7 +169,7 @@ namespace Homagix.Server.Data
                     foreach (JToken item in jData.Children())
                     {
                         string name = (string)item["name"];
-                        int buyEvery = (int)item["BuyEvery"];
+                        int? buyEvery = (int?)item["BuyEvery"];
                         JToken jAmount = item["amount"];
                         Amount amount = null;
                         try
@@ -210,7 +210,7 @@ namespace Homagix.Server.Data
                             recipes.Find(r => r.id == jRecipe.Value<int>());
                         }
                         var jIngredients = (JArray)item["ingredients"];
-                        List<Ingredient> ingredients = new List<Ingredient>();
+                        List<Ingredient> rIngredients = new List<Ingredient>();
                         foreach (JToken jIngredient in jIngredients)
                         {
                             List<JProperty> list = jIngredient.Children<JProperty>().ToList();
@@ -219,10 +219,12 @@ namespace Homagix.Server.Data
                             double aValue = jAmount["value"].Value<double>();
                             string aId = jAmount["id"].Value<string>();
                             Amount amount = new Amount(aValue, aId);
-                            ingredients.Add(new Ingredient(name, amount));
+                            rIngredients.Add(new Ingredient(name, amount) { dateBought = date });
                         }
-                        purchases.Add(new Purchase(id, date, recipes, ingredients));
-                        Log.Information($"Loaded Purchase: {id} - {date.ToString("yyyy/MM/dd")} - {recipes.Count} recipes and {ingredients.Count} items");
+                        //TODO: Somehow figure out which ingredient goes to which recipe
+                        ingredients.AddRange(rIngredients);
+                        purchases.Add(new Purchase(id, date, recipes, rIngredients));
+                        Log.Information($"Loaded Purchase: {id} - {date.ToString("yyyy/MM/dd")} - {recipes.Count} recipes and {rIngredients.Count} items");
                     }
                 }
             }
@@ -333,6 +335,7 @@ namespace Homagix.Server.Data
             {
                 int id = int.Parse(purchase[new YamlScalarNode("id")].ToString());
                 DateTime date = DateTime.Parse(purchase[new YamlScalarNode("date")].ToString());
+
                 //Recipes
                 List<Recipe> recipes = new List<Recipe>();
                 var yRecipes = (YamlSequenceNode)purchase[new YamlScalarNode("recipes")];
@@ -344,17 +347,25 @@ namespace Homagix.Server.Data
                     }
                     Recipe recipe = recipes.FirstOrDefault(r => r.id == rId) ?? throw new Exception($"No recipe found with id {rId}");
                     recipes.Add(recipe);
+                    var rIngredients = recipe.ingredients.Select(r => r.Clone());
+                    foreach (var ing in rIngredients)
+                    {
+                        ing.dateBought = date;
+                        ing.recipeID = recipe.id;
+                    }
+                    ingredients.AddRange(rIngredients);
                 }
 
                 //Add Ingredients
-                List<Ingredient> ingredients = new List<Ingredient>();
+                List<Ingredient> sIngredients = new List<Ingredient>();
                 foreach (var ingredient in (YamlSequenceNode)purchase.Children[new YamlScalarNode("ingredients")])
                 {
                     List<string> x = ingredient.ToString().Split(" ").ToList();
-                    ingredients.Add(new Ingredient(ref x));
+                    sIngredients.Add(new Ingredient(ref x) { dateBought = date });
                 }
-                purchases.Add(new Purchase(id, date, recipes, ingredients));
-                Log.Information($"YAML: Loaded Purchase: {id} - {date.ToString("yyyy/MM/dd")} - {recipes.Count} recipes and {ingredients.Count} items");
+                purchases.Add(new Purchase(id, date, recipes, sIngredients));
+                ingredients.AddRange(sIngredients);
+                Log.Information($"YAML: Loaded Purchase: {id} - {date.ToString("yyyy/MM/dd")} - {recipes.Count} recipes and {sIngredients.Count} items");
             }
 
             SaveData();
