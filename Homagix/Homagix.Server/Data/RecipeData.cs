@@ -8,8 +8,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using YamlDotNet.Core;
 using YamlDotNet.RepresentationModel;
 using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.Converters;
 
 namespace Homagix.Server.Data
 {
@@ -19,6 +21,7 @@ namespace Homagix.Server.Data
         private static List<Recipe> recipes;
         static List<WeekPlan> weeks;
         static List<Ingredient> ingredients;
+        static List<Purchase> purchases;
 
         public static List<Recipe> Recipes
         {
@@ -52,6 +55,16 @@ namespace Homagix.Server.Data
             }
         }
 
+        public static List<Purchase> Purchases
+        {
+            get
+            {
+                if (purchases is null)
+                    LoadData();
+                return purchases;
+            }
+        }
+
         public static void SaveData()
         {
             JsonSerializer serializer = new JsonSerializer();
@@ -69,6 +82,11 @@ namespace Homagix.Server.Data
             using (JsonWriter jsonWriter = new JsonTextWriter(streamWriter))
             {
                 serializer.Serialize(jsonWriter, ingredients.ToArray());
+            }
+            using (StreamWriter streamWriter = new StreamWriter(@".\DataBase\purchases.json", false, Encoding.UTF8))
+            using (JsonWriter jsonWriter = new JsonTextWriter(streamWriter))
+            {
+                serializer.Serialize(jsonWriter, purchases.Select(p => p.PurchaseJson).ToArray());
             }
         }
 
@@ -152,7 +170,6 @@ namespace Homagix.Server.Data
                     {
                         string name = (string)item["name"];
                         int buyEvery = (int)item["BuyEvery"];
-                        var jWeeks = (JArray)item["dishes"];
                         JToken jAmount = item["amount"];
                         Amount amount = null;
                         try
@@ -170,6 +187,42 @@ namespace Homagix.Server.Data
                         };
                         ingredients.Add(ingredient);
                         Log.Information($"Loaded Ingredient: {ingredient}");
+                    }
+                }
+            }
+
+            using (FileStream fs = new FileStream(@".\DataBase\purchases.json", FileMode.Open))
+            {
+                using (StreamReader streamReader = new StreamReader(fs))
+                {
+                    purchases = new List<Purchase>();
+                    string value = streamReader.ReadToEnd();
+                    var data = JsonConvert.DeserializeObject(value);
+                    var jData = (JArray)data;
+                    foreach (JToken item in jData.Children())
+                    {
+                        int id = (int)item["id"];
+                        DateTime date = (DateTime)item["date"];
+                        var jRecipes = (JArray)item["recipes"];
+                        List<Recipe> recipes = new List<Recipe>();
+                        foreach (JToken jRecipe in jRecipes)
+                        {
+                            recipes.Find(r => r.id == jRecipe.Value<int>());
+                        }
+                        var jIngredients = (JArray)item["ingredients"];
+                        List<Ingredient> ingredients = new List<Ingredient>();
+                        foreach (JToken jIngredient in jIngredients)
+                        {
+                            List<JProperty> list = jIngredient.Children<JProperty>().ToList();
+                            string name = list.Find(t => t.Name == "name").Value.Value<string>();
+                            JObject jAmount = (JObject)list.Find(t => t.Name == "amount").Value;
+                            double aValue = jAmount["value"].Value<double>();
+                            string aId = jAmount["id"].Value<string>();
+                            Amount amount = new Amount(aValue, aId);
+                            ingredients.Add(new Ingredient(name, amount));
+                        }
+                        purchases.Add(new Purchase(id, date, recipes, ingredients));
+                        Log.Information($"Loaded Purchase: {id} - {date.ToString("yyyy/MM/dd")} - {recipes.Count} recipes and {ingredients.Count} items");
                     }
                 }
             }
@@ -234,7 +287,7 @@ namespace Homagix.Server.Data
                     {
                         throw new Exception("Not valid recipe id: " + recipeID.ToString());
                     }
-                    Recipe recipe = recipes.Find(r => r.id == rId) ?? throw new Exception($"No recipe found with id {rId}");
+                    Recipe recipe = recipes.FirstOrDefault(r => r.id == rId) ?? throw new Exception($"No recipe found with id {rId}");
                     list.Add(recipe);
                 }
                 weeks.Add(new WeekPlan(id, list.ToArray()));
@@ -272,6 +325,38 @@ namespace Homagix.Server.Data
                     BuyEvery = 93
                 });
             }
+
+            //Load all the purchases
+            purchases = new List<Purchase>();
+            items = (YamlSequenceNode)mapping.Children[new YamlScalarNode("purchases")];
+            foreach (YamlMappingNode purchase in items)
+            {
+                int id = int.Parse(purchase[new YamlScalarNode("id")].ToString());
+                DateTime date = DateTime.Parse(purchase[new YamlScalarNode("date")].ToString());
+                //Recipes
+                List<Recipe> recipes = new List<Recipe>();
+                var yRecipes = (YamlSequenceNode)purchase[new YamlScalarNode("recipes")];
+                foreach (var recipeID in yRecipes)
+                {
+                    if (!int.TryParse(recipeID.ToString(), out int rId))
+                    {
+                        throw new Exception("Not valid recipe id: " + recipeID.ToString());
+                    }
+                    Recipe recipe = recipes.FirstOrDefault(r => r.id == rId) ?? throw new Exception($"No recipe found with id {rId}");
+                    recipes.Add(recipe);
+                }
+
+                //Add Ingredients
+                List<Ingredient> ingredients = new List<Ingredient>();
+                foreach (var ingredient in (YamlSequenceNode)purchase.Children[new YamlScalarNode("ingredients")])
+                {
+                    List<string> x = ingredient.ToString().Split(" ").ToList();
+                    ingredients.Add(new Ingredient(ref x));
+                }
+                purchases.Add(new Purchase(id, date, recipes, ingredients));
+                Log.Information($"YAML: Loaded Purchase: {id} - {date.ToString("yyyy/MM/dd")} - {recipes.Count} recipes and {ingredients.Count} items");
+            }
+
             SaveData();
         }
     }

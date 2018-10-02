@@ -41,6 +41,33 @@ namespace Homagix.Shared.Data
         {
             return $"{amount?.ToString() ?? ""} {name}";
         }
+
+        public Ingredient Clone()
+        {
+            return new Ingredient(name, new Amount(amount.value, amount.id));
+        }
+
+        public static List<Ingredient> Simplify(List<Ingredient> ingredients)
+        {
+            //TODO: Add support for combiningg items of different amounts
+            List<Ingredient> simplified = new List<Ingredient>();
+            foreach (var ing in ingredients)
+            {
+                Ingredient same = simplified.FirstOrDefault(i => ing.name == i.name && i.amount.id == ing.amount.id);
+                if (same != null)
+                {
+                    //Combine
+                    same.amount.value += ing.amount.value;
+                }
+                else
+                {
+                    //add new
+                    simplified.Add(ing.Clone());
+                }
+            }
+
+            return simplified;
+        }
     }
 
     public class Amount
@@ -57,7 +84,9 @@ namespace Homagix.Shared.Data
             "Pkg.",
             "Kopf",
             "Topf",
-            "Würfel"
+            "Würfel",
+            "Packung",
+            "Tafel"
         };
 
         public double value;

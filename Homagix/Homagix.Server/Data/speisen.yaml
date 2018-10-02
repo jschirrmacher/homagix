@@ -130,3 +130,18 @@ sometimes:
     - Vanilleschote
     - Weiße Pfefferkörner
     - Schwarze Pfefferkörner
+
+purchases:
+  - id: 1
+    date: 2018/10/1
+    recipes:  []
+    ingredients:
+      - 1 Packung Batterie
+      - 1 L Milch
+      - 2 Packung Bio-Kräuter
+      - 1 Packung Brillenputztücher
+      - 1 kg Äpfel
+      - 1 Packung Müsli-Riegel
+      - 1 Tafel Edelbitter Schokolade
+      - 1 Tafel Weiße Schokolade
+      - 6 Eier
