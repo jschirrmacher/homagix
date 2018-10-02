@@ -11,8 +11,9 @@ namespace Homagix.Shared.Data
         public DateTime time;
         public List<Recipe> toBuy;
         public List<Ingredient> individualItems;
+        public bool selected = false;
 
-        List<Ingredient> All
+        public List<Ingredient> All
         {
             get
             {

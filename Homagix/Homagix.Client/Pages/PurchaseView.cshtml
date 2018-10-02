@@ -1,0 +1,75 @@
+﻿@page "/purchases"
+@using Homagix.Shared
+@using Homagix.Shared.Data
+@inject HttpClient Http
+
+<html>
+<head>
+</head>
+<body>
+<h1>Purchase Overview</h1>
+
+<p>List of all the purchases.</p>
+
+@if (purchases == null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Date</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var purchase in purchases)
+			{
+				<tr onclick="@(() => { ExpandView(purchase); })" class="recipe">
+					<td>@purchase.time</td>
+					@if (purchase.selected)
+					{
+						<td>
+							@if (purchase.toBuy.Count != 0)
+							{
+								<ul>Dishes</ul>
+							}
+							@foreach (var meal in purchase.toBuy)
+							{
+								<ul>@meal?.name</ul>
+							}
+							<ul>All ingredients:</ul>
+							@foreach (var item in purchase.All)
+							{
+								<ul style="padding-left:50px">-@item.ToString()</ul>
+							}
+						</td>
+
+					}
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+</body>
+</html>
+
+@functions {
+	Purchase[] purchases;
+
+	protected override async Task OnInitAsync()
+	{
+		purchases = await Http.GetJsonAsync<Purchase[]>("api/Purchases/Purchases");
+	}
+
+	void ExpandView(Purchase e)
+	{
+		foreach (var purchase in purchases)
+		{
+			purchase.selected = false;
+		}
+		e.selected = true;
+	}
+}

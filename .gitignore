@@ -25,3 +25,7 @@
 /Homagix/Homagix.Server/test.txt
 /.idea
 /node_modules/
+/Homagix/Homagix.Server/DataBase/weeks.json
+/Homagix/Homagix.Server/DataBase/recipe.json
+/Homagix/Homagix.Server/DataBase/purchases.json
+/Homagix/Homagix.Server/DataBase/ingredients.json
