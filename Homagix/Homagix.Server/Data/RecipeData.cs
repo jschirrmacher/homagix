@@ -53,6 +53,11 @@ namespace Homagix.Server.Data
                     LoadData();
                 return ingredients;
             }
+            set
+            {
+                ingredients = value;
+                SaveData();
+            }
         }
 
         public static List<Purchase> Purchases
@@ -62,6 +67,11 @@ namespace Homagix.Server.Data
                 if (purchases is null)
                     LoadData();
                 return purchases;
+            }
+            set
+            {
+                purchases = value;
+                SaveData();
             }
         }
 

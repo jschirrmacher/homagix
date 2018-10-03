@@ -18,8 +18,8 @@ namespace Homagix.Shared.Data
             get
             {
                 List<Ingredient> all = new List<Ingredient>();
-                toBuy.ForEach(r => all.AddRange(r.ingredients));
-                all.AddRange(individualItems);
+                toBuy?.ForEach(r => all.AddRange(r.ingredients));
+                all.AddRange(individualItems ?? new List<Ingredient>());
                 all = Ingredient.Simplify(all);
                 return all;
             }
@@ -41,17 +41,21 @@ namespace Homagix.Shared.Data
         {
             get
             {
-                return new PurchaseJson(id, time.ToString("yyyy/MM/dd"), toBuy.Select(r => r.id).ToList(), individualItems);
+                return new PurchaseJson(id, time.ToString("yyyy/MM/dd"), toBuy?.Select(r => r.id).ToList() ?? new List<int>(), individualItems ?? new List<Ingredient>());
             }
         }
     }
 
-    public struct PurchaseJson
+    public class PurchaseJson
     {
-        public int id;
-        public string date;
-        public List<int> recipes;
-        public List<Ingredient> ingredients;
+        public int id { get; set; }
+        public string date{ get; set; }
+        public List<int> recipes{ get; set; }
+        public List<Ingredient> ingredients{ get; set; }
+
+        public PurchaseJson()
+        {
+        }
 
         public PurchaseJson(int id, string date, List<int> recipes, List<Ingredient> ingredients)
         {
