@@ -2,12 +2,14 @@ const fs = require('fs')
 const path = require('path')
 const YAML = require('yaml')
 
-const data = YAML.parse(fs.readFileSync(path.join(__dirname, 'speisen.yaml')).toString())
-if (process.argv.length < 3 || ~~process.argv[2] < 1 || ~~process.argv[2] > data.weeks.length) {
-  throw Error(`Usage: ${process.argv[0]} ${process.argv[0]} <week>
-with <week> a week number between 1 and ${data.weeks.length}`)
+const pathToStorage = path.join(__dirname, 'Homagix', 'Homagix.Server', 'Data', 'speisen.yaml')
+const data = YAML.parse(fs.readFileSync(pathToStorage).toString())
+const weekNames = Object.keys(data.weeks)
+if (process.argv.length < 3 || weekNames.indexOf(process.argv[2]) < 0) {
+  throw Error(`Usage: ${path.basename(process.argv[0])} ${path.basename(process.argv[1])} <week>
+with <week> one of "${weekNames.join('", "')}"`)
 }
-const week = process.argv[2] - 1
+const week = process.argv[2]
 
 const list = []
   .concat(...data.weeks[week].map(dishId => {
