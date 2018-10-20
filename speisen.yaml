@@ -157,11 +157,58 @@ dishes:
       - 250 g Reis
       - 300 g Erbsen
 
+  - id: 21
+    name: Gefüllte Champignons mit Reis
+    ingredients:
+      - 250 g Reis
+      - 500 g Große Champignons
+      - 250 g Feta
+      - 1 Glas Pesto
+
+  - id: 22
+    name: Spätzle mit Pilzen
+    ingredients:
+      - 1000 g Spätzle
+      - 500 g Kräutersaitlinge o.ä.
+      - 3 Stk Zwiebeln
+      - 0,5 Kopf Salat
+
+  - id: 23
+    name: Grüne Bohnen mit Schafskäse
+    ingredients:
+      - 500 g Bohnen
+      - 500 g Feta
+      - 2 Stk Baguette
+
+  - id: 24
+    name: Schupfnudeln mit Apfelmus
+    ingredients:
+      - 1 kg Äpfel
+      - 1000 g Schupfnudeln
+
+  - id: 25
+    name: Caprese-Baguette im Ofen
+    ingredients:
+      - 2 Stk Ciabatta
+      - 6 Stk Große Tomaten
+      - 500 g Mozzarella
+      - 1 Topf Basilikum
+
+  - id: 26
+    name: Hamburger mit Pommes
+    ingredients:
+      - 750 g Hackfleisch
+      - 8 Stk Hamburger-Brötchen
+      - 1 Stk Eisbergsalat
+      - 0,5 Glas Saure Gurken
+      - 2 Stk Tomaten
+
 weeks:
   - []
   - [1, 2, 3, 4, 5, 6, 7]
   - [8, 9, 10, 11, 12, 13]
   - [14, 15, 16, 17, 18, 19, 20]
+  - [21, 22, 23, 24, 25, 26]
 
 weekly:
   - 5 L Milch
