@@ -1,9 +1,9 @@
 dishes:
   - id: 1
     name: Kartoffelpüree mit sauren Gurken und gegrillten Hackspießen
-    source: Kochen für 2. S. 27
+    source: Kochen für 2, S. 27
     ingredients:
-      - 1.5 kg Kartoffeln
+      - 1,5 kg Kartoffeln
       - 1 Glas Gewürzgurken
       - 750 g Rinder-Hackfleisch
       - 3 Stk. Tomaten
@@ -13,8 +13,8 @@ dishes:
   - id: 2
     name: Pommes mit Gurkensalat
     ingredients:
-      - 1 kg Pommes Frittes
-      - 1.5 Stk. Bio-Gurke
+      - 1 kg Pommes Frites
+      - 1,5 Stk. Bio-Gurke
       - 200 g Naturjoghurt
       - 100 g Sahne
       - 1 Pkg. TK Dill
@@ -38,7 +38,7 @@ dishes:
 
   - id: 5
     name: Bandnudeln mit Pilzen und Tomaten
-    source: https://www.rewe.de/rezepte/bandnudeln-mit-pilz-tomatenrahm/
+    url: https://www.rewe.de/rezepte/bandnudeln-mit-pilz-tomatenrahm/
     ingredients:
       - 500 g Bandnudeln
       - 1 Bund Lauchzwiebeln
@@ -58,7 +58,7 @@ dishes:
 
   - id: 7
     name: Mozzarellaauflauf mit Basilikum
-    source: Aufläufe und Gratins. S. 14
+    source: Aufläufe und Gratins, S. 14
     ingredients:
       - 500 g Mozzarella
       - 5 Stk. Tomaten
@@ -108,10 +108,106 @@ dishes:
       - 200 g Risotto-Reis
       - 50 g Getrocknete Steinpilze
 
+  - id: 14
+    name: Spaghetti mit Frühlingszwiebeln und Feta
+    ingredients:
+      - 750 g Spaghetti
+      - 500 g Feta
+      - 2 Bund Frühlingszwiebeln
+
+  - id: 15
+    name: Pfannkuchen
+    ingredients:
+      - 500 g Mehl
+      - 1 L Milch
+
+  - id: 16
+    name: Pellkartoffeln mit Kräuterquark
+    ingredients:
+      - 1,5 kg Kartoffeln
+      - 500 g Quark
+      - 1 Bund Kräuter
+
+  - id: 17
+    name: Gnocchi
+    ingredients:
+      - 1000 g Gnocchi
+      - 2 Stk Rote Paprika
+
+  - id: 18
+    name: Lasagne
+    ingredients:
+      - 500 g Hackfleisch
+      - 250 g Lasagne Platten
+      - 1 Stk Zucchini
+      - 200 g Geriebener Käse
+
+  - id: 19
+    name: Wraps
+    ingredients:
+      - 500 g Hackfleisch
+      - 8 Stk Wraps
+      - 1 Rote Paprika
+
+  - id: 20
+    name: Spiced chicken mit Rice + Red Onions + Erbsen
+    ingredients:
+      - 500 g Hühnerbrust
+      - 5 Stk Rote Zwiebeln
+      - 250 g Reis
+      - 300 g Erbsen
+
+  - id: 21
+    name: Gefüllte Champignons mit Reis
+    ingredients:
+      - 250 g Reis
+      - 500 g Große Champignons
+      - 250 g Feta
+      - 1 Glas Pesto
+
+  - id: 22
+    name: Spätzle mit Pilzen
+    ingredients:
+      - 1000 g Spätzle
+      - 500 g Kräutersaitlinge o.ä.
+      - 3 Stk Zwiebeln
+      - 0,5 Kopf Salat
+
+  - id: 23
+    name: Grüne Bohnen mit Schafskäse
+    ingredients:
+      - 500 g Bohnen
+      - 500 g Feta
+      - 2 Stk Baguette
+
+  - id: 24
+    name: Schupfnudeln mit Apfelmus
+    ingredients:
+      - 1 kg Äpfel
+      - 1000 g Schupfnudeln
+
+  - id: 25
+    name: Caprese-Baguette im Ofen
+    ingredients:
+      - 2 Stk Ciabatta
+      - 6 Stk Große Tomaten
+      - 500 g Mozzarella
+      - 1 Topf Basilikum
+
+  - id: 26
+    name: Hamburger mit Pommes
+    ingredients:
+      - 750 g Hackfleisch
+      - 8 Stk Hamburger-Brötchen
+      - 1 Stk Eisbergsalat
+      - 0,5 Glas Saure Gurken
+      - 2 Stk Tomaten
 
 weeks:
-  eins: [8, 9, 10, 11, 12, 13]
-  zwei: [1, 2, 3, 4, 5, 6, 7]
+  eins: [1, 2, 3, 4, 5, 6, 7]
+  zwei: [8, 9, 10, 11, 12, 13]
+  drei: [14, 15, 16, 17, 18, 19, 20]
+  vier: [21, 22, 23, 24, 25, 26]
 
 weekly:
   - 5 L Milch
@@ -160,11 +256,87 @@ purchases:
       - 2 Stück Naan Brot
       - 1 Flasche Sonnenblumenöl
 
-  - id: 3 #Fake
-    date: 2018/9/10
+  - id: 3
+    date: 2018/10/6
     recipes: []
     ingredients:
-      - 0.500 kg Birne
-      - 200 g Bananen
-      - 3 Stk. Eier
-      - 1 Flasche Sonnenblumenöl
+      - 4 Stk. Kartoffelbrötchen
+      - 1000 g Gnocchi
+      - 1 Stk Mango
+      - 300 g Tomaten
+      - 1 Stk Gurke
+      - 10 Stk Eier
+      - 500 g Quark
+      - 1000 g Mehl
+      - 1 kg Rohrzucker
+      - 2 Stk Müsliriegel
+      - 1 Pgk Backkakao
+      - 1 Flasche Ketchup
+
+  - id: 4
+    date: 2018/10/13
+    recipes: []
+    ingredients:
+      - 500 g Rinderhackfleisch
+      - 800 g Hähnchenschnitzel
+      - 150 g Emmentaler
+      - 150 g Scheibenkäse
+      - 500 g Feta
+      - 200 g Geriebener Käse
+      - 1 Stk Kartoffelbrot
+      - 1 Stk Bauernbrot
+      - 4 Stk Laugengebäck
+      - 1 Stk Pomelo
+      - 600 g Bananen
+      - 200 g Baby-Bananen
+      - 1 kg Birnen
+      - 500 g Backpflaumen
+      - 2,5 Kg Kartoffeln
+      - 1 Sack Zwiebeln
+      - 2 Bund Frühlingszwiebeln
+      - 1 Bund Radieschen
+      - 1 Stk Gurke
+      - 200 g Bratpaprika
+      - 4 Stk Paprika rot
+      - 3 Stk Butter
+      - 3 Liter Milch
+      - 500 g Quark
+      - 1 Pkg TK Erbsen
+      - 1 Pkg TK Kräuter
+      - 2,5 kg Mehl
+      - 1 Pkg Burrito-Gewürz
+      - 2 Pkg Tortilla-Wraps
+
+  - id: 5
+    date: 2018/10/20
+    recipes: []
+    ingredients:
+      - 800 g Rinderhackfleisch
+      - 500 g Feta
+      - 2 Pkg Mozzarella
+      - 1 Stk Brot
+      - 4 Stk Laugengebäck
+      - 2 Pkg Hamburger-Brötchen
+      - 2 Pkg Toastbrot
+      - 6 Stk Brötchen
+      - 2 Stk Ciabatta
+      - 1000 g Spätzle
+      - 1000 g Schupfnudeln
+      - 2 Pkg Semmelknödel
+      - 1 Netz Clementinen
+      - 2300 g Äpfel
+      - 4 Stk Kiwi
+      - 1 Kopf Eisbergsalat
+      - 1 kg Tomaten
+      - 1 Stk Gurke
+      - 1 Pkg Bratpaprika
+      - 2 Stk Stangenbohnen
+      - 2 Pkg Shiitake Pilze
+      - 2 Pkg Champignons
+      - 2 Liter Milch
+      - 1000 g Joghurt
+      - 1 Pkg Knusper-Honeys
+      - 2 Pkg Haferflocken
+      - 1 Glas Saure Gurken
+      - 1 Pkg Pfefferminztee
+      - 5 L Apfelsaft
