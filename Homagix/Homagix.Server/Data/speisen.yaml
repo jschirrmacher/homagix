@@ -132,28 +132,28 @@ dishes:
     name: Gnocchi
     ingredients:
       - 1000 g Gnocchi
-      - 2 Stk Rote Paprika
+      - 2 Stk. Rote Paprika
 
   - id: 18
     name: Lasagne
     ingredients:
       - 500 g Hackfleisch
       - 250 g Lasagne Platten
-      - 1 Stk Zucchini
+      - 1 Stk. Zucchini
       - 200 g Geriebener Käse
 
   - id: 19
     name: Wraps
     ingredients:
       - 500 g Hackfleisch
-      - 8 Stk Wraps
-      - 1 Rote Paprika
+      - 8 Stk. Wraps
+      - 1 Stk. Rote Paprika
 
   - id: 20
     name: Spiced chicken mit Rice + Red Onions + Erbsen
     ingredients:
       - 500 g Hühnerbrust
-      - 5 Stk Rote Zwiebeln
+      - 5 Stk. Rote Zwiebeln
       - 250 g Reis
       - 300 g Erbsen
 
@@ -170,7 +170,7 @@ dishes:
     ingredients:
       - 1000 g Spätzle
       - 500 g Kräutersaitlinge o.ä.
-      - 3 Stk Zwiebeln
+      - 3 Stk. Zwiebeln
       - 0,5 Kopf Salat
 
   - id: 23
@@ -178,7 +178,7 @@ dishes:
     ingredients:
       - 500 g Bohnen
       - 500 g Feta
-      - 2 Stk Baguette
+      - 2 Stk. Baguette
 
   - id: 24
     name: Schupfnudeln mit Apfelmus
@@ -189,8 +189,8 @@ dishes:
   - id: 25
     name: Caprese-Baguette im Ofen
     ingredients:
-      - 2 Stk Ciabatta
-      - 6 Stk Große Tomaten
+      - 2 Stk. Ciabatta
+      - 6 Stk. Große Tomaten
       - 500 g Mozzarella
       - 1 Topf Basilikum
 
@@ -198,10 +198,10 @@ dishes:
     name: Hamburger mit Pommes
     ingredients:
       - 750 g Hackfleisch
-      - 8 Stk Hamburger-Brötchen
-      - 1 Stk Eisbergsalat
+      - 8 Stk. Hamburger-Brötchen
+      - 1 Stk. Eisbergsalat
       - 0,5 Glas Saure Gurken
-      - 2 Stk Tomaten
+      - 2 Stk. Tomaten
 
 weeks:
   eins: [1, 2, 3, 4, 5, 6, 7]
@@ -262,15 +262,15 @@ purchases:
     ingredients:
       - 4 Stk. Kartoffelbrötchen
       - 1000 g Gnocchi
-      - 1 Stk Mango
+      - 1 Stk. Mango
       - 300 g Tomaten
-      - 1 Stk Gurke
-      - 10 Stk Eier
+      - 1 Stk. Gurke
+      - 10 Stk. Eier
       - 500 g Quark
       - 1000 g Mehl
       - 1 kg Rohrzucker
-      - 2 Stk Müsliriegel
-      - 1 Pgk Backkakao
+      - 2 Stk. Müsliriegel
+      - 1 Pkg. Backkakao
       - 1 Flasche Ketchup
 
   - id: 4
@@ -283,29 +283,29 @@ purchases:
       - 150 g Scheibenkäse
       - 500 g Feta
       - 200 g Geriebener Käse
-      - 1 Stk Kartoffelbrot
-      - 1 Stk Bauernbrot
-      - 4 Stk Laugengebäck
-      - 1 Stk Pomelo
+      - 1 Stk. Kartoffelbrot
+      - 1 Stk. Bauernbrot
+      - 4 Stk. Laugengebäck
+      - 1 Stk. Pomelo
       - 600 g Bananen
       - 200 g Baby-Bananen
       - 1 kg Birnen
       - 500 g Backpflaumen
-      - 2,5 Kg Kartoffeln
+      - 2,5 kg Kartoffeln
       - 1 Sack Zwiebeln
       - 2 Bund Frühlingszwiebeln
       - 1 Bund Radieschen
-      - 1 Stk Gurke
+      - 1 Stk. Gurke
       - 200 g Bratpaprika
-      - 4 Stk Paprika rot
-      - 3 Stk Butter
-      - 3 Liter Milch
+      - 4 Stk. Paprika rot
+      - 3 Stk. Butter
+      - 3 L Milch
       - 500 g Quark
-      - 1 Pkg TK Erbsen
-      - 1 Pkg TK Kräuter
+      - 1 Pkg. TK Erbsen
+      - 1 Pkg. TK Kräuter
       - 2,5 kg Mehl
-      - 1 Pkg Burrito-Gewürz
-      - 2 Pkg Tortilla-Wraps
+      - 1 Pkg. Burrito-Gewürz
+      - 2 Pkg. Tortilla-Wraps
 
   - id: 5
     date: 2018/10/20
@@ -313,30 +313,30 @@ purchases:
     ingredients:
       - 800 g Rinderhackfleisch
       - 500 g Feta
-      - 2 Pkg Mozzarella
-      - 1 Stk Brot
-      - 4 Stk Laugengebäck
-      - 2 Pkg Hamburger-Brötchen
-      - 2 Pkg Toastbrot
-      - 6 Stk Brötchen
-      - 2 Stk Ciabatta
+      - 2 Pkg. Mozzarella
+      - 1 Stk. Brot
+      - 4 Stk. Laugengebäck
+      - 2 Pkg. Hamburger-Brötchen
+      - 2 Pkg. Toastbrot
+      - 6 Stk. Brötchen
+      - 2 Stk. Ciabatta
       - 1000 g Spätzle
       - 1000 g Schupfnudeln
-      - 2 Pkg Semmelknödel
+      - 2 Pkg. Semmelknödel
       - 1 Netz Clementinen
       - 2300 g Äpfel
-      - 4 Stk Kiwi
+      - 4 Stk. Kiwi
       - 1 Kopf Eisbergsalat
       - 1 kg Tomaten
-      - 1 Stk Gurke
-      - 1 Pkg Bratpaprika
-      - 2 Stk Stangenbohnen
-      - 2 Pkg Shiitake Pilze
-      - 2 Pkg Champignons
-      - 2 Liter Milch
+      - 1 Stk. Gurke
+      - 1 Pkg. Bratpaprika
+      - 2 Stk. Stangenbohnen
+      - 2 Pkg. Shiitake Pilze
+      - 2 Pkg. Champignons
+      - 2 L Milch
       - 1000 g Joghurt
-      - 1 Pkg Knusper-Honeys
-      - 2 Pkg Haferflocken
+      - 1 Pkg. Knusper-Honeys
+      - 2 Pkg. Haferflocken
       - 1 Glas Saure Gurken
-      - 1 Pkg Pfefferminztee
+      - 1 Pkg. Pfefferminztee
       - 5 L Apfelsaft

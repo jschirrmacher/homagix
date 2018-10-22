@@ -132,7 +132,9 @@ namespace Homagix.Shared.Data
             "Packung",
             "Tafel",
             "Stück",
-            "Flasche"
+            "Flasche",
+            "Sack",
+            "Netz"
         };
 
         public double value;
