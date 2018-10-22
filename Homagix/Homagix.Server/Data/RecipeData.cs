@@ -22,6 +22,7 @@ namespace Homagix.Server.Data
         static List<WeekPlan> weeks;
         static List<Ingredient> ingredients;
         static List<Purchase> purchases;
+        public static int maxPurchaseId = 0;
 
         public static List<Recipe> Recipes
         {
@@ -56,7 +57,7 @@ namespace Homagix.Server.Data
             set
             {
                 ingredients = value;
-                SaveData();
+                UpdateData();
             }
         }
 
@@ -71,11 +72,17 @@ namespace Homagix.Server.Data
             set
             {
                 purchases = value;
-                SaveData();
+                UpdateData();
             }
         }
 
-        public static void SaveData()
+        public static void UpdateData()
+        {
+            maxPurchaseId = purchases.Max(p => p.id) + 1;
+            SaveData();
+        }
+
+        private static void SaveData()
         {
             JsonSerializer serializer = new JsonSerializer();
             using (StreamWriter streamWriter = new StreamWriter(@".\DataBase\recipe.json", false, Encoding.UTF8))
@@ -112,6 +119,7 @@ namespace Homagix.Server.Data
                 Log.Information("Loading and populating database from yaml!");
                 LoadDataFromYAML();
             }
+            maxPurchaseId = purchases.Max(p => p.id) + 1;
         }
 
         private static void LoadDataFromJson()
@@ -214,10 +222,13 @@ namespace Homagix.Server.Data
                         int id = (int)item["id"];
                         DateTime date = (DateTime)item["date"];
                         var jRecipes = (JArray)item["recipes"];
-                        List<Recipe> recipes = new List<Recipe>();
+                        List<Recipe> pRecipes = new List<Recipe>();
                         foreach (JToken jRecipe in jRecipes)
                         {
-                            recipes.Find(r => r.id == jRecipe.Value<int>());
+                            int v1 = jRecipe.Value<int>();
+                            Log.Information($"When loading purchase, finding recipe with id {id}");
+                            //TODO: Ensure that they are actually loaded
+                            pRecipes.Add(recipes.Find(r => r.id == v1));
                         }
                         var jIngredients = (JArray)item["ingredients"];
                         List<Ingredient> rIngredients = new List<Ingredient>();
@@ -233,7 +244,7 @@ namespace Homagix.Server.Data
                         }
                         //TODO: Somehow figure out which ingredient goes to which recipe
                         ingredients.AddRange(rIngredients);
-                        purchases.Add(new Purchase(id, date, recipes, rIngredients));
+                        purchases.Add(new Purchase(id, date, pRecipes, rIngredients));
                         Log.Information($"Loaded Purchase: {id} - {date.ToString("yyyy/MM/dd")} - {recipes.Count} recipes and {rIngredients.Count} items");
                     }
                 }
@@ -378,7 +389,7 @@ namespace Homagix.Server.Data
                 Log.Information($"YAML: Loaded Purchase: {id} - {date.ToString("yyyy/MM/dd")} - {recipes.Count} recipes and {sIngredients.Count} items");
             }
 
-            SaveData();
+            UpdateData();
         }
     }
 }

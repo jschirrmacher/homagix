@@ -2,6 +2,7 @@
 @using Homagix.Shared
 @using Homagix.Shared.Data
 @inject HttpClient Http
+@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
 
 <html>
 <head>
@@ -49,11 +50,12 @@ else
 						</td>
 
 					}
-					<td><a href="/Purchase/Edit/@purchase.id">Edit</a></td>
+					<td><a href="/Purchase/Edit/@purchase.id">Edit</a> <button onclick="@(() => DeletePurchase(purchase))">Delete</button></td>
 				</tr>
 			}
 		</tbody>
 	</table>
+	<button onclick="@(() => CreatePurchase())">Add new Purchase</button>
 }
 </body>
 </html>
@@ -63,7 +65,7 @@ else
 
 	protected override async Task OnInitAsync()
 	{
-		purchases = await Http.GetJsonAsync<Purchase[]>("api/Purchases/Purchases");
+		purchases = (await Http.GetJsonAsync<Purchase[]>("api/Purchases/Purchases")).OrderBy(p => p.time).ToArray();
 	}
 
 	void ExpandView(Purchase e)
@@ -73,5 +75,17 @@ else
 			purchase.selected = false;
 		}
 		e.selected = true;
+	}
+
+	async void DeletePurchase(Purchase purchase)
+	{
+		await Http.PostJsonAsync<int>("api/Purchases/DeletePurchase/", purchase.id);
+		purchases = (await Http.GetJsonAsync<Purchase[]>("api/Purchases/Purchases")).OrderBy(p => p.time).ToArray();
+	}
+
+	async Task CreatePurchase()
+	{
+		int id = await Http.GetJsonAsync<int>("api/Purchases/CreatePurchase");
+		UriHelper.NavigateTo($"/Purchase/Edit/{id}");
 	}
 }

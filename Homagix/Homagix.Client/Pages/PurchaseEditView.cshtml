@@ -20,7 +20,7 @@ else
     <h3>Recipes</h3>
     @foreach (var recipe in chosenRecipes)
     {
-        <ul onclick="@(e => RemoveRecipe(recipe))">@recipe.name</ul>
+        <ul>@recipe.name <button onclick="@(e => RemoveRecipe(recipe))">Delete</button></ul>
     }
     <select id="recipes" bind=@toAdd>
         @foreach (var recipe in potentialRecipes)
@@ -32,7 +32,7 @@ else
     <h3>Indiviudal items</h3>
     @foreach (var item in individualIngredients)
     {
-        <ul onclick="@(() => RemoveIngredient(item))">@item.ToString()</ul>
+        <ul>@item.ToString() <button onclick="@(() => RemoveIngredient(item))">Delete</button></ul>
     }
     <input type="text" bind=@ingredientToAdd />
     <button onclick="@(() => AddIngredient())">Add</button>

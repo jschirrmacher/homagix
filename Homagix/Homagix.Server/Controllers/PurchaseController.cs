@@ -27,7 +27,7 @@ namespace Homagix.Server.Controllers
         }
 
         [HttpPost("[action]")]
-        public HttpResponseMessage  UpdatePurchase([FromBody]PurchaseJson pur)
+        public HttpResponseMessage UpdatePurchase([FromBody]PurchaseJson pur)
         {
             Log.Information("Getting updated purchase: " + pur.id);
             var recipes = Data.Data.Recipes.Where(r => pur.recipes.Exists(p => p == r.id)).ToList();
@@ -42,6 +42,29 @@ namespace Homagix.Server.Controllers
             Data.Data.Ingredients = ing;
             Data.Data.Purchases = temp;
             return new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+        }
+
+        [HttpPost("[action]")]
+        public HttpResponseMessage DeletePurchase([FromBody]int id)
+        {
+            var purchases = Data.Data.Purchases;
+            purchases.RemoveAll(p => p.id == id);
+            Data.Data.Purchases = purchases;
+            Data.Data.UpdateData();
+            Log.Information($"Deleting purchase with id {id}");
+            return new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+        }
+
+        [HttpGet("[action]")]
+        public int CreatePurchase()
+        {
+            int maxPurchaseId = Data.Data.maxPurchaseId;
+            Purchase purchase = new Purchase(maxPurchaseId, DateTime.Now, new List<Recipe>(), new List<Ingredient>());
+            List<Purchase> purchases = Data.Data.Purchases;
+            purchases.Add(purchase);
+            Data.Data.Purchases = purchases;
+            Data.Data.UpdateData();
+            return maxPurchaseId;
         }
     }
 }
