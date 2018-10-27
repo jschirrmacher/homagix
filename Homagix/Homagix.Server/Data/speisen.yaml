@@ -203,11 +203,66 @@ dishes:
       - 0,5 Glas Saure Gurken
       - 2 Stk. Tomaten
 
+  - id: 27
+    name: Spaghetti mit selbstgemachtem Pesto
+    ingredients:
+      - 500 g Spaghetti
+      - 1 Bund Basilikum
+      - 1 Bund Petersilie
+      - 100 g Pinienkerne
+      - 100 g Parmesan
+      - 4 Stk Cherry-Tomaten
+
+  - id: 28
+    name: Griechischer Hackfleischtopf
+    ingredients:
+      - 500 g Kritharaki
+      - 400 g Hackfleisch
+      - 1 Stk Zucchini
+      - 2 Zehen Knoblauch
+      - 250 g Feta
+
+  - id: 29
+    name: Überbackenes Baguette
+    ingredients:
+      - 3 Stk Tomaten
+      - 1 Stk Paprika
+      - 1 Stk Zwiebel
+      - 250 g Feta
+      - 10 Stk Oliven
+      - 100 g Geriebener Käse
+      - 2 Stk Baguette
+
+  - id: 30
+    name: Spätzle mit Schinken und Käse
+    ingredients:
+      - 1 kg Spätzle
+      - 1 Pkg Schinken-Würfel
+      - 200 g Geriebener Käse
+      - 1 Stk Gurke
+
+  - id: 31
+    name: Maultaschen mit Salat
+    ingredients:
+      - 1 Pkg Maultaschen
+      - 1 Pkg Gemüse-Maultaschen
+      - 1 Kopf Salat
+      - 2 Stk Tomaten
+
+  - id: 32
+    name: Hühnersuppe mit Buchstabennudeln
+    ingredients:
+      - 1 Pkg TK Suppengemüse
+      - 500 g Hühnerbrust
+      - 250 g Buchstabennudeln
+      - 0,5 Pkg TK Petersilie
+
 weeks:
   eins: [1, 2, 3, 4, 5, 6, 7]
   zwei: [8, 9, 10, 11, 12, 13]
   drei: [14, 15, 16, 17, 18, 19, 20]
   vier: [21, 22, 23, 24, 25, 26]
+  fuenf: [27, 28, 29, 30, 31, 32]
 
 weekly:
   - 5 L Milch
