@@ -257,12 +257,110 @@ dishes:
       - 250 g Buchstabennudeln
       - 0,5 Pkg TK Petersilie
 
+  - id: 33
+    name: Gebackener Camembert mit Salat und Baguette
+    ingredients:
+      - 6 Stk Camemberts
+      - 1 Kopf Salat
+      - 2 Stk Baguette
+      - 3 Stk Tomaten
+      - 2 Stk Bananen
+
+  - id: 34
+    name: Bandnudeln mit Spinat und Gorgonzola
+    ingredients:
+      - 500 g Bandnudeln
+      - 600 g Spinat
+      - 1 Stk Zwiebel
+      - 300 g Gorgonzola
+      - 200 ml Sahne
+
+  - id: 35
+    name: Laugenbrezeln mit Spundekäs und Kräuterquark
+    ingredients:
+      - 10 Stk Laugenbrezeln
+      - 500 g Quark
+      - 1 Stk Zwiebel
+      - 1 Pkg TK Kräuter
+
+  - id: 36
+    name: Backkartoffeln mit Gemüse
+    ingredients:
+      - 1,5 kg Kartoffeln
+      - 1 kg TK Gemüse
+
+  - id: 37
+    name: Ei im Nest
+    ingredients:
+      - 8 Stk Toastbrot
+      - 8 Stk Eier
+      - 1 Stk Gurke
+
+  - id: 38
+    name: Kaiserschmarrn
+    ingredients:
+      - 6 Stk Eier
+      - 600 ml Milch
+      - 400 g Mehl
+      - 75 g Zucker
+
+  - id: 39
+    name: Spaghetti mit Tomatensauce
+    ingredients:
+      - 750 g Spaghetti
+      - 500 g Stückige Tomaten
+
+  - id: 40
+    name: Griechischer Salat
+    ingredients:
+      - 500 g Feta
+      - 1 Stk Gurke
+      - 4 Stk Tomaten
+      - 1 Pkg Oliven
+      - 1 Stk Rote Paprika
+      - 2 Stk Baguette
+
+  - id: 41
+    name: Grüne Bohnen mit Spätzle und Tomatensauce
+    source: VK 177
+    ingredients:
+      - 750 g Spätzle oder Gnochhi
+      - 1 Stk Rote Zwiebel
+      - 1 Pkg Stückige Tomaten
+      - 1 Bund Basilikum
+      - 450 g Grüne Bohnen
+
+  - id: 42
+    name: Pfannengemüse mit gerösteten Sonnenblumenkernen
+    source: VK 189
+    ingredients:
+      - 3 Zehen Knoblauch
+      - 300 g Brokkoli
+      - 200 g Zuckererbsen
+      - 0,5 Kopf Chinakohl
+      - 1 Bund Frühlingszwiebeln
+      - 3 cm Ingwer
+      - 80 g Sonnenblumenkerne
+
+  - id: 43
+    name: Pitataschen mit Gemüse und Schafskäse
+    ingredients:
+      - 8 Stk Pita-Taschen
+      - 1 Dose Mais
+      - 1 Stk Rote Paprika
+      - 1 Stk Zwiebel
+      - 0,5 Pkg Oliven
+      - 250 g Feta
+      - 2 Stk Tomaten
+
 weeks:
   eins: [1, 2, 3, 4, 5, 6, 7]
   zwei: [8, 9, 10, 11, 12, 13]
   drei: [14, 15, 16, 17, 18, 19, 20]
   vier: [21, 22, 23, 24, 25, 26]
   fuenf: [27, 28, 29, 30, 31, 32]
+  sechs: [33, 34, 35, 36, 37, 38]
+  sieben: [39, 40, 41, 42, 43]
 
 weekly:
   - 5 L Milch
