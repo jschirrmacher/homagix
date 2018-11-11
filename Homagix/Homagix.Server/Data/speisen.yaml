@@ -2,6 +2,7 @@ dishes:
   - id: 1
     name: Kartoffelpüree mit sauren Gurken und gegrillten Hackspießen
     source: Kochen für 2, S. 27
+    last: 2018-10-1
     ingredients:
       - 1,5 kg Kartoffeln
       - 1 Glas Gewürzgurken
@@ -12,6 +13,7 @@ dishes:
 
   - id: 2
     name: Pommes mit Gurkensalat
+    last: 2018-10-1
     ingredients:
       - 1 kg Pommes Frites
       - 1,5 Stk. Bio-Gurke
@@ -21,6 +23,7 @@ dishes:
 
   - id: 3
     name: Milchnudeln
+    last: 2018-10-1
     ingredients:
       - 500 g Farfalle
       - 2 L H-Milch
@@ -28,6 +31,7 @@ dishes:
 
   - id: 4
     name: Tomatensuppe mit Schnittlauch und Brot
+    last: 2018-10-1
     ingredients:
       - 1 L Tomatensaft
       - 500 g Passierte Tomaten
@@ -39,6 +43,7 @@ dishes:
   - id: 5
     name: Bandnudeln mit Pilzen und Tomaten
     url: https://www.rewe.de/rezepte/bandnudeln-mit-pilz-tomatenrahm/
+    last: 2018-10-1
     ingredients:
       - 500 g Bandnudeln
       - 1 Bund Lauchzwiebeln
@@ -48,6 +53,7 @@ dishes:
 
   - id: 6
     name: Spätzle mit Schinken und Zwiebeln
+    last: 2018-10-1
     ingredients:
       - 1 kg Spätzle
       - 1 Pkg. Schinkenwürfel
@@ -59,6 +65,7 @@ dishes:
   - id: 7
     name: Mozzarellaauflauf mit Basilikum
     source: Aufläufe und Gratins, S. 14
+    last: 2018-10-1
     ingredients:
       - 500 g Mozzarella
       - 5 Stk. Tomaten
@@ -67,6 +74,7 @@ dishes:
 
   - id: 8
     name: Schnitzel mit Pommes Frites und Erbsen
+    last: 2018-10-8
     ingredients:
       - 500 g Schweineschnitzel
       - 500 g TK Erbsen
@@ -75,6 +83,7 @@ dishes:
 
   - id: 9
     name: Grüne Nudeln mit Schinken
+    last: 2018-10-8
     ingredients:
       - 500 g Grüne Bandnudeln
       - 300 g Kasseler
@@ -82,6 +91,7 @@ dishes:
 
   - id: 10
     name: Kirschnudelauflauf
+    last: 2018-10-8
     ingredients:
       - 500 g Vollkorn-Spiralnudeln
       - 200 g Philadelphia
@@ -91,12 +101,14 @@ dishes:
 
   - id: 11
     name: Backkartoffeln mit Gemüse
+    last: 2018-10-8
     ingredients:
       - 1,5 kg Kartoffeln
       - 500 g Gemüsemischung
 
   - id: 12
     name: Selbstgebackenes Brot mit Salat
+    last: 2018-10-8
     ingredients:
       - 1 Stk. Wurzelsalat
       - 500 g Mehl
@@ -104,12 +116,14 @@ dishes:
 
   - id: 13
     name: Risotto mit Steinpilzen
+    last: 2018-10-8
     ingredients:
       - 200 g Risotto-Reis
       - 50 g Getrocknete Steinpilze
 
   - id: 14
     name: Spaghetti mit Frühlingszwiebeln und Feta
+    last: 2018-10-15
     ingredients:
       - 750 g Spaghetti
       - 500 g Feta
@@ -117,12 +131,14 @@ dishes:
 
   - id: 15
     name: Pfannkuchen
+    last: 2018-10-15
     ingredients:
       - 500 g Mehl
       - 1 L Milch
 
   - id: 16
     name: Pellkartoffeln mit Kräuterquark
+    last: 2018-10-15
     ingredients:
       - 1,5 kg Kartoffeln
       - 500 g Quark
@@ -130,12 +146,14 @@ dishes:
 
   - id: 17
     name: Gnocchi
+    last: 2018-10-15
     ingredients:
       - 1000 g Gnocchi
       - 2 Stk. Rote Paprika
 
   - id: 18
     name: Lasagne
+    last: 2018-10-15
     ingredients:
       - 500 g Hackfleisch
       - 250 g Lasagne Platten
@@ -144,6 +162,7 @@ dishes:
 
   - id: 19
     name: Wraps
+    last: 2018-10-15
     ingredients:
       - 500 g Hackfleisch
       - 8 Stk. Wraps
@@ -151,6 +170,7 @@ dishes:
 
   - id: 20
     name: Spiced chicken mit Rice + Red Onions + Erbsen
+    last: 2018-10-15
     ingredients:
       - 500 g Hühnerbrust
       - 5 Stk. Rote Zwiebeln
@@ -159,6 +179,7 @@ dishes:
 
   - id: 21
     name: Gefüllte Champignons mit Reis
+    last: 2018-10-22
     ingredients:
       - 250 g Reis
       - 500 g Große Champignons
@@ -167,6 +188,7 @@ dishes:
 
   - id: 22
     name: Spätzle mit Pilzen
+    last: 2018-10-22
     ingredients:
       - 1000 g Spätzle
       - 500 g Kräutersaitlinge o.ä.
@@ -175,6 +197,7 @@ dishes:
 
   - id: 23
     name: Grüne Bohnen mit Schafskäse
+    last: 2018-10-22
     ingredients:
       - 500 g Bohnen
       - 500 g Feta
@@ -182,12 +205,14 @@ dishes:
 
   - id: 24
     name: Schupfnudeln mit Apfelmus
+    last: 2018-10-22
     ingredients:
       - 1 kg Äpfel
       - 1000 g Schupfnudeln
 
   - id: 25
     name: Caprese-Baguette im Ofen
+    last: 2018-10-22
     ingredients:
       - 2 Stk. Ciabatta
       - 6 Stk. Große Tomaten
@@ -196,6 +221,7 @@ dishes:
 
   - id: 26
     name: Hamburger mit Pommes
+    last: 2018-10-22
     ingredients:
       - 750 g Hackfleisch
       - 8 Stk. Hamburger-Brötchen
@@ -205,6 +231,7 @@ dishes:
 
   - id: 27
     name: Spaghetti mit selbstgemachtem Pesto
+    last: 2018-10-29
     ingredients:
       - 500 g Spaghetti
       - 1 Bund Basilikum
@@ -215,6 +242,7 @@ dishes:
 
   - id: 28
     name: Griechischer Hackfleischtopf
+    last: 2018-10-29
     ingredients:
       - 500 g Kritharaki
       - 400 g Hackfleisch
@@ -224,6 +252,7 @@ dishes:
 
   - id: 29
     name: Überbackenes Baguette
+    last: 2018-10-29
     ingredients:
       - 3 Stk Tomaten
       - 1 Stk Paprika
@@ -235,6 +264,7 @@ dishes:
 
   - id: 30
     name: Spätzle mit Schinken und Käse
+    last: 2018-10-29
     ingredients:
       - 1 kg Spätzle
       - 1 Pkg Schinken-Würfel
@@ -243,6 +273,7 @@ dishes:
 
   - id: 31
     name: Maultaschen mit Salat
+    last: 2018-10-29
     ingredients:
       - 1 Pkg Maultaschen
       - 1 Pkg Gemüse-Maultaschen
@@ -251,6 +282,7 @@ dishes:
 
   - id: 32
     name: Hühnersuppe mit Buchstabennudeln
+    last: 2018-10-29
     ingredients:
       - 1 Pkg TK Suppengemüse
       - 500 g Hühnerbrust
@@ -259,6 +291,7 @@ dishes:
 
   - id: 33
     name: Gebackener Camembert mit Salat und Baguette
+    last: 2018-11-5
     ingredients:
       - 6 Stk Camemberts
       - 1 Kopf Salat
@@ -268,6 +301,7 @@ dishes:
 
   - id: 34
     name: Bandnudeln mit Spinat und Gorgonzola
+    last: 2018-11-5
     ingredients:
       - 500 g Bandnudeln
       - 600 g Spinat
@@ -277,6 +311,7 @@ dishes:
 
   - id: 35
     name: Laugenbrezeln mit Spundekäs und Kräuterquark
+    last: 2018-11-5
     ingredients:
       - 10 Stk Laugenbrezeln
       - 500 g Quark
@@ -285,12 +320,14 @@ dishes:
 
   - id: 36
     name: Backkartoffeln mit Gemüse
+    last: 2018-11-5
     ingredients:
       - 1,5 kg Kartoffeln
       - 1 kg TK Gemüse
 
   - id: 37
     name: Ei im Nest
+    last: 2018-11-8
     ingredients:
       - 8 Stk Toastbrot
       - 8 Stk Eier
@@ -298,6 +335,7 @@ dishes:
 
   - id: 38
     name: Kaiserschmarrn
+    last: 2018-11-5
     ingredients:
       - 6 Stk Eier
       - 600 ml Milch
@@ -306,12 +344,14 @@ dishes:
 
   - id: 39
     name: Spaghetti mit Tomatensauce
+    last: 2018-11-12
     ingredients:
       - 750 g Spaghetti
       - 500 g Stückige Tomaten
 
   - id: 40
     name: Griechischer Salat
+    last: 2018-11-12
     ingredients:
       - 500 g Feta
       - 1 Stk Gurke
@@ -323,6 +363,7 @@ dishes:
   - id: 41
     name: Grüne Bohnen mit Spätzle und Tomatensauce
     source: VK 177
+    last: 2018-11-12
     ingredients:
       - 750 g Spätzle oder Gnochhi
       - 1 Stk Rote Zwiebel
@@ -333,6 +374,7 @@ dishes:
   - id: 42
     name: Pfannengemüse mit gerösteten Sonnenblumenkernen
     source: VK 189
+    last: 2018-11-12
     ingredients:
       - 3 Zehen Knoblauch
       - 300 g Brokkoli
@@ -344,6 +386,7 @@ dishes:
 
   - id: 43
     name: Pitataschen mit Gemüse und Schafskäse
+    last: 2018-11-12
     ingredients:
       - 8 Stk Pita-Taschen
       - 1 Dose Mais
