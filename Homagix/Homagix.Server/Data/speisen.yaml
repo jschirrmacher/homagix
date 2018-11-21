@@ -2,7 +2,7 @@ dishes:
   - id: 1
     name: Kartoffelpüree mit sauren Gurken und gegrillten Hackspießen
     source: Kochen für 2, S. 27
-    last: 2018-10-1
+    last: 2018-11-17
     ingredients:
       - 1,5 kg Kartoffeln
       - 1 Glas Gewürzgurken
@@ -13,7 +13,7 @@ dishes:
 
   - id: 2
     name: Pommes mit Gurkensalat
-    last: 2018-10-1
+    last: 2018-11-17
     ingredients:
       - 1 kg Pommes Frites
       - 1,5 Stk. Bio-Gurke
@@ -23,7 +23,7 @@ dishes:
 
   - id: 3
     name: Milchnudeln
-    last: 2018-10-1
+    last: 2018-11-17
     ingredients:
       - 500 g Farfalle
       - 2 L H-Milch
@@ -31,7 +31,7 @@ dishes:
 
   - id: 4
     name: Tomatensuppe mit Schnittlauch und Brot
-    last: 2018-10-1
+    last: 2018-11-17
     ingredients:
       - 1 L Tomatensaft
       - 500 g Passierte Tomaten
@@ -43,7 +43,7 @@ dishes:
   - id: 5
     name: Bandnudeln mit Pilzen und Tomaten
     url: https://www.rewe.de/rezepte/bandnudeln-mit-pilz-tomatenrahm/
-    last: 2018-10-1
+    last: 2018-11-17
     ingredients:
       - 500 g Bandnudeln
       - 1 Bund Lauchzwiebeln
@@ -53,7 +53,7 @@ dishes:
 
   - id: 6
     name: Spätzle mit Schinken und Zwiebeln
-    last: 2018-10-1
+    last: 2018-11-17
     ingredients:
       - 1 kg Spätzle
       - 1 Pkg. Schinkenwürfel
@@ -65,7 +65,7 @@ dishes:
   - id: 7
     name: Mozzarellaauflauf mit Basilikum
     source: Aufläufe und Gratins, S. 14
-    last: 2018-10-1
+    last: 2018-11-17
     ingredients:
       - 500 g Mozzarella
       - 5 Stk. Tomaten
