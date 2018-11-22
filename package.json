@@ -10,8 +10,9 @@
     "build": "react-scripts build",
     "eject": "react-scripts eject",
     "test": "react-scripts test",
-    "test-server": "eslint server/*.js && mocha server/*.test.js",
-    "test-ci": "eslint server/*.js && mocha server/*.test.js && CI=true react-scripts test --coverage"
+    "test-server": "eslint server/*.js && jest server",
+    "test-app": "CI=true react-scripts test --coverage",
+    "test-ci": "npm run test-server && npm run test-app"
   },
   "author": "joachimschirrmacher@gmail.com",
   "license": "MIT",
@@ -24,7 +25,6 @@
     "react-scripts": "2.1.1"
   },
   "devDependencies": {
-    "mocha": "^5.2.0",
     "should": "^13.2.3"
   },
   "browserslist": [
