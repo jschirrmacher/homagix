@@ -4,12 +4,33 @@
   "description": "Makes food shopping easier",
   "main": "getShoppingList.js",
   "scripts": {
-    "start": "node getShoppingList.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "echo 'Start server with `npm run server` and app with `npm run app`'",
+    "server": "PORT=8080 node server",
+    "app": "react-scripts start",
+    "build": "react-scripts build",
+    "eject": "react-scripts eject",
+    "test": "react-scripts test",
+    "test-server": "eslint server/*.js && mocha server/*.test.js",
+    "test-ci": "eslint server/*.js && mocha server/*.test.js && CI=true react-scripts test --coverage"
   },
-  "author": "Joachim Schirrmacher <joachimschirrmacher@gmail.com>",
+  "author": "joachimschirrmacher@gmail.com",
   "license": "MIT",
   "dependencies": {
-    "yaml": "^1.0.0"
-  }
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "yaml": "^1.0.0",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
+    "react-scripts": "2.1.1"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0",
+    "should": "^13.2.3"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
