@@ -1,0 +1,83 @@
+h1{
+  margin: 0;
+  background: linear-gradient(to bottom right, #999999, #BBBBBB);
+  color: #FFCC00;
+}
+
+h2 {
+  margin: 5px 0 0;
+  font-size: 18px;
+}
+
+.App-logo {
+  height: 1.3em;
+  vertical-align: middle;
+  margin: 0 10px;
+}
+
+.App {
+  max-width: 800px;
+  padding: 5px 10px;
+}
+
+@media screen {
+  .App {
+    margin: 0 auto;
+    justify-content: space-around;
+  }
+}
+
+@media (min-width: 640px) {
+  .App {
+    display: flex;
+  }
+}
+
+@media print {
+  .App {
+    justify-content: space-between;
+  }
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+ul li {
+  display: block;
+  padding: 5px;
+  border-bottom: 1px solid #bbbbbb;
+  position: relative;
+}
+
+button.delete {
+  border: none;
+  background: transparent;
+  margin-right: 10px;
+  cursor: pointer;
+  color: red;
+  font-size: 1.3em;
+}
+
+button:focus {
+  outline:0;
+}
+
+button:hover {
+  background: #dddddd;
+}
+
+button:active {
+  background: #bbbbbb;
+}
+
+.inhibited:after {
+  content: '';
+  display: block;
+  border-bottom: 3px solid #888888;
+  position: absolute;
+  top: 20px;
+  left: 0;
+  right: 0;
+}
