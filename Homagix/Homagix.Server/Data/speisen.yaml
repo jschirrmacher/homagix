@@ -238,7 +238,7 @@ dishes:
       - 1 Bund Petersilie
       - 100 g Pinienkerne
       - 100 g Parmesan
-      - 4 Stk Cherry-Tomaten
+      - 4 Stk. Cherry-Tomaten
 
   - id: 28
     name: Griechischer Hackfleischtopf
@@ -246,7 +246,7 @@ dishes:
     ingredients:
       - 500 g Kritharaki
       - 400 g Hackfleisch
-      - 1 Stk Zucchini
+      - 1 Stk. Zucchini
       - 2 Zehen Knoblauch
       - 250 g Feta
 
@@ -254,50 +254,50 @@ dishes:
     name: Überbackenes Baguette
     last: 2018-10-29
     ingredients:
-      - 3 Stk Tomaten
-      - 1 Stk Paprika
-      - 1 Stk Zwiebel
+      - 3 Stk. Tomaten
+      - 1 Stk. Paprika
+      - 1 Stk. Zwiebel
       - 250 g Feta
-      - 10 Stk Oliven
+      - 10 Stk. Oliven
       - 100 g Geriebener Käse
-      - 2 Stk Baguette
+      - 2 Stk. Baguette
 
   - id: 30
     name: Spätzle mit Schinken und Käse
     last: 2018-10-29
     ingredients:
       - 1 kg Spätzle
-      - 1 Pkg Schinken-Würfel
+      - 1 Pkg. Schinken-Würfel
       - 200 g Geriebener Käse
-      - 1 Stk Gurke
+      - 1 Stk. Gurke
 
   - id: 31
     name: Maultaschen mit Salat
     last: 2018-10-29
     ingredients:
-      - 1 Pkg Maultaschen
-      - 1 Pkg Gemüse-Maultaschen
+      - 1 Pkg. Maultaschen
+      - 1 Pkg. Gemüse-Maultaschen
       - 1 Kopf Salat
-      - 2 Stk Tomaten
+      - 2 Stk. Tomaten
 
   - id: 32
     name: Hühnersuppe mit Buchstabennudeln
     last: 2018-10-29
     ingredients:
-      - 1 Pkg TK Suppengemüse
+      - 1 Pkg. TK Suppengemüse
       - 500 g Hühnerbrust
       - 250 g Buchstabennudeln
-      - 0,5 Pkg TK Petersilie
+      - 0,5 Pkg. TK Petersilie
 
   - id: 33
     name: Gebackener Camembert mit Salat und Baguette
     last: 2018-11-5
     ingredients:
-      - 6 Stk Camemberts
+      - 6 Stk. Camemberts
       - 1 Kopf Salat
-      - 2 Stk Baguette
-      - 3 Stk Tomaten
-      - 2 Stk Bananen
+      - 2 Stk. Baguette
+      - 3 Stk. Tomaten
+      - 2 Stk. Bananen
 
   - id: 34
     name: Bandnudeln mit Spinat und Gorgonzola
@@ -305,7 +305,7 @@ dishes:
     ingredients:
       - 500 g Bandnudeln
       - 600 g Spinat
-      - 1 Stk Zwiebel
+      - 1 Stk. Zwiebel
       - 300 g Gorgonzola
       - 200 ml Sahne
 
@@ -313,10 +313,10 @@ dishes:
     name: Laugenbrezeln mit Spundekäs und Kräuterquark
     last: 2018-11-5
     ingredients:
-      - 10 Stk Laugenbrezeln
+      - 10 Stk. Laugenbrezeln
       - 500 g Quark
-      - 1 Stk Zwiebel
-      - 1 Pkg TK Kräuter
+      - 1 Stk. Zwiebel
+      - 1 Pkg. TK Kräuter
 
   - id: 36
     name: Backkartoffeln mit Gemüse
@@ -329,15 +329,15 @@ dishes:
     name: Ei im Nest
     last: 2018-11-8
     ingredients:
-      - 8 Stk Toastbrot
-      - 8 Stk Eier
-      - 1 Stk Gurke
+      - 8 Stk. Toastbrot
+      - 8 Stk. Eier
+      - 1 Stk. Gurke
 
   - id: 38
     name: Kaiserschmarrn
     last: 2018-11-5
     ingredients:
-      - 6 Stk Eier
+      - 6 Stk. Eier
       - 600 ml Milch
       - 400 g Mehl
       - 75 g Zucker
@@ -354,11 +354,11 @@ dishes:
     last: 2018-11-12
     ingredients:
       - 500 g Feta
-      - 1 Stk Gurke
-      - 4 Stk Tomaten
-      - 1 Pkg Oliven
-      - 1 Stk Rote Paprika
-      - 2 Stk Baguette
+      - 1 Stk. Gurke
+      - 4 Stk. Tomaten
+      - 1 Pkg. Oliven
+      - 1 Stk. Rote Paprika
+      - 2 Stk. Baguette
 
   - id: 41
     name: Grüne Bohnen mit Spätzle und Tomatensauce
@@ -366,8 +366,8 @@ dishes:
     last: 2018-11-12
     ingredients:
       - 750 g Spätzle oder Gnochhi
-      - 1 Stk Rote Zwiebel
-      - 1 Pkg Stückige Tomaten
+      - 1 Stk. Rote Zwiebel
+      - 1 Pkg. Stückige Tomaten
       - 1 Bund Basilikum
       - 450 g Grüne Bohnen
 
@@ -388,13 +388,13 @@ dishes:
     name: Pitataschen mit Gemüse und Schafskäse
     last: 2018-11-12
     ingredients:
-      - 8 Stk Pita-Taschen
+      - 8 Stk. Pita-Taschen
       - 1 Dose Mais
-      - 1 Stk Rote Paprika
-      - 1 Stk Zwiebel
-      - 0,5 Pkg Oliven
+      - 1 Stk. Rote Paprika
+      - 1 Stk. Zwiebel
+      - 0,5 Pkg. Oliven
       - 250 g Feta
-      - 2 Stk Tomaten
+      - 2 Stk. Tomaten
 
 weeks:
   eins: [1, 2, 3, 4, 5, 6, 7]
@@ -418,10 +418,10 @@ monthly:
   - 2 Glas Kirschen
 
 sometimes:
-    - Kokosflocken
-    - Vanilleschote
-    - Weiße Pfefferkörner
-    - Schwarze Pfefferkörner
+  - Kokosflocken
+  - Vanilleschote
+  - Weiße Pfefferkörner
+  - Schwarze Pfefferkörner
 
 purchases:
   - id: 1
@@ -536,3 +536,4 @@ purchases:
       - 1 Glas Saure Gurken
       - 1 Pkg. Pfefferminztee
       - 5 L Apfelsaft
+version: 1
