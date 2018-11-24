@@ -20,7 +20,6 @@ class IngredientsList extends Component {
   }
 
   render() {
-    console.log(this.props.ingredients)
     const items = this.props.ingredients && this.props.ingredients
       .map(item => (
         <li key={item.id} className={this.state.inhibit[item.id] ? 'inhibited' : undefined}>
