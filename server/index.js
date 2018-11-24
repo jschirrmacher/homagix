@@ -1,5 +1,6 @@
 /*eslint-env node*/
 
+const path = require('path')
 const express = require('express')
 const bodyParser = require('body-parser')
 const DishProposer = require('./DishProposer')
@@ -21,6 +22,7 @@ app.use((req, res, next) => {
 })
 
 app.get('/proposals', async (req, res) => res.json(await proposer.get(handleArrayParam(req.query, 'inhibit', 'int'))))
+app.use('/', express.static(path.join(__dirname, '..', 'build')))
 
 app.listen(PORT, () => {
   logger.info(`Listening on port ${PORT}`)
