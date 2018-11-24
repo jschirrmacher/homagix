@@ -20,11 +20,12 @@ class IngredientsList extends Component {
   }
 
   render() {
+    console.log(this.props.ingredients)
     const items = this.props.ingredients && this.props.ingredients
       .map(item => (
         <li key={item.id} className={this.state.inhibit[item.id] ? 'inhibited' : undefined}>
           <button className="delete" onClick={() => this.removeIngredient(item)}>&times;</button>
-          {item.name}
+          {item.amount} {item.unit} {item.name}
         </li>
       ))
 
@@ -32,16 +33,9 @@ class IngredientsList extends Component {
   }
 }
 
-function extractIngredients(proposals) {
-  let index = 0
-  return (proposals.data || [])
-    .map(proposal => proposal.ingredients.map(name => ({id: ++index + '-' + proposal.id, name, dishId: proposal.id})))
-    .reduce((acc, val) => acc.concat(val), [])
-}
-
 function mapStateToProps(state) {
   return {
-    ingredients: extractIngredients(state.proposals)
+    ingredients: state.proposals.ingredients
   }
 }
 

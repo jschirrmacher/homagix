@@ -34,7 +34,7 @@ class ProposalsList extends Component {
 
 function mapStateToProps(state) {
   return {
-    proposals: state.proposals.data
+    proposals: state.proposals.dishes
   }
 }
 
