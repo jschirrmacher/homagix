@@ -45,19 +45,19 @@ ul {
 }
 
 ul li {
-  display: block;
-  padding: 5px;
+  padding: 10px 20px;
   border-bottom: 1px solid #bbbbbb;
   position: relative;
 }
 
 button.delete {
   border: none;
-  background: transparent;
-  margin-right: 10px;
   cursor: pointer;
   color: red;
-  font-size: 1.3em;
+  font-size: 1.6em;
+  position: absolute;
+  top: 2px;
+  left: -10px;
 }
 
 button:focus {
@@ -78,6 +78,6 @@ button:active {
   border-bottom: 3px solid #888888;
   position: absolute;
   top: 20px;
-  left: 0;
+  left: 5px;
   right: 0;
 }
