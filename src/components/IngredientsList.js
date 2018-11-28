@@ -10,8 +10,9 @@ class IngredientsList extends Component {
     this.state = {inhibit: {}, additions: []}
   }
 
-  removeIngredient(item) {
-    this.setState(state => {
+  removeIngredient(item, elem) {
+    elem.classList.add('fading')
+    setTimeout(() => this.setState(state => {
       if (state.inhibit[item.id]) {
         delete state.inhibit[item.id]
       } else if (item.id < 0) {
@@ -20,12 +21,16 @@ class IngredientsList extends Component {
         state.inhibit[item.id] = true
       }
       return state
-    })
+    }), item.id < 0 ? 1000 : 1)
   }
 
-  addIngredient(name) {
+  addIngredient(elem) {
     this.setState(state => {
-      state.additions.push({id: --index, name})
+      const name = elem.value
+      if (name) {
+        elem.value = ''
+        state.additions.push({id: --index, name})
+      }
       return state
     })
   }
@@ -38,19 +43,19 @@ class IngredientsList extends Component {
     const items = this.getIngredients()
       .map(item => (
         <li key={item.id} className={this.state.inhibit[item.id] ? 'inhibited' : undefined}>
-          <button className="delete" onClick={() => this.removeIngredient(item)}>&times;</button>
+          <button className="delete" onClick={event => this.removeIngredient(item, event.target.parentNode)}>
+            &times;
+          </button>
           {item.amount} {item.unit} {item.name}
         </li>
       ))
 
     return <ul>
       {items}
-      <li><input type="text" id="additionalItem" onKeyDown={event => {
-        if (event.keyCode === 13) {
-          this.addIngredient(event.target.value)
-          event.target.value = ''
-        }
-      }}/></li>
+      <li><input type="text" id="additionalItem"
+                 onKeyDown={event => event.keyCode === 13 && this.addIngredient(event.target)}
+                 onBlur={event => this.addIngredient(event.target)}
+      /></li>
     </ul>
   }
 }

@@ -90,4 +90,10 @@ button:active {
 #additionalItem {
   font-size: 16px;
   width: 100%;
+  border: none;
+}
+
+.fading {
+  opacity: 0.001;
+  transition: opacity 1s;
 }
