@@ -23,15 +23,11 @@ class IngredientsList extends Component {
     })
   }
 
-  addIngredient(event) {
-    if (event.keyCode === 13) {
-      const additionalItem = document.getElementById('additionalItem')
-      this.setState(state => {
-        state.additions.push({id: --index, name: additionalItem.value})
-        additionalItem.value = ''
-        return state
-      })
-    }
+  addIngredient(name) {
+    this.setState(state => {
+      state.additions.push({id: --index, name})
+      return state
+    })
   }
 
   getIngredients() {
@@ -49,7 +45,12 @@ class IngredientsList extends Component {
 
     return <ul>
       {items}
-      <li><input type="text" id="additionalItem" onKeyDown={event => this.addIngredient(event)}/></li>
+      <li><input type="text" id="additionalItem" onKeyDown={event => {
+        if (event.keyCode === 13) {
+          this.addIngredient(event.target.value)
+          event.target.value = ''
+        }
+      }}/></li>
     </ul>
   }
 }
