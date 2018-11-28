@@ -16,6 +16,7 @@ const initialState = {
 }
 
 const store = mockStore(initialState)
+global.setTimeout = callback => callback()
 
 describe('IngredientsList', () => {
   it('renders without crashing', () => {
@@ -45,7 +46,7 @@ describe('IngredientsList', () => {
     const tree = renderer.create(<Provider store={store}><IngredientsList/></Provider>)
     const li = tree.toJSON().children[0]
     const button = li.children[0]
-    button.props.onClick()
+    button.props.onClick({target: {parentNode: document.createElement('li')}})
     tree.toJSON().children[0].props.className.should.equal('inhibited')
   })
 
@@ -53,8 +54,9 @@ describe('IngredientsList', () => {
     const tree = renderer.create(<Provider store={store}><IngredientsList/></Provider>)
     const li = tree.toJSON().children[0]
     const button = li.children[0]
-    button.props.onClick()
-    button.props.onClick()
+    const event = {target: {parentNode: document.createElement('li')}}
+    button.props.onClick(event)
+    button.props.onClick(event)
     should(tree.toJSON().children[0].props.className).be.undefined()
   })
 
@@ -81,7 +83,7 @@ describe('IngredientsList', () => {
     input.props.value = '2 Stk. Butter'
     input.props.onKeyDown({keyCode: 13, target: input.props})
     const button = tree.toJSON().children[1].children[0]
-    button.props.onClick()
+    button.props.onClick({target: {parentNode: document.createElement('li')}})
     tree.toJSON().children[1].children[0].props.id.should.equal('additionalItem')
   })
 })
