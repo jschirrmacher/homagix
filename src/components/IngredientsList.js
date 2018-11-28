@@ -2,16 +2,20 @@ import React, {Component} from 'react'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 
+let index = 0
+
 class IngredientsList extends Component {
   constructor(props) {
     super(props)
-    this.state = {inhibit: {}}
+    this.state = {inhibit: {}, additions: []}
   }
 
   removeIngredient(item) {
     this.setState(state => {
       if (state.inhibit[item.id]) {
         delete state.inhibit[item.id]
+      } else if (item.id < 0) {
+        state.additions = state.additions.filter(el => el.id !== item.id)
       } else {
         state.inhibit[item.id] = true
       }
@@ -19,8 +23,23 @@ class IngredientsList extends Component {
     })
   }
 
+  addIngredient(event) {
+    if (event.keyCode === 13) {
+      const additionalItem = document.getElementById('additionalItem')
+      this.setState(state => {
+        state.additions.push({id: --index, name: additionalItem.value})
+        additionalItem.value = ''
+        return state
+      })
+    }
+  }
+
+  getIngredients() {
+    return (this.props.ingredients || []).concat(this.state.additions)
+  }
+
   render() {
-    const items = this.props.ingredients && this.props.ingredients
+    const items = this.getIngredients()
       .map(item => (
         <li key={item.id} className={this.state.inhibit[item.id] ? 'inhibited' : undefined}>
           <button className="delete" onClick={() => this.removeIngredient(item)}>&times;</button>
@@ -28,7 +47,10 @@ class IngredientsList extends Component {
         </li>
       ))
 
-    return <ul>{items}</ul>
+    return <ul>
+      {items}
+      <li><input type="text" id="additionalItem" onKeyDown={event => this.addIngredient(event)}/></li>
+    </ul>
   }
 }
 
