@@ -22,8 +22,6 @@ jobs:
 
       - run: npm test
 
-  deploy:
-    steps:
       - setup_remote_docker:
           docker_layer_caching: true
 
@@ -38,15 +36,3 @@ jobs:
           name: Deploy app to dilab server
           command: |
             ssh www-data@dilab.co:co.dilab.homagix/upgrade.sh
-
-workflows:
-  version: 2
-    build-and-deploy:
-      jobs:
-        - build
-        - deploy:
-            requires:
-              - build
-            filters:
-              branches:
-                only: master
