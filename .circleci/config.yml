@@ -20,7 +20,11 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      - run: npm test
+      - run: npm run test-ci
+
+      - run npm install --production
+
+      - run npm run build
 
       - setup_remote_docker:
           docker_layer_caching: true
