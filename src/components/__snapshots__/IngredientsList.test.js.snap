@@ -1,3 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`IngredientsList renders without crashing 1`] = `<Connect(IngredientsList) />`;
+exports[`IngredientsList renders without crashing 1`] = `
+<div
+  className="info"
+>
+  Akzeptiere einen Vorschlag, um die Zutatenliste zu füllen!
+</div>
+`;

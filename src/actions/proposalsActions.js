@@ -1,11 +1,15 @@
 import * as types from './actionTypes'
 
-export function getProposals(inhibit) {
+export function getProposals(inhibit, accepted) {
   return async function (dispatch) {
-    let url = '/proposals'
+    const params = []
     if (inhibit && inhibit.length) {
-      url += '?inhibit=' + inhibit.join(',')
+      params.push('inhibit=' + inhibit.join(','))
     }
+    if (accepted && accepted.length) {
+      params.push('accepted=' + accepted.join(','))
+    }
+    const url = '/proposals' + (params.length ? ('?' + params.join('&')) : '')
     const response = await fetch(url)
     const result = await response.json()
     if (response.ok) {

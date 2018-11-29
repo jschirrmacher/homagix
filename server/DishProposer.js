@@ -26,10 +26,12 @@ class DishProposer {
 
   get(options = {}) {
     const inhibited = options.inhibit || []
+    const accepted = options.accepted || []
     const dishes = this.model.getDishes(7 + Math.max(0, inhibited.length))
       .filter(dish => !inhibited.some(id => +id === +dish.id))
     const ingredients = dishes
-      .map(dish => dish.ingredients)                                // get ingredients for each dish
+      .filter(dish => accepted.some(id => id === dish.id))
+      .map(dish => dish.ingredients)                                // get ingredients for each accepted dish
       .reduce((acc, sub) => acc.concat(sub), [])                    // flatten list
       .map(entry => this.getActualIngredient(entry))
       .reduce(addIfNotAlreadyIn, [])

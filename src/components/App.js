@@ -16,7 +16,7 @@ class App extends Component {
         </div>
         <div>
           <h2>Benötigte Zutaten</h2>
-          <IngredientsList />
+          <IngredientsList ingredients={this.props.ingredients} />
         </div>
         {error}
       </div>
@@ -27,6 +27,7 @@ class App extends Component {
 function mapStateToProps(state) {
   return {
     error: state.error.message,
+    ingredients: state.proposals.ingredients
   }
 }
 
