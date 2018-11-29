@@ -21,22 +21,3 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       - run: npm run test-ci
-
-      - run npm install --production
-
-      - run npm run build
-
-      - setup_remote_docker:
-          docker_layer_caching: true
-
-      - run:
-          name: Build and push Docker image
-          command: |
-            docker build -t joschi64/homagix:latest .
-            echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-            docker push joschi64/homagix:latest
-
-      - run:
-          name: Deploy app to dilab server
-          command: |
-            ssh www-data@dilab.co:co.dilab.homagix/upgrade.sh
