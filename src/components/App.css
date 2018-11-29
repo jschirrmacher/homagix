@@ -46,10 +46,11 @@ h2 {
 ul {
   list-style: none;
   padding: 0;
+  margin: 1em;
 }
 
 ul li {
-  padding: 10px 20px;
+  padding: 10px 30px;
   border-bottom: 1px solid #bbbbbb;
   position: relative;
 }
@@ -61,8 +62,21 @@ button.delete {
   font-size: 1.6em;
   position: absolute;
   top: 2px;
-  left: -10px;
-  background-color: white;
+  left: 0;
+}
+
+button.accept {
+  border: none;
+  cursor: pointer;
+  color: lightgray;
+  font-size: 1.3em;
+  position: absolute;
+  right: 0;
+  top: 6px;
+}
+
+.accepted button.accept {
+  color: green;
 }
 
 button:focus {
@@ -85,6 +99,10 @@ button:active {
   top: 20px;
   left: 5px;
   right: 0;
+}
+
+.info {
+  padding: 10px;
 }
 
 #additionalItem {

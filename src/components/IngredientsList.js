@@ -1,6 +1,4 @@
 import React, {Component} from 'react'
-import {bindActionCreators} from 'redux'
-import {connect} from 'react-redux'
 
 let index = 0
 
@@ -11,17 +9,18 @@ class IngredientsList extends Component {
   }
 
   removeIngredient(item, elem) {
-    elem.classList.add('fading')
-    setTimeout(() => this.setState(state => {
-      if (state.inhibit[item.id]) {
-        delete state.inhibit[item.id]
-      } else if (item.id < 0) {
+    if (item.id < 0) {
+      elem.classList.add('fading')
+      setTimeout(() => this.setState(state => {
         state.additions = state.additions.filter(el => el.id !== item.id)
-      } else {
-        state.inhibit[item.id] = true
-      }
-      return state
-    }), item.id < 0 ? 1000 : 1)
+        return state
+      }), 1000)
+    } else {
+      this.setState(state => {
+        state.inhibit[item.id] = !state.inhibit[item.id]
+        return state
+      })
+    }
   }
 
   addIngredient(elem) {
@@ -50,24 +49,16 @@ class IngredientsList extends Component {
         </li>
       ))
 
-    return <ul>
-      {items}
-      <li><input type="text" id="additionalItem"
-                 onKeyDown={event => event.keyCode === 13 && this.addIngredient(event.target)}
-                 onBlur={event => this.addIngredient(event.target)}
-      /></li>
-    </ul>
+    return this.props.ingredients && this.props.ingredients.length
+      ? <ul>
+          {items}
+          <li><input type="text" id="additionalItem"
+                     onKeyDown={event => event.keyCode === 13 && this.addIngredient(event.target)}
+                     onBlur={event => this.addIngredient(event.target)}
+          /></li>
+      </ul>
+      : <div className="info">Akzeptiere einen Vorschlag, um die Zutatenliste zu füllen!</div>
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    ingredients: state.proposals.ingredients
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({}, dispatch)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(IngredientsList)
+export default IngredientsList
