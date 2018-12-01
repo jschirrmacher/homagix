@@ -74,7 +74,7 @@ dishes:
 
   - id: 8
     name: Schnitzel mit Pommes Frites und Erbsen
-    last: 2018-10-8
+    last: 2018-12-03
     ingredients:
       - 500 g Schweineschnitzel
       - 500 g TK Erbsen
@@ -83,7 +83,7 @@ dishes:
 
   - id: 9
     name: Grüne Nudeln mit Schinken
-    last: 2018-10-8
+    last: 2018-12-03
     ingredients:
       - 500 g Grüne Bandnudeln
       - 300 g Kasseler
@@ -91,7 +91,7 @@ dishes:
 
   - id: 10
     name: Kirschnudelauflauf
-    last: 2018-10-8
+    last: 2018-12-03
     ingredients:
       - 500 g Vollkorn-Spiralnudeln
       - 200 g Philadelphia
@@ -101,14 +101,14 @@ dishes:
 
   - id: 11
     name: Backkartoffeln mit Gemüse
-    last: 2018-10-8
+    last: 2018-12-03
     ingredients:
       - 1,5 kg Kartoffeln
       - 500 g Gemüsemischung
 
   - id: 12
     name: Selbstgebackenes Brot mit Salat
-    last: 2018-10-8
+    last: 2018-12-01
     ingredients:
       - 1 Stk. Wurzelsalat
       - 500 g Mehl
@@ -116,7 +116,7 @@ dishes:
 
   - id: 13
     name: Risotto mit Steinpilzen
-    last: 2018-10-8
+    last: 2018-12-03
     ingredients:
       - 200 g Risotto-Reis
       - 50 g Getrocknete Steinpilze
@@ -395,6 +395,13 @@ dishes:
       - 0,5 Pkg. Oliven
       - 250 g Feta
       - 2 Stk. Tomaten
+  - id: 44
+    name: Lachs mit Reis
+    last: 2018-12-02
+    ingredients:
+      - 500 g Lachs
+      - 300 g Reis
+      - 2 Stk. Orange
 
 weeks:
   eins: [1, 2, 3, 4, 5, 6, 7]
