@@ -38,6 +38,12 @@ class DishProposer {
 
     return {dishes, ingredients}
   }
+
+  fix(accepted, date) {
+    accepted.forEach(id => this.model.getDish(id).last = date)
+    this.model.persistChanges()
+    return {accepted, date}
+  }
 }
 
 module.exports = DishProposer

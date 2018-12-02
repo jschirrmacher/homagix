@@ -25,6 +25,7 @@ app.get('/proposals', async (req, res) => res.json(await proposer.get(
   getIntArrayParam(req.query, 'inhibit'),
   getIntArrayParam(req.query, 'accepted')
 )))
+app.post('/proposals/fix', async (req, res) => res.json(await proposer.fix(req.body.accepted, new Date(req.body.date))))
 app.use('/', express.static(path.join(__dirname, '..', 'build')))
 
 app.listen(PORT, () => {
