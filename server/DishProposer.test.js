@@ -10,9 +10,9 @@ class MockModel {
       108: {id: 108, name: 'b'}
     }
     this.dishes = [
-      {id: 1, name: 'A', last: '2018-09-01', ingredients: [{what: 101, amount: 1, unit: 'L'}]},
-      {id: 8, name: 'B', last: '2018-09-02', ingredients: [{what: 108, amount: 2, unit: 'ml'}]},
-      {id: 12, name: 'C', last: '2018-09-03', ingredients: [{what: 101, amount: 4, unit: 'L'}]},
+      {id: 1, name: 'A', last: '2018-09-01', ingredients: [{ingredient: 101, amount: 1, unit: 'L'}]},
+      {id: 8, name: 'B', last: '2018-09-02', ingredients: [{ingredient: 108, amount: 2, unit: 'ml'}]},
+      {id: 12, name: 'C', last: '2018-09-03', ingredients: [{ingredient: 101, amount: 4, unit: 'L'}]},
       {id: 17, name: 'D', last: '2018-08-01', ingredients: []},
       {id: 23, name: 'E', last: '2018-09-04', ingredients: []},
       {id: 25, name: 'F', last: '2018-09-05', ingredients: []},

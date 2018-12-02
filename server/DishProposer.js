@@ -19,7 +19,7 @@ class DishProposer {
   }
 
   getActualIngredient(entry) {
-    const id = entry.what
+    const id = entry.ingredient
     const name = 'Unbekannte Zutat #' + id
     return Object.assign({id, amount: entry.amount, unit: entry.unit}, this.model.getIngredient(id) || {name})
   }
