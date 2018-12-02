@@ -14,7 +14,9 @@ class App extends Component {
   }
 
   fixDishes() {
-    this.props.fixAcceptedDishes(Object.keys(this.props.accepted).map(a => parseInt(a)), this.state.startDate)
+    const accepted = Object.keys(this.props.accepted).map(a => parseInt(a))
+    const date = this.state.startDate.toISOString().split('T')[0]
+    this.props.fixAcceptedDishes(accepted, date)
   }
 
   render() {
