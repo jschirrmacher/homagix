@@ -3,7 +3,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const basePath = path.join(__dirname, '..', 'Homagix', 'Homagix.Server', 'Data')
+const basePath = path.join(__dirname, '..', 'data')
 
 class Model {
   constructor() {
@@ -11,6 +11,9 @@ class Model {
     this.viewModels = {
       dishes: [],
       ingredients: []
+    }
+    if (!fs.existsSync(path.join(basePath, 'events.json'))) {
+      fs.copyFileSync(path.join(basePath, 'events-initial.json'), path.join(basePath, 'events.json'))
     }
     this.events = JSON.parse(fs.readFileSync(path.join(basePath, 'events.json')))
     this.replay()
