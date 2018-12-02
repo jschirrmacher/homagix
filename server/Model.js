@@ -74,22 +74,23 @@ class Model {
       switch (type) {
         case 'dish-added':
           this.viewModels.dishes.push(event)
-          break;
+          break
 
         case 'ingredient-added':
           this.viewModels.ingredients.push(event)
-          break;
+          break
 
         case 'served':
           this.viewModels.dishes.find(dish => dish.id === event.dish).last = new Date(event.date)
-          break;
+          break
 
-        case 'ingredient-assigned':
+        case 'ingredient-assigned': {
           const dish = this.viewModels.dishes.find(dish => dish.id === event.dish)
           delete event.dish
           dish.ingredients = dish.ingredients || []
           dish.ingredients.push(event)
-          break;
+          break
+        }
       }
     })
   }
