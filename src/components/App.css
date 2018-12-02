@@ -1,3 +1,9 @@
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
 h1{
   margin: 0;
   background: linear-gradient(to bottom right, #999999, #BBBBBB);
@@ -5,7 +11,7 @@ h1{
 }
 
 h2 {
-  margin: 5px 0 0;
+  margin: 5px 0 10px;
   font-size: 18px;
 }
 
@@ -55,9 +61,12 @@ ul li {
   position: relative;
 }
 
+button {
+  cursor: pointer;
+}
+
 button.delete {
   border: none;
-  cursor: pointer;
   color: red;
   font-size: 1.6em;
   position: absolute;
@@ -67,7 +76,6 @@ button.delete {
 
 button.accept {
   border: none;
-  cursor: pointer;
   color: lightgray;
   font-size: 1.3em;
   position: absolute;
@@ -114,4 +122,17 @@ button:active {
 .fading {
   opacity: 0.001;
   transition: opacity 1s;
+}
+
+#startDate {
+  font-size: 15px;
+  width: 77px;
+}
+
+#accept-proposals {
+  padding: 5px 20px;
+  background: transparent;
+  border: 2px solid #aaaaaa;
+  border-radius: 4px;
+  font-size: 1em;
 }
