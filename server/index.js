@@ -21,19 +21,16 @@ app.use((req, res, next) => {
   next()
 })
 
-app.get('/proposals', async (req, res) => res.json(await proposer.get(handleArrayParam(req.query, {inhibit: 'int', accepted: 'int'}))))
+app.get('/proposals', async (req, res) => res.json(await proposer.get(
+  getIntArrayParam(req.query, 'inhibit'),
+  getIntArrayParam(req.query, 'accepted')
+)))
 app.use('/', express.static(path.join(__dirname, '..', 'build')))
 
 app.listen(PORT, () => {
   logger.info(`Listening on port ${PORT}`)
 })
 
-function handleArrayParam(params, types) {
-  Object.keys(types).forEach(paramName => {
-    params[paramName] = (params[paramName] && params[paramName].split(',')) || []
-    if (types[paramName] === 'int') {
-      params[paramName] = params[paramName].map(n => parseInt(n))
-    }
-  })
-  return params
+function getIntArrayParam(params, name) {
+  return ((params[name] && params[name].split(',')) || []).map(n => parseInt(n))
 }

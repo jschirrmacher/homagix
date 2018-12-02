@@ -24,11 +24,11 @@ class DishProposer {
     return Object.assign({id, amount: entry.amount, unit: entry.unit}, this.model.getIngredient(id) || {name})
   }
 
-  get(options = {}) {
-    const inhibited = options.inhibit || []
-    const accepted = options.accepted || []
-    const dishes = this.model.getDishes(7 + Math.max(0, inhibited.length))
-      .filter(dish => !inhibited.some(id => +id === +dish.id))
+  get(inhibited = [], accepted = []) {
+    const dishes = this.model.getDishes()
+      .filter(dish => !inhibited.some(id => id === +dish.id))
+      .sort((a, b) => new Date(a.last) - new Date(b.last))
+      .slice(0, 7)
     const ingredients = dishes
       .filter(dish => accepted.some(id => id === dish.id))
       .map(dish => dish.ingredients)                                // get ingredients for each accepted dish
