@@ -42,6 +42,7 @@ export function fixAcceptedDishes(accepted, date) {
     const response = await fetch('/proposals/fix', {method: 'POST', body, headers})
     const result = await response.json()
     if (response.ok) {
+      dispatch(getProposals())
       dispatch({type: types.PROPOSAL_FIXED})
     } else {
       dispatch({type: types.ERROR, message: result.error || response.status + ' ' + response.statusText})
