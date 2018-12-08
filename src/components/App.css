@@ -30,29 +30,9 @@ h2 {
   padding: 5px 10px;
 }
 
-@media screen {
-  .App {
-    margin: 0 auto;
-    justify-content: space-around;
-  }
-}
-
-@media (min-width: 640px) {
-  .App {
-    display: flex;
-  }
-}
-
-@media print {
-  .App {
-    justify-content: space-between;
-  }
-}
-
 ul {
   list-style: none;
   padding: 0;
-  margin: 1em;
 }
 
 ul li {
@@ -63,6 +43,7 @@ ul li {
 
 button {
   cursor: pointer;
+  background: white;
 }
 
 button.delete {
@@ -89,6 +70,7 @@ button.accept {
 
 button:focus {
   outline:0;
+  background: white;
 }
 
 button:hover {
@@ -134,4 +116,35 @@ button:active {
   border: 2px solid #aaaaaa;
   border-radius: 4px;
   font-size: 1em;
+}
+
+@media screen {
+  .App {
+    margin: 0 auto;
+    justify-content: space-around;
+  }
+}
+
+@media (min-width: 640px) {
+  .App {
+    display: flex;
+  }
+
+  ul {
+    margin: 1em;
+  }
+}
+
+@media print {
+  .App {
+    justify-content: space-between;
+  }
+
+  button {
+    display: none;
+  }
+
+  ul li {
+    padding: 10px;
+  }
 }
