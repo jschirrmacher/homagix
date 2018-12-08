@@ -13,6 +13,9 @@ export default function proposalsReducer(state = initialState, action) {
     case types.PROPOSAL_SETACCEPTANCE:
       return {...state, accepted: action.accepted}
 
+    case types.PROPOSAL_FIXED:
+      return {...state, accepted: [], inhibited: []}
+
     default:
       return state
   }
