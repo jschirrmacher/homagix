@@ -1,19 +1,31 @@
+FROM node:dubnium-alpine as builder
+
+RUN mkdir -p /tmp/frontend
+ADD package.json /tmp/frontend/package.json
+RUN cd /tmp/frontend && npm install --force
+
+ADD public /tmp/frontend/public
+ADD src /tmp/frontend/src
+RUN cd /tmp/frontend && npm run build
+
+
 FROM node:dubnium-alpine
 
 RUN mkdir /app
+RUN addgroup -S nodejs && adduser -S nodejs -G nodejs
+RUN chown nodejs.nodejs /app
+USER nodejs
 WORKDIR /app
 
-ADD package.json /app/
-ADD package-lock.json /app/
+RUN mkdir -p /tmp/backend
+ADD package.json /tmp/backend/package.json
+RUN cd /tmp/backend && npm install --production --force && cp -a /tmp/backend/node_modules /app/
+
+ADD package.json /app/package.json
 ADD server /app/server
-ADD public /app/public
-ADD src /app/src
-
-RUN npm install --force
-RUN npm run build
-
-RUN npm install --force --production
+COPY --from=builder /tmp/frontend/build /app/build
 
 EXPOSE 8080
+ENV NODE_ENV production
 
 CMD node server
