@@ -6,8 +6,10 @@ html, body {
 
 h1{
   margin: 0;
+  padding-top: 5px;
   background: linear-gradient(to bottom right, #999999, #BBBBBB);
-  color: #FFCC00;
+  color: #FFFF00;
+  overflow: hidden;
 }
 
 h2 {
@@ -22,7 +24,8 @@ h2 {
 .App-logo {
   height: 1.3em;
   vertical-align: middle;
-  margin: 0 10px;
+  margin: -15px 10px 0 0;
+  transform: scale(1.6);
 }
 
 .App {
