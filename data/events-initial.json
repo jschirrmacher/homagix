@@ -1810,35 +1810,6 @@
   },
   {
     "type": "dish-added",
-    "id": 36,
-    "name": "Backkartoffeln mit Gemüse"
-  },
-  {
-    "type": "served",
-    "dish": 36,
-    "date": "2018-11-5"
-  },
-  {
-    "type": "ingredient-assigned",
-    "dish": 36,
-    "ingredient": 1,
-    "amount": 1.5,
-    "unit": "kg"
-  },
-  {
-    "type": "ingredient-added",
-    "id": 95,
-    "name": "TK Gemüse"
-  },
-  {
-    "type": "ingredient-assigned",
-    "dish": 36,
-    "ingredient": 95,
-    "amount": 1,
-    "unit": "kg"
-  },
-  {
-    "type": "dish-added",
     "id": 37,
     "name": "Ei im Nest"
   },
