@@ -4,11 +4,19 @@ const fs = require('fs')
 const path = require('path')
 const YAML = require('yaml')
 
+const exists = path => {
+  try {
+    return fs.existsSync(path)
+  } catch (e) {
+    return false
+  }
+}
+
 class EventStore {
   constructor({basePath, logger}) {
     this.basePath = basePath
     this.logger = logger
-    if (!fs.existsSync(path.join(this.basePath, 'events.json'))) {
+    if (!exists(path.join(this.basePath, 'events.json'))) {
       fs.copyFileSync(path.join(this.basePath, 'events-initial.json'), path.join(this.basePath, 'events.json'))
     }
     this.events = JSON.parse(fs.readFileSync(path.join(this.basePath, 'events.json')))
@@ -21,7 +29,7 @@ class EventStore {
 
   applyChanges(commandExecutor) {
     const stateFileName = path.join(this.basePath, 'state.json')
-    const state = fs.existsSync(stateFileName) ? JSON.parse(fs.readFileSync(stateFileName).toString()) : {}
+    const state = exists(stateFileName) ? JSON.parse(fs.readFileSync(stateFileName).toString()) : {}
     const files = fs.readdirSync(path.join(this.basePath, 'changes'))
     files.forEach(file => {
       const changeNo = +file.replace('.yaml', '')
