@@ -4,9 +4,12 @@ const path = require('path')
 const express = require('express')
 const bodyParser = require('body-parser')
 const DishProposer = require('./DishProposer')
-const Model = require('./Model')
-const model = new Model()
 const logger = console
+const EventStore = require('./EventStore')
+const Model = require('./Model')
+
+const eventStore = new EventStore({basePath: path.join(__dirname, '..', 'data'), logger})
+const model = new Model({eventStore, logger})
 
 const PORT = process.env.PORT || 8080
 

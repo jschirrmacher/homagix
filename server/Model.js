@@ -1,96 +1,147 @@
 /*eslint-env node*/
 
-const fs = require('fs')
-const path = require('path')
+function camelize(string) {
+  return string.charAt(0).toUpperCase() + string.substr(1)
+}
 
-const basePath = path.join(__dirname, '..', 'data')
+function byId(id) {
+  return el => el.id === id
+}
+
+function byName(name) {
+  return el => el.name === name
+}
 
 class Model {
-  constructor() {
-    this.events = []
+  constructor(options = {}) {
+    this.eventStore = options.eventStore
+    this.logger = options.logger || console
     this.viewModels = {
-      dishes: [],
-      ingredients: []
+      dish: [],
+      ingredient: []
     }
-    if (!fs.existsSync(path.join(basePath, 'events.json'))) {
-      fs.copyFileSync(path.join(basePath, 'events-initial.json'), path.join(basePath, 'events.json'))
-    }
-    this.events = JSON.parse(fs.readFileSync(path.join(basePath, 'events.json')))
-    this.replay()
-    this.transactionIsOpen = false
-  }
-
-  replay() {
     this.inReplay = true
-    this.events.forEach(event => this.handleEvent(event))
+    options.eventStore.getEvents().forEach(event => this.handleEvent(event, true))
+    this.eventStore.applyChanges(this.executeCommand.bind(this))
     this.inReplay = false
   }
 
-  handleEvent(event) {
+  executeCommand(command, index) {
+    try {
+      switch (command.command) {
+        case 'add-ingredient-to-dish': {
+          const dish = this.findElement('dish', byName(command.dish))
+          const ingredient =
+            this.findElement('ingredient', byName(command.ingredient), true) ||
+            this.createElement('ingredient', {name: command.ingredient})
+          const event = {
+            type: 'ingredient-assigned',
+            dish: dish.id,
+            ingredient: ingredient.id,
+            amount: command.amount,
+            unit: command.unit
+          }
+          this.eventStore.add(event)
+          this.handleEvent(event)
+          break
+        }
+      }
+    } catch (e) {
+      this.logger.error(`${e.message} - command ${index} ignored`)
+    }
+  }
+
+  findElement(type, how, dontThrow = false) {
+    const el = this.viewModels[type].find(how)
+    if (!el && !dontThrow) {
+      throw Error(`${camelize(type)} not found`)
+    }
+    return el
+  }
+
+  createElement(type, data) {
     const makeListener = type => {
       return {
         set: (obj, name, value) => {
           obj[name] = value
           if (!this.inReplay) {
             const event = {type: type + '-updated', id: obj.id, name, value}
-            this.events.push(event)
-            this.transactionIsOpen = true
+            this.eventStore.add(event)
           }
           return true
         }
       }
     }
+
+    if (this.viewModels[type].find(byName(data.name))) {
+      throw Error(`${camelize(type)} '${data.name}' already exists`)
+    }
+    data.id = data.id || Math.max(...this.viewModels[type].map(el => el.id))
+    const el = new Proxy(data, makeListener(type))
+    this.viewModels[type].push(el)
+    if (!this.inReplay) {
+      this.eventStore.add(Object.assign({type: type + '-added'}, el))
+    }
+    return el
+  }
+
+  handleEvent(event) {
     const type = event.type
     const data = Object.assign({}, event)
     delete data.type
-    switch (type) {
-      case 'dish-added':
-        this.viewModels.dishes.push(new Proxy(data, makeListener('dishes')))
-        break
+    try {
+      switch (type) {
+        case 'dish-added':
+          this.createElement('dish', data)
+          break
 
-      case 'ingredient-added':
-        this.viewModels.ingredients.push(data)
-        break
+        case 'ingredient-added':
+          this.createElement('ingredient', data)
+          break
 
-      case 'served':
-        this.viewModels.dishes.find(dish => dish.id === data.dish).last = new Date(data.date)
-        break
+        case 'served':
+          this.findElement('dish', byId(data.dish)).last = new Date(data.date)
+          break
 
-      case 'ingredient-assigned': {
-        const dish = this.viewModels.dishes.find(dish => dish.id === data.dish)
-        delete data.dish
-        dish.ingredients = dish.ingredients || []
-        dish.ingredients.push(data)
-        break
+        case 'ingredient-assigned': {
+          const dish = this.findElement('dish', byId(data.dish))
+          delete data.dish
+          dish.ingredients = dish.ingredients || []
+          dish.ingredients.push(data)
+          break
+        }
+
+        case 'dish-updated':
+          this.findElement('dish', byId(data.dish))[data.name] = data.value
+          break
+
+        case 'ingredient-updated':
+          this.findElement('ingredient', byId(data.id))[data.name] = data.value
+          break
       }
-
-      case 'dish-updated':
-        this.viewModels.dishes.find(dish => dish.id === data.id)[data.name] = data.value
-        break
+    } catch (e) {
+      this.logger.error(`${e.message} - ${type} event ignored`)
     }
   }
 
   persistChanges() {
-    if (this.transactionIsOpen) {
-      fs.writeFileSync(path.join(basePath, 'events.json'), JSON.stringify(this.events, null, 2))
-      this.transactionIsOpen = false
-    }
+    this.eventStore.persistChanges()
   }
 
   getDishes() {
-    return this.viewModels.dishes
+    return this.viewModels.dish
   }
 
   getDish(id) {
-    return this.viewModels.dishes.find(dish => dish.id === id)
+    return this.viewModels.dish.find(dish => dish.id === id)
   }
 
   getIngredients() {
-    return this.viewModels.ingredients
+    return this.viewModels.ingredient
   }
 
   getIngredient(id) {
-    return this.viewModels.ingredients.find(ingredient => ingredient.id === id)
+    return this.viewModels.ingredient.find(ingredient => ingredient.id === id)
   }
 }
 

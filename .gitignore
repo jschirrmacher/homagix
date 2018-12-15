@@ -22,4 +22,5 @@
 /coverage/
 /build/
 /data/events.json
+/data/state.json
 .DS_Store
