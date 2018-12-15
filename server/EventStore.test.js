@@ -12,7 +12,7 @@ describe('EventStore', () => {
 
   it('should load initial data when no events.json file exist', () => {
     const events = JSON.stringify([{type: 'dish-added', id: 1, name: 'Test dish'}])
-    mock({'testdata/events-initial.json': events})
+    mock({testdata: {'events-initial.json': events}})
     const basePath = path.join(process.cwd(), 'testdata')
     const store = new EventStore({basePath})
     store.getEvents().should.deepEqual([{type: 'dish-added', id: 1, name: 'Test dish'}])
@@ -23,7 +23,7 @@ describe('EventStore', () => {
   it('should ignore initial data when events.json already exist', () => {
     const initial = JSON.stringify([{type: 'dish-added', id: 1, name: 'Test dish'}])
     const events = JSON.stringify([{type: 'dish-added', id: 2, name: 'Test dish 2'}])
-    mock({'testdata/events-initial.json': initial, 'testdata/events.json': events})
+    mock({testdata: {'events-initial.json': initial, 'events.json': events}})
     const basePath = path.join(process.cwd(), 'testdata')
     const store = new EventStore({basePath})
     store.getEvents().should.deepEqual([{type: 'dish-added', id: 2, name: 'Test dish 2'}])
@@ -33,7 +33,7 @@ describe('EventStore', () => {
 
   it('should replay events on startup', () => {
     const events = JSON.stringify([{type: 'dish-added', id: 1, name: 'Test dish'}])
-    mock({'testdata/events.json': events})
+    mock({testdata: {'events.json': events}})
     const basePath = path.join(process.cwd(), 'testdata')
     const store = new EventStore({basePath})
     store.getEvents().should.deepEqual([{type: 'dish-added', id: 1, name: 'Test dish'}])
@@ -42,7 +42,7 @@ describe('EventStore', () => {
   it('should apply changes', () => {
     const events = JSON.stringify([{type: 'dish-added', id: 1, name: 'Test dish'}])
     const changes = YAML.stringify([{command: 'add-dish', name: 'Test dish 2'}])
-    mock({'testdata/events.json': events, 'testdata/changes/1.yaml': changes})
+    mock({testdata: {'events.json': events, changes: {'1.yaml': changes}}})
     const basePath = path.join(process.cwd(), 'testdata')
     const store = new EventStore({basePath})
     let commandIsExecuted = false
@@ -56,11 +56,13 @@ describe('EventStore', () => {
   })
 
   it('should ignore changes which are already handled', () => {
-    mock({
-      'testdata/events.json': JSON.stringify([{type: 'dish-added', id: 1, name: 'Test dish'}]),
-      'testdata/changes/1.yaml': YAML.stringify([{command: 'add-dish', name: 'Test dish 2'}]),
-      'testdata/state.json': '{"changesRead":1}'
-    })
+    mock({testdata: {
+        'events.json': JSON.stringify([{type: 'dish-added', id: 1, name: 'Test dish'}]),
+        'state.json': '{"changesRead":1}',
+        changes: {
+          '1.yaml': YAML.stringify([{command: 'add-dish', name: 'Test dish 2'}])
+        }
+      }})
     const basePath = path.join(process.cwd(), 'testdata')
     const store = new EventStore({basePath})
     store.applyChanges(() => should('command applied').fail())
