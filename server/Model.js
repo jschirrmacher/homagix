@@ -45,9 +45,13 @@ class Model {
           this.handleEvent(event)
           break
         }
+
+        default:
+          // noinspection ExceptionCaughtLocallyJS
+          throw Error(`invalid command`)
       }
     } catch (e) {
-      this.logger.error(`${e.message} - command ${index} ignored`)
+      this.logger.error(`${e.message} - command #${index + 1} '${command.command}' ignored`)
     }
   }
 

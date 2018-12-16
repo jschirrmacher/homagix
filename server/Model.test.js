@@ -7,21 +7,43 @@ const dish = {id: 47, name: 'Test dish 1'}
 const eventDishAdded = Object.assign({type: 'dish-added'}, dish)
 const ingredient = {id: 1, name: 'Ing 1'}
 const eventIngredientAdded = Object.assign({type: 'ingredient-added'}, ingredient)
+const validCmd = {command: 'add-ingredient-to-dish', dish: 'Test dish 1', ingredient: 'Ing 1', amount: 500, unit: 'g'}
+const invalidCmd1 = {command: 'add-ingredient-to-dish', dish: 'Test dish 2', ingredient: 'Ing 1', amount: 1, unit: 'L'}
+const invalidCmd2 = {command: 'invalid-command'}
+const commands = [validCmd, invalidCmd1, invalidCmd2]
+const completeDish = Object.assign({ingredients: [{ingredient: 1, amount: 500, unit: 'g'}]}, dish)
+const log = []
 
 describe('Model', () => {
   beforeEach(() => {
-    this.eventStore = new EventStoreMock([eventDishAdded, eventIngredientAdded])
-    this.OUT = new Model({eventStore: this.eventStore})
+    this.eventStore = new EventStoreMock([eventDishAdded, eventIngredientAdded], commands)
+    log.length = 0
+    this.OUT = new Model({eventStore: this.eventStore, logger: {
+      error: message => log.push(message)
+    }})
   })
 
   it('should return a list of dishes', () => {
     const dishes = this.OUT.getDishes()
     dishes.should.be.an.instanceOf(Array)
-    dishes.should.deepEqual([dish])
+    dishes.should.deepEqual([completeDish])
   })
 
   it('should return a requested dish', () => {
-    this.OUT.getDish(47).should.deepEqual(dish)
+    this.OUT.getDish(47).should.deepEqual(completeDish)
+  })
+
+  it('should execute commands', () => {
+    const events = this.eventStore.getEvents()
+    const event = {type: 'ingredient-assigned', dish: 47, ingredient: 1, amount: 500, unit: 'g'}
+    events[2].should.deepEqual(event)
+  })
+
+  it('should report invalid commands', () => {
+    log.should.deepEqual([
+      `Dish not found - command #2 'add-ingredient-to-dish' ignored`,
+      `invalid command - command #3 'invalid-command' ignored`
+    ])
   })
 
   it('should persist changes in EventStore', () => {
@@ -30,8 +52,8 @@ describe('Model', () => {
     this.OUT.persistChanges()
     this.eventStore.persistChangesIsCalled.should.be.true()
     const events = this.eventStore.getEvents()
-    events.length.should.equal(3)
-    events[2].should.deepEqual({type: 'dish-updated', id: 47, name: 'name', value: 'Test dish 1 changed'})
+    events.length.should.equal(4)
+    events[3].should.deepEqual({type: 'dish-updated', id: 47, name: 'name', value: 'Test dish 1 changed'})
   })
 
   it('should return a list of ingredients', () => {
@@ -51,8 +73,9 @@ describe('Model', () => {
 })
 
 class EventStoreMock {
-  constructor(events) {
+  constructor(events, commands) {
     this.events = events
+    this.commands = commands
     this.persistChangesIsCalled = false
   }
 
@@ -60,7 +83,8 @@ class EventStoreMock {
     return this.events
   }
 
-  applyChanges() {
+  applyChanges(commandHandler) {
+    this.commands.forEach(commandHandler)
   }
 
   add(event) {
