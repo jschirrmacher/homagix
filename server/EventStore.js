@@ -30,7 +30,8 @@ class EventStore {
   applyChanges(commandExecutor) {
     const stateFileName = path.join(this.basePath, 'state.json')
     const state = exists(stateFileName) ? JSON.parse(fs.readFileSync(stateFileName).toString()) : {}
-    const files = fs.readdirSync(path.join(this.basePath, 'changes'))
+    const changesFolder = path.join(this.basePath, 'changes')
+    const files = exists(changesFolder) ? fs.readdirSync(changesFolder) : []
     files.forEach(file => {
       const changeNo = +file.replace('.yaml', '')
       if (!state.changesRead || state.changesRead < changeNo) {

@@ -39,6 +39,14 @@ describe('EventStore', () => {
     store.getEvents().should.deepEqual([{type: 'dish-added', id: 1, name: 'Test dish'}])
   })
 
+  it(`should do nothing when applyChanges() is called and no 'changes' folder exist`, () => {
+    const events = JSON.stringify([{type: 'dish-added', id: 1, name: 'Test dish'}])
+    mock({testdata: {'events.json': events}})
+    const basePath = path.join(process.cwd(), 'testdata')
+    const store = new EventStore({basePath})
+    store.applyChanges(command => {})
+  })
+
   it('should apply changes', () => {
     const events = JSON.stringify([{type: 'dish-added', id: 1, name: 'Test dish'}])
     const changes = YAML.stringify([{command: 'add-dish', name: 'Test dish 2'}])
