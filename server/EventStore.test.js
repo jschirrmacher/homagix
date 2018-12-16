@@ -44,7 +44,7 @@ describe('EventStore', () => {
     mock({testdata: {'events.json': events}})
     const basePath = path.join(process.cwd(), 'testdata')
     const store = new EventStore({basePath})
-    store.applyChanges(command => {})
+    store.applyChanges(() => {})
   })
 
   it('should apply changes', () => {
