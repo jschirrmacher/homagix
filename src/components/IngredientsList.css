@@ -1,0 +1,49 @@
+.ItemGroup  {
+  float: right;
+  font-size: 15px;
+  border: none;
+  background: transparent;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  outline: none;
+  padding: 2px 10px;
+  border-radius: 3px;
+  -ms-text-align-last: center;
+  text-align-last: center;
+}
+
+.color-fruit {
+  background-color: darkgreen;
+  color: yellow;
+}
+
+.color-breakfast {
+  background-color: yellow;
+  color: saddlebrown;
+}
+
+.color-meat {
+  background-color: darkred;
+  color: yellow;
+}
+
+.color-cooled {
+  background-color: cornflowerblue;
+  color: white;
+}
+
+.color-tinned {
+  background-color: lightgrey;
+  color: black;
+}
+
+.color-drinks {
+  background-color: yellowgreen;
+  color: yellow;
+}
+
+.color-frozen {
+  background-color: blue;
+  color: white;
+}

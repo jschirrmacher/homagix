@@ -33,13 +33,17 @@ h2 {
   padding: 5px 10px;
 }
 
+.react-tabs {
+  width: 100%;
+}
+
 ul {
   list-style: none;
   padding: 0;
 }
 
 ul li {
-  padding: 10px 30px;
+  padding: 10px 0 10px 30px;
   border-bottom: 1px solid #bbbbbb;
   position: relative;
 }

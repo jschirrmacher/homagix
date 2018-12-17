@@ -6,16 +6,10 @@ const createParam = (name, obj) => {
 }
 
 export function getProposals(inhibit = {}, accepted = {}) {
-  return async function (dispatch) {
-    const params = [createParam('inhibit', inhibit), createParam('accepted', accepted)].filter(a => a).join('&')
-    const response = await fetch('/proposals' + (params ? ('?' + params) : ''))
-    const result = await response.json()
-    if (response.ok) {
-      dispatch({type: types.PROPOSALS_LOADED, proposals: result})
-    } else {
-      dispatch({type: types.ERROR, message: result.error || response.status + ' ' + response.statusText})
-    }
-  }
+  const params = [createParam('inhibit', inhibit), createParam('accepted', accepted)].filter(a => a).join('&')
+  return doRemoteAction('GET', '/proposals' + (params ? ('?' + params) : ''), null, response => {
+    return [{type: types.PROPOSALS_LOADED, proposals: response.content}]
+  })
 }
 
 export function discardProposal(dish) {
@@ -36,16 +30,34 @@ export function toggleProposalAcceptance(dish) {
 }
 
 export function fixAcceptedDishes(accepted, date) {
+  return doRemoteAction('POST', '/proposals/fix', {accepted, date}, () => {
+    return [{type: types.PROPOSAL_FIXED}, getProposals()]
+  })
+}
+
+export function getIngredients() {
+  return doRemoteAction('GET', '/ingredients', null, response => {
+    return [{type: types.INGREDIENTS_LOADED, ingredients: response.content}]
+  })
+}
+
+export function setItemGroup(item, group){
+  return doRemoteAction('PUT', '/ingredients/' + item.id, {group}, response => {
+    return [{type: types.INGREDIENT_UPDATED, ingredient: response.content}]
+  })
+}
+
+function doRemoteAction(method, path, body = null, callback) {
   return async function (dispatch) {
-    const headers = {'content-type': 'application/json'}
-    const body = JSON.stringify({accepted, date})
-    const response = await fetch('/proposals/fix', {method: 'POST', body, headers})
-    const result = await response.json()
-    if (response.ok) {
-      dispatch({type: types.PROPOSAL_FIXED})
-      dispatch(getProposals())
+    const headers = body ? {'content-type': 'application/json'} : {}
+    const response = await fetch(path, {method, headers, body: body && JSON.stringify(body)})
+    const contentType = response.headers.get('content-type') || 'text/plain'
+    response.content = contentType.match(/json/) ? await response.json() : {message: await response.text()}
+    if (!response.ok) {
+      response.error = (response.error ? response.error + ': ' : '') + response.status + ' ' + response.statusText
+      dispatch({type: types.ERROR, message: response.error})
     } else {
-      dispatch({type: types.ERROR, message: result.error || response.status + ' ' + response.statusText})
+      callback(response).forEach(dispatch)
     }
   }
 }

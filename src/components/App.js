@@ -1,16 +1,19 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import ProposalsList from './ProposalsList'
 import IngredientsList from './IngredientsList'
 import './App.css'
 import DatePicker from 'react-date-picker'
-import {fixAcceptedDishes} from '../actions/proposalsActions'
+import {Tab, Tabs, TabList, TabPanel} from 'react-tabs'
+import "react-tabs/style/react-tabs.css"
+import {fixAcceptedDishes, getIngredients} from '../actions/proposalsActions'
 
 class App extends Component {
   constructor(props) {
     super(props)
     this.state = {startDate: new Date()}
+    this.props.getIngredients()
   }
 
   fixDishes() {
@@ -23,22 +26,33 @@ class App extends Component {
     const error = this.props.error && <div className="error">{this.props.error}</div>
     return (
       <div className="App">
-        <div>
-          <h2>Vorschläge für die Woche</h2>
-          <label>beginnend vom <DatePicker value={this.state.startDate}
-                                           onChange={startDate => this.setState({startDate})}
-                                           required={true}
-                                           clearIcon={null}
-                                           id="startDate"
-                               />
-          </label>
-          <ProposalsList />
-          <button id="accept-proposals" onClick={() => this.fixDishes()}>Festlegen</button>
-        </div>
-        <div>
-          <h2>Benötigte Zutaten</h2>
-          <IngredientsList ingredients={this.props.ingredients} />
-        </div>
+        <Tabs forceRenderTabPanel={true}>
+          <TabList>
+            <Tab>Wochenvorschläge</Tab>
+            <Tab>Einkaufsliste</Tab>
+            <Tab>Alle Zutaten</Tab>
+          </TabList>
+
+          <TabPanel>
+            <label>beginnend vom <DatePicker value={this.state.startDate}
+                                             onChange={startDate => this.setState({startDate})}
+                                             required={true}
+                                             clearIcon={null}
+                                             id="startDate"
+            />
+            </label>
+            <ProposalsList/>
+            <button id="accept-proposals" onClick={() => this.fixDishes()}>Festlegen</button>
+          </TabPanel>
+
+          <TabPanel>
+            <IngredientsList ingredients={this.props.ingredients}/>
+          </TabPanel>
+
+          <TabPanel>
+            <IngredientsList ingredients={this.props.allIngredients}/>
+          </TabPanel>
+        </Tabs>
         {error}
       </div>
     )
@@ -49,12 +63,13 @@ function mapStateToProps(state) {
   return {
     error: state.error.message,
     accepted: state.proposals.accepted,
-    ingredients: state.proposals.ingredients
+    ingredients: state.proposals.ingredients,
+    allIngredients: state.proposals.allIngredients
   }
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({fixAcceptedDishes}, dispatch)
+  return bindActionCreators({fixAcceptedDishes, getIngredients}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

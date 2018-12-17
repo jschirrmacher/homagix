@@ -16,6 +16,16 @@ export default function proposalsReducer(state = initialState, action) {
     case types.PROPOSAL_FIXED:
       return {...state, accepted: [], inhibited: []}
 
+    case types.INGREDIENTS_LOADED:
+      return {...state, allIngredients: action.ingredients}
+
+    case types.INGREDIENT_UPDATED:
+      return {
+        ...state,
+        allIngredients: state.allIngredients.map(i => i.id === action.ingredient.id ? action.ingredient : i),
+        ingredients: state.ingredients.map(i => i.id === action.ingredient.id ? action.ingredient : i)
+      }
+
     default:
       return state
   }
