@@ -1,3 +1,5 @@
+/*eslint-env node*/
+
 const express = require('express')
 
 module.exports = function ({model}) {

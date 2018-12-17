@@ -29,7 +29,7 @@ app.use('/ingredients', ingredientRouter)
 app.use('/proposals', proposalsRouter)
 app.use('/', express.static(path.join(__dirname, '..', 'build')))
 
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res, next) { // eslint-disable-line no-unused-vars
   logger.error(err)
   res.status(500).json({error: err.toString()})
 })

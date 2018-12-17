@@ -1,6 +1,8 @@
+/*eslint-env node*/
+
 const express = require('express')
 
-module.exports = function ({model, proposer}) {
+module.exports = function ({proposer}) {
   const router = express.Router()
 
   function getIntArrayParam(params, name) {
