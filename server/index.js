@@ -20,6 +20,13 @@ const app = express()
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
+if (process.env.NODE_ENV === 'development') {
+  const webpack = require('webpack')
+  const middleware = require('webpack-dev-middleware')
+  const compiler = webpack(require('../config/webpack.conf.dev'))
+  app.use(middleware(compiler, {logger, writeToDisk: true}))
+}
+
 app.use((req, res, next) => {
   logger.info(req.method + ' ' + req.path)
   next()
@@ -28,6 +35,7 @@ app.use((req, res, next) => {
 app.use('/ingredients', ingredientRouter)
 app.use('/proposals', proposalsRouter)
 app.use('/', express.static(path.join(__dirname, '..', 'build')))
+app.use('/', express.static(path.join(__dirname, '..', 'public')))
 
 app.use(function(err, req, res, next) { // eslint-disable-line no-unused-vars
   logger.error(err)
