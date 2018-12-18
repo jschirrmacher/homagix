@@ -8,7 +8,7 @@ let index = 0
 
 const itemGroups = {
   fruit: {order: 1, title: 'Obst & Gemüse'},
-  breakfast: {order: 2, title: 'Frühstück'},
+  breakfast: {order: 2, title: 'Brot & Frühstück'},
   meat: {order: 3, title: 'Fleisch'},
   cooled: {order: 4, title: 'Frische & Kühlung'},
   tinned: {order: 5, title: 'Nahrungsmittel'},
