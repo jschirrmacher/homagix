@@ -145,19 +145,25 @@ button:active {
 }
 
 @media print {
-  body {
-    zoom: 0.7;
+  @media (max-width: 640px) {
+    body {
+      zoom: 0.7;
+    }
   }
 
   .App {
     justify-content: space-between;
   }
 
-  button {
+  button, .react-tabs__tab-list {
     display: none;
   }
 
   ul li {
     padding: 10px;
+  }
+
+  ul li:not(.accepted) {
+    display: none;
   }
 }
