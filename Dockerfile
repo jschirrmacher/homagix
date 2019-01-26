@@ -7,6 +7,7 @@ RUN cd /tmp/frontend && npm install --force
 ADD public /tmp/frontend/public
 ADD src /tmp/frontend/src
 ADD config /tmp/frontend/config
+ADD babel.config.js /tmp/frontend/babel.config.js
 RUN cd /tmp/frontend && npm run build
 
 

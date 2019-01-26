@@ -1,5 +1,6 @@
 const webpack = require('webpack')
 const path = require('path')
+const babelConfig = require(path.resolve(__dirname, '..', 'babel.config'))
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
@@ -27,11 +28,7 @@ module.exports = {
         exclude: [/node_modules/, /build/],
         use: {
           loader: require.resolve('babel-loader'),
-          options: {
-            cacheDirectory: true,
-            cacheCompression: false,
-            presets: ['@babel/preset-env']
-          }
+          options: babelConfig
         }
       }
     ]
