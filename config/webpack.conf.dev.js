@@ -12,7 +12,7 @@ module.exports = {
     rules: [
       {
         test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
-        loader: require.resolve('url-loader'),
+        loader: 'file-loader',
         options: {
           limit: 10000,
           name: 'static/media/[name].[hash:8].[ext]',
@@ -24,7 +24,7 @@ module.exports = {
       },
       {
         test: /\.m?js$/,
-        exclude: /node_modules/,
+        exclude: [/node_modules/, /build/],
         use: {
           loader: require.resolve('babel-loader'),
           options: {

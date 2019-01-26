@@ -6,6 +6,7 @@ RUN cd /tmp/frontend && npm install --force
 
 ADD public /tmp/frontend/public
 ADD src /tmp/frontend/src
+ADD config /tmp/frontend/config
 RUN cd /tmp/frontend && npm run build
 
 
@@ -23,6 +24,7 @@ RUN cd /tmp/backend && npm install --production --force && cp -a /tmp/backend/no
 
 ADD package.json /app/package.json
 ADD server /app/server
+ADD public /app/public
 COPY --from=builder /tmp/frontend/build /app/build
 
 EXPOSE 8080
