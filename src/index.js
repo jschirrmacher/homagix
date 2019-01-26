@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import logo from './homagix.png'
 import App from './components/App'
-import 'babel-polyfill'
+import '@babel/polyfill'
 
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
 import configureStore from './configureStore'

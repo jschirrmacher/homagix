@@ -1,0 +1,10 @@
+env:
+  es6: true
+  jest: true
+plugins:
+  - eslint-plugin-react
+parser: 'babel-eslint'
+rules:
+  react/jsx-uses-vars: warn
+  react/react-in-jsx-scope: off
+  no-unused-vars: off
