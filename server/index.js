@@ -22,7 +22,7 @@ app.use(bodyParser.json())
 
 if (process.env.NODE_ENV === 'development') {
   const webpack = require('webpack')
-  const webpackConfig = require('../config/webpack.conf.dev')
+  const webpackConfig = require('../config/webpack.conf')
   const compiler = webpack(webpackConfig)
   app.use(require('webpack-dev-middleware')(compiler, {logger, publicPath: webpackConfig.output.publicPath}))
   app.use(require("webpack-hot-middleware")(compiler, {logger, path: '/__webpack_hmr', heartbeat: 10 * 1000}))

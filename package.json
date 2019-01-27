@@ -6,7 +6,7 @@
   "main": "server/index.js",
   "scripts": {
     "start": "node server",
-    "build": "webpack --config config/webpack.conf.dev.js",
+    "build": "webpack --config config/webpack.conf.js",
     "test-server": "eslint server/**/*.js && mocha server/**/*.test.js",
     "test-app": "eslint src/**/*.js && jest --env=jsdom src/**/*.test.js",
     "test": "CI=true npm run test-server && npm run test-app"

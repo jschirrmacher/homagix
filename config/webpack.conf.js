@@ -2,14 +2,18 @@ const webpack = require('webpack')
 const path = require('path')
 const babelConfig = require(path.resolve(__dirname, '..', 'babel.config'))
 
+const mode = process.env.NODE_ENV || 'development'
+const plugins = []
+const index = []
+if (mode === 'development') {
+  plugins.push(new webpack.HotModuleReplacementPlugin())
+  index.push('webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000')
+}
+index.push(path.resolve(__dirname, '..', 'src', 'index.js'))
+
 module.exports = {
-  mode: process.env.NODE_ENV || 'development',
-  entry: {
-    index: [
-      "webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000",
-      path.resolve(__dirname, '..', 'src', 'index.js')
-    ]
-  },
+  mode,
+  entry: {index, },
   output: {
     path: path.resolve(__dirname, '..', 'build'),
     filename: 'bundle.js'
@@ -38,7 +42,10 @@ module.exports = {
       }
     ]
   },
-  "plugins": [
-    new webpack.HotModuleReplacementPlugin()
-  ]
+  plugins,
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    }
+  }
 }
