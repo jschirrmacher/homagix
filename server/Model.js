@@ -103,10 +103,6 @@ class Model {
           this.createElement('ingredient', data)
           break
 
-        case 'served':
-          this.findElement('dish', byId(data.dish)).last = new Date(data.date)
-          break
-
         case 'ingredient-assigned': {
           const dish = this.findElement('dish', byId(data.dish))
           delete data.dish
@@ -116,7 +112,7 @@ class Model {
         }
 
         case 'dish-updated':
-          this.findElement('dish', byId(data.dish))[data.name] = data.value
+          this.findElement('dish', byId(data.id))[data.name] = data.value
           break
 
         case 'ingredient-updated':
