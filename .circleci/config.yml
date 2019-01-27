@@ -3,7 +3,7 @@ executors:
   my-executor:
     docker:
       - image: buildpack-deps:jessie
-    working_directory: /tmp
+    working_directory: ~/repo
 
 jobs:
   build:
@@ -32,7 +32,7 @@ jobs:
     executor: my-executor
     steps:
       - attach_workspace:
-          at: /tmp/workspace
+          at: ~/repo/workspace
 
       - run: npm run test
 
