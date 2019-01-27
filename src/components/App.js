@@ -51,7 +51,7 @@ class App extends Component {
             {this.props.ingredients && this.props.ingredients.length
               ? <Fragment>
                   <button className="print-button" onClick={() => window.print()}>Drucken</button>
-                  <button id="accept-proposals" onClick={() => this.fixDishes()}>Beenden</button>
+                  <button id="accept-proposals" onClick={() => this.fixDishes()}>Erledigt</button>
                 </Fragment>
               : ''
             }
