@@ -8,7 +8,6 @@ executors:
 jobs:
   build:
     executor: my-executor
-    working_directory: ~/repo
     steps:
       - checkout
 
@@ -25,22 +24,32 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       - persist_to_workspace:
-          root: ~/repo
+          root: .
           paths:
-            - echo-output
+            - config
+            - node_modules
+            - public
+            - server
+            - src
+            - package.json
+            - Dockerfile
+            - babel.config.js
 
   test:
     executor: my-executor
     working_directory: ~/repo
     steps:
       - attach_workspace:
-          at: ~/repo
+          at: .
 
       - run: npm run test
 
   publish:
     executor: my-executor
     steps:
+      - attach_workspace:
+          at: .
+
       - setup_remote_docker:
           docker_layer_caching: true
 
