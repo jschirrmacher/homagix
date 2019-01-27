@@ -59,10 +59,18 @@ class IngredientsList extends Component {
     return ingredients
   }
 
+  setItemGroup(item, group) {
+    if (item.id > 0) {
+      this.props.setItemGroup(item, group)
+    } else {
+      this.setState({additions: this.state.additions.map(i => i.id === item.id ? Object.assign(i, {group}) : i)})
+    }
+  }
+
   render() {
     const items = this.getIngredients()
       .map(item => {
-        const group = <select onChange={event => this.props.setItemGroup(item, event.target.value)}
+        const group = <select onChange={event => this.setItemGroup(item, event.target.value)}
                               defaultValue={item.group} className={'ItemGroup color-' + item.group}>
           <option value={null}>-- bitte auswählen --</option>
           {Object.keys(itemGroups).map(group => (
