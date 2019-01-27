@@ -24,7 +24,7 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       - persist_to_workspace:
-          root: workspace
+          root: .
           paths:
             - echo-output
 
@@ -32,7 +32,7 @@ jobs:
     executor: my-executor
     steps:
       - attach_workspace:
-          at: ~/repo/workspace
+          at: ~/repo
 
       - run: npm run test
 
