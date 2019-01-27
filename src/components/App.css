@@ -120,11 +120,13 @@ button:active {
   width: 77px;
 }
 
-#accept-proposals {
+#accept-proposals,
+.print-button {
   padding: 5px 20px;
   border: 2px solid #aaaaaa;
   border-radius: 4px;
   font-size: 1em;
+  margin-right: 1em;
 }
 
 @media screen {
@@ -137,6 +139,7 @@ button:active {
 @media (min-width: 640px) {
   .App {
     display: flex;
+    flex-direction: column;
   }
 
   ul {

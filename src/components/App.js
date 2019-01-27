@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import ProposalsList from './ProposalsList'
@@ -29,9 +29,9 @@ class App extends Component {
       <div className="App">
         <Tabs forceRenderTabPanel={true}>
           <TabList>
-            <Tab>Wochenvorschläge</Tab>
-            <Tab>Einkaufsliste</Tab>
-            <Tab>Alle Zutaten</Tab>
+            <Tab>Planen</Tab>
+            <Tab>Einkaufen</Tab>
+            <Tab>Verwalten</Tab>
           </TabList>
 
           <TabPanel>
@@ -43,11 +43,18 @@ class App extends Component {
             />
             </label>
             <ProposalsList/>
-            <button id="accept-proposals" onClick={() => this.fixDishes()}>Festlegen</button>
+            <button className="print-button" onClick={() => window.print()}>Drucken</button>
           </TabPanel>
 
           <TabPanel>
             <IngredientsList ingredients={this.props.ingredients}/>
+            {this.props.ingredients && this.props.ingredients.length
+              ? <Fragment>
+                  <button className="print-button" onClick={() => window.print()}>Drucken</button>
+                  <button id="accept-proposals" onClick={() => this.fixDishes()}>Beenden</button>
+                </Fragment>
+              : ''
+            }
           </TabPanel>
 
           <TabPanel>
