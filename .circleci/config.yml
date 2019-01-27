@@ -23,11 +23,6 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      - persist_to_workspace:
-          root: .
-          paths:
-            - echo-output
-
   test:
     executor: my-executor
     steps:
