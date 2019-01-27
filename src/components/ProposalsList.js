@@ -18,7 +18,7 @@ class ProposalsList extends Component {
       </li>
     ))
 
-    return <ul>{items}</ul>
+    return <ul className="ProposalsList">{items}</ul>
   }
 }
 

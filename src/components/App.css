@@ -166,7 +166,8 @@ button:active {
     padding: 10px;
   }
 
-  ul li:not(.accepted) {
+  .ProposalsList li:not(.accepted),
+  .IngredientsList li.inhibited {
     display: none;
   }
 }
