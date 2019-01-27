@@ -34,7 +34,7 @@ jobs:
             - package.json
             - Dockerfile
             - babel.config.js
-            - .eslintrc.yaml
+            - .eslintrc.yml
 
   test:
     executor: my-executor
