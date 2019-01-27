@@ -20,8 +20,16 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
+  test:
+    docker:
+      - image: circleci/node:10
+    steps:
       - run: npm run test
 
+  publish:
+    docker:
+      - image: circleci/node:10
+    steps:
       - setup_remote_docker:
           docker_layer_caching: true
 
@@ -31,3 +39,18 @@ jobs:
             docker build -t joschi64/homagix:latest .
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
             docker push joschi64/homagix:latest
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - test
+          requires:
+            - build
+      - publish
+          requires:
+            - test
+          filters:
+            branches:
+              only: /^master$/
