@@ -22,9 +22,10 @@ app.use(bodyParser.json())
 
 if (process.env.NODE_ENV === 'development') {
   const webpack = require('webpack')
-  const middleware = require('webpack-dev-middleware')
-  const compiler = webpack(require('../config/webpack.conf.dev'))
-  app.use(middleware(compiler, {logger, writeToDisk: true}))
+  const webpackConfig = require('../config/webpack.conf.dev')
+  const compiler = webpack(webpackConfig)
+  app.use(require('webpack-dev-middleware')(compiler, {logger, publicPath: webpackConfig.output.publicPath}))
+  app.use(require("webpack-hot-middleware")(compiler, {logger, path: '/__webpack_hmr', heartbeat: 10 * 1000}))
 }
 
 app.use((req, res, next) => {
@@ -42,6 +43,8 @@ app.use(function(err, req, res, next) { // eslint-disable-line no-unused-vars
   res.status(500).json({error: err.toString()})
 })
 
-app.listen(PORT, () => {
-  logger.info(`Listening on port ${PORT}`)
-})
+if (require.main === module) {
+  app.listen(PORT, () => {
+    logger.info(`Listening on port ${PORT}`)
+  })
+}

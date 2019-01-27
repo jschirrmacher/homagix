@@ -8,6 +8,7 @@ import DatePicker from 'react-date-picker'
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs'
 import "react-tabs/style/react-tabs.css"
 import {fixAcceptedDishes, getIngredients} from '../actions/proposalsActions'
+import {hot} from 'react-hot-loader/root'
 
 class App extends Component {
   constructor(props) {
@@ -72,4 +73,4 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({fixAcceptedDishes, getIngredients}, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(hot(App, {cacheDirectory: true}))
