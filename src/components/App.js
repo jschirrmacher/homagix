@@ -80,4 +80,5 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({fixAcceptedDishes, getIngredients}, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(hot(App, {cacheDirectory: true}))
+const app = location.hostname === 'localhost' ? hot(App, {cacheDirectory: true}) : App
+export default connect(mapStateToProps, mapDispatchToProps)(app)
