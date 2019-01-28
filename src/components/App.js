@@ -8,7 +8,8 @@ import DatePicker from 'react-date-picker'
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs'
 import "react-tabs/style/react-tabs.css"
 import {fixAcceptedDishes, getIngredients} from '../actions/proposalsActions'
-import {hot} from 'react-hot-loader/root'
+
+const hot = location.hostname === 'localhost' && require('react-hot-loader/root').hot
 
 class App extends Component {
   constructor(props) {
@@ -80,5 +81,5 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({fixAcceptedDishes, getIngredients}, dispatch)
 }
 
-const app = location.hostname === 'localhost' ? hot(App, {cacheDirectory: true}) : App
+const app = hot ? hot(App, {cacheDirectory: true}) : App
 export default connect(mapStateToProps, mapDispatchToProps)(app)
