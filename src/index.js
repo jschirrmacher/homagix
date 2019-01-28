@@ -29,4 +29,6 @@ ReactDOM.render(
   document.getElementById('root')
 )
 
-module.hot.accept();
+if (location.hostname === 'localhost') {
+  module.hot.accept();
+}

@@ -45,6 +45,6 @@ app.use(function(err, req, res, next) { // eslint-disable-line no-unused-vars
 
 if (require.main === module) {
   app.listen(PORT, () => {
-    logger.info(`Listening on port ${PORT}`)
+    logger.info(`Listening on port ${PORT} (NODE_ENV=${process.env.NODE_ENV})`)
   })
 }

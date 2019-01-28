@@ -42,10 +42,5 @@ module.exports = {
       }
     ]
   },
-  plugins,
-  optimization: {
-    splitChunks: {
-      chunks: 'all'
-    }
-  }
+  plugins
 }
