@@ -170,4 +170,20 @@ button:active {
   .IngredientsList li.inhibited {
     display: none;
   }
+
+  .react-tabs {
+    display: flex;
+  }
+
+  .react-tabs .react-tabs__tab-panel {
+    display: block;
+  }
+
+  .react-tabs .react-tabs__tab-panel:last-of-type {
+    display: none;
+  }
+
+  .ItemGroup {
+    display: none;
+  }
 }
