@@ -115,6 +115,10 @@ class Model {
           this.findElement('dish', byId(data.id))[data.name] = data.value
           break
 
+        case 'served':
+          this.findElement('dish', byId(data.dish)).last = data.date + 'T00:00:00.000Z'
+          break
+
         case 'ingredient-updated':
           this.findElement('ingredient', byId(data.id))[data.name] = data.value
           break
