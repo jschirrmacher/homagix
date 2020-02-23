@@ -40,7 +40,11 @@ class DishProposer {
   }
 
   fix(accepted, date) {
-    accepted.forEach(id => this.model.getDish(id).last = date)
+    accepted.forEach((id, index) => {
+      const newDate = new Date(date)
+      newDate.setDate(newDate.getDate() + index)
+      this.model.getDish(id).last = newDate 
+    })
     this.model.persistChanges()
     return {accepted, date}
   }
