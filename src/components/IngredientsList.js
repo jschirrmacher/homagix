@@ -55,7 +55,10 @@ class IngredientsList extends Component {
 
   getIngredients() {
     const ingredients = (this.props.ingredients || []).concat(this.state.additions)
-    ingredients.sort((a, b) => itemGroups[a.group || 'other'].order - itemGroups[b.group || 'other'].order)
+    ingredients.sort((a, b) => {
+      const comp = itemGroups[a.group || 'other'].order - itemGroups[b.group || 'other'].order
+      return comp || a.name.localeCompare(b.name)
+    })
     return ingredients
   }
 
