@@ -156,6 +156,8 @@ button:active {
 
   .App {
     justify-content: space-between;
+    max-width: none;
+    font-size: 15px;
   }
 
   button, .react-tabs__tab-list {
@@ -177,6 +179,7 @@ button:active {
 
   .react-tabs .react-tabs__tab-panel {
     display: block;
+    width: 50%;
   }
 
   .react-tabs .react-tabs__tab-panel:last-of-type {
