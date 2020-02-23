@@ -46,6 +46,11 @@ ul li {
   padding: 10px 0 10px 30px;
   border-bottom: 1px solid #bbbbbb;
   position: relative;
+  cursor: pointer;
+}
+
+ul li:last-of-type {
+  border-bottom: none;
 }
 
 button {

@@ -7,3 +7,9 @@
   vertical-align: text-top;
   margin-left: 1em;
 }
+
+@media print {
+  .ingredient-list, .last-served {
+    display: none;
+  }
+}
