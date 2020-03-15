@@ -85,7 +85,8 @@ class IngredientsList extends Component {
           <button className="delete inline" onClick={event => this.removeIngredient(item, event.target.parentNode)}>
             &times;
           </button>
-          {item.amount} {item.unit} {item.name} {group}
+          {group}
+          {item.amount} {item.unit} {item.name}
         </li>
       })
 

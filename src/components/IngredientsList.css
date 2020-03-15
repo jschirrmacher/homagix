@@ -6,6 +6,10 @@
   right: -30px;
 }
 
+.IngredientsList li:last-of-type {
+  padding-right: 15px;
+}
+
 .ItemGroup  {
   float: right;
   font-size: 15px;
@@ -19,6 +23,14 @@
   border-radius: 3px;
   -ms-text-align-last: center;
   text-align-last: center;
+  margin-right: -25px;
+}
+
+@media screen and (max-width: 640px) {
+  .ItemGroup {
+    padding: 5px 0;
+    font-size: 11px;
+  }
 }
 
 .color-fruit {
