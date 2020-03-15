@@ -81,9 +81,8 @@ describe('IngredientsList', () => {
     const input = tree.toJSON().children[1].children[0]
     input.props.value = '2 Stk. Butter'
     input.props.onKeyDown({keyCode: 13, target: input.props})
-    const li = tree.toJSON().children[1]
-    const content = li.children.splice(1).join('').trim()
-    content.should.containEql('2 Stk. Butter')
+    const entries = tree.toJSON().children.map(li => li.children.splice(1, li.children.length - 2).join('').trim())
+    entries.should.containEql('2 Stk. Butter')
   })
 
   it('should remove additional ingredients when delete button is pressed', () => {
@@ -91,7 +90,9 @@ describe('IngredientsList', () => {
     const input = tree.toJSON().children[1].children[0]
     input.props.value = '2 Stk. Butter'
     input.props.onKeyDown({keyCode: 13, target: input.props})
-    const button = tree.toJSON().children[1].children[0]
+    const button = tree.toJSON().children.find(li => {
+      return li.children.splice(1, li.children.length - 2).join('').trim() === '2 Stk. Butter'
+    }).children[0]
     button.props.onClick({target: {parentNode: document.createElement('li')}})
     tree.toJSON().children[1].children[0].props.id.should.equal('additionalItem')
   })
