@@ -82,7 +82,7 @@ class IngredientsList extends Component {
         </select>
 
         return <li key={item.id} className={classNames({inhibited: this.state.inhibit[item.id]})}>
-          <button className="delete" onClick={event => this.removeIngredient(item, event.target.parentNode)}>
+          <button className="delete inline" onClick={event => this.removeIngredient(item, event.target.parentNode)}>
             &times;
           </button>
           {item.amount} {item.unit} {item.name} {group}

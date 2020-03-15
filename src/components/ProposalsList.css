@@ -1,3 +1,11 @@
+.ProposalsList li {
+  padding-right: 50px;
+}
+
+.ProposalsList li button.inline {
+  right: -50px;
+}
+
 .ProposalsList .ingredient-list {
   padding-left: 1em;
 }

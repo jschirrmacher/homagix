@@ -1,3 +1,11 @@
+.IngredientsList li {
+  padding-right: 30px;
+}
+
+.IngredientsList li button.inline {
+  right: -30px;
+}
+
 .ItemGroup  {
   float: right;
   font-size: 15px;
