@@ -89,15 +89,13 @@ class IngredientsList extends Component {
         </li>
       })
 
-    return this.props.ingredients && this.props.ingredients.length
-      ? <ul className="IngredientsList">
+    return <ul className="IngredientsList">
         {items}
         <li><input type="text" id="additionalItem"
                    onKeyDown={event => event.keyCode === 13 && this.addIngredient(event.target)}
                    onBlur={event => this.addIngredient(event.target)}
         /></li>
       </ul>
-      : <div className="info">Akzeptiere einen Vorschlag, um die Zutatenliste zu füllen!</div>
   }
 }
 
