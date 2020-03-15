@@ -3,6 +3,7 @@ import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import {getProposals, discardProposal, toggleProposalAcceptance} from '../actions/proposalsActions'
 import Dish from './Dish'
+import './ProposalsList.css'
 
 class ProposalsList extends Component {
   constructor(props) {
@@ -13,9 +14,9 @@ class ProposalsList extends Component {
   render() {
     const items = this.props.proposals && this.props.proposals.map(item => (
       <li key={item.id} className={this.props.accepted[item.id] ? 'accepted' : ''}>
-        <button className="delete" onClick={() => this.props.discardProposal(item)} title="Reject proposal">&times;</button>
+        <button className="delete inline" onClick={() => this.props.discardProposal(item)} title="Reject proposal">&times;</button>
+        <button className="accept inline" onClick={() => this.props.toggleProposalAcceptance(item)} title="Accept proposal">&#10003;</button>
         <Dish value={item} />
-        <button className="accept" onClick={() => this.props.toggleProposalAcceptance(item)} title="Accept proposal">&#10003;</button>
       </li>
     ))
 

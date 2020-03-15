@@ -43,10 +43,11 @@ ul {
 }
 
 ul li {
-  padding: 10px 0 10px 30px;
+  padding: 10px 50px 10px 0;
   border-bottom: 1px solid #bbbbbb;
   position: relative;
   cursor: pointer;
+  line-height: 1.4em;
 }
 
 ul li:last-of-type {
@@ -58,24 +59,23 @@ button {
   background: white;
 }
 
-button.delete {
-  border: none;
-  color: red;
+button.inline {
+  float: right;
+  padding: 3px 3px 5px;
+  background: none;
+  position: relative;
+  top: -0.4em;
+  right: -50px;
   font-size: 1.6em;
-  position: absolute;
-  top: 2px;
-  left: 0;
-  padding: 0 3px;
+  border: none;
+}
+
+button.delete {
+  color: red;
 }
 
 button.accept {
-  border: none;
   color: lightgray;
-  font-size: 1.3em;
-  position: absolute;
-  right: 0;
-  top: 6px;
-  padding: 0 3px;
 }
 
 .accepted button.accept {
@@ -148,7 +148,7 @@ button:active {
   }
 
   ul {
-    margin: 1em;
+    margin: 1em 0;
   }
 }
 

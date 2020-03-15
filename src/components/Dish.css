@@ -6,6 +6,8 @@
   font-size: 80%;
   vertical-align: text-top;
   margin-left: 1em;
+  float: right;
+  margin-right: -50px;
 }
 
 @media print {
