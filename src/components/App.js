@@ -44,7 +44,6 @@ class App extends Component {
             />
             </label>
             <ProposalsList/>
-            <button className="print-button" onClick={() => window.print()}>Drucken</button>
           </TabPanel>
 
           <TabPanel>
