@@ -33,6 +33,20 @@
   }
 }
 
+@media screen {
+  .unit {
+    display: inline-block;
+    width: 50px;
+    margin: 0 5px;
+  }
+
+  .amount {
+    display: inline-block;
+    width: 50px;
+    text-align: right;
+  }
+}
+
 .color-fruit {
   background-color: darkgreen;
   color: yellow;

@@ -47,7 +47,7 @@ class App extends Component {
           </TabPanel>
 
           <TabPanel>
-            <IngredientsList ingredients={this.props.ingredients}/>
+            <IngredientsList ingredients={this.props.ingredients} showAmount="true" showNew="true" />
             {this.props.ingredients && this.props.ingredients.length
               ? <Fragment>
                   <button className="print-button" onClick={() => window.print()}>Drucken</button>

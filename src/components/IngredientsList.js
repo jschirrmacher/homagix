@@ -17,6 +17,12 @@ const itemGroups = {
   other: {order: 8, title: 'Sonstiges'}
 }
 
+const knownUnits = ['Stk', 'Pkg', 'Glas', 'Zehen', 'Würfel', 'Dose', 'Kopf', 'Bund', 'g', 'kg', 'L', 'ml', 'cm']
+
+function guessUnit(text) {
+  return knownUnits.find(unit => text.match(new RegExp('\\b' + unit + '\\.?\\b', 'i')))
+}
+
 function classNames(props) {
   return Object.keys(props).filter(name => !!props[name]).join(' ')
 }
@@ -44,10 +50,13 @@ class IngredientsList extends Component {
 
   addIngredient(elem) {
     this.setState(state => {
-      const name = elem.value
-      if (name) {
+      if (elem.value) {
+        const amount = parseFloat(elem.value.replace(/(\d),(\d)/, '$1.$2')) || 1
+        const rest = elem.value.replace(new RegExp(('' + amount).replace(/\./, '[.,]')), '')
+        const unit = guessUnit(rest) || 'Stk'
+        const name = rest.replace(new RegExp(unit + '\\.?', 'i'), '')
         elem.value = ''
-        state.additions.push({id: --index, name})
+        state.additions.push({id: --index, name, amount, unit})
       }
       return state
     })
@@ -86,16 +95,20 @@ class IngredientsList extends Component {
             &times;
           </button>
           {group}
-          {item.amount} {item.unit} {item.name}
+          {this.props.showAmount && <span className="amount">{item.amount}</span>}
+          <span className="unit">{item.unit}</span>
+          {item.name}
         </li>
       })
 
     return <ul className="IngredientsList">
         {items}
-        <li><input type="text" id="additionalItem"
-                   onKeyDown={event => event.keyCode === 13 && this.addIngredient(event.target)}
-                   onBlur={event => this.addIngredient(event.target)}
-        /></li>
+        {this.props.showNew && <li>
+          <input type="text" id="additionalItem"
+                 onKeyDown={event => event.keyCode === 13 && this.addIngredient(event.target)}
+                 onBlur={event => this.addIngredient(event.target)}
+          />
+        </li>}
       </ul>
   }
 }
