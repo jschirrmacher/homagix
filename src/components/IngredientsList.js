@@ -48,22 +48,33 @@ class IngredientsList extends Component {
     }
   }
 
+  add(item, list) {
+    const existing = list.find(entry => entry.name === item.name)
+    if (existing && existing.unit === item.unit) {
+      existing.amount += item.amount
+    } else {
+      item.id = --index
+      list.push(item)
+    }
+}
+
   addIngredient(elem) {
     this.setState(state => {
       if (elem.value) {
         const amount = parseFloat(elem.value.replace(/(\d),(\d)/, '$1.$2')) || 1
         const rest = elem.value.replace(new RegExp(('' + amount).replace(/\./, '[.,]')), '')
         const unit = guessUnit(rest) || 'Stk'
-        const name = rest.replace(new RegExp(unit + '\\.?', 'i'), '')
+        const name = rest.replace(new RegExp(unit + '\\.?', 'i'), '').trim()
+        this.add({amount, unit, name}, state.additions)
         elem.value = ''
-        state.additions.push({id: --index, name, amount, unit})
       }
       return state
     })
   }
 
   getIngredients() {
-    const ingredients = (this.props.ingredients || []).concat(this.state.additions)
+    const ingredients = (this.props.ingredients || []).map(ingredient => ({...ingredient}))
+    this.state.additions.forEach(add => this.add(add, ingredients))
     ingredients.sort((a, b) => {
       const comp = itemGroups[a.group || 'other'].order - itemGroups[b.group || 'other'].order
       return comp || a.name.localeCompare(b.name)
