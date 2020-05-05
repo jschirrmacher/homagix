@@ -1,20 +1,20 @@
-import React, {Component} from 'react'
-import {connect} from 'react-redux'
-import {setItemGroup} from '../actions/proposalsActions'
-import {bindActionCreators} from 'redux'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { setItemGroup } from '../actions/proposalsActions'
+import { bindActionCreators } from 'redux'
 import './IngredientsList.css'
 
 let index = 0
 
 const itemGroups = {
-  fruit: {order: 1, title: 'Obst & Gemüse'},
-  breakfast: {order: 2, title: 'Brot & Frühstück'},
-  meat: {order: 3, title: 'Fleisch'},
-  cooled: {order: 4, title: 'Frische & Kühlung'},
-  tinned: {order: 5, title: 'Nahrungsmittel'},
-  drinks: {order: 6, title: 'Getränke'},
-  frozen: {order: 7, title: 'Tiefgekühlt'},
-  other: {order: 8, title: 'Sonstiges'}
+  fruit: { order: 1, title: 'Obst & Gemüse' },
+  breakfast: { order: 2, title: 'Brot & Frühstück' },
+  meat: { order: 3, title: 'Fleisch' },
+  cooled: { order: 4, title: 'Frische & Kühlung' },
+  tinned: { order: 5, title: 'Nahrungsmittel' },
+  drinks: { order: 6, title: 'Getränke' },
+  frozen: { order: 7, title: 'Tiefgekühlt' },
+  other: { order: 8, title: 'Sonstiges' }
 }
 
 const knownUnits = ['Stk', 'Pkg', 'Glas', 'Zehen', 'Würfel', 'Dose', 'Kopf', 'Bund', 'g', 'kg', 'L', 'ml', 'cm']
@@ -30,7 +30,7 @@ function classNames(props) {
 class IngredientsList extends Component {
   constructor(props) {
     super(props)
-    this.state = {inhibit: {}, additions: []}
+    this.state = { inhibit: {}, additions: [] }
   }
 
   removeIngredient(item, elem) {
@@ -56,7 +56,7 @@ class IngredientsList extends Component {
       item.id = --index
       list.push(item)
     }
-}
+  }
 
   addIngredient(elem) {
     this.setState(state => {
@@ -65,7 +65,7 @@ class IngredientsList extends Component {
         const rest = elem.value.replace(new RegExp(('' + amount).replace(/\./, '[.,]')), '')
         const unit = guessUnit(rest) || 'Stk'
         const name = rest.replace(new RegExp(unit + '\\.?', 'i'), '').trim()
-        this.add({amount, unit, name}, state.additions)
+        this.add({ amount, unit, name }, state.additions)
         elem.value = ''
       }
       return state
@@ -73,7 +73,7 @@ class IngredientsList extends Component {
   }
 
   getIngredients() {
-    const ingredients = (this.props.ingredients || []).map(ingredient => ({...ingredient}))
+    const ingredients = (this.props.ingredients || []).map(ingredient => ({ ...ingredient }))
     this.state.additions.forEach(add => this.add(add, ingredients))
     ingredients.sort((a, b) => {
       const comp = itemGroups[a.group || 'other'].order - itemGroups[b.group || 'other'].order
@@ -86,7 +86,7 @@ class IngredientsList extends Component {
     if (item.id > 0) {
       this.props.setItemGroup(item, group)
     } else {
-      this.setState({additions: this.state.additions.map(i => i.id === item.id ? Object.assign(i, {group}) : i)})
+      this.setState({ additions: this.state.additions.map(i => i.id === item.id ? Object.assign(i, { group }) : i) })
     }
   }
 
@@ -94,14 +94,14 @@ class IngredientsList extends Component {
     const items = this.getIngredients()
       .map(item => {
         const group = <select onChange={event => this.setItemGroup(item, event.target.value)}
-                              defaultValue={item.group} className={'ItemGroup color-' + item.group}>
+          defaultValue={item.group} className={'ItemGroup color-' + item.group}>
           <option value={null}>-- bitte auswählen --</option>
           {Object.keys(itemGroups).map(group => (
             <option key={group} value={group}>{itemGroups[group].title}</option>
           ))}
         </select>
 
-        return <li key={item.id} className={classNames({inhibited: this.state.inhibit[item.id]})}>
+        return <li key={item.id} className={classNames({ inhibited: this.state.inhibit[item.id] })}>
           <button className="delete inline" onClick={event => this.removeIngredient(item, event.target.parentNode)}>
             &times;
           </button>
@@ -113,14 +113,14 @@ class IngredientsList extends Component {
       })
 
     return <ul className="IngredientsList">
-        {items}
-        {this.props.showNew && <li>
-          <input type="text" id="additionalItem"
-                 onKeyDown={event => event.keyCode === 13 && this.addIngredient(event.target)}
-                 onBlur={event => this.addIngredient(event.target)}
-          />
-        </li>}
-      </ul>
+      {items}
+      {this.props.showNew && <li>
+        <input type="text" id="additionalItem"
+          onKeyDown={event => event.keyCode === 13 && this.addIngredient(event.target)}
+          onBlur={event => this.addIngredient(event.target)}
+        />
+      </li>}
+    </ul>
   }
 }
 
@@ -129,7 +129,7 @@ function mapStateToProps() {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({setItemGroup}, dispatch)
+  return bindActionCreators({ setItemGroup }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(IngredientsList)
