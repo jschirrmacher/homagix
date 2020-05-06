@@ -30,7 +30,7 @@ function classNames(props) {
 class IngredientsList extends Component {
   constructor(props) {
     super(props)
-    this.state = { inhibit: {}, additions: [] }
+    this.state = { inhibit: {}, additions: [], modified: null, inputChanged: false }
   }
 
   removeIngredient(item, elem) {
@@ -59,17 +59,34 @@ class IngredientsList extends Component {
   }
 
   addIngredient(elem) {
-    this.setState(state => {
-      if (elem.value) {
+    if (elem.value && this.state.inputChanged) {
+      this.setState(state => {
         const amount = parseFloat(elem.value.replace(/(\d),(\d)/, '$1.$2')) || 1
         const rest = elem.value.replace(new RegExp(('' + amount).replace(/\./, '[.,]')), '')
         const unit = guessUnit(rest) || 'Stk'
         const name = rest.replace(new RegExp(unit + '\\.?', 'i'), '').trim()
         this.add({ amount, unit, name }, state.additions)
+        state.modified = name
+        setTimeout(() => this.setState({ modified: null }), 500)
         elem.value = ''
-      }
-      return state
-    })
+        return state
+      })
+    }
+  }
+
+  handleKeyDown(event) {
+    if (event.keyCode === 13) {
+      this.addIngredient(event.target)
+    }
+    this.setState({ inputChanged: true })
+  }
+
+  selectIngredient(text) {
+    const newItem = document.querySelector('#additionalItem input')
+    newItem.value = text
+    newItem.setSelectionRange(0, 0)
+    newItem.focus()
+    this.setState({ inputChanged: false })
   }
 
   getIngredients() {
@@ -101,7 +118,8 @@ class IngredientsList extends Component {
           ))}
         </select>
 
-        return <li key={item.id} className={classNames({ inhibited: this.state.inhibit[item.id] })}>
+        const classes = classNames({ inhibited: this.state.inhibit[item.id], modified: this.state.modified === item.name })
+        return <li key={item.id} className={classes} onClick={() => this.selectIngredient(item.unit + ' ' + item.name)}>
           <button className="delete inline" onClick={event => this.removeIngredient(item, event.target.parentNode)}>
             &times;
           </button>
@@ -114,9 +132,9 @@ class IngredientsList extends Component {
 
     return <ul className="IngredientsList">
       {items}
-      {this.props.showNew && <li>
-        <input type="text" id="additionalItem"
-          onKeyDown={event => event.keyCode === 13 && this.addIngredient(event.target)}
+      {this.props.showNew && <li id="additionalItem">
+        <input type="text"
+          onKeyDown={event => this.handleKeyDown(event)}
           onBlur={event => this.addIngredient(event.target)}
         />
       </li>}
