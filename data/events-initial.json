@@ -56,7 +56,7 @@
     "dish": 1,
     "ingredient": 4,
     "amount": 3,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-added",
@@ -80,7 +80,7 @@
     "dish": 1,
     "ingredient": 6,
     "amount": 3,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "dish-added",
@@ -114,7 +114,7 @@
     "dish": 2,
     "ingredient": 8,
     "amount": 1.5,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-added",
@@ -150,7 +150,7 @@
     "dish": 2,
     "ingredient": 11,
     "amount": 1,
-    "unit": "Pkg."
+    "unit": "Pgk"
   },
   {
     "type": "dish-added",
@@ -249,7 +249,7 @@
     "dish": 4,
     "ingredient": 6,
     "amount": 1,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-added",
@@ -261,7 +261,7 @@
     "dish": 4,
     "ingredient": 18,
     "amount": 1,
-    "unit": "Pkg."
+    "unit": "Pgk"
   },
   {
     "type": "ingredient-added",
@@ -273,7 +273,7 @@
     "dish": 4,
     "ingredient": 19,
     "amount": 2,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "dish-added",
@@ -372,14 +372,14 @@
     "dish": 6,
     "ingredient": 25,
     "amount": 1,
-    "unit": "Pkg."
+    "unit": "Pgk"
   },
   {
     "type": "ingredient-assigned",
     "dish": 6,
     "ingredient": 6,
     "amount": 2,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-added",
@@ -415,7 +415,7 @@
     "dish": 6,
     "ingredient": 28,
     "amount": 1,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "dish-added",
@@ -445,7 +445,7 @@
     "dish": 7,
     "ingredient": 4,
     "amount": 5,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-added",
@@ -457,7 +457,7 @@
     "dish": 7,
     "ingredient": 30,
     "amount": 2,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-added",
@@ -522,7 +522,7 @@
     "dish": 8,
     "ingredient": 34,
     "amount": 2,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "dish-added",
@@ -684,7 +684,7 @@
     "dish": 12,
     "ingredient": 43,
     "amount": 1,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-added",
@@ -892,7 +892,7 @@
     "dish": 17,
     "ingredient": 55,
     "amount": 2,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "dish-added",
@@ -938,7 +938,7 @@
     "dish": 18,
     "ingredient": 58,
     "amount": 1,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-assigned",
@@ -974,14 +974,14 @@
     "dish": 19,
     "ingredient": 59,
     "amount": 8,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-assigned",
     "dish": 19,
     "ingredient": 55,
     "amount": 1,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "dish-added",
@@ -1015,7 +1015,7 @@
     "dish": 20,
     "ingredient": 61,
     "amount": 5,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-added",
@@ -1123,7 +1123,7 @@
     "dish": 22,
     "ingredient": 6,
     "amount": 3,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-assigned",
@@ -1166,7 +1166,7 @@
     "dish": 23,
     "ingredient": 19,
     "amount": 2,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "dish-added",
@@ -1217,7 +1217,7 @@
     "dish": 25,
     "ingredient": 30,
     "amount": 2,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-added",
@@ -1229,7 +1229,7 @@
     "dish": 25,
     "ingredient": 70,
     "amount": 6,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-assigned",
@@ -1272,7 +1272,7 @@
     "dish": 26,
     "ingredient": 71,
     "amount": 8,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-added",
@@ -1284,7 +1284,7 @@
     "dish": 26,
     "ingredient": 72,
     "amount": 1,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-added",
@@ -1303,7 +1303,7 @@
     "dish": 26,
     "ingredient": 4,
     "amount": 2,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "dish-added",
@@ -1375,7 +1375,7 @@
     "dish": 27,
     "ingredient": 77,
     "amount": 4,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "dish-added",
@@ -1411,7 +1411,7 @@
     "dish": 28,
     "ingredient": 58,
     "amount": 1,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-assigned",
@@ -1442,7 +1442,7 @@
     "dish": 29,
     "ingredient": 4,
     "amount": 3,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-added",
@@ -1454,7 +1454,7 @@
     "dish": 29,
     "ingredient": 79,
     "amount": 1,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-added",
@@ -1466,7 +1466,7 @@
     "dish": 29,
     "ingredient": 80,
     "amount": 1,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-assigned",
@@ -1485,7 +1485,7 @@
     "dish": 29,
     "ingredient": 81,
     "amount": 10,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-assigned",
@@ -1499,7 +1499,7 @@
     "dish": 29,
     "ingredient": 19,
     "amount": 2,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "dish-added",
@@ -1528,7 +1528,7 @@
     "dish": 30,
     "ingredient": 82,
     "amount": 1,
-    "unit": "Pkg."
+    "unit": "Pgk"
   },
   {
     "type": "ingredient-assigned",
@@ -1547,7 +1547,7 @@
     "dish": 30,
     "ingredient": 83,
     "amount": 1,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "dish-added",
@@ -1569,7 +1569,7 @@
     "dish": 31,
     "ingredient": 84,
     "amount": 1,
-    "unit": "Pkg."
+    "unit": "Pgk"
   },
   {
     "type": "ingredient-added",
@@ -1581,7 +1581,7 @@
     "dish": 31,
     "ingredient": 85,
     "amount": 1,
-    "unit": "Pkg."
+    "unit": "Pgk"
   },
   {
     "type": "ingredient-assigned",
@@ -1595,7 +1595,7 @@
     "dish": 31,
     "ingredient": 4,
     "amount": 2,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "dish-added",
@@ -1617,7 +1617,7 @@
     "dish": 32,
     "ingredient": 86,
     "amount": 1,
-    "unit": "Pkg."
+    "unit": "Pgk"
   },
   {
     "type": "ingredient-assigned",
@@ -1648,7 +1648,7 @@
     "dish": 32,
     "ingredient": 88,
     "amount": 0.5,
-    "unit": "Pkg."
+    "unit": "Pgk"
   },
   {
     "type": "dish-added",
@@ -1670,7 +1670,7 @@
     "dish": 33,
     "ingredient": 89,
     "amount": 6,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-assigned",
@@ -1684,14 +1684,14 @@
     "dish": 33,
     "ingredient": 19,
     "amount": 2,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-assigned",
     "dish": 33,
     "ingredient": 4,
     "amount": 3,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-added",
@@ -1703,7 +1703,7 @@
     "dish": 33,
     "ingredient": 90,
     "amount": 2,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "dish-added",
@@ -1739,7 +1739,7 @@
     "dish": 34,
     "ingredient": 80,
     "amount": 1,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-added",
@@ -1780,7 +1780,7 @@
     "dish": 35,
     "ingredient": 93,
     "amount": 10,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-assigned",
@@ -1794,7 +1794,7 @@
     "dish": 35,
     "ingredient": 80,
     "amount": 1,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-added",
@@ -1806,7 +1806,7 @@
     "dish": 35,
     "ingredient": 94,
     "amount": 1,
-    "unit": "Pkg."
+    "unit": "Pgk"
   },
   {
     "type": "dish-added",
@@ -1828,21 +1828,21 @@
     "dish": 37,
     "ingredient": 96,
     "amount": 8,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-assigned",
     "dish": 37,
     "ingredient": 34,
     "amount": 8,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-assigned",
     "dish": 37,
     "ingredient": 83,
     "amount": 1,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "dish-added",
@@ -1859,7 +1859,7 @@
     "dish": 38,
     "ingredient": 34,
     "amount": 6,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-assigned",
@@ -1933,35 +1933,35 @@
     "dish": 40,
     "ingredient": 83,
     "amount": 1,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-assigned",
     "dish": 40,
     "ingredient": 4,
     "amount": 4,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-assigned",
     "dish": 40,
     "ingredient": 81,
     "amount": 1,
-    "unit": "Pkg."
+    "unit": "Pgk"
   },
   {
     "type": "ingredient-assigned",
     "dish": 40,
     "ingredient": 55,
     "amount": 1,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-assigned",
     "dish": 40,
     "ingredient": 19,
     "amount": 2,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "dish-added",
@@ -1996,14 +1996,14 @@
     "dish": 41,
     "ingredient": 99,
     "amount": 1,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-assigned",
     "dish": 41,
     "ingredient": 17,
     "amount": 1,
-    "unit": "Pkg."
+    "unit": "Pgk"
   },
   {
     "type": "ingredient-assigned",
@@ -2129,7 +2129,7 @@
     "dish": 43,
     "ingredient": 106,
     "amount": 8,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-added",
@@ -2148,21 +2148,21 @@
     "dish": 43,
     "ingredient": 55,
     "amount": 1,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-assigned",
     "dish": 43,
     "ingredient": 80,
     "amount": 1,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "ingredient-assigned",
     "dish": 43,
     "ingredient": 81,
     "amount": 0.5,
-    "unit": "Pkg."
+    "unit": "Pgk"
   },
   {
     "type": "ingredient-assigned",
@@ -2176,7 +2176,7 @@
     "dish": 43,
     "ingredient": 4,
     "amount": 2,
-    "unit": "Stk."
+    "unit": "Stk"
   },
   {
     "type": "dish-added",
@@ -2217,6 +2217,6 @@
     "dish": 44,
     "ingredient": 109,
     "amount": 2,
-    "unit": "Stk."
+    "unit": "Stk"
   }
 ]

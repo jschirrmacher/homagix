@@ -79,19 +79,19 @@ describe('IngredientsList', () => {
   it('should add ingredients when enter is pressed', () => {
     const tree = renderer.create(<Provider store={store}><IngredientsList ingredients={ingredients}/></Provider>)
     const input = tree.toJSON().children[1].children[0]
-    input.props.value = '2 Stk. Butter'
+    input.props.value = '2 Stk Butter'
     input.props.onKeyDown({keyCode: 13, target: input.props})
     const entries = tree.toJSON().children.map(li => li.children.splice(1, li.children.length - 2).join('').trim())
-    entries.should.containEql('2 Stk. Butter')
+    entries.should.containEql('2 Stk Butter')
   })
 
   it('should remove additional ingredients when delete button is pressed', () => {
     const tree = renderer.create(<Provider store={store}><IngredientsList ingredients={ingredients}/></Provider>)
     const input = tree.toJSON().children[1].children[0]
-    input.props.value = '2 Stk. Butter'
+    input.props.value = '2 Stk Butter'
     input.props.onKeyDown({keyCode: 13, target: input.props})
     const button = tree.toJSON().children.find(li => {
-      return li.children.splice(1, li.children.length - 2).join('').trim() === '2 Stk. Butter'
+      return li.children.splice(1, li.children.length - 2).join('').trim() === '2 Stk Butter'
     }).children[0]
     button.props.onClick({target: {parentNode: document.createElement('li')}})
     tree.toJSON().children[1].children[0].props.id.should.equal('additionalItem')

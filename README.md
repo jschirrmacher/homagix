@@ -11,22 +11,19 @@ To do this in a more digital way, we created this repository to remember dishes,
 When adding new dishes please use the correct amount identifiers as otherwise everything crashes!
 Right now the following the identifiers are supported:
 
- - kg
- - Glas
- - g
- - Stk.
- - Zehen
- - L
- - Bund
- - Pkg.
- - Kopf
- - Topf
- - Würfel
- - Packung
- - Tafel
- - Stück
- - Flasche
- - Sack
- - Netz
-
-**If the identifier is slightly different it does not work! (The . is important)!**
+- kg
+- Glas
+- g
+- Stk
+- Zehen
+- L
+- Bund
+- Pkg
+- Kopf
+- Topf
+- WÃ¼rfel
+- Tafel
+- StÃ¼ck
+- Flasche
+- Sack
+- Netz
