@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import './Dish.css'
-import ingredient from './Ingredient'
 import Ingredient from './Ingredient'
 
 export default class Dish extends Component {
@@ -16,7 +15,7 @@ export default class Dish extends Component {
   render() {
     const ingredients = this.state.showDetails && (
       <ul className="ingredient-list">
-        {this.props.value.ingredients.map(ingredient => (<li><Ingredient value={ingredient} /></li>))}
+        {this.props.value.ingredients.map(ingredient => (<li><Ingredient value={ingredient} key={ingredient.ingredient} /></li>))}
       </ul>)
 
     return <div className="dish">
