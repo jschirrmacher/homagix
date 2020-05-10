@@ -15,7 +15,7 @@ ReactDOM.render(
   <React.Fragment>
     <h1>
       <img src={logo} className="App-logo" alt="Homagix Logo" />
-      Homagix
+      omagix
     </h1>
 
     <Provider store={store}>

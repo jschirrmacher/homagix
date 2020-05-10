@@ -6,8 +6,8 @@ html, body {
 
 h1{
   margin: 0;
-  padding-top: 5px;
-  background: linear-gradient(to bottom right, #999999, #BBBBBB);
+  padding: 10px 10px 5px;
+  background: linear-gradient(to bottom right, #F0A30A, rgb(240, 205, 10));
   color: #FFFF00;
   overflow: hidden;
 }
@@ -23,9 +23,7 @@ h2 {
 
 .App-logo {
   height: 1.3em;
-  vertical-align: middle;
-  margin: -15px 10px 0 0;
-  transform: scale(1.6);
+  margin-right: -7px;
 }
 
 .App {
