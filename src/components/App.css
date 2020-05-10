@@ -147,16 +147,19 @@ button:active {
 }
 
 @media print {
-  @media (max-width: 640px) {
-    body {
-      zoom: 0.7;
-    }
+  @page {
+    size: A4 landscape;
+  }
+
+  h1 {
+    padding: 10px;
   }
 
   .App {
     justify-content: space-between;
     max-width: none;
-    font-size: 15px;
+    font-size: 14px;
+    padding: 20px;
   }
 
   button, .react-tabs__tab-list {
@@ -178,7 +181,12 @@ button:active {
 
   .react-tabs .react-tabs__tab-panel {
     display: block;
-    width: 50%;
+    width: 66%;
+  }
+
+  .react-tabs .react-tabs__tab-panel:first-of-type {
+    display: block;
+    width: 33%;
   }
 
   .react-tabs .react-tabs__tab-panel:last-of-type {
@@ -187,5 +195,19 @@ button:active {
 
   .ItemGroup {
     display: none;
+  }
+
+  .IngredientsList {
+    padding-left: 25px;
+  }
+
+  .IngredientsList li {
+    width: 33%;
+    float: left;
+    padding: 5px 0;
+  }
+
+  .unit {
+    padding: 0 5px;
   }
 }
