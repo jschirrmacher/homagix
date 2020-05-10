@@ -81,7 +81,10 @@ class IngredientsList extends Component {
     this.setState({ inputChanged: true })
   }
 
-  selectIngredient(text) {
+  selectIngredient(el, text) {
+    if (['SELECT', 'BUTTON'].includes(el.tagName)) {
+      return
+    }
     const newItem = document.querySelector('#additionalItem input')
     newItem.value = text
     newItem.setSelectionRange(0, 0)
@@ -119,7 +122,10 @@ class IngredientsList extends Component {
         </select>
 
         const classes = classNames({ inhibited: this.state.inhibit[item.id], modified: this.state.modified === item.name })
-        return <li key={item.id} className={classes} onClick={() => this.selectIngredient(item.unit + ' ' + item.name)}>
+        return <li key={item.id}
+                   className={classes}
+                   onClick={event => this.selectIngredient(event.target, item.unit + ' ' + item.name)}
+               >
           <button className="delete inline" onClick={event => this.removeIngredient(item, event.target.parentNode)}>
             &times;
           </button>
