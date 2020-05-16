@@ -156,7 +156,7 @@ button:active {
   .App {
     justify-content: space-between;
     max-width: none;
-    font-size: 14px;
+    font-size: 12px;
     padding: 20px;
   }
 
@@ -197,12 +197,7 @@ button:active {
 
   .IngredientsList {
     padding-left: 25px;
-  }
-
-  .IngredientsList li {
-    width: 33%;
-    float: left;
-    padding: 5px 0;
+    column-count: 3;
   }
 
   .unit {
