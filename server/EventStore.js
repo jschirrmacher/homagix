@@ -2,7 +2,6 @@
 
 const fs = require('fs')
 const path = require('path')
-const YAML = require('yaml')
 
 const exists = path => {
   try {
@@ -13,9 +12,10 @@ const exists = path => {
 }
 
 class EventStore {
-  constructor({basePath, logger}) {
+  constructor({basePath, migrationsPath, logger}) {
     this.basePath = basePath
     this.logger = logger
+    this.migrationsPath = migrationsPath
     if (!exists(path.join(this.basePath, 'events.json'))) {
       fs.copyFileSync(path.join(this.basePath, 'events-initial.json'), path.join(this.basePath, 'events.json'))
     }
@@ -30,14 +30,12 @@ class EventStore {
   applyChanges(commandExecutor) {
     const stateFileName = path.join(this.basePath, 'state.json')
     const state = exists(stateFileName) ? JSON.parse(fs.readFileSync(stateFileName).toString()) : {}
-    const changesFolder = path.join(this.basePath, 'changes')
-    const files = exists(changesFolder) ? fs.readdirSync(changesFolder) : []
+    const files = exists(this.migrationsPath) ? fs.readdirSync(this.migrationsPath) : []
     files.forEach(file => {
-      const changeNo = +file.replace('.yaml', '')
+      const changeNo = +file.replace('.js', '')
       if (!state.changesRead || state.changesRead < changeNo) {
-        const fileContent = fs.readFileSync(path.join(this.basePath, 'changes', file)).toString()
-        const commands = YAML.parse(fileContent)
-        commands.forEach(commandExecutor)
+        const migrator = require(path.join(this.migrationsPath, file))
+        migrator(commandExecutor, this.events)
         state.changesRead = changeNo
       }
     })

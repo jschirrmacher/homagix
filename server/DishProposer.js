@@ -43,7 +43,7 @@ class DishProposer {
     accepted.forEach((id, index) => {
       const newDate = new Date(date)
       newDate.setDate(newDate.getDate() + index)
-      this.model.getDish(id).last = newDate 
+      this.model.getDish(id).last = newDate.toISOString().replace(/T.*$/, '')
     })
     this.model.persistChanges()
     return {accepted, date}

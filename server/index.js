@@ -10,7 +10,9 @@ const DishProposer = require('./DishProposer')
 
 const PORT = process.env.PORT || 8080
 
-const eventStore = new EventStore({basePath: path.join(__dirname, '..', 'data'), logger})
+const basePath = path.join(__dirname, '..', 'data')
+const migrationsPath = path.join(__dirname, 'migrations')
+const eventStore = new EventStore({basePath, migrationsPath, logger})
 const model = new Model({eventStore, logger})
 const proposer = new DishProposer({model})
 const ingredientRouter = require('./IngredientRouter')({model})

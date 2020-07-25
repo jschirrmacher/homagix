@@ -7,7 +7,7 @@ const dish = {id: 47, name: 'Test dish 1'}
 const ingredient = {id: 1, name: 'Ing X'}
 
 const eventDishAdded = Object.assign({type: 'dish-added'}, dish)
-const eventDishUpdated = {type: 'dish-updated', id: 47, name: 'last', value: '2019-01-27'}
+const eventDishUpdated = {type: 'served', dish: 47, date: '2019-01-27'}
 const eventIngredientAdded = Object.assign({type: 'ingredient-added'}, ingredient)
 const eventIngredientUpdated = {type: 'ingredient-updated', id: 1, name: 'name', value: 'Ing 1'}
 const eventStream = [

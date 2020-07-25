@@ -3,18 +3,24 @@
 const should = require('should')
 const EventStore = require('./EventStore')
 const path = require('path')
-const mock = require('mock-fs')
 const fs = require('fs')
-const YAML = require('yaml')
+
+const basePath = path.resolve(__dirname, 'testdata')
+const migrationsPath = path.join(basePath, 'migrations')
+const changes_1js = `module.exports = function(e) { e({command: 'add-dish', name: 'Test dish 2'}) }`
+const events = JSON.stringify([{type: 'dish-added', id: 1, name: 'Test dish'}])
 
 describe('EventStore', () => {
-  afterEach(() => mock.restore())
+  beforeEach(() => {
+    fs.rmdirSync(basePath, { recursive: true })
+    fs.mkdirSync(basePath)
+  })
+
+  afterEach(() => fs.rmdirSync(basePath, { recursive: true }))
 
   it('should load initial data when no events.json file exist', () => {
-    const events = JSON.stringify([{type: 'dish-added', id: 1, name: 'Test dish'}])
-    mock({testdata: {'events-initial.json': events}})
-    const basePath = path.join(process.cwd(), 'testdata')
-    const store = new EventStore({basePath})
+    fs.writeFileSync(path.join(basePath, 'events-initial.json'), events)
+    const store = new EventStore({ basePath })
     store.getEvents().should.deepEqual([{type: 'dish-added', id: 1, name: 'Test dish'}])
     fs.existsSync(path.join(basePath, 'events.json')).should.be.true()
     fs.readFileSync(path.join(basePath, 'events.json')).toString().should.equal(events)
@@ -23,36 +29,31 @@ describe('EventStore', () => {
   it('should ignore initial data when events.json already exist', () => {
     const initial = JSON.stringify([{type: 'dish-added', id: 1, name: 'Test dish'}])
     const events = JSON.stringify([{type: 'dish-added', id: 2, name: 'Test dish 2'}])
-    mock({testdata: {'events-initial.json': initial, 'events.json': events}})
-    const basePath = path.join(process.cwd(), 'testdata')
-    const store = new EventStore({basePath})
+    fs.writeFileSync(path.join(basePath, 'events.json'), events)
+    fs.writeFileSync(path.join(basePath, 'events-initial.json'), initial)
+    const store = new EventStore({ basePath})
     store.getEvents().should.deepEqual([{type: 'dish-added', id: 2, name: 'Test dish 2'}])
     fs.existsSync(path.join(basePath, 'events.json')).should.be.true()
     fs.readFileSync(path.join(basePath, 'events.json')).toString().should.equal(events)
   })
 
   it('should replay events on startup', () => {
-    const events = JSON.stringify([{type: 'dish-added', id: 1, name: 'Test dish'}])
-    mock({testdata: {'events.json': events}})
-    const basePath = path.join(process.cwd(), 'testdata')
+    fs.writeFileSync(path.join(basePath, 'events.json'), events)
     const store = new EventStore({basePath})
     store.getEvents().should.deepEqual([{type: 'dish-added', id: 1, name: 'Test dish'}])
   })
 
-  it(`should do nothing when applyChanges() is called and no 'changes' folder exist`, () => {
-    const events = JSON.stringify([{type: 'dish-added', id: 1, name: 'Test dish'}])
-    mock({testdata: {'events.json': events}})
-    const basePath = path.join(process.cwd(), 'testdata')
-    const store = new EventStore({basePath})
+  it(`should do nothing when applyChanges() is called and no 'migrations' folder exist`, () => {
+    fs.writeFileSync(path.join(basePath, 'events.json'), events)
+    const store = new EventStore({ basePath, migrationsPath })
     store.applyChanges(() => {})
   })
 
-  it('should apply changes', () => {
-    const events = JSON.stringify([{type: 'dish-added', id: 1, name: 'Test dish'}])
-    const changes = YAML.stringify([{command: 'add-dish', name: 'Test dish 2'}])
-    mock({testdata: {'events.json': events, changes: {'1.yaml': changes}}})
-    const basePath = path.join(process.cwd(), 'testdata')
-    const store = new EventStore({basePath})
+  it('should apply migrations', () => {
+    fs.writeFileSync(path.resolve(basePath, 'events.json'), events)
+    fs.mkdirSync(migrationsPath)
+    fs.writeFileSync(path.resolve(migrationsPath, '1.js'), changes_1js)
+    const store = new EventStore({basePath, migrationsPath})
     let commandIsExecuted = false
     store.applyChanges(command => {
       command.should.deepEqual({command: 'add-dish', name: 'Test dish 2'})
@@ -63,15 +64,11 @@ describe('EventStore', () => {
     fs.readFileSync(path.join(basePath, 'state.json')).toString().should.equal('{"changesRead":1}')
   })
 
-  it('should ignore changes which are already handled', () => {
-    mock({testdata: {
-        'events.json': JSON.stringify([{type: 'dish-added', id: 1, name: 'Test dish'}]),
-        'state.json': '{"changesRead":1}',
-        changes: {
-          '1.yaml': YAML.stringify([{command: 'add-dish', name: 'Test dish 2'}])
-        }
-      }})
-    const basePath = path.join(process.cwd(), 'testdata')
+  it('should ignore migrations which are already handled', () => {
+    fs.writeFileSync(path.resolve(basePath, 'events.json'), events)
+    fs.writeFileSync(path.resolve(basePath, 'state.json'), '{"changesRead":1}')
+    fs.mkdirSync(migrationsPath)
+    fs.writeFileSync(path.resolve(migrationsPath, '1.js'), changes_1js)
     const store = new EventStore({basePath})
     store.applyChanges(() => should('command applied').fail())
   })

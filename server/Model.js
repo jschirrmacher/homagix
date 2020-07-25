@@ -21,8 +21,8 @@ class Model {
       ingredient: []
     }
     this.inReplay = true
-    options.eventStore.getEvents().forEach(event => this.handleEvent(event, true))
     this.eventStore.applyChanges(this.executeCommand.bind(this))
+    options.eventStore.getEvents().forEach(event => this.handleEvent(event, true))
     this.inReplay = false
   }
 
@@ -111,17 +111,16 @@ class Model {
           break
         }
 
-        case 'dish-updated':
-          this.findElement('dish', byId(data.id))[data.name] = data.value
-          break
-
         case 'served':
-          this.findElement('dish', byId(data.dish)).last = data.date + 'T00:00:00.000Z'
+          this.findElement('dish', byId(data.dish)).last = data.date
           break
 
         case 'ingredient-updated':
           this.findElement('ingredient', byId(data.id))[data.name] = data.value
           break
+
+        default:
+          throw Error('Unexpected event type')
       }
     } catch (e) {
       this.logger.error(`${e.message} - ${type} event ignored`)
