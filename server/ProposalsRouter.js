@@ -2,7 +2,7 @@
 
 const express = require('express')
 
-module.exports = function ({proposer}) {
+module.exports = ({ proposer }) => {
   const router = express.Router()
 
   function getIntArrayParam(params, name) {

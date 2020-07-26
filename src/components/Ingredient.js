@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 
 class Ingredient extends Component {
   render() {
-    const ingredient = this.props.allIngredients.find(ingredient => ingredient.id === this.props.value.ingredient)
+    const ingredient = this.props.allIngredients.find(ingredient => ingredient.id === this.props.value.id)
 
     return <div className="ingredient">
       {this.props.value.amount} {this.props.value.unit} {ingredient.name}

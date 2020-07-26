@@ -1,22 +1,18 @@
-/*eslint-env node*/
-
 const path = require('path')
 const express = require('express')
 const bodyParser = require('body-parser')
 const logger = console
-const EventStore = require('./EventStore')
-const Model = require('./Model')
-const DishProposer = require('./DishProposer')
 
 const PORT = process.env.PORT || 8080
 
 const basePath = path.join(__dirname, '..', 'data')
-const migrationsPath = path.join(__dirname, 'migrations')
-const eventStore = new EventStore({basePath, migrationsPath, logger})
-const model = new Model({eventStore, logger})
-const proposer = new DishProposer({model})
-const ingredientRouter = require('./IngredientRouter')({model})
-const proposalsRouter = require('./ProposalsRouter')({model, proposer})
+const store = require('./EventStore')({ basePath, logger })
+const models = require('./models')({ store })
+const Events = require('./events')({ models })
+
+const proposer = require('./DishProposer')({ models, store, Events })
+const ingredientRouter = require('./IngredientRouter')({ models, store })
+const proposalsRouter = require('./ProposalsRouter')({ proposer })
 
 const app = express()
 app.use(bodyParser.urlencoded({extended: false}))
@@ -46,7 +42,8 @@ app.use(function(err, req, res, next) { // eslint-disable-line no-unused-vars
 })
 
 if (require.main === module) {
+  store.replay()
   app.listen(PORT, () => {
-    logger.info(`Listening on port ${PORT} (NODE_ENV=${process.env.NODE_ENV})`)
+    logger.info(`Listening on http://localhost:${PORT} (NODE_ENV=${process.env.NODE_ENV})`)
   })
 }

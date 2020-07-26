@@ -1,15 +1,30 @@
-module.exports = function (executor, events) {
-  events.forEach(event => {
-    if (event.type === 'dish-updated') {
-      if (event.name !== 'last') {
-        throw Error(`Update of dish's attribute '${event.name}' is not expected`)
-      }
-      event.type = 'served'
-      event.dish = event.id
-      event.date = event.value.replace(/T.*$/, '')
-      delete event.id
-      delete event.name
-      delete event.value
+const { Transform } = require('stream')
+
+module.exports = class mig1 extends Transform {
+  constructor(options = {}) {
+    options.objectMode = true
+    super(options)
+  }
+
+  _transform(event, encoding, callback) {
+    event.type = event.type.replace(/-(.)/g, (m, p) => p.toUpperCase())
+
+    if ((event.type === 'served' || event.type === 'ingredientAssigned') && event.dish) {
+      event.dishId = event.dish
+      delete event.dish
     }
-  })
+
+    if (event.type === 'ingredientAssigned' && event.ingredient) {
+      event.ingredientId = event.ingredient
+      delete event.ingredient
+    }
+
+    if (event.type === 'ingredientUpdated' && event.id) {
+      event.ingredientId = event.id
+      delete event.id
+    }
+
+    this.push(event)
+    callback()
+  }
 }

@@ -1,59 +1,114 @@
-/*eslint-env node*/
+const { existsSync, mkdirSync, unlinkSync, readdirSync, readFileSync, writeFileSync, createReadStream, createWriteStream } = require('fs')
+const { resolve } = require('path')
+const { Transform } = require('stream')
+const es = require('event-stream')
 
-const fs = require('fs')
-const path = require('path')
+class JsonStringify extends Transform {
+  constructor(options = {}) {
+    options.objectMode = true
+    super(options)
+  }
 
-const exists = path => {
-  try {
-    return fs.existsSync(path)
-  } catch (e) {
-    return false
+  _transform(event, encoding, done) {
+    this.push(JSON.stringify(event) + '\n')
+    done()
   }
 }
 
-class EventStore {
-  constructor({basePath, migrationsPath, logger}) {
-    this.basePath = basePath
-    this.logger = logger
-    this.migrationsPath = migrationsPath
-    if (!exists(path.join(this.basePath, 'events.json'))) {
-      fs.copyFileSync(path.join(this.basePath, 'events-initial.json'), path.join(this.basePath, 'events.json'))
-    }
-    this.events = JSON.parse(fs.readFileSync(path.join(this.basePath, 'events.json')))
-    this.newEvents = []
+module.exports = ({ basePath, migrationsPath, logger = console }) => {
+  const listeners = {}
+  let ready
+  let changeStream
+
+  function openChangeStream() {
+    changeStream = createWriteStream(eventsFileName, { flags: 'a' })
   }
 
-  getEvents() {
-    return this.events
-  }
+  function migrate(basePath, fromVersion, migrationFiles) {
+    return new Promise(pResolve => {
+      const oldEventsFile = resolve(basePath, `events-${fromVersion}.json`)
+      if (existsSync(oldEventsFile)) {
+        const readStream = createReadStream(oldEventsFile).pipe(es.split()).pipe(es.parse())
+        readStream.on('end', pResolve)
 
-  applyChanges(commandExecutor) {
-    const stateFileName = path.join(this.basePath, 'state.json')
-    const state = exists(stateFileName) ? JSON.parse(fs.readFileSync(stateFileName).toString()) : {}
-    const files = exists(this.migrationsPath) ? fs.readdirSync(this.migrationsPath) : []
-    files.forEach(file => {
-      const changeNo = +file.replace('.js', '')
-      if (!state.changesRead || state.changesRead < changeNo) {
-        const migrator = require(path.join(this.migrationsPath, file))
-        migrator(commandExecutor, this.events)
-        state.changesRead = changeNo
+        migrationFiles
+          .map(migration => require(migration))
+          .reduce((stream, migrator) => stream.pipe(new migrator()), readStream)
+          .pipe(new JsonStringify())
+          .pipe(createWriteStream(eventsFileName))
+      } else {
+        pResolve()
       }
     })
-    fs.writeFileSync(stateFileName, JSON.stringify(state))
-    this.persistChanges()
   }
 
-  add(event) {
-    if (!this.inReplay) {
-      this.newEvents.push(event)
+  function dispatch(event) {
+    try {
+      (listeners[event.type] || []).forEach(listener => listener(event))
+    } catch (error) {
+      logger.error(error)
+      logger.debug(error.stack)
     }
   }
 
-  persistChanges() {
-    this.events.push(...this.newEvents)
-    this.newEvents = []
-    fs.writeFileSync(path.join(this.basePath, 'events.json'), JSON.stringify(this.events, null, 2))
+  if (!existsSync(basePath)) {
+    mkdirSync(basePath)
+  }
+  migrationsPath = migrationsPath || resolve(__dirname, 'migrations')
+  const versionFile = resolve(basePath, 'state.json')
+  const eventsVersionNo = !existsSync(versionFile) ? 0 : JSON.parse(readFileSync(versionFile).toString()).versionNo || 0
+  const migrationFiles = readdirSync(migrationsPath)
+    .filter(name => parseInt(name) > eventsVersionNo)
+    .map(name => resolve(migrationsPath, name))
+  const versionNo = eventsVersionNo + migrationFiles.length
+  const eventsFileName = resolve(basePath, `events-${versionNo}.json`)
+  if (eventsVersionNo < versionNo) {
+    logger.info(`Migrating data from ${eventsVersionNo} to ${versionNo}`)
+    ready = migrate(basePath, eventsVersionNo, migrationFiles)
+      .then(() => writeFileSync(versionFile, JSON.stringify({ versionNo })))
+      .then(() => logger.info('Migration successful'))
+      .then(openChangeStream)
+  } else {
+    openChangeStream()
+    ready = Promise.resolve()
+  }    
+
+  return {
+    async replay() {
+      await ready
+      const stream = createReadStream(eventsFileName)
+        .pipe(es.split())
+        .pipe(es.parse())
+        .pipe(es.mapSync(event => {
+          dispatch(event)
+        }))
+
+      return new Promise(resolve => {
+        stream.on('end', resolve)
+      })
+    },
+
+    on(type, func) {
+      listeners[type.name] = listeners[type.name] || []
+      listeners[type.name].push(func)
+      return this
+    },
+
+    async emit(event) {
+      await ready
+      const completeEvent = { ts: new Date(), ...event }
+      changeStream.write(JSON.stringify(completeEvent) + '\n')
+      dispatch(completeEvent)
+    },
+
+    deleteAll() {
+      if (existsSync(eventsFileName)) {
+        unlinkSync(eventsFileName)
+      }
+    },
+
+    end() {
+      changeStream.end()
+    }
   }
 }
-
-module.exports = EventStore
