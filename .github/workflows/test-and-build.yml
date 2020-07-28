@@ -29,12 +29,12 @@ jobs:
         run: npm run lint
 
       - name: Test backend
-        run: npm test-server
+        run: npm run test-server
         env:
           CI: true
 
       - name: Test frontend
-        run: npm test-app
+        run: npm run test-app
         env:
           CI: true
 
