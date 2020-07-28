@@ -1,32 +1,28 @@
-FROM node:dubnium-alpine as builder
-
-RUN mkdir -p /tmp/frontend
-ADD package.json /tmp/frontend/package.json
-RUN cd /tmp/frontend && npm install --force --production
-
-ADD public /tmp/frontend/public
-ADD src /tmp/frontend/src
-ADD config /tmp/frontend/config
-ADD babel.config.js /tmp/frontend/babel.config.js
-RUN cd /tmp/frontend && npm run build
+FROM node:12 as frontend_builder
+WORKDIR /app
+ADD . .
+RUN npm ci && npm run build
 
 
-FROM node:dubnium-alpine
+FROM node:12 as backend_builder
+WORKDIR /app
+ADD package-lock.json package.json ./
+RUN npm ci --production
 
-RUN mkdir /app
-RUN addgroup -S nodejs && adduser -S nodejs -G nodejs
-RUN chown nodejs.nodejs /app
+
+FROM node:12-alpine
+
+RUN mkdir /app && \
+    addgroup -S nodejs && adduser -S nodejs -G nodejs && \
+    chown nodejs.nodejs /app
 USER nodejs
 WORKDIR /app
 
-RUN mkdir -p /tmp/backend
-ADD package.json /tmp/backend/package.json
-RUN cd /tmp/backend && npm install --production --force && cp -a /tmp/backend/node_modules /app/
-
-ADD package.json /app/package.json
-ADD server /app/server
-ADD public /app/public
-COPY --from=builder /tmp/frontend/build /app/build
+COPY --from=frontend_builder /app/build/ build/
+COPY --from=backend_builder /app/node_modules/ node_modules/
+ADD public public
+ADD server server
+ADD package.json ./
 
 EXPOSE 8080
 ENV NODE_ENV production
