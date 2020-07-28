@@ -7,9 +7,10 @@
   "scripts": {
     "start": "node server",
     "build": "webpack --config config/webpack.conf.js",
-    "test-server": "eslint server/**/*.js && mocha server/**/*.test.js",
-    "test-app": "eslint src/**/*.js && jest --env=jsdom src/**/*.test.js",
-    "test": "CI=true npm run test-server && npm run test-app"
+    "lint": "eslint server/**/*.js src/**/*.js",
+    "test-server": "nyc --reporter=lcov --reporter=text-summary mocha server/**/*.test.js",
+    "test-app": "jest --env=jsdom src/**/*.test.js",
+    "test": "CI=true npm run lint && npm run test-server && npm run test-app"
   },
   "author": "joachimschirrmacher@gmail.com",
   "license": "MIT",

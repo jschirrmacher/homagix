@@ -25,8 +25,16 @@ jobs:
       - name: Build frontend files
         run: npm run build --if-present
 
-      - name: Execute tests
-        run: npm test
+      - name: Lint
+        run: npm run lint
+
+      - name: Test backend
+        run: npm test-server
+        env:
+          CI: true
+
+      - name: Test frontend
+        run: npm test-app
         env:
           CI: true
 
