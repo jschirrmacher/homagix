@@ -28,18 +28,18 @@ describe('IngredientsList', () => {
   })
 
   it('should render ingredients', () => {
-    const tree = renderer.create(<Provider store={store}><IngredientsList ingredients={ingredients}/></Provider>)
+    const tree = renderer.create(<Provider store={store}><IngredientsList showAmount="true" ingredients={ingredients}/></Provider>)
     const li = tree.toJSON().children[0]
-    const content = li.children.splice(1).join('')
-    content.should.containEql('5 L Milch')
+    li.children[2].children[0].should.containEql(5)
+    li.children[3].children[0].should.containEql('L')
+    li.children[4].should.containEql('Milch')
   })
 
-  it('should render an information message when no ingredients are selected', () => {
+  it('should render an empty list when no ingredients are selected', () => {
     const tree = renderer.create(<Provider store={store}><IngredientsList ingredients={[]}/></Provider>)
     const div = tree.toJSON()
-    div.type.should.equal('div')
-    div.props.className.should.equal('info')
-    div.children[0].should.be.instanceOf(String)
+    div.type.should.equal('ul')
+    should(div.children).be.null()
   })
 
   it('has a button to remove proposed ingredients', () => {
@@ -47,7 +47,7 @@ describe('IngredientsList', () => {
     const li = tree.toJSON().children[0]
     li.children[0].type.should.equal('button')
     const button = li.children[0]
-    button.props.className.should.equal('delete')
+    button.props.className.should.containEql('delete')
     button.children[0].should.equal('×')
   })
 
@@ -69,31 +69,36 @@ describe('IngredientsList', () => {
     should(tree.toJSON().children[0].props.className).equal('')
   })
 
-  it('has an input field to add ingredients', () => {
-    const tree = renderer.create(<Provider store={store}><IngredientsList ingredients={ingredients}/></Provider>)
-    const input = tree.toJSON().children[1].children[0]
-    input.type.should.equal('input')
-    input.props.id.should.equal('additionalItem')
+  it('should render an input field to add ingredients', () => {
+    const tree = renderer.create(<Provider store={store}><IngredientsList showNew="true" ingredients={ingredients}/></Provider>)
+    const item = tree.toJSON().children[1]
+    item.props.id.should.equal('additionalItem')
+    item.children[0].type.should.equal('input')
   })
 
+  function enterTotarget(target, value) {
+    target.value = value
+    target.onKeyDown({keyCode: 65, target})
+    target.onKeyDown({keyCode: 8, target})
+    target.onKeyDown({keyCode: 13, target})
+  }
+
   it('should add ingredients when enter is pressed', () => {
-    const tree = renderer.create(<Provider store={store}><IngredientsList ingredients={ingredients}/></Provider>)
+    const tree = renderer.create(<Provider store={store}><IngredientsList showAmount="true" showNew="true" ingredients={ingredients}/></Provider>)
     const input = tree.toJSON().children[1].children[0]
-    input.props.value = '2 Stk Butter'
-    input.props.onKeyDown({keyCode: 13, target: input.props})
-    const entries = tree.toJSON().children.map(li => li.children.splice(1, li.children.length - 2).join('').trim())
-    entries.should.containEql('2 Stk Butter')
+    enterTotarget(input.props, '2 Stk Butter')
+    const entries = tree.toJSON().children[0]
+    entries.children[2].children[0].should.containEql(2)
+    entries.children[3].children[0].should.containEql('Stk')
+    entries.children[4].should.containEql('Butter')
   })
 
   it('should remove additional ingredients when delete button is pressed', () => {
-    const tree = renderer.create(<Provider store={store}><IngredientsList ingredients={ingredients}/></Provider>)
+    const tree = renderer.create(<Provider store={store}><IngredientsList showNew="true" ingredients={ingredients}/></Provider>)
     const input = tree.toJSON().children[1].children[0]
-    input.props.value = '2 Stk Butter'
-    input.props.onKeyDown({keyCode: 13, target: input.props})
-    const button = tree.toJSON().children.find(li => {
-      return li.children.splice(1, li.children.length - 2).join('').trim() === '2 Stk Butter'
-    }).children[0]
+    enterTotarget(input.props, '2 Stk Butter')
+    const button = tree.toJSON().children[0].children[0]
     button.props.onClick({target: {parentNode: document.createElement('li')}})
-    tree.toJSON().children[1].children[0].props.id.should.equal('additionalItem')
+    tree.toJSON().children[1].props.id.should.equal('additionalItem')
   })
 })

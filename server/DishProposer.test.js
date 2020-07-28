@@ -9,9 +9,9 @@ const allIngredients = {
 }
 
 const allDishes = {
-  1: {id: 1, name: 'A', last: '2018-09-01', ingredients: [{ingredient: 101, amount: 1, unit: 'L'}]},
-  8: {id: 8, name: 'B', last: '2018-09-02', ingredients: [{ingredient: 108, amount: 2, unit: 'ml'}]},
-  12: {id: 12, name: 'C', last: '2018-09-03', ingredients: [{ingredient: 101, amount: 4, unit: 'L'}]},
+  1: {id: 1, name: 'A', last: '2018-09-01', ingredients: [{id: 101, amount: 1, unit: 'L'}]},
+  8: {id: 8, name: 'B', last: '2018-09-02', ingredients: [{id: 108, amount: 2, unit: 'ml'}]},
+  12: {id: 12, name: 'C', last: '2018-09-03', ingredients: [{id: 101, amount: 4, unit: 'L'}]},
   17: {id: 17, name: 'D', last: '2018-08-01', ingredients: []},
   23: {id: 23, name: 'E', last: '2018-09-04', ingredients: []},
   25: {id: 25, name: 'F', last: '2018-09-05', ingredients: []},
