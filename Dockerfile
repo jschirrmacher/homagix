@@ -2,7 +2,7 @@ FROM node:dubnium-alpine as builder
 
 RUN mkdir -p /tmp/frontend
 ADD package.json /tmp/frontend/package.json
-RUN cd /tmp/frontend && npm install --force
+RUN cd /tmp/frontend && npm install --force --production
 
 ADD public /tmp/frontend/public
 ADD src /tmp/frontend/src
