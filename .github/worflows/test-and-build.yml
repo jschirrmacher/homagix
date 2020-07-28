@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   build:
-    name: Build and push
+    name: Test, build and push to Dockerhub
     runs-on: ubuntu-latest
     strategy:
       matrix:
