@@ -1,6 +1,6 @@
 const webpack = require('webpack')
 const path = require('path')
-const babelConfig = require(path.resolve(__dirname, '..', 'babel.config'))
+const babelConfig = require(path.resolve(__dirname, 'babel.config'))
 
 const mode = process.env.NODE_ENV || 'development'
 const plugins = []
@@ -15,7 +15,7 @@ module.exports = {
   mode,
   entry: {index, },
   output: {
-    path: path.resolve(__dirname, '..', 'build'),
+    path: path.resolve(__dirname, '..', 'server', 'build'),
     filename: 'bundle.js'
   },
   module: {

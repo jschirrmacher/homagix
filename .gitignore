@@ -3,6 +3,6 @@
 /.nyc_output/
 /node_modules/
 /coverage/
-/build/
+/server/build/
 /data/
 .DS_Store

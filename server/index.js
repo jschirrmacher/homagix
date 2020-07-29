@@ -33,8 +33,8 @@ app.use((req, res, next) => {
 
 app.use('/ingredients', ingredientRouter)
 app.use('/proposals', proposalsRouter)
-app.use('/', express.static(path.join(__dirname, '..', 'build')))
-app.use('/', express.static(path.join(__dirname, '..', 'public')))
+app.use('/', express.static(path.join(__dirname, 'build')))
+app.use('/', express.static(path.join(__dirname, 'public')))
 
 app.use(function(err, req, res, next) { // eslint-disable-line no-unused-vars
   logger.error(err)
