@@ -3,7 +3,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const logger = console
 
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT || 8200
 
 const basePath = path.join(__dirname, '..', 'data')
 const store = require('./EventStore')({ basePath, logger })
