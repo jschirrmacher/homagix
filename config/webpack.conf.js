@@ -1,22 +1,32 @@
 const webpack = require('webpack')
 const path = require('path')
-const babelConfig = require(path.resolve(__dirname, '..', 'babel.config'))
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
 
 const mode = process.env.NODE_ENV || 'development'
+const isDev = mode === 'development'
 const plugins = []
 const index = []
-if (mode === 'development') {
+if (isDev) {
   plugins.push(new webpack.HotModuleReplacementPlugin())
   index.push('webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000')
 }
-index.push(path.resolve(__dirname, '..', 'src', 'index.js'))
+index.push(path.resolve(__dirname, '..', 'frontend', 'main.js'))
+plugins.push(new VueLoaderPlugin())
 
 module.exports = {
   mode,
-  entry: {index, },
+  entry: {index},
   output: {
     path: path.resolve(__dirname, '..', 'server', 'build'),
     filename: 'bundle.js'
+  },
+  resolve: {
+    extensions: [ '.js', '.vue' ],
+    alias: {
+      'vue$': isDev ? 'vue/dist/vue.js' : 'vue/dist/vue.runtime.min.js',
+      '@': path.resolve(__dirname, '..', 'frontend')
+    }
   },
   module: {
     rules: [
@@ -30,16 +40,20 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [ 'style-loader', 'css-loader' ]
+        use: [ 'vue-style-loader ', 'css-loader' ]
       },
       {
-        test: /\.m?js$/,
-        exclude: [/node_modules/, /build/],
-        use: {
-          loader: require.resolve('babel-loader'),
-          options: babelConfig
-        }
-      }
+        test: /\.scss$/,
+        use: [
+          isDev ? 'vue-style-loader' : MiniCSSExtractPlugin.loader,
+          { loader: 'css-loader', options: { sourceMap: isDev } },
+          { loader: 'sass-loader', options: { sourceMap: isDev } }
+        ]
+      },
+      {
+        test: /\.vue$/,
+        loader: { loader: 'vue-loader', options: { sourceMap: isDev } }
+      },
     ]
   },
   plugins
