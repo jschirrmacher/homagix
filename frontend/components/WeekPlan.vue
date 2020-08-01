@@ -14,25 +14,29 @@ export default {
   },
 
   computed: {
-    ...mapState(['proposals'])
+    ...mapState(['proposals']),
   },
 }
 </script>
 
 <template>
-<div>
+<div class="plan">
   <h2>Wochenplan</h2>
   <p>beginnend ab <input type="date" v-model="startDate" autocomplete="off"></p>
 
   <ul>
     <li v-for="proposal in proposals" :key="proposal.id">
-      <Dish :id="proposal.id" :name="proposal.name" :lastServed="proposal.last" />
+      <Dish :id="proposal.id" :name="proposal.name" :lastServed="proposal.last" :ingredients="proposal.ingredients" />
     </li>
   </ul>
 </div>
 </template>
 
 <style scoped lang="scss">
+.plan {
+  padding: 10px;
+}
+
 ul {
   list-style: none;
   padding: 0;

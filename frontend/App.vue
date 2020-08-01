@@ -1,7 +1,7 @@
 <script>
 import TabBar from '@/components/TabBar'
 import { mapState } from 'vuex'
-import { CLEAR_ERROR, GET_PROPOSALS } from './store/mutation_types'
+import { CLEAR_ERROR, GET_PROPOSALS, GET_INGREDIENTS } from './store/mutation_types'
 
 export default {
   components: { TabBar },
@@ -10,6 +10,7 @@ export default {
 
   mounted() {
     this.$store.dispatch(GET_PROPOSALS)
+    this.$store.dispatch(GET_INGREDIENTS)
   },
 
   methods: {
@@ -29,8 +30,8 @@ export default {
       {{ error.message }}
     </div>
 
-    <TabBar />
     <div class="content">
+      <TabBar />
       <router-view></router-view>
     </div>
   </div>
@@ -66,8 +67,13 @@ h1 {
   }
 }
 
+h2 {
+  margin-top: 0;
+}
+
 .content {
-  padding: 15px;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .error {
