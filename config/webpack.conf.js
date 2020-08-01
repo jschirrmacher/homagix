@@ -1,6 +1,6 @@
 const webpack = require('webpack')
 const path = require('path')
-const babelConfig = require(path.resolve(__dirname, 'babel.config'))
+const babelConfig = require(path.resolve(__dirname, '..', 'babel.config'))
 
 const mode = process.env.NODE_ENV || 'development'
 const plugins = []
