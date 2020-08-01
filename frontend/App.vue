@@ -1,6 +1,8 @@
 <script>
+import TabBar from '@/components/TabBar'
+
 export default {
-  
+  components: { TabBar }
 }
 </script>
 
@@ -8,8 +10,10 @@ export default {
   <div>
     <h1>Homagix</h1>
 
-    <div class="TabBar"></div>
-    <div class="Content"></div>
+    <TabBar />
+    <div class="content">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -41,5 +45,9 @@ h1 {
     border-left-style: solid;
     transform: rotate(45deg);
   }
+}
+
+.content {
+  padding: 15px;
 }
 </style>
