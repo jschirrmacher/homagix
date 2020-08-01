@@ -1,14 +1,33 @@
 <script>
 import TabBar from '@/components/TabBar'
+import { mapState } from 'vuex'
+import { CLEAR_ERROR, GET_PROPOSALS } from './store/mutation_types'
 
 export default {
-  components: { TabBar }
+  components: { TabBar },
+
+  computed: mapState(['error']),
+
+  mounted() {
+    this.$store.dispatch(GET_PROPOSALS)
+  },
+
+  methods: {
+    clearError() {
+      this.$store.commit(CLEAR_ERROR)
+    }
+  }
 }
 </script>
 
 <template>
   <div>
     <h1>Homagix</h1>
+
+    <div v-if="error.message" class="error">
+      <span @click="clearError">×</span>
+      {{ error.message }}
+    </div>
 
     <TabBar />
     <div class="content">
@@ -49,5 +68,9 @@ h1 {
 
 .content {
   padding: 15px;
+}
+
+.error {
+  color: red;
 }
 </style>
