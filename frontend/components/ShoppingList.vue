@@ -1,10 +1,19 @@
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import IngredientList from './IngredientList'
 
 export default {
   components: { IngredientList },
-  computed: mapState(['shoppinglist'])
+  computed: {
+    ...mapState(['allIngredients']),
+    ...mapGetters(['shoppinglist']),
+    items() {
+      return this.shoppinglist.map(i => ({
+        ...i,
+        name: this.allIngredients.find(item => item.id === i.id).name
+      }))
+    }
+  },
 }
 </script>
 
@@ -12,7 +21,7 @@ export default {
   <div class="shoppinglist">
     <h2>Einkaufsliste</h2>
 
-    <IngredientList :items="shoppinglist" />
+    <IngredientList :items="items" />
   </div>
 </template>
 

@@ -19,6 +19,18 @@ function loadData(url, mutationType) {
   }
 }
 
+function addIfNotAlreadyIn(array, element) {
+  const existing = array.findIndex(el => el.id === element.id)
+  if (existing !== -1) {
+    if (array[existing].unit !== element.unit) {
+      throw Error(`Problem: ingredient '${element.name}' is specified with different units!`)
+    }
+    return array.map(el => el.id === element.id ? {...el, amount: el.amount + element.amount} : el)
+  } else {
+    return [...array, element]
+  }
+}
+
 export default new Vuex.Store({
   strict: true,
 
@@ -33,12 +45,13 @@ export default new Vuex.Store({
   },
 
   getters: {
-    shoppinglist() {
-      return this.$store.proposals
-        .filter(p => this.$store.accepted.includes(p.id))
+    shoppinglist(state) {
+      return state.proposals
+        .filter(p => state.accepted.includes(p.id))
         .map(p => p.ingredients)
         .flat()
-        + this.$store.state.extras
+        .concat(state.extras)
+        .reduce(addIfNotAlreadyIn, [])
     }
   },
 
