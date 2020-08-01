@@ -1,13 +1,14 @@
 import Vue from 'vue'
 import router from 'vue-router'
 import App from './App'
+import store from './store'
 
 Vue.config.productionTip = false
 
 new Vue({
   el: '#root',
   router,
-  // store,
+  store,
   components: { App },
   template: '<App/>'
 })
