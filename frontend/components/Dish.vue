@@ -29,14 +29,17 @@ export default {
   },
 
   computed: {
-    ...mapState(['allIngredients']),
+    ...mapState(['allIngredients', 'accepted']),
 
-    served() {
+    servedDate() {
       return this.lastServed && (new Date(this.lastServed)).toLocaleString('de', { dateStyle: 'medium' })
     },
 
     classNames() {
-      return 'openclose ' + (this.opened ? 'opened' : '')
+      const names = ['dish']
+      this.opened && names.push('opened')
+      this.accepted.includes(this.id) && names.push('accepted')
+      return names.join(' ')
     },
 
     dishIngredients() {
@@ -52,24 +55,24 @@ export default {
       this.opened = !this.opened
     },
 
-    decline() {
-      this.$store.commit(DISH_DECLINED)
+    decline(dishId) {
+      this.$store.dispatch(DISH_DECLINED, { dishId: this.id })
     },
 
-    accept() {
-      this.$store.commit(DISH_ACCEPTED)
+    accept(dishId) {
+      this.$store.dispatch(DISH_ACCEPTED, { dishId: this.id })
     },
   }
 }
 </script>
 
 <template>
-  <div class="dish">
-    <span :class="classNames" @click="toggleOpen"></span>
+  <div :class="classNames">
+    <span class="openclose" @click="toggleOpen"></span>
     <button class="delete" title="Ablehnen" @click="decline">×</button>
     <button class="accept" title="Annehmen" @click="accept">✓</button>
     {{name}}
-    <span class="served">{{served}}</span>
+    <span class="served">{{servedDate}}</span>
     <div v-if="opened" class="ingredient-list">
       <IngredientList :items="dishIngredients" />
     </div>
@@ -81,7 +84,6 @@ export default {
   padding: 10px 0;
   border-bottom: 1px solid #bbbbbb;
   position: relative;
-  cursor: pointer;
   line-height: 1.4em;
 
   button {
@@ -94,6 +96,7 @@ export default {
     right: -10px;
     font-size: 1.6em;
     border: none;
+    outline: none;
     cursor: pointer;
 
     &:hover {
@@ -111,6 +114,10 @@ export default {
     &.accept {
       color: lightgray;
     }
+  }
+
+  &.accepted button.accept {
+    color: green;
   }
 
   .served {
@@ -135,10 +142,11 @@ export default {
     border-color: transparent #888888 #888888 transparent;
     transform: rotate(-45deg);
     transition: transform .3s;
+    cursor: pointer;
+  }
 
-    &.opened {
-      transform: rotate(45deg);
-    }
+  &.opened .openclose {
+    transform: rotate(45deg);
   }
 }
 </style>
