@@ -13,14 +13,33 @@ export default {
 <template>
   <ul>
     <li v-for="item in items" :key="item.id">
-      {{ item.amount }} {{ item.unit }} {{ item.name }}
+      <span class="amount">{{ item.amount }}</span>
+      <span class="unit">{{ item.unit }}</span>
+      {{ item.name }}
       <slot />
     </li>
   </ul>
 </template>
 
 <style lang="scss" scoped>
-.shoppinglist {
-  padding: 10px;
+ul {
+  padding: 10px 0 10px 22px;
+  list-style: none;
+
+  li {
+    border-bottom: 1px solid #dddddd;
+  }
+
+  .amount {
+    display: inline-block;
+    width: 50px;
+    text-align: right;
+  }
+
+  .unit {
+    display: inline-block;
+    width: 30px;
+    text-align: center
+  }
 }
 </style>

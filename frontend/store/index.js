@@ -1,15 +1,21 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { ERROR_OCCURED, CLEAR_ERROR, GET_PROPOSALS, PROPOSALS_LOADED, GET_INGREDIENTS, INGREDIENTS_LOADED } from './mutation_types'
+import * as types from './mutation_types'
 
 Vue.use(Vuex)
 
-async function loadData(url, context, mutationType) {
-  const result = await fetch(url)
-  if (result.ok) {
-    context.commit(mutationType, await result.json())
-  } else {
-    context.commit(ERROR_OCCURED, { message: 'Cannot load dish proposals', details: await result.json() })
+function loadData(url, mutationType) {
+  return async function (context) {
+    const params = [
+      'accepted=' + context.state.accepted.join(','),
+      'inhibit=' + context.state.declined.join(','),
+    ]
+    const result = await fetch(url + '?' + params.join('&'))
+    if (result.ok) {
+      context.commit(mutationType, await result.json())
+    } else {
+      context.commit(types.ERROR_OCCURED, { message: 'Cannot load dish proposals', details: await result.json() })
+    }
   }
 }
 
@@ -37,22 +43,46 @@ export default new Vuex.Store({
   },
 
   mutations: {
-    [CLEAR_ERROR](state) {
+    [types.CLEAR_ERROR](state) {
       state.error = {}
     },
 
-    [PROPOSALS_LOADED](state, { dishes, ingredients }) {
+    [types.PROPOSALS_LOADED](state, { dishes, ingredients }) {
       state.proposals = dishes
       state.selectedIngredients = ingredients
     },
 
-    [INGREDIENTS_LOADED](state, ingredients) {
+    [types.INGREDIENTS_LOADED](state, ingredients) {
       state.allIngredients = ingredients
-    }
+    },
+
+    [types.DISH_ACCEPTED](state, { dishId }) {
+      if (state.accepted.includes(dishId)) {
+        state.accepted = state.accepted.filter(id => id !== dishId)
+      } else {
+        state.accepted.push(dishId)
+      }
+    },
+
+    [types.DISH_DECLINED](state, { dishId }) {
+      if (state.declined.includes(dishId)) {
+        state.declined = state.declined.filter(id => id !== dishId)
+      } else {
+        state.declined.push(dishId)
+      }
+    },
   },
 
   actions: {
-    [GET_PROPOSALS]: (context) => loadData('/proposals', context, PROPOSALS_LOADED),
-    [GET_INGREDIENTS]: (context) => loadData('/ingredients', context, INGREDIENTS_LOADED),
+    [types.GET_PROPOSALS]: loadData('/proposals', types.PROPOSALS_LOADED),
+    [types.GET_INGREDIENTS]: loadData('/ingredients', types.INGREDIENTS_LOADED),
+    [types.DISH_ACCEPTED]: (context, { dishId }) => {
+      context.commit(types.DISH_ACCEPTED, { dishId })
+      loadData('/proposals', types.PROPOSALS_LOADED)(context)
+    },
+    [types.DISH_DECLINED]: (context, { dishId }) => {
+      context.commit(types.DISH_DECLINED, { dishId })
+      loadData('/proposals', types.PROPOSALS_LOADED)(context)
+    },
   },
 })
