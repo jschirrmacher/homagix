@@ -29,6 +29,8 @@ export default {
       <Dish :id="proposal.id" :name="proposal.name" :lastServed="proposal.last" :ingredients="proposal.ingredients" />
     </li>
   </ul>
+
+  <router-link :to="{name: 'shoppinglist'}" tag="button">Zur Einkaufsliste</router-link>
 </div>
 </template>
 

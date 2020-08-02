@@ -4,6 +4,17 @@ import * as types from './mutation_types'
 
 Vue.use(Vuex)
 
+const itemGroups = {
+  fruit: { order: 1, title: 'Obst & Gemüse' },
+  breakfast: { order: 2, title: 'Brot & Frühstück' },
+  meat: { order: 3, title: 'Fleisch' },
+  cooled: { order: 4, title: 'Frische & Kühlung' },
+  tinned: { order: 5, title: 'Nahrungsmittel' },
+  drinks: { order: 6, title: 'Getränke' },
+  frozen: { order: 7, title: 'Tiefgekühlt' },
+  other: { order: 8, title: 'Sonstiges' }
+}
+
 function loadData(url, mutationType) {
   return async function (context) {
     const params = [
@@ -52,6 +63,10 @@ export default new Vuex.Store({
         .flat()
         .concat(state.extras)
         .reduce(addIfNotAlreadyIn, [])
+        .map(i => {
+          const item = state.allIngredients.find(item => item.id === i.id)
+          return { ...i, name: item.name, group: { ...itemGroups[item.group], id: item.group }}
+        })
     }
   },
 
