@@ -4,15 +4,18 @@ import IngredientList from '@/components/IngredientList'
 
 export default {
   components: { IngredientList },
-  computed: mapGetters(['shoppinglist']),
+  computed: mapGetters(['shoppinglist', 'itemsOnShoppingList']),
 }
 </script>
 
 <template>
   <div class="shoppinglist">
-    <h2>Einkaufsliste</h2>
+    <h2>
+      Einkaufsliste
+      <span v-if="!itemsOnShoppingList">ist leer</span>
+    </h2>
 
-    <IngredientList :items="shoppinglist" v-slot:default="slotProps">
+    <IngredientList v-if="itemsOnShoppingList" :items="shoppinglist" v-slot:default="slotProps">
       <span :class="'group ' + slotProps.item.group.id">{{ slotProps.item.group.title }}</span>
     </IngredientList>
   </div>

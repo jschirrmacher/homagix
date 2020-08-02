@@ -69,6 +69,10 @@ export default new Vuex.Store({
         })
         .sort((a, b) => a.group.order - b.group.order)
     },
+
+    itemsOnShoppingList(state) {
+      return state.accepted.length + state.extras.length > 0
+    }
   },
 
   mutations: {
