@@ -1,10 +1,22 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import IngredientList from '@/components/IngredientList'
+import { ITEM_REMOVED, ITEM_ADDED } from '../store/mutation_types'
 
 export default {
   components: { IngredientList },
-  computed: mapGetters(['shoppinglist', 'itemsOnShoppingList']),
+  computed: mapGetters(['shoppinglist', 'itemsInShoppingList']),
+
+  methods: {
+    remove(ingredientId) {
+      this.$store.dispatch(ITEM_REMOVED, { ingredientId })
+    },
+
+    restore(item) {
+      item.amount = -item.amount
+      this.$store.dispatch(ITEM_ADDED, { item })
+    }
+  }
 }
 </script>
 
@@ -12,10 +24,12 @@ export default {
   <div class="shoppinglist">
     <h2>
       Einkaufsliste
-      <span v-if="!itemsOnShoppingList">ist leer</span>
+      <span v-if="!itemsInShoppingList">ist leer</span>
     </h2>
 
-    <IngredientList v-if="itemsOnShoppingList" :items="shoppinglist" v-slot:default="slotProps">
+    <IngredientList v-if="itemsInShoppingList" :items="shoppinglist" v-slot:default="slotProps">
+      <button v-if="slotProps.item.amount > 0" class="inline delete" title="Von der Liste streichen" @click="remove(slotProps.item.id)">×</button>
+      <button v-if="slotProps.item.amount <= 0" class="inline restore" title="Wieder hinzufügen" @click="restore(slotProps.item)">✓</button>
       <span :class="'group ' + slotProps.item.group.id">{{ slotProps.item.group.title }}</span>
     </IngredientList>
   </div>
@@ -70,5 +84,9 @@ export default {
     background-color: blue;
     color: white;
   }
+}
+
+.restore {
+  color: green;
 }
 </style>

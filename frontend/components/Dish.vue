@@ -69,10 +69,10 @@ export default {
 <template>
   <div :class="classNames">
     <span class="openclose" @click="toggleOpen"></span>
-    <button class="delete" title="Ablehnen" @click="decline">×</button>
-    <button class="accept" title="Annehmen" @click="accept">✓</button>
+    <button class="inline delete" title="Ablehnen" @click="decline">×</button>
+    <button class="inline accept" title="Annehmen" @click="accept">✓</button>
     {{name}}
-    <span class="served">{{servedDate}}</span>
+    <span class="servedDate">{{servedDate}}</span>
     <div v-if="opened" class="ingredient-list">
       <IngredientList :items="dishIngredients" />
     </div>
@@ -86,41 +86,15 @@ export default {
   position: relative;
   line-height: 1.4em;
 
-  button {
-    right: 0;
-    float: right;
-    padding: 3px 3px 5px;
-    background: none;
-    position: relative;
-    top: -0.4em;
-    right: -10px;
-    font-size: 1.6em;
-    border: none;
-    outline: none;
-    cursor: pointer;
-
-    &:hover {
-      background: #dddddd;
-    }
-
-    &::active {
-      background: #bbbbbb;
-    }
-
-    &.delete {
-      color: red;
-    }
-
-    &.accept {
-      color: lightgray;
-    }
+  button.accept {
+    color: lightgray;
   }
 
   &.accepted button.accept {
     color: green;
   }
 
-  .served {
+  .servedDate {
     background: #aaaaaa;
     position: relative;
     right: 50px;

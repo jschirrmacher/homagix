@@ -1,27 +1,58 @@
-import * as types from './mutation_types'
 import { loadData, doFetch } from '@/lib/api'
+import {
+  GET_PROPOSALS,
+  PROPOSALS_LOADED,
+  GET_INGREDIENTS,
+  INGREDIENTS_LOADED,
+  DISH_ACCEPTED,
+  DISH_DECLINED,
+  ITEM_REMOVED,
+  CHANGES_CHANGED,
+  SHOPPING_DONE,
+  ITEM_ADDED,
+} from './mutation_types'
 
 export const actions = {
-  [types.GET_PROPOSALS]: loadData('/proposals', types.PROPOSALS_LOADED),
+  [GET_PROPOSALS]: loadData('/proposals', PROPOSALS_LOADED),
 
-  [types.GET_INGREDIENTS]: loadData('/ingredients', types.INGREDIENTS_LOADED),
+  [GET_INGREDIENTS]: loadData('/ingredients', INGREDIENTS_LOADED),
 
-  [types.DISH_ACCEPTED]: (context, { dishId }) => {
-    context.commit(types.DISH_ACCEPTED, { dishId })
-    loadData('/proposals', types.PROPOSALS_LOADED)(context)
+  [DISH_ACCEPTED]: (context, { dishId }) => {
+    context.commit(DISH_ACCEPTED, { dishId })
+    loadData('/proposals', PROPOSALS_LOADED)(context)
   },
 
-  [types.DISH_DECLINED]: (context, { dishId }) => {
-    context.commit(types.DISH_DECLINED, { dishId })
-    loadData('/proposals', types.PROPOSALS_LOADED)(context)
+  [DISH_DECLINED]: (context, { dishId }) => {
+    context.commit(DISH_DECLINED, { dishId })
+    loadData('/proposals', PROPOSALS_LOADED)(context)
   },
 
-  [types.SHOPPING_DONE]: async (context) => {
+  [ITEM_REMOVED]: (context, { ingredientId }) => {
+    const changes = context.state.changes.filter(item => item.id !== ingredientId)
+    const existing = context.getters.shoppinglist.find(item => item.id === ingredientId)
+    if (existing) {
+      existing.amount = -existing.amount
+      changes.push(existing)
+      context.commit(CHANGES_CHANGED, { changes })
+    }
+  },
+
+  [ITEM_ADDED]: (context, { item }) => {
+    const changes = context.state.changes.filter(change => change.id !== item.id)
+    const existing = context.getters.shoppinglist.find(sItem => sItem.id === item.id)
+    if (existing) {
+      existing.amount = -existing.amount
+      changes.push(existing)
+      context.commit(CHANGES_CHANGED, { changes })
+    }
+  },
+
+  [SHOPPING_DONE]: async (context) => {
     const data = {
       accepted: context.state.accepted.join(','),
       date: context.state.startDate.toISOString()
     }
     await doFetch('post', '/proposals/fix', data)
-    context.commit(types.SHOPPING_DONE)
+    context.commit(SHOPPING_DONE)
   }
 }

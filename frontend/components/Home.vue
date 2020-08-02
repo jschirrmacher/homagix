@@ -8,7 +8,7 @@ export default {
   components: { WeekPlan, ShoppingList },
   computed: {
     ...mapState(['proposals']),
-    ...mapGetters(['shoppinglist', 'itemsOnShoppingList']),
+    ...mapGetters(['shoppinglist', 'itemsInShoppingList']),
   },
   methods: {
     print() {
@@ -27,8 +27,8 @@ export default {
     <WeekPlan />
     <ShoppingList />
 
-    <button v-if="itemsOnShoppingList" @click="print">Drucken</button>
-    <button v-if="itemsOnShoppingList" @click="completed">Erledigt</button>
+    <button v-if="itemsInShoppingList" @click="print">Drucken</button>
+    <button v-if="itemsInShoppingList" @click="completed">Erledigt</button>
   </div>
 </template>
 
