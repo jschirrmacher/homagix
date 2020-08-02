@@ -49,7 +49,7 @@ export const actions = {
 
   [SHOPPING_DONE]: async (context) => {
     const data = {
-      accepted: context.state.accepted.join(','),
+      accepted: context.state.accepted,
       date: context.state.startDate.toISOString()
     }
     await doFetch('post', '/proposals/fix', data)

@@ -10,6 +10,7 @@ export default new Vuex.Store({
   strict: true,
 
   state: {
+    startDate: new Date(),
     proposals: [],
     selectedIngredients: [],
     allIngredients: [],
