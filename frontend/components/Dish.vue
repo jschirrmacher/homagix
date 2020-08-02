@@ -1,7 +1,7 @@
 <script>
-import IngredientList from './IngredientList'
+import IngredientList from '@/components/IngredientList'
 import { mapState } from 'vuex'
-import { DISH_DECLINED, DISH_ACCEPTED } from '../store/mutation_types'
+import { DISH_DECLINED, DISH_ACCEPTED } from '@/store/mutation_types'
 
 export default {
   components: { IngredientList },

@@ -23,9 +23,6 @@ export default {
 
 <style lang="scss" scoped>
 ul {
-  padding: 10px 0 10px 22px;
-  list-style: none;
-
   li {
     border-bottom: 1px solid #dddddd;
     padding: 4px 0;
@@ -45,6 +42,10 @@ ul {
     display: inline-block;
     width: 35px;
     text-align: left;
+  }
+
+  @media print {
+    column-count: 2;
   }
 }
 </style>

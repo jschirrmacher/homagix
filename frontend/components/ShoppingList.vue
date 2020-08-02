@@ -1,17 +1,10 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
-import IngredientList from './IngredientList'
+import IngredientList from '@/components/IngredientList'
 
 export default {
   components: { IngredientList },
-  computed: {
-    ...mapState(['allIngredients']),
-    ...mapGetters(['shoppinglist']),
-  },
-
-  methods: {
-    print() {}
-  }
+  computed: mapGetters(['shoppinglist']),
 }
 </script>
 
@@ -22,17 +15,10 @@ export default {
     <IngredientList :items="shoppinglist" v-slot:default="slotProps">
       <span :class="'group ' + slotProps.item.group.id">{{ slotProps.item.group.title }}</span>
     </IngredientList>
-
-    <button v-if="!!shoppinglist.length" @click="print">Drucken</button>
-    <router-link v-if="!!shoppinglist.length" :to="{name: 'completed'}" tag="button">Erledigt</router-link>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.shoppinglist {
-  padding: 10px;
-}
-
 .group {
   float: right;
   font-size: 15px;
@@ -46,7 +32,6 @@ export default {
   border-radius: 3px;
   -ms-text-align-last: center;
   text-align-last: center;
-  margin-right: -25px;
 
   &.fruit {
     background-color: darkgreen;

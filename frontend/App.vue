@@ -1,11 +1,11 @@
 <script>
-import TabBar from '@/components/TabBar'
 import { mapState } from 'vuex'
 import { CLEAR_ERROR, GET_PROPOSALS, GET_INGREDIENTS } from './store/mutation_types'
+import Home from '@/components/Home'
 
 export default {
-  components: { TabBar },
-
+  components: { Home },
+  
   computed: mapState(['error']),
 
   mounted() {
@@ -31,8 +31,7 @@ export default {
     </div>
 
     <div class="content">
-      <TabBar />
-      <router-view></router-view>
+      <Home />
     </div>
   </div>
 </template>
@@ -67,10 +66,6 @@ h1 {
   }
 }
 
-h2 {
-  margin-top: 0;
-}
-
 .content {
   max-width: 800px;
   margin: 0 auto;
@@ -78,6 +73,11 @@ h2 {
 
 .error {
   color: red;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
 }
 
 button {

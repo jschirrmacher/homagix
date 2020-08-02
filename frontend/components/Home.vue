@@ -1,15 +1,53 @@
 <script>
+import { mapState, mapGetters } from 'vuex'
+import WeekPlan from '@/components/WeekPlan'
+import ShoppingList from '@/components/ShoppingList'
+
 export default {
-  
+  components: { WeekPlan, ShoppingList },
+  computed: {
+    ...mapState(['proposals']),
+    ...mapGetters(['shoppinglist', 'itemsOnShoppingList']),
+  },
+  methods: {
+    print() {
+      window.print()
+    },
+
+    completed() {
+
+    }
+  }
 }
 </script>
 
 <template>
-  <div>
-    <h2>Willkommen bei Homagix!</h2>
+  <div class="Home">
+    <WeekPlan />
+    <ShoppingList />
 
-    <p>Starte mit der Planung, was du in der nächsten Woche essen möchtest:</p>
-
-    <router-link to="/weekplan">Planen</router-link>
+    <button v-if="itemsOnShoppingList" @click="print">Drucken</button>
+    <button v-if="itemsOnShoppingList" @click="completed">Erledigt</button>
   </div>
 </template>
+
+<style lang="scss">
+.Home {
+  padding: 10px 1em;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+  }
+
+  h1 {
+    padding: 10px;
+  }
+
+  button,
+  .group {
+    display: none;
+  }
+}
+</style>
