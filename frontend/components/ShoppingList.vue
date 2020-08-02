@@ -19,10 +19,8 @@ export default {
   <div class="shoppinglist">
     <h2>Einkaufsliste</h2>
 
-    <IngredientList :items="shoppinglist">
-      <template v-slot:default="slotProps">
-        <span :class="'group ' + slotProps.item.group.id">{{ slotProps.item.group.title }}</span>
-      </template>
+    <IngredientList :items="shoppinglist" v-slot:default="slotProps">
+      <span :class="'group ' + slotProps.item.group.id">{{ slotProps.item.group.title }}</span>
     </IngredientList>
 
     <button v-if="!!shoppinglist.length" @click="print">Drucken</button>
