@@ -15,7 +15,7 @@ export default {
     },
 
     completed() {
-
+      this.$store.dispatch(SHOPPING_DONE)
     }
   }
 }
