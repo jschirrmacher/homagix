@@ -67,7 +67,8 @@ export default new Vuex.Store({
           const item = state.allIngredients.find(item => item.id === i.id)
           return { ...i, name: item.name, group: { ...itemGroups[item.group], id: item.group }}
         })
-    }
+        .sort((a, b) => a.group.order - b.group.order)
+    },
   },
 
   mutations: {
