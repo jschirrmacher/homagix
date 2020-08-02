@@ -13,7 +13,7 @@ export default new Vuex.Store({
     proposals: [],
     selectedIngredients: [],
     allIngredients: [],
-    extras: [],
+    changes: [],
     accepted: [],
     declined: [],
     error: {}

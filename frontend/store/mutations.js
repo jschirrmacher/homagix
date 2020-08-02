@@ -31,6 +31,10 @@ export const mutations = {
   [types.SHOPPING_DONE](state) {
     state.accepted = []
     state.declined = []
-    state.extras = []
+    state.changes = []
   },
+
+  [types.CHANGES_CHANGED](state, { changes }) {
+    state.changes = changes
+  }
 }

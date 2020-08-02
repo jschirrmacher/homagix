@@ -96,4 +96,31 @@ button {
     background: #dddddd;
   }
 }
+
+button.inline {
+  float: right;
+  padding: 2px 1px 5px 2px;
+  margin-left: 5px;
+  background: none;
+  position: relative;
+  top: -1px;
+  height: 30px;
+  width: 24px;
+  font-size: 1.6em;
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  &:hover {
+    background: #dddddd;
+  }
+
+  &::active {
+    background: #bbbbbb;
+  }
+
+  &.delete {
+    color: red;
+  }
+}
 </style>
