@@ -5,6 +5,10 @@ export const mutations = {
     state.error = {}
   },
 
+  [types.STARTDATE_CHANGED](state, { startDate }) {
+    state.startDate = new Date(startDate)
+  },
+
   [types.PROPOSALS_LOADED](state, { dishes, ingredients }) {
     state.proposals = dishes
     state.selectedIngredients = ingredients

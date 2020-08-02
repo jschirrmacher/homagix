@@ -1,19 +1,24 @@
 <script>
 import { mapState } from 'vuex'
 import Dish from '@/components/Dish'
+import { STARTDATE_CHANGED } from '../store/mutation_types'
 
 export default {
   components: {
     Dish
   },
-
-  data() {
-    return {
-      startDate: new Date().toISOString().replace(/T.*$/, '')
+  
+  computed: {
+    ...mapState(['proposals']),
+    startDate: {
+      get() {
+        return this.$store.state.startDate.toISOString().replace(/T.*$/, '')
+      },
+      set(startDate) {
+        this.$store.commit(STARTDATE_CHANGED, { startDate })
+      }
     }
   },
-  
-  computed: mapState(['proposals']),
 }
 </script>
 
