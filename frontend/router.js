@@ -11,7 +11,7 @@ export default new VueRouter({
   base: __dirname,
   routes: [
     { name: 'home', path: '/', component: Home },
-    { name: 'weekplan', path: 'weekplan', component: WeekPlan },
-    { name: 'shoppinglist', path: 'shoppinglist', component: ShoppingList },
+    { name: 'weekplan', path: '/weekplan', component: WeekPlan },
+    { name: 'shoppinglist', path: '/shoppinglist', component: ShoppingList },
   ]
 })
