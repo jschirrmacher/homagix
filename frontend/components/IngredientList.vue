@@ -16,7 +16,7 @@ export default {
       <span class="amount">{{ item.amount }}</span>
       <span class="unit">{{ item.unit }}</span>
       {{ item.name }}
-      <slot />
+      <slot v-bind:item="item" />
     </li>
   </ul>
 </template>
@@ -28,6 +28,11 @@ ul {
 
   li {
     border-bottom: 1px solid #dddddd;
+    padding: 4px 0;
+
+    &:last-of-type {
+      border-bottom: none;
+    }
   }
 
   .amount {
@@ -38,8 +43,8 @@ ul {
 
   .unit {
     display: inline-block;
-    width: 30px;
-    text-align: center
+    width: 35px;
+    text-align: left;
   }
 }
 </style>

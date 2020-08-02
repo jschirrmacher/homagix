@@ -79,4 +79,21 @@ h2 {
 .error {
   color: red;
 }
+
+button {
+  padding: 5px 20px;
+  border: 2px solid #aaaaaa;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+  background: white;
+
+  &:hover {
+    background: #eeeeee;
+  }
+
+  &:active {
+    background: #dddddd;
+  }
+}
 </style>
