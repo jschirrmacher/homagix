@@ -2,6 +2,7 @@
 import { mapState, mapGetters } from 'vuex'
 import WeekPlan from '@/components/WeekPlan'
 import ShoppingList from '@/components/ShoppingList'
+import { SHOPPING_DONE } from '../store/mutation_types'
 
 export default {
   components: { WeekPlan, ShoppingList },

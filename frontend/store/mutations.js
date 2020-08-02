@@ -23,9 +23,7 @@ export const mutations = {
   },
 
   [types.DISH_DECLINED](state, { dishId }) {
-    if (state.declined.includes(dishId)) {
-      state.declined = state.declined.filter(id => id !== dishId)
-    } else {
+    if (!state.declined.includes(dishId)) {
       state.declined.push(dishId)
     }
   },
