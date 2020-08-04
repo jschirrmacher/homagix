@@ -46,7 +46,7 @@ li {
 
 .unit {
   display: inline-block;
-  width: 35px;
+  width: 45px;
   text-align: left;
 }
 
