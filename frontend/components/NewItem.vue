@@ -4,7 +4,8 @@ import { mapState } from 'vuex'
 import Autocomplete from './Autocomplete'
 
 const defaultSettings = {
-  amount: '',
+  id: null,
+  amount: '1',
   unit: 'Stk',
   name: ''
 }
@@ -29,12 +30,12 @@ export default {
       this.reset()
     },
 
-    nameFieldChanged(name) {
-      this.item.name = name
+    nameFieldChanged(item) {
+      this.item = { ...this.item, ...item }
     },
 
     reset() {
-      this.item = { ...this.defaultSettings }
+      this.item = { ...defaultSettings }
     }
   }
 }
@@ -47,13 +48,14 @@ export default {
 
     <input type="number" v-model="item.amount" id="newItem-amount">
 
-    <select v-model="item.unit" id="newItem-unit">
+    <select v-model="item.unit" id="newItem-unit" :disabled="!!item.id">
       <option v-for="(unit, index) in units" :key="index">{{unit}}</option>
     </select>
 
     <Autocomplete id="newItem-name"
       :list="this.allIngredients"
-      @changed="nameFieldChanged"
+      :value="this.item.name"
+      @input="nameFieldChanged"
       @enter-pressed="addItem"
     />
   </div>
@@ -85,6 +87,7 @@ input[type="number"] {
 
 #newItem-unit {
   width: 70px;
+  text-align: right;
 
   option.selected {
     background: #eeeeee;

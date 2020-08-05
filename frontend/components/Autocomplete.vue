@@ -15,9 +15,21 @@ export default {
 
   data() {
     return {
-      search: this.value,
       selectedIndex: -1,
       suggestions: []
+    }
+  },
+
+  computed: {
+    search: {
+      get() {
+        return this.value
+      },
+
+      set(value) {
+        const item = this.list.find(item => item.name === value) || { id: null, name: value }
+        this.$emit('input', item)
+      }
     }
   },
 
@@ -30,15 +42,14 @@ export default {
       return index === this.selectedIndex ? 'selected' : ''
     },
 
-    selected() {
-      this.search && this.$emit('changed', this.search)
+    reset() {
       this.suggestions = []
       this.selectedIndex = -1
     },
 
     selectItem(event) {
       this.search = this.suggestions[event.target.dataset.index].name
-      this.selected()
+      this.reset()
     },
 
     handleKey(event) {
@@ -49,7 +60,7 @@ export default {
         if (this.selectedIndex >= 0) {
           this.search = this.suggestions[this.selectedIndex].name
         }
-        this.selected()
+        this.reset()
         this.search && this.$emit('enter-pressed')
       } else {
         this.updateSuggestions()
@@ -65,10 +76,7 @@ export default {
 </script>
 
 <template>
-  <div class="autocomplete"
-    :id="id"
-    @keyup.enter="selected"
-  >
+  <div class="autocomplete" :id="id">
     <input type="text"
       v-model="search"
       @keyup="handleKey"
