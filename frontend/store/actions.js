@@ -38,13 +38,16 @@ export const actions = {
   },
 
   [ITEM_ADDED]: (context, { item }) => {
-    const changes = context.state.changes.filter(change => change.id !== item.id)
+    const changes = [ ...context.state.changes ]
     const existing = context.getters.shoppinglist.find(sItem => sItem.id === item.id)
+    item.amount = +item.amount
     if (existing) {
-      existing.amount = -existing.amount
+      existing.amount = +existing.amount + item.amount
       changes.push(existing)
-      context.commit(CHANGES_CHANGED, { changes })
+    } else {
+      changes.push(item)
     }
+    context.commit(CHANGES_CHANGED, { changes })
   },
 
   [SHOPPING_DONE]: async (context) => {
