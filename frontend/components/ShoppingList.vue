@@ -2,7 +2,7 @@
 import { mapState, mapGetters } from 'vuex'
 import IngredientList from './IngredientList'
 import NewItem from './NewItem'
-import { ITEM_REMOVED, ITEM_ADDED } from '../store/mutation_types'
+import { REMOVE_ITEM, RESTORE_ITEM } from '../store/mutation_types'
 
 export default {
   components: { IngredientList, NewItem },
@@ -10,13 +10,14 @@ export default {
   computed: mapGetters(['shoppinglist', 'itemsInShoppingList']),
 
   methods: {
-    remove(ingredientId) {
-      this.$store.dispatch(ITEM_REMOVED, { ingredientId })
+    remove(item) {
+      this.$store.dispatch(REMOVE_ITEM, { item })
     },
 
     restore(item) {
-      item.amount = -item.amount
-      this.$store.dispatch(ITEM_ADDED, { item })
+      item.amount = item.originalAmount
+      delete item.originalAmount
+      this.$store.dispatch(RESTORE_ITEM, { item })
     }
   }
 }
@@ -30,7 +31,7 @@ export default {
     </h2>
 
     <IngredientList v-if="itemsInShoppingList" :items="shoppinglist" v-slot:default="slotProps">
-      <button v-if="slotProps.item.amount > 0" class="inline delete" title="Von der Liste streichen" @click="remove(slotProps.item.id)">×</button>
+      <button v-if="slotProps.item.amount > 0" class="inline delete" title="Von der Liste streichen" @click="remove(slotProps.item)">×</button>
       <button v-if="slotProps.item.amount <= 0" class="inline restore" title="Wieder hinzufügen" @click="restore(slotProps.item)">✓</button>
       <span :class="'group ' + slotProps.item.group.id">{{ slotProps.item.group.title }}</span>
     </IngredientList>

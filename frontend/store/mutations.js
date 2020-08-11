@@ -9,21 +9,16 @@ export const mutations = {
     state.startDate = new Date(startDate)
   },
 
-  [types.PROPOSALS_LOADED](state, { dishes, ingredients }) {
+  [types.PROPOSALS_LOADED](state, { dishes }) {
     state.proposals = dishes
-    state.selectedIngredients = ingredients
   },
 
-  [types.INGREDIENTS_LOADED](state, ingredients) {
+  [types.INGREDIENTS_LOADED](state, { ingredients }) {
     state.allIngredients = ingredients
   },
 
-  [types.DISH_ACCEPTED](state, { dishId }) {
-    if (state.accepted.includes(dishId)) {
-      state.accepted = state.accepted.filter(id => id !== dishId)
-    } else {
-      state.accepted.push(dishId)
-    }
+  [types.ACCEPTANCE_CHANGED](state, { accepted }) {
+    state.accepted = accepted
   },
 
   [types.DISH_DECLINED](state, { dishId }) {

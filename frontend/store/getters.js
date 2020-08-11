@@ -1,28 +1,27 @@
-import { itemGroups } from '@/lib/itemGroups'
+import { itemGroups } from '../lib/itemGroups'
+
+const logger = console
 
 function addIfNotAlreadyIn(array, element) {
   const existing = array.findIndex(el => el.id === element.id)
   if (existing !== -1) {
     if (array[existing].unit !== element.unit) {
+      logger.error(array[existing], element)
       throw Error(`Problem: ingredient '${element.name}' is specified with different units!`)
     }
-    return array.map(el => el.id === element.id ? {...el, amount: el.amount + element.amount} : el)
+    array[existing].originalAmount = array[existing].originalAmount || array[existing].amount
+    array[existing].amount = array[existing].amount + element.amount
+    return array
   } else {
     return [...array, element]
   }
 }
 
-function applyChanges(ingredients, changes) {
-  return ingredients
-    .concat(changes)
-    .reduce(addIfNotAlreadyIn, [])
-}
-
-function addDetails(items, allIngredients) {
-  return items.map(i => {
-    const item = allIngredients.find(item => item.id === i.id)
-    return { ...i, name: item.name, group: { ...itemGroups[item.group], id: item.group }}
-  })
+function addDetails(allIngredients) {
+  return function (i) {
+    const item = allIngredients.find(item => item.id === i.id) || i
+    return { ...i, name: item.name, unit: item.unit, group: { ...itemGroups[item.group], id: item.group }}
+  }
 }
 
 function shoppingListFromState(state) {
@@ -30,17 +29,18 @@ function shoppingListFromState(state) {
     .filter(p => state.accepted.includes(p.id))
     .map(p => p.ingredients)
     .flat()
-  const modified = applyChanges(ingredients, state.changes)
-  return addDetails(modified, state.allIngredients)
+  return [...ingredients, ...state.changes]
+    .map(addDetails(state.allIngredients))
+    .reduce(addIfNotAlreadyIn, [])
 }
 
 export const getters = {
   shoppinglist(state) {
     return shoppingListFromState(state)
-      .sort((a, b) => a.group.order - b.group.order)
+      .sort((a, b) => a.group.order - b.group.order || a.name.toLowerCase().localeCompare(b.name.toLowerCase))
   },
 
   itemsInShoppingList(state) {
-    return shoppingListFromState(state).length > 0
+    return shoppingListFromState(state).some(item => item.amount)
   }
 }

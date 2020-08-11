@@ -1,5 +1,5 @@
 <script>
-import { ITEM_ADDED } from '../store/mutation_types'
+import { ADD_ITEM } from '../store/mutation_types'
 import { mapState } from 'vuex'
 import Autocomplete from './Autocomplete'
 
@@ -26,7 +26,7 @@ export default {
 
   methods: {
     addItem() {
-      this.$store.dispatch(ITEM_ADDED, { item: this.item })
+      this.$store.dispatch(ADD_ITEM, { item: this.item })
       this.reset()
     },
 

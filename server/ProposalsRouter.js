@@ -10,8 +10,7 @@ module.exports = ({ proposer }) => {
   }
 
   router.get('/', async (req, res) => res.json(await proposer.get(
-    getIntArrayParam(req.query, 'inhibit'),
-    getIntArrayParam(req.query, 'accepted')
+    getIntArrayParam(req.query, 'inhibit')
   )))
   router.post('/fix', async (req, res) => res.json(await proposer.fix(req.body.accepted, new Date(req.body.date))))
 

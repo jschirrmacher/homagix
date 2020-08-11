@@ -1,7 +1,7 @@
 <script>
 import IngredientList from '@/components/IngredientList'
 import { mapState } from 'vuex'
-import { DISH_DECLINED, DISH_ACCEPTED } from '@/store/mutation_types'
+import { DISH_DECLINED, TOGGLE_ACCEPTANCE } from '@/store/mutation_types'
 
 export default {
   components: { IngredientList },
@@ -59,8 +59,8 @@ export default {
       this.$store.dispatch(DISH_DECLINED, { dishId: this.id })
     },
 
-    accept(dishId) {
-      this.$store.dispatch(DISH_ACCEPTED, { dishId: this.id })
+    toggleAcceptance(dishId) {
+      this.$store.dispatch(TOGGLE_ACCEPTANCE, { dishId: this.id })
     },
   }
 }
@@ -70,7 +70,7 @@ export default {
   <div :class="classNames">
     <span class="openclose" @click="toggleOpen"></span>
     <button class="inline delete" title="Ablehnen" @click="decline">×</button>
-    <button class="inline accept" title="Annehmen" @click="accept">✓</button>
+    <button class="inline accept" title="Annehmen" @click="toggleAcceptance">✓</button>
     {{name}}
     <span class="servedDate">{{servedDate}}</span>
     <div v-if="opened" class="ingredient-list">
