@@ -1,49 +1,70 @@
-import { loadData, doFetch } from '@/lib/api'
+import { loadData, doFetch } from '../lib/api'
 import {
   GET_PROPOSALS,
   PROPOSALS_LOADED,
   GET_INGREDIENTS,
   INGREDIENTS_LOADED,
-  DISH_ACCEPTED,
   DISH_DECLINED,
-  ITEM_REMOVED,
+  REMOVE_ITEM,
   CHANGES_CHANGED,
   SHOPPING_DONE,
-  ITEM_ADDED,
+  ADD_ITEM,
+  TOGGLE_ACCEPTANCE,
+  ACCEPTANCE_CHANGED,
+  RESTORE_ITEM,
 } from './mutation_types'
+
+function eqItem(item) {
+  if (item.id) {
+    return i => i.id === item.id
+  } else {
+    const name = item.name.toLowerCase()
+    return i => i.name.toLowerCase().localeCompare(name)
+  }
+}
+
+function neItem(item) {
+  return () => !eqItem(item)
+}
 
 export const actions = {
   [GET_PROPOSALS]: loadData('/proposals', PROPOSALS_LOADED),
 
   [GET_INGREDIENTS]: loadData('/ingredients', INGREDIENTS_LOADED),
 
-  [DISH_ACCEPTED]: (context, { dishId }) => {
-    context.commit(DISH_ACCEPTED, { dishId })
-    loadData('/proposals', PROPOSALS_LOADED)(context)
+  [TOGGLE_ACCEPTANCE]({ state, commit }, { dishId }) {
+    const accepted = state.accepted.includes(dishId)
+      ? state.accepted.filter(id => id !== dishId)
+      : [...state.accepted, dishId]
+    commit(ACCEPTANCE_CHANGED, { accepted })
   },
 
-  [DISH_DECLINED]: (context, { dishId }) => {
+  [DISH_DECLINED](context, { dishId }) {
     context.commit(DISH_DECLINED, { dishId })
     loadData('/proposals', PROPOSALS_LOADED)(context)
   },
 
-  [ITEM_REMOVED]: (context, { ingredientId }) => {
-    const changes = context.state.changes.filter(item => item.id !== ingredientId)
-    const existing = context.getters.shoppinglist.find(item => item.id === ingredientId)
+  [REMOVE_ITEM](context, { item }) {
+    const changes = context.state.changes.filter(neItem(item))
+    const existing = context.getters.shoppinglist.find(eqItem(item))
     if (existing) {
       existing.amount = -existing.amount
       changes.push(existing)
-      context.commit(CHANGES_CHANGED, { changes })
     }
+    context.commit(CHANGES_CHANGED, { changes })
   },
 
-  [ITEM_ADDED]: (context, { item }) => {
-    const changes = [ ...context.state.changes ]
-    const existing = context.getters.shoppinglist.find(sItem => sItem.id === item.id)
+  [RESTORE_ITEM](context, { item }) {
+    const changes = context.state.changes.filter(neItem(item))
+    context.commit(CHANGES_CHANGED, { changes })
+  },
+
+  [ADD_ITEM]: (context, { item }) => {
     item.amount = +item.amount
+    const changes = [ ...context.state.changes ]
+    const existing = changes.find(eqItem(item))
     if (existing) {
       existing.amount = +existing.amount + item.amount
-      changes.push(existing)
     } else {
       changes.push(item)
     }

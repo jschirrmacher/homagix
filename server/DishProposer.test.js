@@ -35,11 +35,10 @@ const models = {
 }
 
 describe('DishProposer', () => {
-  it('should return a data structure containing dishes and ingredients', () => {
+  it('should return a data structure containing dishes', () => {
     const proposer = DishProposer({models})
     const result = proposer.get()
     result.should.have.property('dishes')
-    result.should.have.property('ingredients')
   })
 
   it('should propose the 7 dishes which are the longest not served', () => {
@@ -50,20 +49,5 @@ describe('DishProposer', () => {
   it('should propose 7 dishes with some ids inhibited', () => {
     const proposer = DishProposer({models})
     proposer.get([12, 1, 33]).dishes.map(d => d.id).should.deepEqual([17, 43, 44, 8, 23, 25, 29])
-  })
-
-  it('should return no ingredients as long there are no accepted dishes', () => {
-    const proposer = DishProposer({models})
-    proposer.get().ingredients.length.should.equal(0)
-  })
-
-  it('should return ingredients only of accepted dishes', () => {
-    const proposer = DishProposer({models})
-    proposer.get([], [1]).ingredients.should.deepEqual([{id: 101, name: 'a', amount: 1, unit: 'L'}])
-  })
-
-  it('should add amounts of ingredients', () => {
-    const proposer = DishProposer({models})
-    proposer.get([], [1, 12]).ingredients.should.deepEqual([{id: 101, name: 'a', amount: 5, unit: 'L'}])
   })
 })
