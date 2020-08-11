@@ -9,9 +9,7 @@
     "start": "node server",
     "build": "webpack --config config/webpack.conf.js",
     "lint": "eslint server/**/*.js frontend/**/*.js",
-    "test-server": "nyc --reporter=lcov --reporter=text-summary mocha server/**/*.test.js",
-    "test-app": "nyc --reporter=lcov --reporter=text-summary mocha -r esm frontend/**/*.test.js",
-    "test": "CI=true npm run lint && npm run test-server && npm run test-app"
+    "test": "nyc mocha -r esm --color server/**/*.test.js frontend/**/*.test.js"
   },
   "author": "joachimschirrmacher@gmail.com",
   "license": "MIT",
