@@ -1,12 +1,22 @@
 <script>
 import { mapState } from 'vuex'
-import { CLEAR_ERROR, GET_PROPOSALS, GET_INGREDIENTS } from './store/mutation_types'
+import { CLEAR_ERROR, GET_PROPOSALS, GET_INGREDIENTS, STARTDATE_CHANGED } from './store/mutation_types'
 import Home from '@/components/Home'
 
 export default {
   components: { Home },
   
-  computed: mapState(['error']),
+  computed: {
+    ...mapState(['error']),
+    startDate: {
+      get() {
+        return this.$store.state.startDate.toISOString().replace(/T.*$/, '')
+      },
+      set(startDate) {
+        this.$store.commit(STARTDATE_CHANGED, { startDate })
+      }
+    }
+  },
 
   mounted() {
     this.$store.dispatch(GET_PROPOSALS)
@@ -23,7 +33,10 @@ export default {
 
 <template>
   <div>
-    <h1>Homagix</h1>
+    <div class="title">
+      <h1>Homagix</h1>
+      Wochenplan beginnend ab <input type="date" v-model="startDate" autocomplete="off">
+    </div>
 
     <div v-if="error.message" class="error">
       <span @click="clearError">×</span>
@@ -43,26 +56,38 @@ html, body {
   margin: 0;
 }
 
-h1 {
-  color: #FFFF00;
-  font-size: 31px;
+.title {
   margin: 0;
   padding: 10px 10px 5px;
   background: linear-gradient(to bottom right, #F0A30A, rgb(240, 205, 10));
   overflow: hidden;
 
-  &:after {
-    content: '';
-    display: block;
-    position: absolute;
-    left: 11px;
-    top: 10px;
-    width: 16px;
-    height: 16px;
-    border: 4px none #FFFF00;
-    border-top-style: solid;
-    border-left-style: solid;
-    transform: rotate(45deg);
+  h1 {
+    color: #FFFF00;
+    position: relative;
+    float: left;
+    font-size: 28px;
+    margin: 0;
+    padding: 0 30px 0 0;
+
+    &:after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: .03em;
+      top: -.15em;
+      width: 0.5em;
+      height: 0.5em;
+      border: .15em none #FFFF00;
+      border-top-style: solid;
+      border-left-style: solid;
+      transform: rotate(45deg);
+    }
+  }
+
+  input {
+    font: 1em Arial, helvetica, sans-serif;
+    border: none;
   }
 }
 
