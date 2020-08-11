@@ -40,6 +40,7 @@
     "should": "^13.2.3",
     "style-loader": "^0.23.1",
     "url-loader": "^1.1.2",
+    "util.promisify": "^1.0.1",
     "vue-loader": "^15.9.3",
     "vue-template-compiler": "^2.6.11",
     "webpack": "^4.44.0",
