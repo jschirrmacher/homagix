@@ -78,5 +78,6 @@ export const actions = {
     }
     await doFetch('post', '/proposals/fix', data)
     context.commit(SHOPPING_DONE)
+    loadData('/proposals', PROPOSALS_LOADED)(context)
   }
 }
