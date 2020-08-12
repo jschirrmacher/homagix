@@ -28,13 +28,8 @@ jobs:
       - name: Build frontend files
         run: npm run build --if-present
 
-      - name: Test backend
-        run: npm run test-server
-        env:
-          CI: true
-
-      - name: Test frontend
-        run: npm run test-app
+      - name: Test
+        run: npm test
         env:
           CI: true
 
