@@ -17,9 +17,13 @@ export async function doFetch(method, url, data) {
   } else if (data && method.toLowerCase() === 'get') {
     url += '?' + prepareQueryParamers(data)
   }
-  const response = await fetch(url, options)
-  const content = response.headers.get('content-type').match(/json/) ? await response.json() : await response.text()
-  return response.ok ? content : { httpStatus: response.status, error: content }
+  try {
+    const response = await (global || window).fetch(url, options)
+    const content = response.headers.get('content-type').match(/json/) ? await response.json() : await response.text()
+    return response.ok ? content : { httpStatus: response.status, error: content }
+  } catch (error) {
+    return { httpStatus: error.code, error: error.message || error}
+  }
 }
 
 export function loadData(url, mutationType) {
