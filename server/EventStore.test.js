@@ -21,26 +21,51 @@ function rmDataFolder() {
 
 function setupFiles(list) {
   Object.entries(list).forEach(([location, content]) => {
-    fs.writeFileSync(path.resolve(basePath, location), content)
+    try {
+      fs.writeFileSync(path.resolve(basePath, location), content)
+    } catch (error) {
+      logger.error(error)
+    }
   })
 }
 
 const logger = {
-  info() {}
+  log: [],
+
+  info: function (msg) {
+    this.log.push(['info', msg])
+  },
+  warn: function (msg) {
+    this.log.push(['warn', msg])
+  },
+  error: function (msg) {
+    this.log.push(['error', msg])
+  },
+
+  reset: function () {
+    this.log.length = 0
+  },
 }
+
+let store
 
 describe('EventStore', () => {
   beforeEach(() => {
+    logger.reset()
     rmDataFolder()
     fs.mkdirSync(basePath)
     fs.mkdirSync(migrationsPath)
   })
 
-  afterEach(rmDataFolder)
+  afterEach(() => {
+    store.end()
+    logger.log.should.deepEqual([])
+    rmDataFolder()
+  })
 
   it('should replay events on startup', async () => {
     setupFiles({'events-0.json': events})
-    const store = EventStore({ basePath, migrationsPath })
+    store = EventStore({ basePath, migrationsPath })
     const eventList = []
     store.on(testEvent, event => eventList.push(event))
     await store.replay()
@@ -52,7 +77,7 @@ describe('EventStore', () => {
       'events-0.json': events,
       'migrations/1.js': changes_1js
     })
-    const store = EventStore({ basePath, migrationsPath, logger })
+    store = EventStore({ basePath, migrationsPath, logger })
     const eventList = []
     store.on(testEvent, event => eventList.push(event))
     await store.replay()
@@ -60,6 +85,11 @@ describe('EventStore', () => {
     eventList[0].should.containDeep({type: 'testEvent', name: 'Migrated event'})
     fs.existsSync(path.join(basePath, 'state.json')).should.be.true()
     fs.readFileSync(path.join(basePath, 'state.json')).toString().should.equal('{"versionNo":1}')
+    logger.log.should.deepEqual([
+      ['info', 'Migrating data from 0 to 1'],
+      ['info', 'Migration successful']
+    ])
+    logger.reset()
   })
 
   it('should ignore migrations which are already handled', async () => {
@@ -68,13 +98,13 @@ describe('EventStore', () => {
       'state.json': '{"versionNo":1}',
       'migrations/1.js': changes_1js
     })
-    const store = EventStore({ basePath, migrationsPath, logger })
+    store = EventStore({ basePath, migrationsPath, logger })
     store.on(testEvent, should().fail)
     await store.replay()
   })
 
   it('should deliver events', async () => {
-    const store = EventStore({ basePath, migrationsPath })
+    store = EventStore({ basePath, migrationsPath })
     let delivered = false
     store.on(testEvent, () => delivered = true)
     await store.replay()
@@ -83,7 +113,7 @@ describe('EventStore', () => {
   })
 
   it('should use additional event data', async () => {
-    const store = EventStore({ basePath, migrationsPath })
+    store = EventStore({ basePath, migrationsPath })
     let data
     store.on(testEvent, event => data = event)
     await store.replay()

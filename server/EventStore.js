@@ -21,23 +21,37 @@ module.exports = ({ basePath, migrationsPath, logger = console }) => {
   let changeStream
 
   function openChangeStream() {
-    changeStream = createWriteStream(eventsFileName, { flags: 'a' })
+    try {
+      changeStream = createWriteStream(eventsFileName, { flags: 'a' })
+      changeStream.on('error', logger.error)
+    } catch (error) {
+      logger.error(error)
+    }
   }
 
   function migrate(basePath, fromVersion, migrationFiles) {
-    return new Promise(pResolve => {
-      const oldEventsFile = resolve(basePath, `events-${fromVersion}.json`)
-      if (existsSync(oldEventsFile)) {
-        const readStream = createReadStream(oldEventsFile).pipe(es.split()).pipe(es.parse())
-        readStream.on('end', pResolve)
+    return new Promise((pResolve, reject) => {
+      try {
+        const oldEventsFile = resolve(basePath, `events-${fromVersion}.json`)
+        if (existsSync(oldEventsFile)) {
+          const readStream = createReadStream(oldEventsFile).pipe(es.split()).pipe(es.parse())
+          readStream.on('end', pResolve)
+          readStream.on('error', error => {
+            logger.error(error)
+            reject(error)
+          })
 
-        migrationFiles
-          .map(migration => require(migration))
-          .reduce((stream, migrator) => stream.pipe(new migrator()), readStream)
-          .pipe(new JsonStringify())
-          .pipe(createWriteStream(eventsFileName))
-      } else {
-        pResolve()
+          migrationFiles
+            .map(migration => require(migration))
+            .reduce((stream, migrator) => stream.pipe(new migrator()), readStream)
+            .pipe(new JsonStringify())
+            .pipe(createWriteStream(eventsFileName))
+        } else {
+          pResolve()
+        }
+      } catch (error) {
+        logger.error(error)
+        reject(error)
       }
     })
   }
@@ -75,17 +89,22 @@ module.exports = ({ basePath, migrationsPath, logger = console }) => {
 
   return {
     async replay() {
-      await ready
-      const stream = createReadStream(eventsFileName)
-        .pipe(es.split())
-        .pipe(es.parse())
-        .pipe(es.mapSync(event => {
-          dispatch(event)
-        }))
+      try {
+        await ready
+        const stream = createReadStream(eventsFileName)
+          .pipe(es.split())
+          .pipe(es.parse())
+          .pipe(es.mapSync(event => {
+            dispatch(event)
+          }))
 
-      return new Promise(resolve => {
-        stream.on('end', resolve)
-      })
+        return new Promise(resolve => {
+          stream.on('end', resolve)
+          stream.on('error', logger.error)
+        })
+      } catch (error) {
+        logger.error(error)
+      }
     },
 
     on(type, func) {
@@ -95,10 +114,14 @@ module.exports = ({ basePath, migrationsPath, logger = console }) => {
     },
 
     async emit(event) {
-      await ready
-      const completeEvent = { ts: new Date(), ...event }
-      changeStream.write(JSON.stringify(completeEvent) + '\n')
-      dispatch(completeEvent)
+      try {
+        await ready
+        const completeEvent = { ts: new Date(), ...event }
+        changeStream.write(JSON.stringify(completeEvent) + '\n')
+        dispatch(completeEvent)
+      } catch (error) {
+        logger.error(error)
+      }
     },
 
     deleteAll() {
