@@ -2,7 +2,14 @@
   "name": "homagix",
   "version": "0.1.0",
   "description": "Makes food shopping easier",
-  "repository": "https://github.com/jschirrmacher/homagix.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jschirrmacher/homagix.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jschirrmacher/homagix/issues"
+  },
+  "homepage": "https://github.com/jschirrmacher/homagix#readme",
   "main": "server/index.js",
   "type": "commonjs",
   "scripts": {
