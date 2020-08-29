@@ -18,20 +18,21 @@ const store = EventStore({ basePath, logger })
 const models = Models({ store })
 
 const dishReader = DishReader({ store, models, basePath })
-const router = MainRouter({ models, store })
+const router = MainRouter({ models, store })
 
 const app = express()
 app.set('json spaces', 2)
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
-if (process.env.NODE_ENV === 'development') {
-  const webpack =import('webpack')
-  const webpackConfig = import('../config/webpack.conf.cjs')
-  const compiler = webpack(webpackConfig)
-  app.use(import('webpack-dev-middleware')(compiler, {logger, publicPath: webpackConfig.output.publicPath}))
-  app.use(import("webpack-hot-middleware")(compiler, {logger, path: '/__webpack_hmr', heartbeat: 10 * 1000}))
+async function setupHotLoading() {
+  if (process.env.NODE_ENV === 'development') {
+    const webpack = await import('./Webpack.js')
+    webpack.setup(app, logger)
+  }
 }
+
+setupHotLoading()
 
 app.use((req, res, next) => {
   logger.info(req.method + ' ' + req.path)
