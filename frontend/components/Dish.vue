@@ -122,5 +122,13 @@ export default {
   &.opened .openclose {
     transform: rotate(45deg);
   }
+
+  @media print {
+    .servedDate,
+    &:not(.accepted)
+    {
+      display: none;
+    }
+  }
 }
 </style>
