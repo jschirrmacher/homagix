@@ -19,7 +19,11 @@ export default function ({ store, models, basePath }) {
 
   return {
     loadData() {
-      fs.readdirSync(path.resolve(basePath, 'dishes')).map(file => {
+      const dir = path.resolve(basePath, 'dishes')
+      if (!fs.existsSync(dir)) {
+        return
+      }
+      fs.readdirSync(dir).map(file => {
         const content = fs.readFileSync(path.resolve(basePath, 'dishes', file)).toString()
         const dish = YAML.parse(content)
         dish.id = file.replace(/\.\w+$/, '')
