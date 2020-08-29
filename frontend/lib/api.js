@@ -1,4 +1,4 @@
-import { ERROR_OCCURED } from '../store/mutation_types'
+import { ERROR_OCCURED } from '../store/mutation_types.js'
 
 function encodeParameter([key, val]) {
   const value = val instanceof Array ? val.join(',') : val

@@ -16,7 +16,7 @@
     "start": "node server",
     "build": "webpack --config config/webpack.conf.cjs",
     "lint": "eslint server/**/*.js frontend/**/*.js",
-    "test": "nyc mocha -r esm --color server/**/*.test.js frontend/**/*.test.js"
+    "test": "nyc mocha --color server/**/*.test.js frontend/**/*.test.js"
   },
   "author": "joachimschirrmacher@gmail.com",
   "license": "MIT",

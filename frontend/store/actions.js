@@ -1,4 +1,4 @@
-import { loadData, doFetch } from '../lib/api'
+import { loadData, doFetch } from '../lib/api.js'
 import {
   GET_PROPOSALS,
   PROPOSALS_LOADED,
@@ -14,7 +14,7 @@ import {
   RESTORE_ITEM,
   GET_UNITS,
   UNITS_LOADED,
-} from './mutation_types'
+} from './mutation_types.js'
 
 function eqItem(item) {
   const name = item.name.toLowerCase()

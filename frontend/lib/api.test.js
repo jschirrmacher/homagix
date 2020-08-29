@@ -1,8 +1,8 @@
 import 'should'
 import fetch from 'node-fetch'
 import nock from 'nock'
-import * as api from './api'
-import { before } from 'mocha'
+import * as api from './api.js'
+import mocha from 'mocha'
 
 const baseName = 'http://test'
 const state = {
@@ -11,7 +11,7 @@ const state = {
 }
 
 describe('api', () => {
-  before(async () => {
+  mocha.before(async () => {
     global.fetch = await fetch
   })
 

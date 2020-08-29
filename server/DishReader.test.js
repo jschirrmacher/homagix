@@ -1,10 +1,13 @@
 import should from 'should'
 import fs from 'fs'
 import path from 'path'
-import DishReader from './DishReader'
-import MockFS from './MockFS'
-import Models from './models'
-import Events from './events'
+import DishReader from './DishReader.js'
+import MockFS from './MockFS.js'
+import Models from './models/index.js'
+import Events from './Events.js'
+import Location from './Location.js'
+
+const { DIRNAME } = Location(import.meta.url)
 
 const eventList = []
 const listeners = {}
@@ -22,7 +25,7 @@ const store = {
 const models = Models({ store })
 const events = Events({ models })
 
-const basePath = path.resolve(__dirname, 'testdata')
+const basePath = path.resolve(DIRNAME, 'testdata')
 const mockFS = MockFS({ basePath })
 
 describe('DishReader', () => {

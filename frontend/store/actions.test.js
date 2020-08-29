@@ -1,7 +1,7 @@
 import 'should'
-import store from './index'
-import { REMOVE_ITEM, PROPOSALS_LOADED, SHOPPING_DONE, INGREDIENTS_LOADED, ACCEPTANCE_CHANGED, ADD_ITEM, CHANGES_CHANGED, RESTORE_ITEM } from './mutation_types'
-import { dishes, ingredients } from './test_dishes'
+import store from './index.js'
+import { REMOVE_ITEM, PROPOSALS_LOADED, SHOPPING_DONE, INGREDIENTS_LOADED, ACCEPTANCE_CHANGED, ADD_ITEM, CHANGES_CHANGED, RESTORE_ITEM } from './mutation_types.js'
+import { dishes, ingredients } from './test_dishes.js'
 
 describe('Store actions', () => {
   beforeEach(() => store.commit(SHOPPING_DONE))

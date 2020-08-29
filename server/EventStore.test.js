@@ -6,10 +6,12 @@ import path from 'path'
 import fs from 'fs'
 import logger from './MockLogger.js'
 import MockFS from './MockFS.js'
+import Location from './Location.js'
 
-const basePath = path.resolve(__dirname, 'testdata')
+const { DIRNAME } = Location(import.meta.url)
+const basePath = path.resolve(DIRNAME, 'testdata')
 const migrationsPath = path.join(basePath, 'migrations')
-const changes_1js = fs.readFileSync(path.resolve(__dirname, 'testMigrator.js')).toString()
+const changes_1js = fs.readFileSync(path.resolve(DIRNAME, 'testMigrator.js')).toString()
 const events = JSON.stringify({type: 'testEvent', id: 1, name: 'Test event'}) + '\n'
 const mockFS = MockFS({ basePath, logger })
 

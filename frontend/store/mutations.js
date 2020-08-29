@@ -1,4 +1,4 @@
-import * as types from './mutation_types'
+import * as types from './mutation_types.js'
 
 export const mutations = {
   [types.CLEAR_ERROR](state) {

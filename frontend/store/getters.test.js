@@ -1,7 +1,7 @@
 import 'should'
-import store from './index'
-import { INGREDIENTS_LOADED, PROPOSALS_LOADED, ACCEPTANCE_CHANGED, SHOPPING_DONE, CHANGES_CHANGED } from './mutation_types'
-import { dishes, ingredients } from './test_dishes'
+import store from './index.js'
+import { INGREDIENTS_LOADED, PROPOSALS_LOADED, ACCEPTANCE_CHANGED, SHOPPING_DONE, CHANGES_CHANGED } from './mutation_types.js'
+import { dishes, ingredients } from './test_dishes.js'
 
 store.commit(INGREDIENTS_LOADED, { ingredients: Object.values(ingredients) })
 store.commit(PROPOSALS_LOADED, { dishes: Object.values(dishes) })

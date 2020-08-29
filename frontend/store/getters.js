@@ -1,4 +1,4 @@
-import { itemGroups } from '../lib/itemGroups'
+import { itemGroups } from '../lib/itemGroups.js'
 
 const logger = console
 
