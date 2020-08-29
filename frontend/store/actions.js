@@ -15,16 +15,25 @@ import {
 } from './mutation_types'
 
 function eqItem(item) {
-  if (item.id) {
-    return i => i.id === item.id
-  } else {
-    const name = item.name.toLowerCase()
-    return i => i.name.toLowerCase().localeCompare(name)
+  const name = item.name.toLowerCase()
+  return function (other) {
+    if (item.id && other.id) {
+      return item.id === other.id
+    } else {
+      return !other.name.toLowerCase().localeCompare(name)
+    }
   }
 }
 
 function neItem(item) {
-  return () => !eqItem(item)
+  const name = item.name.toLowerCase()
+  return function (other) {
+    if (item.id && other.id) {
+      return item.id !== other.id
+    } else {
+      return other.name.toLowerCase().localeCompare(name)
+    }
+  }
 }
 
 export const actions = {
@@ -46,10 +55,9 @@ export const actions = {
 
   [REMOVE_ITEM](context, { item }) {
     const changes = context.state.changes.filter(neItem(item))
-    const existing = context.getters.shoppinglist.find(eqItem(item))
+    const existing = context.getters.proposedItems.find(eqItem(item))
     if (existing) {
-      existing.amount = -existing.amount
-      changes.push(existing)
+      changes.push({ ...existing, amount: -existing.amount })
     }
     context.commit(CHANGES_CHANGED, { changes })
   },

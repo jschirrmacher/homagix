@@ -35,6 +35,15 @@ function shoppingListFromState(state) {
 }
 
 export const getters = {
+  proposedItems(state) {
+    return state.proposals
+    .filter(p => state.accepted.includes(p.id))
+    .map(p => p.ingredients)
+    .flat()
+    .map(addDetails(state.allIngredients))
+    .reduce(addIfNotAlreadyIn, [])
+  },
+
   shoppinglist(state) {
     return shoppingListFromState(state)
       .sort((a, b) => a.group.order - b.group.order || a.name.toLowerCase().localeCompare(b.name.toLowerCase))

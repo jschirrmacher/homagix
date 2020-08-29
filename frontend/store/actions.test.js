@@ -51,6 +51,16 @@ describe('Store actions', () => {
       await store.dispatch(REMOVE_ITEM, { item })
       store.state.changes.length.should.equal(0)
     })
+
+    it('should keep existing changes if a proposed item is removed', async () => {
+      const item = { name: 'Zucker', amount: 50, unit: 'g'}
+      store.commit(INGREDIENTS_LOADED, { ingredients: Object.values(ingredients) })
+      store.commit(PROPOSALS_LOADED, { dishes: Object.values(dishes) })
+      store.commit(ACCEPTANCE_CHANGED, { accepted: [ dishes.brot.id ] })
+      store.commit(CHANGES_CHANGED, { changes: [item] })
+      await store.dispatch(REMOVE_ITEM, { item: ingredients.mehl })
+      store.state.changes.some(item => item.name === 'Zucker').should.be.true()
+    })
   }),
 
   describe('RESTORE_ITEM', () => {
