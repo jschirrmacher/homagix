@@ -1,6 +1,6 @@
 import Events from '../Events.js'
-import Dish from './Dish.js'
-import Ingredient from './Ingredient.js'
+import Dish from './dish.js'
+import Ingredient from './ingredient.js'
 
 export default function ({ store }) {
   const models = {}

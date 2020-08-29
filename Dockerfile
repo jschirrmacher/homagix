@@ -1,10 +1,12 @@
 FROM node:12 as builder
-WORKDIR /app
+WORKDIR /build
 ADD . .
 RUN npm ci && \
     npm run build && \
-    rm -rf node_modules && \
-    npm ci --production
+    rm -rf node_modules frontend && \
+    npm ci --production && \
+    mkdir /app && \
+    cp -r build node_modules package.json public server /app
 
 
 FROM node:12-alpine
@@ -16,9 +18,7 @@ RUN mkdir /app && \
 USER nodejs
 WORKDIR /app
 
-COPY --from=builder /app/server server/
-COPY --from=builder /app/node_modules node_modules/
-COPY --from=builder /app/package.json .
+COPY --from=builder /app ./
 
 EXPOSE 8080
 CMD node server
