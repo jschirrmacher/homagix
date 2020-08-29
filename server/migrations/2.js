@@ -1,6 +1,6 @@
-const { Transform } = require('stream')
+import { Transform } from 'stream'
 
-module.exports = class mig1 extends Transform {
+export default class mig2 extends Transform {
   constructor(options = {}) {
     options.objectMode = true
     super(options)

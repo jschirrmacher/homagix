@@ -1,8 +1,6 @@
-/*eslint-env node*/
+import express from 'express'
 
-const express = require('express')
-
-module.exports = ({ proposer }) => {
+export default ({ proposer }) => {
   const router = express.Router()
 
   function getIntArrayParam(params, name) {

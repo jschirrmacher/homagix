@@ -1,5 +1,5 @@
-module.exports = function ({ store, Events }) {
-  const { dishAdded, ingredientAssigned, served } = Events
+export default function ({ store, events }) {
+  const { dishAdded, ingredientAssigned, served } = events
 
   const dishes = {
     byId: {},

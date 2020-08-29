@@ -1,4 +1,4 @@
-module.exports = ({ models, store, Events }) => {
+export default ({ models, store, events }) => {
   return {
     get(inhibited = []) {
       const dishes = models.dish.getAll()
@@ -13,7 +13,7 @@ module.exports = ({ models, store, Events }) => {
       accepted.forEach((id, index) => {
         const newDate = new Date(date)
         newDate.setDate(newDate.getDate() + index)
-        store.emit(Events.served(id, newDate))
+        store.emit(events.served(id, newDate))
       })
       return { accepted, date }
     }

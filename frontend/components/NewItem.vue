@@ -16,7 +16,7 @@ export default {
   data() {
     return {
       item: { ...defaultSettings },
-      units: ['Stk', 'Pgk', 'g', 'kg', 'ml', 'L', 'Kopf', 'Glas', 'Dose', 'Zehen', 'Würfel'],
+      units: ['Stk', 'Pgk', 'g', 'kg', 'ml', 'L', 'Kopf', 'Glas', 'Dose', 'Zehen', 'Würfel'], // @todo get from server
     }
   },
 

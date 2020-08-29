@@ -18,7 +18,7 @@ module.exports = {
   mode,
   entry: {index},
   output: {
-    path: path.resolve(__dirname, '..', 'server', 'build'),
+    path: path.resolve(__dirname, '..', 'build'),
     filename: 'bundle.js'
   },
   resolve: {

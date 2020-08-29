@@ -1,5 +1,5 @@
-module.exports = function ({ store, Events }) {
-  const { ingredientAdded, ingredientUpdated } = Events
+export default function ({ store, events }) {
+  const { ingredientAdded, ingredientUpdated } = events
 
   const ingredients = {
     byId: {},
@@ -28,6 +28,14 @@ module.exports = function ({ store, Events }) {
 
     byName(name) {
       return ingredients.byName[name]
+    },
+
+    byExample(item) {
+      if (item.id) {
+        return this.byId(item.id)
+      }
+      const pattern = new RegExp('.*' + item.name + '.*')
+      return Object.values(ingredients.byId).find(i => i.name.match(pattern))
     }
   }
 }

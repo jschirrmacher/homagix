@@ -1,7 +1,5 @@
-/*eslint-env mocha, node*/
-
-require('should')
-const DishProposer = require('./DishProposer')
+import 'should'
+import DishProposer from './DishProposer.js'
 
 const allIngredients = {
   101: {id: 101, name: 'a'},

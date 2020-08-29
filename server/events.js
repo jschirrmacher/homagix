@@ -1,4 +1,4 @@
-module.exports = function ({ models }) {
+export default function ({ models }) {
   function assert(event, condition, message) {
     if (!condition) {
       const originalFunc = Error.prepareStackTrace
@@ -15,25 +15,25 @@ module.exports = function ({ models }) {
     dishAdded(dish) {
       assert(!!dish, 'No dish')
       assert(dish.name !== '', 'Missing name')
-      return { type: 'dish-added', dish }
+      return { type: 'dishAdded', ...dish }
     },
 
     ingredientAdded(ingredient) {
       assert(!!ingredient, 'No ingredient')
       assert(ingredient.name, 'Missing name')
-      return { type: 'ingredient-added', ingredient }
+      return { type: 'ingredientAdded', ...ingredient }
     },
 
     ingredientAssigned(dishId, ingredientId) {
-      assert(dishId > 0, 'No dishId')
-      assert(ingredientId > 0, 'No ingredientId')
+      assert(dishId, 'No dishId')
+      assert(ingredientId, 'No ingredientId')
       assert(models.dish.byId(dishId), 'Dish not found')
       assert(models.ingredient.byId(ingredientId), 'Ingredient not found')
-      return { type: 'ingredient-assigned', dishId, ingredientId }
+      return { type: 'ingredientAssigned', dishId, ingredientId }
     },
 
     served(dishId, date) {
-      assert(dishId > 0, 'No dishId')
+      assert(dishId, 'No dishId')
       assert(date, 'No date')
       assert(models.dish.byId(dishId), 'Dish not found')
       assert(date instanceof Date, `date should be of type 'Date'`)
@@ -41,10 +41,10 @@ module.exports = function ({ models }) {
     },
 
     ingredientUpdated(ingredientId, attrName, value) {
-      assert(ingredientId > 0, 'No ingredientId')
+      assert(ingredientId, 'No ingredientId')
       assert(attrName !== '', 'No attrName')
       assert(models.ingredient.byId(ingredientId), 'Ingredient not found')
-      return { type: 'ingredient-updated', ingredientId, name, value }
+      return { type: 'ingredientUpdated', ingredientId, name, value }
     }
   }
 }

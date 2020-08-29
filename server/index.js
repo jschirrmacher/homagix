@@ -1,29 +1,36 @@
-const path = require('path')
-const express = require('express')
-const bodyParser = require('body-parser')
+import path from 'path'
+import express from 'express'
+import bodyParser from 'body-parser'
+import Models from './Models/index.js'
+import EventStore from './EventStore.js'
+import DishReader from './DishReader.js'
+import MainRouter from './MainRouter.js'
+import Location from './Location.js'
+
+const nodeEnv = process.env.NODE_ENV || 'development'
 const logger = console
+const { DIRNAME } = Location(import.meta.url)
 
 const PORT = process.env.PORT || 8200
 
-const basePath = path.join(__dirname, '..', 'data')
-const store = require('./EventStore')({ basePath, logger })
-const models = require('./models')({ store })
-const Events = require('./events')({ models })
+const basePath = path.join(DIRNAME, '..', 'data')
+const store = EventStore({ basePath, logger })
+const models = Models({ store })
 
-const proposer = require('./DishProposer')({ models, store, Events })
-const ingredientRouter = require('./IngredientRouter')({ models, store })
-const proposalsRouter = require('./ProposalsRouter')({ proposer })
+const dishReader = DishReader({ store, models, basePath })
+const router = MainRouter({ models, store })
 
 const app = express()
+app.set('json spaces', 2)
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
 if (process.env.NODE_ENV === 'development') {
-  const webpack = require('webpack')
-  const webpackConfig = require('../config/webpack.conf')
+  const webpack =import('webpack')
+  const webpackConfig = import('../config/webpack.conf.cjs')
   const compiler = webpack(webpackConfig)
-  app.use(require('webpack-dev-middleware')(compiler, {logger, publicPath: webpackConfig.output.publicPath}))
-  app.use(require("webpack-hot-middleware")(compiler, {logger, path: '/__webpack_hmr', heartbeat: 10 * 1000}))
+  app.use(import('webpack-dev-middleware')(compiler, {logger, publicPath: webpackConfig.output.publicPath}))
+  app.use(import("webpack-hot-middleware")(compiler, {logger, path: '/__webpack_hmr', heartbeat: 10 * 1000}))
 }
 
 app.use((req, res, next) => {
@@ -31,19 +38,17 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use('/ingredients', ingredientRouter)
-app.use('/proposals', proposalsRouter)
-app.use('/', express.static(path.join(__dirname, 'build')))
-app.use('/', express.static(path.join(__dirname, 'public')))
+app.use(router)
+app.use('/', express.static(path.join(DIRNAME, '..', 'build')))
+app.use('/', express.static(path.join(DIRNAME, '..', 'public')))
 
 app.use(function(err, req, res, next) { // eslint-disable-line no-unused-vars
   logger.error(err)
   res.status(500).json({error: err.toString()})
 })
 
-if (require.main === module) {
-  store.replay()
-  app.listen(PORT, () => {
-    logger.info(`Listening on http://localhost:${PORT} (NODE_ENV=${process.env.NODE_ENV})`)
-  })
-}
+dishReader.loadData()
+store.replay()
+app.listen(PORT, () => {
+  logger.info(`Listening on http://localhost:${PORT} (NODE_ENV=${nodeEnv})`)
+})

@@ -1,50 +1,20 @@
 /* eslint-env node, mocha */
 
-const should = require('should')
-const EventStore = require('./EventStore')
-const path = require('path')
-const fs = require('fs')
+import should from 'should'
+import EventStore from './EventStore.js'
+import path from 'path'
+import fs from 'fs'
+import logger from './MockLogger.js'
+import MockFS from './MockFS.js'
 
 const basePath = path.resolve(__dirname, 'testdata')
 const migrationsPath = path.join(basePath, 'migrations')
 const changes_1js = fs.readFileSync(path.resolve(__dirname, 'testMigrator.js')).toString()
 const events = JSON.stringify({type: 'testEvent', id: 1, name: 'Test event'}) + '\n'
+const mockFS = MockFS({ basePath, logger })
 
 function testEvent(data) {
   return { type: 'testEvent', ...data }
-}
-
-function rmDataFolder() {
-  fs.rmdirSync(basePath, { recursive: true })
-  fs.rmdirSync(migrationsPath, { recursive: true })
-}
-
-function setupFiles(list) {
-  Object.entries(list).forEach(([location, content]) => {
-    try {
-      fs.writeFileSync(path.resolve(basePath, location), content)
-    } catch (error) {
-      logger.error(error)
-    }
-  })
-}
-
-const logger = {
-  log: [],
-
-  info: function (msg) {
-    this.log.push(['info', msg])
-  },
-  warn: function (msg) {
-    this.log.push(['warn', msg])
-  },
-  error: function (msg) {
-    this.log.push(['error', msg])
-  },
-
-  reset: function () {
-    this.log.length = 0
-  },
 }
 
 let store
@@ -52,19 +22,16 @@ let store
 describe('EventStore', () => {
   beforeEach(() => {
     logger.reset()
-    rmDataFolder()
-    fs.mkdirSync(basePath)
-    fs.mkdirSync(migrationsPath)
   })
 
   afterEach(() => {
     store.end()
     logger.log.should.deepEqual([])
-    rmDataFolder()
+    mockFS.cleanup()
   })
 
   it('should replay events on startup', async () => {
-    setupFiles({'events-0.json': events})
+    mockFS.setupFiles({'events-0.json': events})
     store = EventStore({ basePath, migrationsPath })
     const eventList = []
     store.on(testEvent, event => eventList.push(event))
@@ -73,7 +40,7 @@ describe('EventStore', () => {
   })
 
   it('should apply migrations', async () => {
-    setupFiles({
+    mockFS.setupFiles({
       'events-0.json': events,
       'migrations/1.js': changes_1js
     })
@@ -93,7 +60,7 @@ describe('EventStore', () => {
   })
 
   it('should ignore migrations which are already handled', async () => {
-    setupFiles({
+    mockFS.setupFiles({
       'events-0.json': events,
       'state.json': '{"versionNo":1}',
       'migrations/1.js': changes_1js

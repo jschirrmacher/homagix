@@ -1,6 +1,6 @@
-const { Transform } = require('stream')
+import { Transform } from 'stream'
 
-module.exports = class testMigration extends Transform {
+export default class testMigration extends Transform {
   constructor(options = {}) {
     options.objectMode = true
     super(options)

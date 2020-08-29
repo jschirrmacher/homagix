@@ -1,7 +1,10 @@
-const { existsSync, mkdirSync, unlinkSync, readdirSync, readFileSync, writeFileSync, createReadStream, createWriteStream } = require('fs')
-const { resolve } = require('path')
-const { Transform } = require('stream')
-const es = require('event-stream')
+import { existsSync, mkdirSync, unlinkSync, readdirSync, readFileSync, writeFileSync, createReadStream, createWriteStream } from 'fs'
+import { resolve } from 'path'
+import { Transform } from 'stream'
+import es from 'event-stream'
+import location from './Location.js'
+
+const { DIRNAME } = location(import.meta.url)
 
 class JsonStringify extends Transform {
   constructor(options = {}) {
@@ -15,7 +18,7 @@ class JsonStringify extends Transform {
   }
 }
 
-module.exports = ({ basePath, migrationsPath, logger = console }) => {
+export default ({ basePath, migrationsPath, logger = console }) => {
   const listeners = {}
   let ready
   let changeStream
@@ -42,7 +45,7 @@ module.exports = ({ basePath, migrationsPath, logger = console }) => {
           })
 
           migrationFiles
-            .map(migration => require(migration))
+            .map(migration => import(migration))
             .reduce((stream, migrator) => stream.pipe(new migrator()), readStream)
             .pipe(new JsonStringify())
             .pipe(createWriteStream(eventsFileName))
@@ -68,10 +71,10 @@ module.exports = ({ basePath, migrationsPath, logger = console }) => {
   if (!existsSync(basePath)) {
     mkdirSync(basePath)
   }
-  migrationsPath = migrationsPath || resolve(__dirname, 'migrations')
+  migrationsPath = migrationsPath || resolve(DIRNAME, 'migrations')
   const versionFile = resolve(basePath, 'state.json')
   const eventsVersionNo = !existsSync(versionFile) ? 0 : JSON.parse(readFileSync(versionFile).toString()).versionNo || 0
-  const migrationFiles = readdirSync(migrationsPath)
+  const migrationFiles = (existsSync(migrationsPath) ? readdirSync(migrationsPath) : [])
     .filter(name => parseInt(name) > eventsVersionNo)
     .map(name => resolve(migrationsPath, name))
   const versionNo = eventsVersionNo + migrationFiles.length
@@ -88,6 +91,8 @@ module.exports = ({ basePath, migrationsPath, logger = console }) => {
   }    
 
   return {
+    dispatch,
+
     async replay() {
       try {
         await ready
