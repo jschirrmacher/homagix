@@ -17,6 +17,10 @@ export const mutations = {
     state.allIngredients = ingredients
   },
 
+  [types.UNITS_LOADED](state, { units }) {
+    state.units = units
+  },
+
   [types.ACCEPTANCE_CHANGED](state, { accepted }) {
     state.accepted = accepted
   },

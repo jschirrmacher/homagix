@@ -1,6 +1,6 @@
 <script>
 import { mapState } from 'vuex'
-import { CLEAR_ERROR, GET_PROPOSALS, GET_INGREDIENTS, STARTDATE_CHANGED } from './store/mutation_types'
+import { CLEAR_ERROR, GET_PROPOSALS, GET_INGREDIENTS, STARTDATE_CHANGED, GET_UNITS } from './store/mutation_types'
 import Home from '@/components/Home'
 
 export default {
@@ -21,6 +21,7 @@ export default {
   mounted() {
     this.$store.dispatch(GET_PROPOSALS)
     this.$store.dispatch(GET_INGREDIENTS)
+    this.$store.dispatch(GET_UNITS)
   },
 
   methods: {

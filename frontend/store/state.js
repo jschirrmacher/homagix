@@ -5,5 +5,6 @@ export const state = {
   changes: [],
   accepted: [],
   declined: [],
-  error: {}
+  error: {},
+  units: []
 }

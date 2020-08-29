@@ -16,12 +16,11 @@ export default {
   data() {
     return {
       item: { ...defaultSettings },
-      units: ['Stk', 'Pgk', 'g', 'kg', 'ml', 'L', 'Kopf', 'Glas', 'Dose', 'Zehen', 'Würfel'], // @todo get from server
     }
   },
 
   computed: {
-    ...mapState(['allIngredients']),
+    ...mapState(['allIngredients', 'units']),
   },
 
   methods: {

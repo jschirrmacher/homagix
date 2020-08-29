@@ -12,6 +12,8 @@ import {
   TOGGLE_ACCEPTANCE,
   ACCEPTANCE_CHANGED,
   RESTORE_ITEM,
+  GET_UNITS,
+  UNITS_LOADED,
 } from './mutation_types'
 
 function eqItem(item) {
@@ -40,6 +42,11 @@ export const actions = {
   [GET_PROPOSALS]: loadData('/proposals', PROPOSALS_LOADED),
 
   [GET_INGREDIENTS]: loadData('/ingredients', INGREDIENTS_LOADED),
+
+  async [GET_UNITS]({ commit }) {
+    const units = await doFetch('GET', '/ingredients/units')
+    commit(UNITS_LOADED, { units })
+  },
 
   [TOGGLE_ACCEPTANCE]({ state, commit }, { dishId }) {
     const accepted = state.accepted.includes(dishId)
