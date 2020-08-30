@@ -32,7 +32,7 @@ export default ({ basePath, migrationsPath, logger = console }) => {
     }
   }
 
-  function migrate(basePath, fromVersion, migrationFiles) {
+  function migrate(basePath, fromVersion, migrators) {
     return new Promise((pResolve, reject) => {
       try {
         const oldEventsFile = resolve(basePath, `events-${fromVersion}.json`)
@@ -44,9 +44,8 @@ export default ({ basePath, migrationsPath, logger = console }) => {
             reject(error)
           })
 
-          migrationFiles
-            .map(migration => import(migration))
-            .reduce((stream, migrator) => stream.pipe(new migrator()), readStream)
+          migrators
+            .reduce((stream, migrator) => stream.pipe(migrator), readStream)
             .pipe(new JsonStringify())
             .pipe(createWriteStream(eventsFileName))
         } else {
@@ -81,10 +80,12 @@ export default ({ basePath, migrationsPath, logger = console }) => {
   const eventsFileName = resolve(basePath, `events-${versionNo}.json`)
   if (eventsVersionNo < versionNo) {
     logger.info(`Migrating data from ${eventsVersionNo} to ${versionNo}`)
-    ready = migrate(basePath, eventsVersionNo, migrationFiles)
+    ready = Promise.all(migrationFiles.map(async file => new (await import(file)).default()))
+      .then(migrators => migrate(basePath, eventsVersionNo, migrators)
       .then(() => writeFileSync(versionFile, JSON.stringify({ versionNo })))
       .then(() => logger.info('Migration successful'))
       .then(openChangeStream)
+    )
   } else {
     openChangeStream()
     ready = Promise.resolve()
