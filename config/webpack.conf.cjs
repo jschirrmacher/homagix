@@ -3,6 +3,10 @@ const path = require('path')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
 
+const fs = require('fs')
+const packageJson = fs.readFileSync('./package.json')
+const version = JSON.parse(packageJson).version || 0
+
 const mode = process.env.NODE_ENV || 'development'
 const isDev = mode === 'development'
 const plugins = []
@@ -13,6 +17,11 @@ if (isDev) {
 }
 index.push(path.resolve(__dirname, '..', 'frontend', 'main.js'))
 plugins.push(new VueLoaderPlugin())
+plugins.push(new webpack.DefinePlugin({
+  'process.env': {
+    PACKAGE_VERSION: '"' + version + '"'
+  }
+}))
 
 module.exports = {
   mode,

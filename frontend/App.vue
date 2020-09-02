@@ -5,6 +5,13 @@ import Home from '@/components/Home'
 
 export default {
   components: { Home },
+
+  data() {
+    return {
+      version: process.env.PACKAGE_VERSION
+    }
+  },
+
   
   computed: {
     ...mapState(['error']),
@@ -37,6 +44,7 @@ export default {
     <div class="title">
       <h1>Homagix</h1>
       Wochenplan beginnend ab <input type="date" v-model="startDate" autocomplete="off">
+      <span id="version">{{ version }}</span>
     </div>
 
     <div v-if="error.message" class="error">
@@ -89,6 +97,15 @@ html, body {
   input {
     font: 1em Arial, helvetica, sans-serif;
     border: none;
+  }
+}
+
+#version {
+  float: right;
+  font-size: 12px;
+
+  &:before {
+    content: 'Version '
   }
 }
 
