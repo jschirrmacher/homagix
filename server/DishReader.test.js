@@ -6,22 +6,10 @@ import MockFS from './MockFS.js'
 import Models from './models/index.js'
 import Events from './Events.js'
 import Location from './Location.js'
+import { store, eventList } from './Store.mock.js'
 
 const { DIRNAME } = Location(import.meta.url)
 
-const eventList = []
-const listeners = {}
-const store = {
-  on(type, func) {
-    listeners[type.name] = listeners[type.name] || []
-    listeners[type.name].push(func)
-    return this
-  },
-  dispatch(event) {
-    eventList.push(event)
-    ;(listeners[event.type] || []).forEach(listener => listener(event))
-  },
-}
 const models = Models({ store })
 const events = Events({ models })
 

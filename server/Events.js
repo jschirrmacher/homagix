@@ -24,12 +24,13 @@ export default function ({ models }) {
       return { type: 'ingredientAdded', ...ingredient }
     },
 
-    ingredientAssigned(dishId, ingredientId) {
+    ingredientAssigned(dishId, ingredientId, amount) {
       assert(dishId, 'No dishId')
       assert(ingredientId, 'No ingredientId')
       assert(models.dish.byId(dishId), 'Dish not found')
       assert(models.ingredient.byId(ingredientId), 'Ingredient not found')
-      return { type: 'ingredientAssigned', dishId, ingredientId }
+      assert(amount > 0, 'No valid amount')
+      return { type: 'ingredientAssigned', dishId, ingredientId, amount }
     },
 
     served(dishId, date) {

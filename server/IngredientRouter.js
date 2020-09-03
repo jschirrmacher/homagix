@@ -6,7 +6,10 @@ export default function ({ models, store }) {
   const router = express.Router()
   const { ingredientUpdated } = Events({ models })
 
-  router.get('/', async (req, res) => res.json({ ingredients: await models.ingredient.getAll() }))
+  router.get('/', async (req, res) => res.json({
+    ingredients: await models.ingredient.getAll(),
+    standards: models.dish.getStandardIngredients().map(i => ({...models.ingredient.byId(i.id), ...i}))
+  }))
   router.get('/units', (req, res) => res.json(units))
   router.put('/:id', async (req, res) => {
     await store.emit(ingredientUpdated(+req.params.id, 'group', req.body.group))

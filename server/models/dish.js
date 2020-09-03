@@ -7,15 +7,15 @@ export default function ({ store, events }) {
   }
 
   store
-    .on(dishAdded, ({ id, name, source }) => {
-      const dish = { id, name, source }
+    .on(dishAdded, ({ id, name, source, alwaysOnList }) => {
+      const dish = { id, name, source, alwaysOnList }
       dishes.byId[id] = dish
       dishes.byName[name.toLowerCase()] = dish
     })
-    .on(ingredientAssigned, ({ dishId, ingredientId, amount, unit }) => {
+    .on(ingredientAssigned, ({ dishId, ingredientId, amount }) => {
       const dish = dishes.byId[dishId]
       dish.ingredients = dish.ingredients || []
-      dish.ingredients.push({ id: ingredientId, amount, unit })
+      dish.ingredients.push({ id: ingredientId, amount })
     })
     .on(served, ({ dishId, date }) => {
       const dish = dishes.byId[dishId]
@@ -33,6 +33,13 @@ export default function ({ store, events }) {
 
     byName(name) {
       return dishes.byName[name]
+    },
+
+    getStandardIngredients() {
+      return Object.values(dishes.byId)
+        .filter(dish => dish.alwaysOnList)
+        .map(dish => dish.ingredients)
+        .flat()
     }
   }
 }

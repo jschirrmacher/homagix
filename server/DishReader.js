@@ -36,7 +36,7 @@ export default function ({ store, models, basePath }) {
             item.id = uuid()
             store.dispatch(ingredientAdded(item))
           }
-          store.dispatch(ingredientAssigned(dish.id, item.id))
+          store.dispatch(ingredientAssigned(dish.id, item.id, item.amount))
         })
       })
     }
