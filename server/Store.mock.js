@@ -8,8 +8,13 @@ export const store = {
     listeners[type.name].push(func)
     return this
   },
+  
   dispatch(event) {
     eventList.push(event)
     ;(listeners[event.type] || []).forEach(listener => listener(event))
   },
+
+  emit(event) {
+    this.dispatch(event)
+  }
 }

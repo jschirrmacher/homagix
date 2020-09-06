@@ -74,16 +74,29 @@ export const actions = {
     context.commit(CHANGES_CHANGED, { changes })
   },
 
-  [ADD_ITEM]: (context, { item }) => {
-    item.amount = +item.amount
-    const changes = [ ...context.state.changes ]
-    const existing = changes.find(eqItem(item))
-    if (existing) {
-      existing.amount = +existing.amount + item.amount
-    } else {
-      changes.push(item)
+  async [ADD_ITEM](context, { item }) {
+    async function createNewItem(newItem) {
+      const item = await doFetch('post', '/ingredients', newItem)
+      context.commit(INGREDIENTS_LOADED, { ingredients: [ ...context.state.allIngredients, item ] })
+      return item
     }
-    context.commit(CHANGES_CHANGED, { changes })
+
+    async function getChangedChanges(item) {
+      const existing = context.state.changes.find(eqItem(item))
+      if (existing) {
+        const cmpFunc = eqItem(item)
+        const replaceItem = { ...existing, amount: +existing.amount + item.amount }
+        return context.state.changes.map(i => cmpFunc(i) ? replaceItem : i)
+      } else {
+        if (!item.id) {
+          return [...context.state.changes, await createNewItem(item)]
+        }
+        return [...context.state.changes, item]
+      }  
+    }
+
+    item.amount = +item.amount
+    context.commit(CHANGES_CHANGED, { changes: await getChangedChanges(item) })
   },
 
   [SHOPPING_DONE]: async (context) => {

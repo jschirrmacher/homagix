@@ -1,20 +1,13 @@
 import express from 'express'
 import units from './units.js'
-import Events from './Events.js'
 
-export default function ({ models, store }) {
+export default function ({ controller, jsonResult }) {
   const router = express.Router()
-  const { ingredientUpdated } = Events({ models })
 
-  router.get('/', async (req, res) => res.json({
-    ingredients: await models.ingredient.getAll(),
-    standards: models.dish.getStandardIngredients().map(i => ({...models.ingredient.byId(i.id), ...i}))
-  }))
-  router.get('/units', (req, res) => res.json(units))
-  router.put('/:id', async (req, res) => {
-    await store.emit(ingredientUpdated(+req.params.id, 'group', req.body.group))
-    res.json(models.ingredients.byId(+req.params.id))
-  })
+  router.get('/', jsonResult(controller.getIngredients))
+  router.get('/units', jsonResult(() => units))
+  router.put('/:id', jsonResult(req => controller.setIngredientGroup(+req.params.id, req.body.group)))
+  router.post('/', jsonResult(req => controller.addIngredient(req.body)))
 
   return router
 }

@@ -37,7 +37,7 @@ describe('DishReader', () => {
     mockFS.setupFiles({ 'dishes/1.yaml': "name: 'test dish'\nitems:\n  - 1 Stk new item" })
     DishReader({ store, models, basePath }).loadData()
     const event = eventList.find(event => event.type === 'ingredientAdded')
-    event.should.containDeep({type: 'ingredientAdded', amount: 1, unit: 'Stk', name: 'new item'})
+    event.should.containDeep({type: 'ingredientAdded', unit: 'Stk', name: 'new item'})
   })
   
   it('should use existing ingredients', () => {

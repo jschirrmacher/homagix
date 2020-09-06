@@ -1,14 +1,19 @@
 import 'should'
 import express from 'express'
 import request from 'supertest'
+import bodyParser from 'body-parser'
 import Router from './IngredientRouter.js'
+import Controller from './IngredientController.js'
 import Models from './models/index.js'
 import { store } from './Store.mock.js'
 import Events from './Events.js'
 
+const jsonResult = func => async (req, res) => res.json(await func(req))
 const models = Models({ store })
-const router = Router({ models, store })
+const controller = Controller({ models, store })
+const router = Router({ controller, jsonResult })
 const app = express()
+app.use(bodyParser.json())
 app.use(router)
 
 describe('IngredientRouter', () => {
@@ -33,5 +38,16 @@ describe('IngredientRouter', () => {
   it('should return ingredients from the standards list', async () => {
     const result = await request(app).get('/')
     result.body.standards.should.deepEqual([{ id: 1, name: 'Milch', unit: 'L', amount: 3 }])
+  })
+
+  it('should add new ingredients', async () => {
+    const name = 'new ingredient ' + (+new Date())
+    await request(app).post('/').send({ name, unit: 'g' })
+    models.ingredient.byName(name).should.not.be.undefined()
+  })
+
+  it('should create a uuid when adding new ingredients', async () => {
+    const result = await request(app).post('/').send({ name: 'new ingredient', unit: 'g' })
+    result.body.id.should.match(/^[0-9a-f-]+$/)
   })
 })
