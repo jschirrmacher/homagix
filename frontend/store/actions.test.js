@@ -1,10 +1,19 @@
 import 'should'
+import fetch from 'node-fetch'
+import nock from 'nock'
 import store from './index.js'
 import { REMOVE_ITEM, PROPOSALS_LOADED, SHOPPING_DONE, INGREDIENTS_LOADED, ACCEPTANCE_CHANGED, ADD_ITEM, CHANGES_CHANGED, RESTORE_ITEM } from './mutation_types.js'
 import { dishes, ingredients } from './test_dishes.js'
+import { setBaseUrl } from '../lib/api.js'
+
+const baseName = 'http://test'
+setBaseUrl(baseName)
 
 describe('Store actions', () => {
-  beforeEach(() => store.commit(SHOPPING_DONE))
+  beforeEach(async () => {
+    global.fetch = await fetch  
+    store.commit(SHOPPING_DONE)
+  })
   
   describe('ADD_ITEM', () => {
     it('should add amount to existing shopping list items', async () => {
@@ -26,11 +35,12 @@ describe('Store actions', () => {
 
     it('should add extra items even if ingredient is unknown', async () => {
       const zucker = { name: 'Zucker', amount: 50, unit: 'g' }
+      nock(baseName).post('/ingredients').reply(200, { ...zucker, id: '1234-5678'})
       store.commit(INGREDIENTS_LOADED, { ingredients: Object.values(ingredients) })
       store.commit(PROPOSALS_LOADED, { dishes: Object.values(dishes) })
       store.commit(ACCEPTANCE_CHANGED, { accepted: [ dishes.brot.id ] })
       await store.dispatch(ADD_ITEM, { item: zucker })
-      store.state.changes[0].should.deepEqual(zucker)
+      store.state.changes[0].should.containDeep(zucker)
     })
   })
   

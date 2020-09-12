@@ -9,6 +9,12 @@ function prepareQueryParamers(params) {
   return Object.entries(params).map(encodeParameter).join('&')
 }
 
+let baseUrl = ''
+
+export function setBaseUrl(url) {
+  baseUrl = url
+}
+
 export async function doFetch(method, url, data) {
   const options = { method }
   if (data && !['get', 'options'].includes(method.toLowerCase())) {
@@ -18,7 +24,7 @@ export async function doFetch(method, url, data) {
     url += '?' + prepareQueryParamers(data)
   }
   try {
-    const response = await (global || window).fetch(url, options)
+    const response = await (global || window).fetch(baseUrl + url, options)
     const content = response.headers.get('content-type').match(/json/) ? await response.json() : await response.text()
     return response.ok ? content : { httpStatus: response.status, error: content }
   } catch (error) {
