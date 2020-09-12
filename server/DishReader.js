@@ -11,7 +11,7 @@ export default function ({ store, models, basePath }) {
   function extractIngredientComponents(item) {
     const matches = item.match(/^\s*([\d.,]*)\s*(\w+)\.?\s*(.*)$/)
     const amount = +matches[1] || 1
-    const hasUnit = units.includes(matches[2])
+    const hasUnit = units.map(u => u.name).includes(matches[2])
     const unit = hasUnit ? matches[2] : 'Stk'
     const name = hasUnit ? matches[3] : (matches[2] + ' ' + matches[3])
     return { amount, unit, name }
