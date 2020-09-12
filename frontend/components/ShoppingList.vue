@@ -36,7 +36,7 @@ export default {
       <span v-if="!itemsInShoppingList">ist leer</span>
     </h2>
 
-    <IngredientList v-if="itemsInShoppingList" :items="shoppinglist" v-slot:default="slotProps">
+    <IngredientList v-if="itemsInShoppingList" :items="shoppinglist" v-slot:default="slotProps" :canEditAmount="true">
       <button v-if="slotProps.item.amount > 0" class="inline delete" title="Von der Liste streichen" @click="remove(slotProps.item)">×</button>
       <button v-if="slotProps.item.amount <= 0" class="inline restore" title="Wieder hinzufügen" @click="restore(slotProps.item)">+</button>
       <span :class="'group ' + slotProps.item.group.id">{{ slotProps.item.group.title }}</span>

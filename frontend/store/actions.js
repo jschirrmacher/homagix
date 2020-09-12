@@ -14,6 +14,7 @@ import {
   RESTORE_ITEM,
   GET_UNITS,
   UNITS_LOADED,
+  UPDATE_AMOUNT,
 } from './mutation_types.js'
 
 function eqItem(item) {
@@ -92,11 +93,25 @@ export const actions = {
           return [...context.state.changes, await createNewItem(item)]
         }
         return [...context.state.changes, item]
-      }  
+      }
     }
 
     item.amount = +item.amount
     context.commit(CHANGES_CHANGED, { changes: await getChangedChanges(item) })
+  },
+
+  async [UPDATE_AMOUNT](context, { item, newAmount }) {
+    function getChangedChanges(item, amount) {
+      if (context.state.changes.find(eqItem(item))) {
+        return context.state.changes.map(i => i.id !== item.id ? i : { ...i, amount })
+      } else {
+        return [ ...context.state.changes, { ...item, amount } ]
+      }
+    }
+
+    const proposedItem = context.getters.proposedItems.find(eqItem(item))
+    const changes = getChangedChanges(item, proposedItem ? newAmount - proposedItem.amount : newAmount)
+    context.commit(CHANGES_CHANGED, { changes })
   },
 
   [SHOPPING_DONE]: async (context) => {

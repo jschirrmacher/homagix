@@ -1,6 +1,6 @@
 <script>
 import { mapState } from 'vuex'
-import { CLEAR_ERROR, GET_PROPOSALS, GET_INGREDIENTS, STARTDATE_CHANGED, GET_UNITS } from './store/mutation_types'
+import { CLEAR_ERROR, GET_PROPOSALS, GET_INGREDIENTS, STARTDATE_CHANGED, GET_UNITS, SET_ACTIVE_ITEM } from './store/mutation_types'
 import Home from '@/components/Home'
 
 export default {
@@ -34,13 +34,17 @@ export default {
   methods: {
     clearError() {
       this.$store.commit(CLEAR_ERROR)
+    },
+
+    deactivateActiveItem() {
+      this.$store.commit(SET_ACTIVE_ITEM, { itemId: null })
     }
   }
 }
 </script>
 
 <template>
-  <div>
+  <div @click="deactivateActiveItem">
     <div class="title">
       <h1>Homagix</h1>
       Wochenplan beginnend ab <input type="date" v-model="startDate" autocomplete="off">

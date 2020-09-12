@@ -2,7 +2,7 @@ import 'should'
 import fetch from 'node-fetch'
 import nock from 'nock'
 import store from './index.js'
-import { REMOVE_ITEM, PROPOSALS_LOADED, SHOPPING_DONE, INGREDIENTS_LOADED, ACCEPTANCE_CHANGED, ADD_ITEM, CHANGES_CHANGED, RESTORE_ITEM } from './mutation_types.js'
+import { REMOVE_ITEM, PROPOSALS_LOADED, SHOPPING_DONE, INGREDIENTS_LOADED, ACCEPTANCE_CHANGED, ADD_ITEM, CHANGES_CHANGED, RESTORE_ITEM, UPDATE_AMOUNT } from './mutation_types.js'
 import { dishes, ingredients } from './test_dishes.js'
 import { setBaseUrl } from '../lib/api.js'
 
@@ -92,6 +92,32 @@ describe('Store actions', () => {
       await store.dispatch(REMOVE_ITEM, { item: ingredients.mehl })
       await store.dispatch(RESTORE_ITEM, { item: ingredients.mehl })
       store.state.changes.length.should.equal(0)
+    })
+  })
+
+  describe('UPDATE_AMOUNT', () => {
+    it('should change amount of proposed items', async () => {
+      store.commit(INGREDIENTS_LOADED, { ingredients: Object.values(ingredients) })
+      store.commit(PROPOSALS_LOADED, { dishes: Object.values(dishes) })
+      store.commit(ACCEPTANCE_CHANGED, { accepted: [ dishes.brot.id ] })
+      await store.dispatch(UPDATE_AMOUNT, { item: ingredients.hefe, newAmount: 3 })
+      store.state.changes.map(item => ({ id: item.id, amount: item.amount })).should.deepEqual([{ id: 9, amount: 2 }])
+    })
+
+    it('should change amount of individual items', async () => {
+      const item = { name: 'Zucker', amount: 50, unit: 'g'}
+      store.commit(CHANGES_CHANGED, { changes: [item] })
+      await store.dispatch(UPDATE_AMOUNT, { item, newAmount: 80 })
+      store.state.changes.map(item => item.amount).should.deepEqual([80])
+    })
+
+    it('should change amount of changed proposed items', async () => {
+      store.commit(INGREDIENTS_LOADED, { ingredients: Object.values(ingredients) })
+      store.commit(PROPOSALS_LOADED, { dishes: Object.values(dishes) })
+      store.commit(ACCEPTANCE_CHANGED, { accepted: [ dishes.brot.id ] })
+      await store.dispatch(ADD_ITEM, { item: { ...ingredients.hefe, amount: 2 } })
+      await store.dispatch(UPDATE_AMOUNT, { item: ingredients.hefe, newAmount: 4 })
+      store.state.changes.map(item => ({ id: item.id, amount: item.amount })).should.deepEqual([{ id: 9, amount: 3 }])
     })
   })
 })

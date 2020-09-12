@@ -19,5 +19,7 @@ export const ADD_ITEM = 'ADD_ITEM'
 export const REMOVE_ITEM = 'REMOVE_ITEM'
 export const RESTORE_ITEM = 'RESTORE_ITEM'
 export const CHANGES_CHANGED = 'CHANGES_CHANGED'
+export const SET_ACTIVE_ITEM = 'SET_ACTIVE_ITEM'
+export const UPDATE_AMOUNT = 'UPDATE_AMOUNT'
 
 export const SHOPPING_DONE = 'SHOPPING_DONE'

@@ -7,5 +7,6 @@ export const state = {
   accepted: [],
   declined: [],
   error: {},
-  units: []
+  units: [],
+  activeItemId: undefined
 }

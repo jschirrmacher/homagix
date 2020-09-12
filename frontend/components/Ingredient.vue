@@ -1,26 +1,49 @@
 
 <script>
 import { mapState } from 'vuex'
+import { UPDATE_AMOUNT } from '../store/mutation_types'
 
 export default {
   props: {
     item: {
       type: Object,
       default: () => {}
+    },
+    canEditAmount: {
+      type: Boolean,
+      default: false
     }
   },
 
   computed: {
     itemClass() {
       return this.item.amount <= 0 ? 'removed' : ''
-    }
-  }
+    },
+  },
+
+  methods: {
+    getStep(unit) {
+      return unit === 'g' || unit === 'ml' ? 100 : 1
+    },
+
+    amountChanged(item, newAmount) {
+      this.$store.dispatch(UPDATE_AMOUNT, { item, newAmount })
+    },
+  },
 }
 </script>
 
 <template>
-  <li :class="itemClass">
-    <span class="amount">{{ item.amount }}</span>
+  <li :class="itemClass" @click.stop="$emit('click')">
+    <input type="number"
+      class="amount"
+      min="0"
+      :step="getStep(item.unit)"
+      :value="item.amount"
+      :disabled="!canEditAmount"
+      @change="event => amountChanged(item, +event.target.value)"
+      @blur="$emit('blur')"
+    >
     <span class="unit">{{ item.unit }}</span>
     {{ item.name }}
     <slot v-bind:item="item" />
@@ -42,6 +65,11 @@ li {
   display: inline-block;
   width: 50px;
   text-align: right;
+
+  &[disabled] {
+    border-color: transparent;
+    background: white;
+  }
 }
 
 .unit {

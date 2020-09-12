@@ -6,7 +6,7 @@ import Autocomplete from './Autocomplete'
 const defaultSettings = {
   id: null,
   amount: '1',
-  unit: 'Stk',
+  unit: { name: 'Pkg', step: 1 },
   name: ''
 }
 
@@ -30,7 +30,7 @@ export default {
     },
 
     nameFieldChanged(item) {
-      this.item = { ...this.item, ...item }
+      this.item = { ...this.item, ...item, unit: this.$store.state.units.find(u => u.name === item.unit) || this.item.unit }
     },
 
     reset() {
@@ -45,10 +45,10 @@ export default {
     <button class="inline delete" @click="reset">×</button>
     <button class="inline add" @click="addItem">+</button>
 
-    <input type="number" v-model="item.amount" id="newItem-amount">
+    <input type="number" :step="item.unit.step" min="0" v-model="item.amount" id="newItem-amount">
 
     <select v-model="item.unit" id="newItem-unit" :disabled="!!item.id">
-      <option v-for="(unit, index) in units" :key="index">{{unit}}</option>
+      <option v-for="(unit, index) in units" :key="index" :value="unit">{{ unit.name }}</option>
     </select>
 
     <Autocomplete id="newItem-name"

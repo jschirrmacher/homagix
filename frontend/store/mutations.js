@@ -39,5 +39,9 @@ export const mutations = {
 
   [types.CHANGES_CHANGED](state, { changes }) {
     state.changes = changes
+  },
+
+  [types.SET_ACTIVE_ITEM](state, { itemId }) {
+    state.activeItemId = itemId
   }
 }
