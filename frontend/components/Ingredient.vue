@@ -57,5 +57,9 @@ li {
   .amount, .unit {
     visibility: hidden;
   }
+
+  @media print {
+    display: none;
+  }
 }
 </style>

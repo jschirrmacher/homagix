@@ -5,6 +5,12 @@ import NewItem from './NewItem'
 import { REMOVE_ITEM, RESTORE_ITEM } from '../store/mutation_types'
 
 export default {
+  data() {
+    return {
+      preset: {}
+    }
+  },
+
   components: { IngredientList, NewItem },
 
   computed: mapGetters(['shoppinglist', 'itemsInShoppingList']),

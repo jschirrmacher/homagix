@@ -16,7 +16,7 @@ export default {
 
 <template>
   <ul>
-    <Ingredient v-for="item in items" :key="item.id" :item="item">
+    <Ingredient v-for="item in items" :key="item.id" :item="item" @click="() => $emit('item-select', item)">
       <slot v-bind:item="item" />
     </Ingredient>
   </ul>
