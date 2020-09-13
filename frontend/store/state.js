@@ -2,7 +2,7 @@ export const state = {
   startDate: new Date(),
   proposals: [],
   allIngredients: [],
-  standardIngredients: [],
+  standardItems: [],
   changes: [],
   accepted: [],
   declined: [],

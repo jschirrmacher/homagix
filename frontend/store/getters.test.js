@@ -3,7 +3,7 @@ import store from './index.js'
 import { INGREDIENTS_LOADED, PROPOSALS_LOADED, ACCEPTANCE_CHANGED, SHOPPING_DONE, CHANGES_CHANGED } from './mutation_types.js'
 import { dishes, ingredients } from './test_dishes.js'
 
-store.commit(INGREDIENTS_LOADED, { ingredients: Object.values(ingredients) })
+store.commit(INGREDIENTS_LOADED, { ingredients: Object.values(ingredients), standards: [] })
 store.commit(PROPOSALS_LOADED, { dishes: Object.values(dishes) })
 
 describe('Store getters', () => {

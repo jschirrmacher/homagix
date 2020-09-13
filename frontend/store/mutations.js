@@ -13,8 +13,9 @@ export const mutations = {
     state.proposals = dishes
   },
 
-  [types.INGREDIENTS_LOADED](state, { ingredients }) {
+  [types.INGREDIENTS_LOADED](state, { ingredients, standards }) {
     state.allIngredients = ingredients
+    state.standardItems = standards
   },
 
   [types.UNITS_LOADED](state, { units }) {

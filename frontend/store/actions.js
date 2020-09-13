@@ -63,7 +63,7 @@ export const actions = {
 
   [REMOVE_ITEM](context, { item }) {
     const changes = context.state.changes.filter(neItem(item))
-    const existing = context.getters.proposedItems.find(eqItem(item))
+    const existing = context.getters.proposedItems.find(eqItem(item)) || context.state.standardItems.find(eqItem(item))
     if (existing) {
       changes.push({ ...existing, amount: -existing.amount })
     }
@@ -109,7 +109,7 @@ export const actions = {
       }
     }
 
-    const proposedItem = context.getters.proposedItems.find(eqItem(item))
+    const proposedItem = [...context.getters.proposedItems, ...context.state.standardItems].find(eqItem(item))
     const changes = getChangedChanges(item, proposedItem ? newAmount - proposedItem.amount : newAmount)
     context.commit(CHANGES_CHANGED, { changes })
   },

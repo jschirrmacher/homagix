@@ -24,12 +24,18 @@ function addDetails(allIngredients) {
   }
 }
 
+function getProposedOrStandardItems(state) {
+  return [
+    ...state.proposals
+      .filter(p => state.accepted.includes(p.id))
+      .map(p => p.ingredients)
+      .flat(),
+    ...state.standardItems
+  ]
+}
+
 function shoppingListFromState(state) {
-  const ingredients = state.proposals
-    .filter(p => state.accepted.includes(p.id))
-    .map(p => p.ingredients)
-    .flat()
-  return [...ingredients, ...state.changes]
+  return [...getProposedOrStandardItems(state), ...state.changes]
     .map(addDetails(state.allIngredients))
     .reduce(addIfNotAlreadyIn, [])
 }
