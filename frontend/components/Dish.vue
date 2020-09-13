@@ -43,10 +43,7 @@ export default {
     },
 
     dishIngredients() {
-      return this.ingredients.map(i => ({
-        ...i,
-        name: this.allIngredients.find(item => item.id === i.id).name
-      }))
+      return this.ingredients.map(i => ({ ...this.allIngredients.find(item => item.id === i.id), amount: i.amount }))
     }
   },
 
