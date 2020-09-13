@@ -1,6 +1,11 @@
 import * as types from './mutation_types.js'
+import { getDefaultState } from './state.js'
 
 export const mutations = {
+  [types.RESET_STORE](state) {
+    Object.assign(state, getDefaultState())
+  },
+
   [types.CLEAR_ERROR](state) {
     state.error = {}
   },

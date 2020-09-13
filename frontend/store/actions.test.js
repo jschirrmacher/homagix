@@ -2,7 +2,7 @@ import 'should'
 import fetch from 'node-fetch'
 import nock from 'nock'
 import store from './index.js'
-import { REMOVE_ITEM, PROPOSALS_LOADED, SHOPPING_DONE, INGREDIENTS_LOADED, ACCEPTANCE_CHANGED, ADD_ITEM, CHANGES_CHANGED, RESTORE_ITEM, UPDATE_AMOUNT } from './mutation_types.js'
+import { REMOVE_ITEM, PROPOSALS_LOADED, INGREDIENTS_LOADED, ACCEPTANCE_CHANGED, ADD_ITEM, CHANGES_CHANGED, RESTORE_ITEM, UPDATE_AMOUNT, RESET_STORE } from './mutation_types.js'
 import { dishes, ingredients } from './test_dishes.js'
 import { setBaseUrl } from '../lib/api.js'
 
@@ -16,7 +16,7 @@ const standards = [
 describe('Store actions', () => {
   beforeEach(async () => {
     global.fetch = await fetch  
-    store.commit(SHOPPING_DONE)
+    store.commit(RESET_STORE)
   })
   
   describe('ADD_ITEM', () => {
