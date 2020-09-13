@@ -68,7 +68,7 @@ describe('Store actions', () => {
 
     it('should keep existing changes if a proposed item is removed', async () => {
       const item = { name: 'Zucker', amount: 50, unit: 'g'}
-      store.commit(INGREDIENTS_LOADED, { ingredients: Object.values(ingredients) })
+      store.commit(INGREDIENTS_LOADED, { ingredients: Object.values(ingredients), standards })
       store.commit(PROPOSALS_LOADED, { dishes: Object.values(dishes) })
       store.commit(ACCEPTANCE_CHANGED, { accepted: [ dishes.brot.id ] })
       store.commit(CHANGES_CHANGED, { changes: [item] })
@@ -81,11 +81,19 @@ describe('Store actions', () => {
       await store.dispatch(REMOVE_ITEM, { item: standards[0] })
       store.state.changes.map(item => ({ ...item })).should.deepEqual([{ ...standards[0], amount: -standards[0].amount }])
     })
+
+    it('should create a change with the negative amount of an item which was both, proposed and standard', async () => {
+      store.commit(INGREDIENTS_LOADED, { ingredients: Object.values(ingredients), standards: [{ ...ingredients.mehl, amount: 123 }] })
+      store.commit(PROPOSALS_LOADED, { dishes: Object.values(dishes) })
+      store.commit(ACCEPTANCE_CHANGED, { accepted: [ dishes.brot.id ] })
+      await store.dispatch(REMOVE_ITEM, { item: ingredients.mehl })
+      store.state.changes.map(item => ({ id: item.id, amount: item.amount })).should.deepEqual([{ id: ingredients.mehl.id, amount: -dishes.brot.ingredients[0].amount - 123 }])
+    })
   }),
 
   describe('RESTORE_ITEM', () => {
     it('should restore original amount', async () => {
-      store.commit(INGREDIENTS_LOADED, { ingredients: Object.values(ingredients) })
+      store.commit(INGREDIENTS_LOADED, { ingredients: Object.values(ingredients), standards })
       store.commit(PROPOSALS_LOADED, { dishes: Object.values(dishes) })
       store.commit(ACCEPTANCE_CHANGED, { accepted: [ dishes.brot.id ] })
       await store.dispatch(REMOVE_ITEM, { item: ingredients.mehl })
