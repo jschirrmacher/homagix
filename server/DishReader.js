@@ -31,12 +31,14 @@ export default function ({ store, models, basePath }) {
         delete dish.items
         store.dispatch(dishAdded(dish))
         items.map(extractIngredientComponents).forEach(item => {
-          const existing = models.ingredient.byExample(item)
-          if (!existing) {
+          const existing = models.ingredient.byExample(item, true)
+          if (existing) {
+            store.dispatch(ingredientAssigned(dish.id, existing.id, item.amount))
+          } else {
             item.id = uuid()
             store.dispatch(ingredientAdded(item))
+            store.dispatch(ingredientAssigned(dish.id, item.id, item.amount))
           }
-          store.dispatch(ingredientAssigned(dish.id, item.id, item.amount))
         })
       })
     }

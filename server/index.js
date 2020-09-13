@@ -48,8 +48,8 @@ app.use(function(err, req, res, next) { // eslint-disable-line no-unused-vars
   res.status(500).json({error: err.toString()})
 })
 
-dishReader.loadData()
-store.replay()
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
+  await store.replay()
+  dishReader.loadData()
   logger.info(`Listening on http://localhost:${PORT} (NODE_ENV=${nodeEnv})`)
 })

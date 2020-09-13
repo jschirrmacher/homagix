@@ -39,11 +39,11 @@ export default function ({ store, events }) {
     return ingredients.byName[name]
   }
 
-  function byExample(item) {
+  function byExample(item, strict = false) {
     if (item.id) {
       return this.byId(item.id)
     }
-    const pattern = new RegExp('.*' + item.name + '.*')
+    const pattern = new RegExp(strict ? ('^' + item.name + '$') : item.name)
     return Object.values(ingredients.byId).find(i => i.name.match(pattern))
   }
 
