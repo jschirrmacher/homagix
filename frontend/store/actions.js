@@ -80,7 +80,10 @@ export const actions = {
   async [ADD_ITEM](context, { item }) {
     async function createNewItem(newItem) {
       const item = await doFetch('post', '/ingredients', newItem)
-      context.commit(INGREDIENTS_LOADED, { ingredients: [ ...context.state.allIngredients, item ] })
+      context.commit(INGREDIENTS_LOADED, {
+        ingredients: [ ...context.state.allIngredients, item ],
+        standards: context.state.standardItems
+      })
       return item
     }
 
