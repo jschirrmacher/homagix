@@ -25,7 +25,13 @@ export default {
 
   methods: {
     addItem() {
-      this.$store.dispatch(ADD_ITEM, { item: this.item })
+      const item = {
+        id: this.item.id,
+        name: this.item.name,
+        amount: this.item.amount,
+        unit: this.item.unit.name,
+      }
+      this.$store.dispatch(ADD_ITEM, { item })
       this.reset()
     },
 
