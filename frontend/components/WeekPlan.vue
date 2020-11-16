@@ -26,7 +26,7 @@ export default {
 <div>
   <ul>
     <li v-for="proposal in proposals" :key="proposal.id">
-      <Dish :id="proposal.id" :name="proposal.name" :lastServed="proposal.last" :ingredients="proposal.ingredients" />
+      <Dish :id="proposal.id" :name="proposal.name" :lastServed="proposal.last" :ingredients="proposal.items" />
     </li>
   </ul>
 </div>
