@@ -3,14 +3,13 @@ import fs from 'fs'
 import path from 'path'
 import DishReader from './DishReader.js'
 import MockFS from './MockFS.js'
-import Models from './models/index.js'
+import models from './MockedModel.js'
 import Events from './Events.js'
 import Location from './Location.js'
 import { store, eventList } from './Store.mock.js'
 
 const { DIRNAME } = Location(import.meta.url)
 
-const models = Models({ store })
 const events = Events({ models })
 
 const basePath = path.resolve(DIRNAME, 'testdata')

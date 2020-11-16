@@ -48,7 +48,7 @@ describe('Store getters', () => {
     })
 
     it('should return false, if all items have an amount of zero', () => {
-      const changes = dishes.brot.ingredients.map(item => ({ ...item, amount: -item.amount }))
+      const changes = dishes.brot.items.map(item => ({ ...item, amount: -item.amount }))
       store.commit(ACCEPTANCE_CHANGED, { accepted: [ dishes.brot.id ] })
       store.commit(CHANGES_CHANGED, { changes })
       store.getters.itemsInShoppingList.should.be.false()

@@ -28,7 +28,7 @@ function getProposedOrStandardItems(state) {
   return [
     ...state.proposals
       .filter(p => state.accepted.includes(p.id))
-      .map(p => p.ingredients)
+      .map(p => p.items)
       .flat(),
     ...state.standardItems
   ]
@@ -44,7 +44,7 @@ export const getters = {
   proposedItems(state) {
     return state.proposals
     .filter(p => state.accepted.includes(p.id))
-    .map(p => p.ingredients)
+    .map(p => p.items)
     .flat()
     .map(addDetails(state.allIngredients))
     .reduce(addIfNotAlreadyIn, [])

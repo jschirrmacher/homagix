@@ -1,6 +1,6 @@
 {
   "name": "homagix",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Makes food shopping easier",
   "repository": {
     "type": "git",
@@ -25,7 +25,6 @@
     "body-parser": "^1.19.0",
     "event-stream": "^4.0.1",
     "express": "^4.17.1",
-    "supertest": "^4.0.2",
     "uuid": "^8.3.1",
     "vue": "^2.6.12",
     "vue-router": "^3.4.9",
@@ -48,6 +47,7 @@
     "sass-loader": "^9.0.3",
     "should": "^13.2.3",
     "style-loader": "^0.23.1",
+    "supertest": "^4.0.2",
     "url-loader": "^1.1.2",
     "util.promisify": "^1.0.1",
     "vue-loader": "^15.9.5",

@@ -2,7 +2,7 @@ export default ({ models, store, events }) => {
   return {
     get(inhibited = []) {
       const dishes = models.dish.getAll()
-        .filter(dish => !inhibited.some(id => id === +dish.id))
+        .filter(dish => !inhibited.some(id => id === dish.id))
         .sort((a, b) => new Date(a.last) - new Date(b.last))
         .slice(0, 7)
   

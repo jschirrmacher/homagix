@@ -87,7 +87,7 @@ describe('Store actions', () => {
       store.commit(PROPOSALS_LOADED, { dishes: Object.values(dishes) })
       store.commit(ACCEPTANCE_CHANGED, { accepted: [ dishes.brot.id ] })
       await store.dispatch(REMOVE_ITEM, { item: ingredients.mehl })
-      store.state.changes.map(item => ({ id: item.id, amount: item.amount })).should.deepEqual([{ id: ingredients.mehl.id, amount: -dishes.brot.ingredients[0].amount - 123 }])
+      store.state.changes.map(item => ({ id: item.id, amount: item.amount })).should.deepEqual([{ id: ingredients.mehl.id, amount: -dishes.brot.items[0].amount - 123 }])
     })
   }),
 

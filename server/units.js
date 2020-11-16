@@ -9,5 +9,6 @@ export default [
   { name: "Glas", step: 1 },
   { name: "Dose", step: 1 },
   { name: "Zehen", step: 1 },
-  { name: "Würfel", step: 1 }
+  { name: "Würfel", step: 1 },
+  { name: "Bund", step: 1 },
 ]

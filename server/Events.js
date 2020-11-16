@@ -21,7 +21,7 @@ export default function ({ models }) {
     ingredientAdded(ingredient) {
       assert(!!ingredient, 'No ingredient')
       assert(ingredient.name, 'Missing name')
-      return { type: 'ingredientAdded', id: ingredient.id, unit: ingredient.unit, name: ingredient.name }
+      return { type: 'ingredientAdded', id: ingredient.id, unit: ingredient.unit, name: ingredient.name, group: ingredient.group }
     },
 
     ingredientAssigned(dishId, ingredientId, amount) {

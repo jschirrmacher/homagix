@@ -6,6 +6,7 @@ import EventStore from './EventStore.js'
 import DishReader from './DishReader.js'
 import MainRouter from './MainRouter.js'
 import Location from './Location.js'
+import ModelWriter from './ModelWriter.js'
 
 const nodeEnv = process.env.NODE_ENV || 'development'
 const logger = console
@@ -15,7 +16,8 @@ const PORT = process.env.PORT || 8200
 
 const basePath = path.join(DIRNAME, '..', 'data')
 const store = EventStore({ basePath, logger })
-const models = Models({ store })
+const modelWriter = ModelWriter({ basePath })
+const models = Models({ store, modelWriter })
 
 const dishReader = DishReader({ store, models, basePath })
 const router = MainRouter({ models, store })
@@ -49,7 +51,8 @@ app.use(function(err, req, res, next) { // eslint-disable-line no-unused-vars
 })
 
 app.listen(PORT, async () => {
-  await store.replay()
   dishReader.loadData()
+  await store.replay()
   logger.info(`Listening on http://localhost:${PORT} (NODE_ENV=${nodeEnv})`)
+
 })

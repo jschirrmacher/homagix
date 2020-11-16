@@ -5,11 +5,11 @@ export const ingredients = {
 }
 
 export const dishes = {
-  brot: { id: 4, ingredients: [
+  brot: { id: 4, items: [
     { id: ingredients.mehl.id, amount: 500 },
     { id: ingredients.hefe.id, amount: 1 },
   ]},
-  kuchen: { id: 5, ingredients: [
+  kuchen: { id: 5, items: [
     { id: ingredients.mehl.id, amount: 350 },
     { id: ingredients.hefe.id, amount: .5 },
     { id: ingredients.eier.id, amount: 3 },
