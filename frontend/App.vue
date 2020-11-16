@@ -87,14 +87,14 @@ html, body {
       content: '';
       display: block;
       position: absolute;
-      left: .03em;
-      top: -.15em;
-      width: 0.5em;
-      height: 0.5em;
-      border: .15em none #FFFF00;
+      left: -0.3px;
+      top: -0.07em;
+      width: 0.55em;
+      height: 0.55em;
+      border: .19em none #FFFF00;
       border-top-style: solid;
       border-left-style: solid;
-      transform: rotate(45deg);
+      transform: scale(1, 0.66) rotate(45deg);
     }
   }
 
