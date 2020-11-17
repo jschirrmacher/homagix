@@ -17,7 +17,7 @@ import {
   UPDATE_AMOUNT,
   INGREDIENT_CHANGED,
 } from './mutation_types.js'
-import { CHANGE_GROUP } from './action_types'
+import { CHANGE_GROUP } from './action_types.js'
 
 function eqItem(item) {
   const name = item.name.toLowerCase()
