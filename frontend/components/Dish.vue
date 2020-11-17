@@ -32,7 +32,7 @@ export default {
     ...mapState(['allIngredients', 'accepted']),
 
     servedDate() {
-      return this.lastServed && (new Date(this.lastServed)).toLocaleString('de', { dateStyle: 'medium' })
+      return this.lastServed ? (new Date(this.lastServed)).toLocaleString('de', { dateStyle: 'medium' }) : 'noch nie'
     },
 
     classNames() {

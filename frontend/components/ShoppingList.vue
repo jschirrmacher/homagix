@@ -39,7 +39,7 @@ export default {
     <IngredientList v-if="itemsInShoppingList" :items="shoppinglist" v-slot:default="slotProps" :canEditAmount="true">
       <button v-if="slotProps.item.amount > 0" class="inline delete" title="Von der Liste streichen" @click="remove(slotProps.item)">×</button>
       <button v-if="slotProps.item.amount <= 0" class="inline restore" title="Wieder hinzufügen" @click="restore(slotProps.item)">+</button>
-      <span :class="'group ' + slotProps.item.group.id">{{ slotProps.item.group.title }}</span>
+      <span :class="'group ' + slotProps.item.group.id">{{ slotProps.item.group.title || 'undefiniert' }}</span>
     </IngredientList>
 
     <NewItem />
@@ -61,6 +61,7 @@ export default {
   border-radius: 3px;
   -ms-text-align-last: center;
   text-align-last: center;
+  height: 20px;
 
   &.fruit {
     background-color: darkgreen;
