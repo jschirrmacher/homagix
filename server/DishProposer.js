@@ -1,12 +1,17 @@
 export default ({ models, store, events }) => {
+  function getDate(dish) {
+    return new Date(dish.last || 0)
+  }
+
   return {
     get(inhibited = []) {
       const dishes = models.dish.getAll()
+        .filter(dish => !dish.alwaysOnList)
         .filter(dish => !inhibited.some(id => id === dish.id))
-        .sort((a, b) => new Date(a.last) - new Date(b.last))
+        .sort((a, b) => getDate(a) - getDate(b))
         .slice(0, 7)
   
-      return {dishes}
+      return { dishes }
     },
   
     fix(accepted, date) {
