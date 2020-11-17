@@ -54,7 +54,7 @@ export const getters = {
     .filter(p => state.accepted.includes(p.id))
     .map(p => p.items)
     .flat()
-    .map(addDetails(state.allIngredients))
+    .map(addDetails(state))
     .reduce(addIfNotAlreadyIn, [])
   },
 
