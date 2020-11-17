@@ -41,9 +41,9 @@ export default function ({ models }) {
       return { type: 'served', dishId, date: date.toISOString().replace(/T.*$/, '') }
     },
 
-    ingredientUpdated(ingredientId, attrName, value) {
+    ingredientUpdated(ingredientId, name, value) {
       assert(ingredientId, 'No ingredientId')
-      assert(attrName !== '', 'No attrName')
+      assert(name !== '', 'No attribute Name')
       assert(models.ingredient.byId(ingredientId), 'Ingredient not found')
       return { type: 'ingredientUpdated', ingredientId, name, value }
     }

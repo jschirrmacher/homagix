@@ -1,5 +1,3 @@
-import { itemGroups } from '../lib/itemGroups.js'
-
 const logger = console
 
 function addIfNotAlreadyIn(array, element) {
@@ -17,10 +15,10 @@ function addIfNotAlreadyIn(array, element) {
   }
 }
 
-function addDetails(allIngredients) {
+function addDetails(state) {
   return function (i) {
-    const item = allIngredients.find(item => item.id === i.id) || i
-    return { ...i, name: item.name, unit: item.unit, group: { ...itemGroups[item.group], id: item.group }}
+    const item = state.allIngredients.find(item => item.id === i.id) || i
+    return { ...i, name: item.name, unit: item.unit, group: { ...state.itemGroups[item.group], id: item.group }}
   }
 }
 
@@ -36,7 +34,7 @@ function getProposedOrStandardItems(state) {
 
 function shoppingListFromState(state) {
   return [...getProposedOrStandardItems(state), ...state.changes]
-    .map(addDetails(state.allIngredients))
+    .map(addDetails(state))
     .reduce(addIfNotAlreadyIn, [])
 }
 

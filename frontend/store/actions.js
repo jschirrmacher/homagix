@@ -15,7 +15,9 @@ import {
   GET_UNITS,
   UNITS_LOADED,
   UPDATE_AMOUNT,
+  INGREDIENT_CHANGED,
 } from './mutation_types.js'
+import { CHANGE_GROUP } from './action_types'
 
 function eqItem(item) {
   const name = item.name.toLowerCase()
@@ -127,5 +129,11 @@ export const actions = {
     await doFetch('post', '/proposals/fix', data)
     context.commit(SHOPPING_DONE)
     loadData('/proposals', PROPOSALS_LOADED)(context)
-  }
+  },
+
+  [CHANGE_GROUP](context, { ingredient, group }) {
+    doFetch('put', '/ingredients/' + ingredient.id, { group })
+    ingredient.group = group
+    context.commit(INGREDIENT_CHANGED, { ingredient })
+  },
 }

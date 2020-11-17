@@ -23,6 +23,10 @@ export const mutations = {
     state.standardItems = standards
   },
 
+  [types.INGREDIENT_CHANGED](state, { ingredient }) {
+    state.allIngredients = state.allIngredients.map(i => i.id === ingredient.id ? ingredient : i)
+  },
+
   [types.UNITS_LOADED](state, { units }) {
     state.units = units
   },

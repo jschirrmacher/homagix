@@ -6,7 +6,7 @@ export default function ({ controller, jsonResult }) {
 
   router.get('/', jsonResult(controller.getIngredients))
   router.get('/units', jsonResult(() => units))
-  router.put('/:id', jsonResult(req => controller.setIngredientGroup(+req.params.id, req.body.group)))
+  router.put('/:id', jsonResult(req => controller.setIngredientGroup(req.params.id, req.body.group)))
   router.post('/', jsonResult(req => controller.addIngredient(req.body)))
 
   return router

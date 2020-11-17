@@ -13,6 +13,7 @@ export function addIngredient(writer, { id, name, unit, group }) {
   if (existing) {
     aliases['' + id] = existing.id
   } else {
+    ingredient.group = ingredient.group || 'other'
     ingredients.byId['' + id] = ingredient
     ingredients.byName[name.toLowerCase()] = ingredient
     writer(ingredient)

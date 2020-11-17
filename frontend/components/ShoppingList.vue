@@ -3,6 +3,7 @@ import { mapState, mapGetters } from 'vuex'
 import IngredientList from './IngredientList'
 import NewItem from './NewItem'
 import { REMOVE_ITEM, RESTORE_ITEM } from '../store/mutation_types'
+import { CHANGE_GROUP } from '../store/action_types'
 
 export default {
   data() {
@@ -13,7 +14,10 @@ export default {
 
   components: { IngredientList, NewItem },
 
-  computed: mapGetters(['shoppinglist', 'itemsInShoppingList']),
+  computed: {
+    ...mapState(['itemGroups']),
+    ...mapGetters(['shoppinglist', 'itemsInShoppingList']),
+  },
 
   methods: {
     remove(item) {
@@ -24,7 +28,11 @@ export default {
       item.amount = item.originalAmount
       delete item.originalAmount
       this.$store.dispatch(RESTORE_ITEM, { item })
-    }
+    },
+
+    changeGroup(ingredient, group) {
+      this.$store.dispatch(CHANGE_GROUP, { ingredient, group })
+    },
   }
 }
 </script>
@@ -39,7 +47,11 @@ export default {
     <IngredientList v-if="itemsInShoppingList" :items="shoppinglist" v-slot:default="slotProps" :canEditAmount="true">
       <button v-if="slotProps.item.amount > 0" class="inline delete" title="Von der Liste streichen" @click="remove(slotProps.item)">×</button>
       <button v-if="slotProps.item.amount <= 0" class="inline restore" title="Wieder hinzufügen" @click="restore(slotProps.item)">+</button>
-      <span :class="'group ' + slotProps.item.group.id">{{ slotProps.item.group.title || 'undefiniert' }}</span>
+      <select :class="'group ' + slotProps.item.group.id" @change="changeGroup(slotProps.item, $event.target.value)">
+        <option v-for="(opt, key) in itemGroups" :key="key" :value="key" :selected="key === slotProps.item.group.id">
+          {{ opt.title }}
+        </option>
+      </select>
     </IngredientList>
 
     <NewItem />
@@ -61,7 +73,6 @@ export default {
   border-radius: 3px;
   -ms-text-align-last: center;
   text-align-last: center;
-  height: 20px;
 
   &.fruit {
     background-color: darkgreen;

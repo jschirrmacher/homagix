@@ -13,7 +13,7 @@ export default ({ models, store }) => {
 
   async function setIngredientGroup(id, group) {
     await store.emit(ingredientUpdated(id, 'group', group))
-    return models.ingredients.byId(id)
+    return models.ingredient.byId(id)
   }
 
   async function addIngredient(ingredient) {
