@@ -40,6 +40,16 @@ function shoppingListFromState(state) {
     .reduce(addIfNotAlreadyIn, [])
 }
 
+function compareItems(a, b) {
+  if (a.group.order && !b.group.order) {
+    return -1
+  }
+  if (b.group.order && !a.group.order) {
+    return 1
+  }
+  return a.group.order - b.group.order || a.name.toLowerCase().localeCompare(b.name.toLowerCase)
+}
+
 export const getters = {
   proposedItems(state) {
     return state.proposals
@@ -52,7 +62,7 @@ export const getters = {
 
   shoppinglist(state) {
     return shoppingListFromState(state)
-      .sort((a, b) => a.group.order - b.group.order || a.name.toLowerCase().localeCompare(b.name.toLowerCase))
+      .sort(compareItems)
   },
 
   itemsInShoppingList(state) {
