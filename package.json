@@ -1,6 +1,6 @@
 {
   "name": "homagix",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "Makes food shopping easier",
   "repository": {
     "type": "git",
@@ -12,6 +12,9 @@
   "homepage": "https://github.com/jschirrmacher/homagix#readme",
   "main": "server/index.js",
   "type": "module",
+  "engines": {
+    "node": "14"
+  },
   "scripts": {
     "start": "node server",
     "start-dev": "NODE_ENV=development node server",
@@ -25,16 +28,16 @@
     "body-parser": "^1.19.0",
     "event-stream": "^4.0.1",
     "express": "^4.17.1",
-    "uuid": "^8.3.1",
+    "uuid": "^8.3.2",
     "vue": "^2.6.12",
     "vue-router": "^3.4.9",
     "vue-style-loader": "^4.1.2",
-    "vuex": "^3.5.1",
+    "vuex": "^3.6.0",
     "yaml": "^1.10.0"
   },
   "devDependencies": {
     "css-loader": "^2.1.1",
-    "eslint": "^7.13.0",
+    "eslint": "^7.16.0",
     "eslint-loader": "^4.0.2",
     "file-loader": "^3.0.1",
     "mini-css-extract-plugin": "^0.9.0",
@@ -50,11 +53,11 @@
     "supertest": "^4.0.2",
     "url-loader": "^1.1.2",
     "util.promisify": "^1.0.1",
-    "vue-loader": "^15.9.5",
+    "vue-loader": "^15.9.6",
     "vue-template-compiler": "^2.6.12",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12",
-    "webpack-dev-middleware": "^3.7.2",
+    "webpack-dev-middleware": "^3.7.3",
     "webpack-hot-middleware": "^2.25.0"
   },
   "esm": {

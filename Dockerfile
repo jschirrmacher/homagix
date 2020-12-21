@@ -1,4 +1,4 @@
-FROM node:12 as builder
+FROM node:14 as builder
 WORKDIR /build
 ADD . .
 RUN npm ci && \
@@ -9,7 +9,7 @@ RUN npm ci && \
     mv build node_modules package.json public server /app
 
 
-FROM node:12-alpine
+FROM node:14-alpine
 ENV NODE_ENV production
 WORKDIR /app
 COPY --from=builder /app .
