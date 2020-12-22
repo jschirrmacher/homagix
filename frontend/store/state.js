@@ -1,7 +1,7 @@
 export function getDefaultState() {
   return {
     startDate: new Date(),
-    proposals: [],
+    weekplan: [],
     allIngredients: [],
     standardItems: [],
     changes: [],

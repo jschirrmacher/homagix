@@ -1,1 +1,2 @@
 export const CHANGE_GROUP = 'CHANGE_GROUP'
+export const CHANGE_STARTDATE = 'CHANGE_STARTDATE'

@@ -5,13 +5,11 @@ export default ({ models, store, events }) => {
 
   return {
     get(inhibited = []) {
-      const dishes = models.dish.getAll()
+      return models.dish.getAll()
         .filter(dish => !dish.alwaysOnList)
         .filter(dish => !inhibited.some(id => id === dish.id))
         .sort((a, b) => getDate(a) - getDate(b))
         .slice(0, 7)
-  
-      return { dishes }
     },
   
     fix(accepted, date) {

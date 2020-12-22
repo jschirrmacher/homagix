@@ -24,9 +24,9 @@ function addDetails(state) {
 
 function getProposedOrStandardItems(state) {
   return [
-    ...state.proposals
-      .filter(p => state.accepted.includes(p.id))
-      .map(p => p.items)
+    ...state.weekplan
+      .filter(p => state.accepted.includes(p.dish.id))
+      .map(p => p.dish.items)
       .flat(),
     ...state.standardItems
   ]
@@ -50,9 +50,9 @@ function compareItems(a, b) {
 
 export const getters = {
   proposedItems(state) {
-    return state.proposals
-    .filter(p => state.accepted.includes(p.id))
-    .map(p => p.items)
+    return state.weekplan
+    .filter(p => state.accepted.includes(p.dish.id))
+    .map(p => p.dish.items)
     .flat()
     .map(addDetails(state))
     .reduce(addIfNotAlreadyIn, [])

@@ -7,7 +7,6 @@ import { SHOPPING_DONE } from '../store/mutation_types'
 export default {
   components: { WeekPlan, ShoppingList },
   computed: {
-    ...mapState(['proposals']),
     ...mapGetters(['shoppinglist', 'itemsInShoppingList']),
   },
   methods: {

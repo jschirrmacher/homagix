@@ -1,7 +1,5 @@
-import { loadData, doFetch } from '../lib/api.js'
+import { loadData, doFetch, fetchWeekplan } from '../lib/api.js'
 import {
-  GET_PROPOSALS,
-  PROPOSALS_LOADED,
   GET_INGREDIENTS,
   INGREDIENTS_LOADED,
   DISH_DECLINED,
@@ -16,8 +14,9 @@ import {
   UNITS_LOADED,
   UPDATE_AMOUNT,
   INGREDIENT_CHANGED,
+  STARTDATE_CHANGED,
 } from './mutation_types.js'
-import { CHANGE_GROUP } from './action_types.js'
+import { CHANGE_GROUP, CHANGE_STARTDATE } from './action_types.js'
 
 function eqItem(item) {
   const name = item.name.toLowerCase()
@@ -41,8 +40,16 @@ function neItem(item) {
   }
 }
 
+async function updateWeekplan(context) {
+  const args = await fetchWeekplan(context.state.startDate, context.state.declined)
+  context.commit(...args)
+}
+
 export const actions = {
-  [GET_PROPOSALS]: loadData('/proposals', PROPOSALS_LOADED),
+  async [CHANGE_STARTDATE](context, { startDate }) {
+    context.commit(STARTDATE_CHANGED, { startDate })
+    await updateWeekplan(context)
+  },
 
   [GET_INGREDIENTS]: loadData('/ingredients', INGREDIENTS_LOADED),
 
@@ -58,9 +65,9 @@ export const actions = {
     commit(ACCEPTANCE_CHANGED, { accepted })
   },
 
-  [DISH_DECLINED](context, { dishId }) {
+  async [DISH_DECLINED](context, { dishId }) {
     context.commit(DISH_DECLINED, { dishId })
-    loadData('/proposals', PROPOSALS_LOADED)(context)
+    await updateWeekplan(context)
   },
 
   [REMOVE_ITEM](context, { item }) {
@@ -128,7 +135,7 @@ export const actions = {
     }
     await doFetch('post', '/proposals/fix', data)
     context.commit(SHOPPING_DONE)
-    loadData('/proposals', PROPOSALS_LOADED)(context)
+    await updateWeekplan(context)
   },
 
   [CHANGE_GROUP](context, { ingredient, group }) {

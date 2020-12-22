@@ -33,19 +33,19 @@ const models = {
 }
 
 describe('DishProposer', () => {
-  it('should return a data structure containing dishes', () => {
+  it('should return a list of dish proposals', () => {
     const proposer = DishProposer({models})
     const result = proposer.get()
-    result.should.have.property('dishes')
+    result.should.be.an.Array()
   })
 
   it('should propose the 7 dishes which are the longest not served', () => {
     const proposer = DishProposer({models})
-    proposer.get().dishes.map(d => d.id).should.deepEqual(['17', '43', '1', '44', '8', '12', '23'])
+    proposer.get().map(d => d.id).should.deepEqual(['17', '43', '1', '44', '8', '12', '23'])
   })
 
   it('should propose 7 dishes with some ids inhibited', () => {
     const proposer = DishProposer({models})
-    proposer.get(['12', '1', '33']).dishes.map(d => d.id).should.deepEqual(['17', '43', '44', '8', '23', '25', '29'])
+    proposer.get(['12', '1', '33']).map(d => d.id).should.deepEqual(['17', '43', '44', '8', '23', '25', '29'])
   })
 })

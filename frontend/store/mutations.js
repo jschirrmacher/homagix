@@ -6,6 +6,10 @@ export const mutations = {
     Object.assign(state, getDefaultState())
   },
 
+  [types.ERROR_OCCURED](state, error) {
+    state.error = error
+  },
+
   [types.CLEAR_ERROR](state) {
     state.error = {}
   },
@@ -14,8 +18,8 @@ export const mutations = {
     state.startDate = new Date(startDate)
   },
 
-  [types.PROPOSALS_LOADED](state, { dishes }) {
-    state.proposals = dishes
+  [types.WEEKPLAN_LOADED](state, { weekplan }) {
+    state.weekplan = weekplan
   },
 
   [types.INGREDIENTS_LOADED](state, { ingredients, standards }) {

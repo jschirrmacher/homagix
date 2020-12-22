@@ -32,7 +32,7 @@ export default {
     ...mapState(['allIngredients', 'accepted']),
 
     servedDate() {
-      return this.lastServed ? (new Date(this.lastServed)).toLocaleString('de', { dateStyle: 'medium' }) : 'noch nie'
+      return this.lastServed ? (new Date(this.lastServed)).toLocaleString(navigator.language, { dateStyle: 'medium' }) : 'noch nie'
     },
 
     classNames() {
@@ -76,9 +76,9 @@ export default {
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .dish {
-  padding: 10px 0;
+  padding: 2px 0 10px;
   border-bottom: 1px solid #bbbbbb;
   position: relative;
   line-height: 1.4em;
@@ -91,7 +91,7 @@ export default {
     color: green;
   }
 
-  .servedDate {
+  &:not(.served) .servedDate {
     background: #aaaaaa;
     position: relative;
     right: 50px;

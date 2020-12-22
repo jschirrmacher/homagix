@@ -1,7 +1,7 @@
 <script>
 import { mapState } from 'vuex'
 import Dish from '@/components/Dish'
-import { STARTDATE_CHANGED } from '../store/mutation_types'
+import { CHANGE_STARTDATE } from '../store/action_types'
 
 export default {
   components: {
@@ -9,33 +9,80 @@ export default {
   },
   
   computed: {
-    ...mapState(['proposals']),
-    startDate: {
-      get() {
-        return this.$store.state.startDate.toISOString().replace(/T.*$/, '')
-      },
-      set(startDate) {
-        this.$store.commit(STARTDATE_CHANGED, { startDate })
-      }
-    }
+    ...mapState(['weekplan', 'startDate']),
   },
+
+  methods: {
+    formatDate(date) {
+      return (new Date(date)).toLocaleDateString(navigator.language, { weekday: 'short', day: 'numeric', month: 'numeric' })
+    },
+
+    addToDate(offset) {
+      const startDate = new Date(this.startDate)
+      startDate.setDate(startDate.getDate() + offset)
+      this.$store.dispatch(CHANGE_STARTDATE, { startDate })
+    }
+  }
 }
 </script>
 
 <template>
-<div>
+<div class="weekplan">
+  <div class="pager" @click="addToDate(-1)">▲</div>
   <ul>
-    <li v-for="proposal in proposals" :key="proposal.id">
-      <Dish :id="proposal.id" :name="proposal.name" :lastServed="proposal.last" :ingredients="proposal.items" />
+    <li v-for="entry in weekplan" :key="entry.day" :class="{ served: entry.served }">
+      <span>{{ formatDate(entry.date) }}</span>
+      <Dish :id="entry.dish.id" :name="entry.dish.name" :lastServed="entry.dish.last" :ingredients="entry.dish.items" />
     </li>
   </ul>
+  <div class="pager" @click="addToDate(1)">▼</div>
 </div>
 </template>
 
-<style scoped lang="scss">
-@media (min-width: 640px) {
-  ul {
-    margin: 1em 0;
+<style lang="scss">
+.weekplan {
+  @media (min-width: 640px) {
+    .pager {
+      text-align: center;
+      background: #eeeeee;
+      cursor: pointer;
+      user-select: none;
+
+      &:hover {
+        background: #dddddd;
+      }
+
+      &:active {
+        background: #cccccc;
+      }
+    }
+
+    ul {
+      margin: 0;
+
+
+      li > span {
+        background: #eecc00;
+        padding: 2px 5px;
+      }
+
+      li.served {
+        background: lightgrey;
+      }
+
+      li.served {
+        .servedDate, .accept, .delete {
+          display: none;
+        }
+      }
+    }
+  }
+
+  @media print {
+    .pager,
+    ul li > span {
+      display: none;
+    }
   }
 }
 </style>

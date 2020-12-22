@@ -1,7 +1,8 @@
 <script>
 import { mapState } from 'vuex'
-import { CLEAR_ERROR, GET_PROPOSALS, GET_INGREDIENTS, STARTDATE_CHANGED, GET_UNITS, SET_ACTIVE_ITEM } from './store/mutation_types'
+import { CLEAR_ERROR, GET_INGREDIENTS, GET_UNITS, SET_ACTIVE_ITEM } from './store/mutation_types'
 import Home from '@/components/Home'
+import { CHANGE_STARTDATE } from './store/action_types'
 
 export default {
   components: { Home },
@@ -20,13 +21,13 @@ export default {
         return this.$store.state.startDate.toISOString().replace(/T.*$/, '')
       },
       set(startDate) {
-        this.$store.commit(STARTDATE_CHANGED, { startDate })
+        this.$store.dispatch(CHANGE_STARTDATE, { startDate })
       }
     }
   },
 
   mounted() {
-    this.$store.dispatch(GET_PROPOSALS)
+    this.$store.dispatch(CHANGE_STARTDATE, { startDate: new Date() })
     this.$store.dispatch(GET_INGREDIENTS)
     this.$store.dispatch(GET_UNITS)
   },
@@ -119,7 +120,14 @@ html, body {
 }
 
 .error {
+  border: 2px solid red;
   color: red;
+  margin: 10px;
+  padding: 10px;
+  
+  span {
+    cursor: pointer;
+  }
 }
 
 ul {

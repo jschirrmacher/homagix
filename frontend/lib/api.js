@@ -1,4 +1,4 @@
-import { ERROR_OCCURED } from '../store/mutation_types.js'
+import { ERROR_OCCURED, WEEKPLAN_LOADED } from '../store/mutation_types.js'
 
 function encodeParameter([key, val]) {
   const value = val instanceof Array ? val.join(',') : val
@@ -44,5 +44,17 @@ export function loadData(url, mutationType) {
     } else {
       context.commit(mutationType, result)
     }
+  }
+}
+
+export async function fetchWeekplan(startDate, declined) {
+  const params = {
+    inhibit: declined.join(','),
+  }
+  const result = await doFetch('get', '/weekplan/' + startDate.toISOString().split('T')[0], params)
+  if (result.error) {
+    return [ERROR_OCCURED, { message: 'Error accessing server', details: result }]
+  } else {
+    return [WEEKPLAN_LOADED, { weekplan: result }]
   }
 }
