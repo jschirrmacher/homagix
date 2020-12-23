@@ -118,10 +118,15 @@ export default {
   &.opened .openclose {
     transform: rotate(45deg);
   }
+}
 
-  @media print {
+@media print {
+  .dish {
+    display: inline-block;
+
     .servedDate,
-    &:not(.accepted)
+    &:not(.accepted),
+    .openclose
     {
       display: none;
     }

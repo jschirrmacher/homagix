@@ -53,8 +53,7 @@ export default {
 <style lang="scss" scoped>
 li {
   border-bottom: 1px solid #dddddd;
-  padding: 4px 0;
-  line-height: 1.6em;
+  padding: 0;
 
   &:last-of-type {
     border-bottom: none;

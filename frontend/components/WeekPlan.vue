@@ -85,9 +85,12 @@ export default {
   }
 
   @media print {
-    .pager,
-    ul li > span {
+    .pager {
       display: none;
+    }
+
+    ul li > span {
+      display: inline-block;
     }
   }
 }
