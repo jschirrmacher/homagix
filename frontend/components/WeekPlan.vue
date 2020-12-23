@@ -61,10 +61,10 @@ export default {
       }
     }
 
-    ul {
+    > ul {
       margin: 0;
 
-      li {
+      > li {
         min-height: 52px;
         border-bottom: 1px solid #bbbbbb;
 
