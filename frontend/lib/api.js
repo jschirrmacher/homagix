@@ -16,9 +16,9 @@ export function setBaseUrl(url) {
 }
 
 export async function doFetch(method, url, data) {
-  const options = { method }
+  const options = { method, headers: { accept: 'application/json' }}
   if (data && !['get', 'options'].includes(method.toLowerCase())) {
-    options.headers = {'content-type': 'application/json'}
+    options.headers['content-type'] = 'application/json'
     options.body = JSON.stringify(data)
   } else if (data && method.toLowerCase() === 'get') {
     url += '?' + prepareQueryParamers(data)

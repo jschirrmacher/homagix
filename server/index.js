@@ -7,6 +7,7 @@ import DishReader from './DishReader.js'
 import MainRouter from './MainRouter.js'
 import Location from './Location.js'
 import ModelWriter from './ModelWriter.js'
+import history from 'connect-history-api-fallback'
 
 const nodeEnv = process.env.NODE_ENV || 'development'
 const logger = console
@@ -22,10 +23,6 @@ const models = Models({ store, modelWriter })
 const dishReader = DishReader({ store, models, basePath })
 const router = MainRouter({ models, store })
 
-const knownFrontendPatterns = [
-  /^\/recipes/
-]
-
 const app = express()
 app.set('json spaces', 2)
 app.use(bodyParser.urlencoded({extended: false}))
@@ -40,13 +37,11 @@ async function setupHotLoading() {
 
 setupHotLoading()
 
+app.use(history())
+
 app.use((req, res, next) => {
-  if (knownFrontendPatterns.some(pattern => req.path.match(pattern))) {
-    res.sendFile(path.join(DIRNAME, '..', 'public', 'index.html'))
-  } else {
-    logger.info(req.method + ' ' + req.path)
-    next()
-  }
+  logger.info(req.method + ' ' + req.path)
+  next()
 })
 
 app.use(router)
