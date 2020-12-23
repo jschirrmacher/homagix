@@ -79,7 +79,6 @@ export default {
 <style lang="scss">
 .dish {
   padding: 2px 0 10px;
-  border-bottom: 1px solid #bbbbbb;
   position: relative;
   line-height: 1.4em;
 
