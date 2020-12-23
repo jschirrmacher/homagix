@@ -35,7 +35,7 @@ export default {
   <div class="pager" @click="addToDate(-1)">▲</div>
   <ul>
     <li v-for="entry in weekplan" :key="entry.day" :class="{ past: past(entry.date) }">
-      <span>{{ formatDate(entry.date) }}</span>
+      <span class="day">{{ formatDate(entry.date) }}</span>
       <Dish v-if="entry.dish.id" :id="entry.dish.id" :name="entry.dish.name" :lastServed="entry.dish.last" :ingredients="entry.dish.items" />
     </li>
   </ul>
@@ -68,9 +68,10 @@ export default {
         min-height: 52px;
         border-bottom: 1px solid #bbbbbb;
 
-        & > span {
+        .day {
           background: #eecc00;
           padding: 2px 5px;
+          font-size: 13px;
         }
 
         &.past {
@@ -89,7 +90,7 @@ export default {
       display: none;
     }
 
-    ul li > span {
+    day {
       display: inline-block;
     }
   }
