@@ -1,11 +1,11 @@
 <script>
 import { mapState } from 'vuex'
 import { CLEAR_ERROR, GET_INGREDIENTS, GET_UNITS, SET_ACTIVE_ITEM } from './store/mutation_types'
-import Home from '@/components/Home'
+import Navigation from '@/components/Navigation.vue'
 import { CHANGE_STARTDATE } from './store/action_types'
 
 export default {
-  components: { Home },
+  components: { Navigation },
 
   data() {
     return {
@@ -16,14 +16,6 @@ export default {
   
   computed: {
     ...mapState(['error']),
-    startDate: {
-      get() {
-        return this.$store.state.startDate.toISOString().replace(/T.*$/, '')
-      },
-      set(startDate) {
-        this.$store.dispatch(CHANGE_STARTDATE, { startDate })
-      }
-    }
   },
 
   mounted() {
@@ -48,7 +40,7 @@ export default {
   <div @click="deactivateActiveItem">
     <div class="title">
       <h1>Homagix</h1>
-      Wochenplan beginnend ab <input type="date" v-model="startDate" autocomplete="off">
+      <Navigation />
       <span id="version">{{ version }}</span>
     </div>
 
@@ -58,7 +50,7 @@ export default {
     </div>
 
     <div class="content">
-      <Home />
+      <router-view></router-view>
     </div>
   </div>
 </template>

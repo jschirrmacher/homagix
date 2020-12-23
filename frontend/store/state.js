@@ -2,6 +2,7 @@ export function getDefaultState() {
   return {
     startDate: new Date(),
     weekplan: [],
+    dishes: [],
     allIngredients: [],
     standardItems: [],
     changes: [],

@@ -22,6 +22,10 @@ const models = Models({ store, modelWriter })
 const dishReader = DishReader({ store, models, basePath })
 const router = MainRouter({ models, store })
 
+const knownFrontendPatterns = [
+  /^\/recipes/
+]
+
 const app = express()
 app.set('json spaces', 2)
 app.use(bodyParser.urlencoded({extended: false}))
@@ -37,8 +41,12 @@ async function setupHotLoading() {
 setupHotLoading()
 
 app.use((req, res, next) => {
-  logger.info(req.method + ' ' + req.path)
-  next()
+  if (knownFrontendPatterns.some(pattern => req.path.match(pattern))) {
+    res.sendFile(path.join(DIRNAME, '..', 'public', 'index.html'))
+  } else {
+    logger.info(req.method + ' ' + req.path)
+    next()
+  }
 })
 
 app.use(router)
@@ -54,5 +62,4 @@ app.listen(PORT, async () => {
   dishReader.loadData()
   await store.replay()
   logger.info(`Listening on http://localhost:${PORT} (NODE_ENV=${nodeEnv})`)
-
 })

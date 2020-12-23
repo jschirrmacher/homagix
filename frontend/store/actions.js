@@ -15,8 +15,9 @@ import {
   UPDATE_AMOUNT,
   INGREDIENT_CHANGED,
   STARTDATE_CHANGED,
+  DISHES_LOADED,
 } from './mutation_types.js'
-import { CHANGE_GROUP, CHANGE_STARTDATE } from './action_types.js'
+import { CHANGE_GROUP, CHANGE_STARTDATE, LOAD_DISHES } from './action_types.js'
 
 function eqItem(item) {
   const name = item.name.toLowerCase()
@@ -50,6 +51,8 @@ export const actions = {
     context.commit(STARTDATE_CHANGED, { startDate })
     await updateWeekplan(context)
   },
+
+  [LOAD_DISHES]: loadData('/dishes', DISHES_LOADED),
 
   [GET_INGREDIENTS]: loadData('/ingredients', INGREDIENTS_LOADED),
 

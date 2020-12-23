@@ -22,6 +22,10 @@ export const mutations = {
     state.weekplan = weekplan
   },
 
+  [types.DISHES_LOADED](state, { dishes }) {
+    state.dishes = dishes
+  },
+
   [types.INGREDIENTS_LOADED](state, { ingredients, standards }) {
     state.allIngredients = ingredients
     state.standardItems = standards
