@@ -21,6 +21,10 @@ export default {
       const startDate = new Date(this.startDate)
       startDate.setDate(startDate.getDate() + offset)
       this.$store.dispatch(CHANGE_STARTDATE, { startDate })
+    },
+
+    past(date) {
+      return date < (new Date()).toISOString().split('T')[0]
     }
   }
 }
@@ -30,7 +34,7 @@ export default {
 <div class="weekplan">
   <div class="pager" @click="addToDate(-1)">▲</div>
   <ul>
-    <li v-for="entry in weekplan" :key="entry.day" :class="{ served: entry.served }">
+    <li v-for="entry in weekplan" :key="entry.day" :class="{ past: past(entry.date) }">
       <span>{{ formatDate(entry.date) }}</span>
       <Dish :id="entry.dish.id" :name="entry.dish.name" :lastServed="entry.dish.last" :ingredients="entry.dish.items" />
     </li>
@@ -66,11 +70,11 @@ export default {
         padding: 2px 5px;
       }
 
-      li.served {
-        background: lightgrey;
+      li.past {
+        background: #eeeeee;
       }
 
-      li.served {
+      li.past {
         .servedDate, .accept, .delete {
           display: none;
         }
