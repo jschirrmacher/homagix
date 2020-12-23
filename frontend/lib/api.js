@@ -34,27 +34,30 @@ export async function doFetch(method, url, data) {
 
 export function loadData(url, mutationType) {
   return async function (context) {
-    const params = {
-      accepted: context.state.accepted.join(','),
-      inhibit: context.state.declined.join(','),
-    }
-    const result = await doFetch('get', url, params)
-    if (result.error) {
-      context.commit(ERROR_OCCURED, { message: 'Error accessing server', details: result })
-    } else {
+    try {
+      const params = {
+        accepted: context.state.accepted.join(','),
+        inhibit: context.state.declined.join(','),
+      }
+      const result = await doFetch('get', url, params)
+      if (result.error) {
+        throw result
+      }
       context.commit(mutationType, result)
+    } catch (details) {
+      context.commit(ERROR_OCCURED, { message: 'Error accessing server', details })
     }
   }
 }
 
 export async function fetchWeekplan(startDate, declined) {
-  const params = {
-    inhibit: declined.join(','),
-  }
-  const result = await doFetch('get', '/weekplan/' + startDate.toISOString().split('T')[0], params)
-  if (result.error) {
-    return [ERROR_OCCURED, { message: 'Error accessing server', details: result }]
-  } else {
+  try {
+    const result = await doFetch('get', '/weekplan/' + startDate.toISOString().split('T')[0], { inhibit: declined.join(',') })
+    if (result.error) {
+      throw result
+    }
     return [WEEKPLAN_LOADED, { weekplan: result }]
+  } catch (error) {
+    return [ERROR_OCCURED, { message: 'Error accessing server', details: error }]
   }
 }
