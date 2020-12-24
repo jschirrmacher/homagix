@@ -8,10 +8,6 @@ export default Vue.extend({
     id: String,
   },
 
-  mounted() {
-    this.$store.dispatch(LOAD_DISHES)
-  },
-
   computed: {
     ...mapState(['dishes', 'allIngredients']),
 
