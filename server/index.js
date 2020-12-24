@@ -47,6 +47,7 @@ app.use((req, res, next) => {
 app.use(router)
 app.use('/', express.static(path.join(DIRNAME, '..', 'build')))
 app.use('/', express.static(path.join(DIRNAME, '..', 'public')))
+app.use('/images', express.static(path.join(DIRNAME, '..', 'data', 'images')))
 
 app.use(function(err, req, res, next) { // eslint-disable-line no-unused-vars
   logger.error(err)

@@ -58,7 +58,9 @@ export default {
   <div :class="classNames">
     <span class="openclose" @click="toggleOpen"></span>
     <slot />
-    {{name}}
+    <router-link :to="'/recipes/' + id">
+      {{name}}
+    </router-link>
     <span class="servedDate">{{servedDate}}</span>
     <div v-if="opened" class="ingredient-list">
       <IngredientList :items="dishIngredients" />
@@ -107,6 +109,11 @@ export default {
 
   &.opened .openclose {
     transform: rotate(45deg);
+  }
+
+  a {
+    text-decoration: none;
+    color: black;
   }
 }
 

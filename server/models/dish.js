@@ -3,11 +3,12 @@ const dishes = {
   byName: {},
 }
 
-export function addDish(writer, { id, name, source, alwaysOnList, items, recipe }) {
+export function addDish(writer, { id, name, source, alwaysOnList, items, recipe, image }) {
   const dish = { id: '' + id, name, items: items || [] }
   alwaysOnList && (dish.alwaysOnList = true)
   source && (dish.source = source)
   recipe && (dish.recipe = recipe)
+  image && (dish.image = image)
   dishes.byId[dish.id] = dish
   dishes.byName[dish.name.toLowerCase()] = dish
   writer(dish)
