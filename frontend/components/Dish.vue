@@ -43,6 +43,10 @@ export default {
 
     dishIngredients() {
       return this.ingredients.map(i => ({ ...this.allIngredients.find(item => item.id === i.id), amount: i.amount }))
+    },
+
+    slug() {
+      return '/recipes/' + this.id + '/' + this.name.replace(/\s+/g, '-').replace(/[^\w-]/g, '').toLowerCase()
     }
   },
 
@@ -50,6 +54,10 @@ export default {
     toggleOpen() {
       this.opened = !this.opened
     },
+
+    getSlug() {
+
+    }
   }
 }
 </script>
@@ -58,7 +66,7 @@ export default {
   <div :class="classNames">
     <span class="openclose" @click="toggleOpen"></span>
     <slot />
-    <router-link :to="'/recipes/' + id">
+    <router-link :to="slug">
       {{name}}
     </router-link>
     <span class="servedDate">{{servedDate}}</span>

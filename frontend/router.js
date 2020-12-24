@@ -17,7 +17,7 @@ export default new VueRouter({
     { name: 'recipes', path: '/recipes', component: RecipesList },
     {
       name: 'recipe',
-      path: '/recipes/:id',
+      path: '/recipes/:id/*',
       component: Recipe,
       props: true,
       async beforeEnter(to, from, next) {
