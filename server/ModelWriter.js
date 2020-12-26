@@ -4,10 +4,22 @@ import YAML from 'yaml'
 import { getIngredientById } from './models/ingredient.js'
 
 export default ({ basePath }) => {
-  const dishesPath = path.join(basePath, 'dishes')
-  const ingredientsPath = path.join(basePath, 'ingredients')
-  fs.mkdirSync(dishesPath, { recursive: true })
-  fs.mkdirSync(ingredientsPath, { recursive: true })
+  function writer(name) {
+    const base = path.join(basePath, name)
+    fs.mkdirSync(base, { recursive: true })
+    return (id, data) => {
+      const filePath = path.join(base, id + '.yaml')
+      if (data) {
+        fs.writeFileSync(filePath, '---\n' + YAML.stringify(data))
+      } else {
+        fs.unlinkSync(filePath)
+      }
+    }
+  }
+
+  const dishesWriter = writer('dishes')
+  const ingredientsWriter = writer('ingredients')
+  const usersWriter = writer('users')
 
   return {
     writeDish(dish) {
@@ -21,12 +33,19 @@ export default ({ basePath }) => {
         })
       })
       delete data.id
-      const yaml = '---\n' + YAML.stringify(data)
-      fs.writeFileSync(path.join(dishesPath, dish.id + '.yaml'), yaml)
+      dishesWriter(dish.id, data)
     },
 
     writeIngredient(ingredient) {
-      fs.writeFileSync(path.join(ingredientsPath, ingredient.id + '.yaml'), '---\n' + YAML.stringify(ingredient))
+      ingredientsWriter(ingredient.id, ingredient)
+    },
+
+    writeUser(user) {
+      usersWriter(user.id, user)
+    },
+
+    removeUser(id) {
+      usersWriter(id, null)
     }
   }
 }

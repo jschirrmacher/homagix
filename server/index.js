@@ -1,3 +1,5 @@
+import { config } from 'dotenv-flow'
+config()
 import path from 'path'
 import express from 'express'
 import bodyParser from 'body-parser'
@@ -8,6 +10,7 @@ import MainRouter from './MainRouter.js'
 import Location from './Location.js'
 import ModelWriter from './ModelWriter.js'
 import history from 'connect-history-api-fallback'
+import Auth from './auth/auth.js'
 
 const nodeEnv = process.env.NODE_ENV || 'development'
 const logger = console
@@ -21,12 +24,13 @@ const modelWriter = ModelWriter({ basePath })
 const models = Models({ store, modelWriter })
 
 const dishReader = DishReader({ store, models, basePath })
-const router = MainRouter({ models, store })
 
 const app = express()
 app.set('json spaces', 2)
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
+const auth = Auth({ app, models, store, secretOrKey: process.env.SECRET })
+const router = MainRouter({ models, store, auth })
 
 async function setupHotLoading() {
   if (process.env.NODE_ENV === 'development') {

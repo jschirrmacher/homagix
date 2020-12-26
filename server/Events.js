@@ -46,6 +46,25 @@ export default function ({ models }) {
       assert(name !== '', 'No attribute Name')
       assert(models.ingredient.byId(ingredientId), 'Ingredient not found')
       return { type: 'ingredientUpdated', ingredientId, name, value }
+    },
+
+    userAdded(user) {
+      assert(user, 'No user')
+      assert(user.id, 'No id')
+      assert(user.email, 'No email')
+      assert(user.email.match(/.+@.+\..+/), 'email has wrong format')
+      return { type: 'userAdded', user }
+    },
+
+    userRemoved(id) {
+      assert(id, 'No id')
+      return { type: 'userRemoved', id }
+    },
+
+    userChanged(id, user) {
+      assert(id, 'No id')
+      assert(!user.email || user.email.match(/.+@.+\..+/), 'email has wrong format')
+      return { type: 'userChanged', id, user }
     }
   }
 }
