@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '@/components/Home'
+import Planner from '@/components/Planner'
 import RecipesList from '@/components/RecipesList'
 import Recipe from '@/components/Recipe'
 import NotFoundComponent from '@/components/NotFoundComponent'
@@ -13,7 +13,8 @@ export default new VueRouter({
   mode: 'history',
   base: __dirname,
   routes: [
-    { name: 'home', path: '/', component: Home },
+    { name: 'home', path: '/', redirect: '/recipes' },
+    { name: 'planner', path: '/planner', component: Planner },
     { name: 'recipes', path: '/recipes', component: RecipesList },
     {
       name: 'recipe',

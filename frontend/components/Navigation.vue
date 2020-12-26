@@ -8,8 +8,8 @@ export default Vue.extend({
 
 <template>
   <nav>
-    <router-link to="/">Wochenplan</router-link>
     <router-link to="/recipes">Rezepte</router-link>
+    <router-link to="/planner">Wochenplan</router-link>
   </nav>
 </template>
 

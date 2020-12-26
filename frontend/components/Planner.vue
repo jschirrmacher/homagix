@@ -22,7 +22,7 @@ export default {
 </script>
 
 <template>
-  <div class="Home">
+  <div class="Planner">
     <WeekPlan />
     <ShoppingList />
 
@@ -32,7 +32,7 @@ export default {
 </template>
 
 <style lang="scss">
-.Home {
+.Planner {
   padding: 10px 1em;
 }
 
