@@ -4,8 +4,9 @@ import Planner from '@/components/Planner'
 import RecipesList from '@/components/RecipesList'
 import Recipe from '@/components/Recipe'
 import NotFoundComponent from '@/components/NotFoundComponent'
-import store from './store'
-import { LOAD_DISHES } from './store/action_types'
+import store from '@/store'
+import { LOAD_DISHES } from '@/store/action_types'
+import openDialog from '@/lib/openDialog'
 
 Vue.use(VueRouter)
 
@@ -14,7 +15,19 @@ export default new VueRouter({
   base: __dirname,
   routes: [
     { name: 'home', path: '/', redirect: '/recipes' },
-    { name: 'planner', path: '/planner', component: Planner },
+    {
+      name: 'planner',
+      path: '/planner',
+      component: Planner,
+      beforeEnter(to, from, next) {
+        if (store.currentUser) {
+          next()
+        } else {
+          openDialog('LoginDialog')
+          next(false)
+        }
+      }
+    },
     { name: 'recipes', path: '/recipes', component: RecipesList },
     {
       name: 'recipe',

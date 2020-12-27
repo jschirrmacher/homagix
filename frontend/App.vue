@@ -1,11 +1,13 @@
 <script>
 import { mapState } from 'vuex'
 import { CLEAR_ERROR, GET_INGREDIENTS, GET_UNITS, SET_ACTIVE_ITEM } from './store/mutation_types'
-import Navigation from '@/components/Navigation.vue'
 import { CHANGE_STARTDATE } from './store/action_types'
+import Navigation from '@/components/Navigation.vue'
+import RegisterDialog from '@/dialogs/RegisterDialog.vue'
+import LoginDialog from '@/dialogs/LoginDialog.vue'
 
 export default {
-  components: { Navigation },
+  components: { Navigation, RegisterDialog, LoginDialog },
 
   data() {
     return {
@@ -52,6 +54,10 @@ export default {
     <div class="content">
       <router-view></router-view>
     </div>
+
+    <LoginDialog />
+    <RegisterDialog />
+
   </div>
 </template>
 

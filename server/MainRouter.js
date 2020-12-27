@@ -31,7 +31,7 @@ export default function ({ models, store, auth }) {
   const proposalsRouter = ProposalsRouter({ proposer })
   const weekplanRouter = WeekplanRouter({ controller: WeekplanController({ models, proposer }), jsonResult })
   
-  router.use('/session', sessionRouter)
+  router.use('/sessions', sessionRouter)
   router.use('/dishes', dishesRouter)
   router.use('/ingredients', ingredientRouter)
   router.use('/proposals', proposalsRouter)
