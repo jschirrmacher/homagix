@@ -6,7 +6,7 @@ import { Strategy as JwtStrategy } from 'passport-jwt'
 import 'express-session'
 import bcrypt from 'bcryptjs'
 import jsonwebtoken from 'jsonwebtoken'
-import Events from '../Events.js'
+import Events from '../EventStore/Events.js'
 import md5 from 'md5'
 
 export default ({ app, models, store, secretOrKey }) => {

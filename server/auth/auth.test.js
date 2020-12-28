@@ -46,11 +46,9 @@ const store = {
   }
 }
 
-const config = {
-  authSecret: 'secret-key'
-}
+const secretOrKey = 'secret-key'
 
-const auth = AuthFactory({app, Model, models, store, config})
+const auth = AuthFactory({app, Model, models, store, secretOrKey})
 
 function expect(expected) {
   if (typeof expected === 'function') {
@@ -62,7 +60,7 @@ function expect(expected) {
 
 function checkCookie(name, value) {
   name.should.equal('token')
-  jsonwebtoken.verify(value, config.authSecret, (err, decoded) => {
+  jsonwebtoken.verify(value, secretOrKey, (err, decoded) => {
     should(err).be.null()
     decoded.should.have.properties(['iat', 'exp'])
   })
@@ -170,7 +168,7 @@ describe('auth', () => {
   describe('requireJWT', () => {
     it('should authenticate with JWT in header', done => {
       const middleware = auth.requireJWT()
-      const authorization = jsonwebtoken.sign({sub: 4712}, config.authSecret, {expiresIn: '24h'})
+      const authorization = jsonwebtoken.sign({sub: 4712}, secretOrKey, {expiresIn: '24h'})
       const req = {body: {email: 'test3@example.com'}, headers: {authorization}}
       const res = makeExpectedResult()
       middleware(req, res, err => {
@@ -183,7 +181,7 @@ describe('auth', () => {
 
     it('should authenticate with JWT in cookie', done => {
       const middleware = auth.requireJWT()
-      const token = jsonwebtoken.sign({sub: 4712}, config.authSecret, {expiresIn: '24h'})
+      const token = jsonwebtoken.sign({sub: 4712}, secretOrKey, {expiresIn: '24h'})
       const req = {body: {email: 'test3@example.com'}, cookies: {token}}
       const res = makeExpectedResult()
       middleware(req, res, err => {
@@ -226,7 +224,7 @@ describe('auth', () => {
 
     it('should authenticate with JWT token', done => {
       const middleware = auth.requireCodeOrAuth()
-      const token = jsonwebtoken.sign({sub: 4712}, config.authSecret, {expiresIn: '24h'})
+      const token = jsonwebtoken.sign({sub: 4712}, secretOrKey, {expiresIn: '24h'})
       const req = {body: {email: 'test3@example.com'}, cookies: {token}}
       const res = makeExpectedResult()
       middleware(req, res, err => {

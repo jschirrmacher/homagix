@@ -1,13 +1,15 @@
 /*eslint-env mocha*/
-import 'should'
+import should from 'should'
 import request from 'supertest'
 import express from 'express'
+import bodyParser from 'body-parser'
 import SessionRouter from './SessionRouter.js'
 
 const app = express()
 const log = []
 const testUser = {
   id: 4711,
+  email: 'test@example.com',
   access_code: 'test-access-code',
 }
 
@@ -25,6 +27,9 @@ const auth = {
   requireLogin() {
     return function (req, res, next) {
       log.push('auth.requireLogin')
+      if (req.body.email === 'test@example.com' && req.body.password === 'test-password') {
+        req.user = testUser
+      }
       next()
     }
   },
@@ -39,6 +44,8 @@ const auth = {
   }
 }
 
+app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.json())
 const router = SessionRouter({express, auth})
 app.use('/session', router)
 
@@ -54,7 +61,7 @@ describe('SessionRouter', () => {
         .expect(200)
         .expect('Content-Type', /json/)
         .then(response => {
-          response.body.id.should.be.undefined()
+          should(response.body.id).be.undefined()
         })
     })
 
@@ -67,6 +74,7 @@ describe('SessionRouter', () => {
         .then(response => {
           response.body.should.deepEqual({
             id: 4711,
+            email: 'test@example.com',
             access_code: 'test-access-code'
           })
         })
@@ -77,13 +85,13 @@ describe('SessionRouter', () => {
     it('should log in users', () => {
       return request(app)
         .post('/session')
-        .field('email', 'test@example.com')
-        .field('password', 'test-pasword')
+        .set('Content-Type', 'application/json')
+        .send(JSON.stringify({ email: 'test@example.com', password: 'test-password' }))
         .expect(200)
         .expect('Content-Type', /json/)
         .then(response => {
-          response.body.should.deepEqual({token: 'test-token'})
-          log.should.deepEqual(['auth.requireLogin', 'auth.signIn'])
+          response.body.should.deepEqual(testUser)
+          log.should.deepEqual(['auth.requireLogin'])
         })
     })
   })
@@ -92,8 +100,7 @@ describe('SessionRouter', () => {
     it(`should invalidate the user's session`, () => {
       return request(app)
         .get('/session/logout')
-        .expect(302)
-        .expect('location', '/')
+        .expect(200)
         .then(() => {
           log.should.deepEqual(['auth.logout'])
         })
