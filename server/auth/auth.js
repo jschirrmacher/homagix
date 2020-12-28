@@ -7,22 +7,34 @@ import 'express-session'
 import bcrypt from 'bcryptjs'
 import jsonwebtoken from 'jsonwebtoken'
 import Events from '../Events.js'
+import md5 from 'md5'
 
 export default ({ app, models, store, secretOrKey }) => {
-  const secretOrKey = config.authSecret
-  const userChanged = Events({ models }).userChanged
+  const { userAdded, userChanged } = Events({ models })
 
   function getLoginURL(req) {
-    return '/session/' + encodeURIComponent(req.params.accessCode) + '/' + encodeURIComponent(encodeURIComponent(req.originalUrl))
+    return '/sessions/' + encodeURIComponent(req.params.accessCode) + '/' + encodeURIComponent(encodeURIComponent(req.originalUrl))
   }
 
-  function signIn(user) {
-    const token = jsonwebtoken.sign({ sub: user.id, accessToken: user.accessToken }, secretOrKey, { expiresIn: '24h' })
-    return token
+  function signIn(user, req, res) {
+    const token = jsonwebtoken.sign({
+      sub: user.id,
+      firstName: user.firstName,
+      accessToken: user.accessToken
+    }, secretOrKey, { expiresIn: '24h' })
+    res.cookie('token', token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true })
+    req.user = user
+  }
+
+  function register(user, req, res) {
+    user.id = md5(process.hrtime())
+    user.password = bcrypt.hashSync(user.password, 10)
+    store.emit(userAdded(user))
+    return signIn(user, req, res)
   }
 
   function logout(res) {
-    res.cookie('token', '')
+    res.cookie('token', '', { maxAge: -1 })
   }
 
   function jwtFromRequest(req) {
@@ -30,9 +42,9 @@ export default ({ app, models, store, secretOrKey }) => {
   }
 
   // @todo move function to account router
-  async function setPassword(accessCode, password) {
+  function setPassword(accessCode, password) {
     const user = models.user.getByAccessCode(accessCode)
-    const passwordHash = await bcrypt.hash(password, 10)
+    const passwordHash = bcrypt.hashSync(password, 10)
     store.emit(userChanged(user.id, { password: passwordHash }))
     return {message: 'Passwort ist geändert'}
   }
@@ -95,8 +107,7 @@ export default ({ app, models, store, secretOrKey }) => {
             res.status(401).json({error: 'Not authenticated'})
           }
         } else if (!req.user && user) {
-          req.user = user
-          res.cookie('token', signIn(user))
+          signIn(user, req, res)
           next()
         } else {
           next()
@@ -126,6 +137,7 @@ export default ({ app, models, store, secretOrKey }) => {
   return {
     authenticate,
     signIn,
+    register,
     setPassword,
     logout,
 

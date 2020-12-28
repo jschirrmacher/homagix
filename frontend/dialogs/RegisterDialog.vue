@@ -1,6 +1,7 @@
 <script>
 import Dialog from './Dialog'
-import openDialog from '@/lib/openDialog'
+import { openDialog, closeDialogs } from '@/lib/dialogs'
+import { CURRENTUSER_SET } from '../store/mutation_types'
 
 const defaultMessage = 'Sag uns, wer Du bist, damit wir deine Planung wieder Dir zuordnen können:'
 
@@ -32,16 +33,18 @@ export default {
         }
         const response = await fetch('/accounts', { body: JSON.stringify(params), headers, method: 'POST' })
         if (!response.ok) {
-          if (response.status === 401) {
-            throw Error('Unbekannter Benutzer')
+          if (response.status === 409) {
+            throw Error('Du bist bereits registriert - melde dich doch einfach an!')
           }
           throw Error(`${response.status} ${response.statusText}`)
         }
         const userInfo = await response.json()
-        if (userInfo.loggedIn) {
+        if (userInfo.id) {
+          closeDialogs()
+          this.$store.commit(CURRENTUSER_SET, userInfo)
           this.$router.push('/planner')
         } else {
-          throw Error('Not logged in')
+          throw Error('Unerwarteter Fehler beim Registrieren')
         }
       } catch (error) {
         this.message = error.message

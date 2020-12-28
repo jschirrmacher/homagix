@@ -1,8 +1,22 @@
 <script>
 import Vue from 'vue'
+import { doFetch } from '@/lib/api'
+import { CURRENTUSER_SET } from '../store/mutation_types'
 
 export default Vue.extend({
-  
+  computed: {
+    loggedIn() {
+      return this.$store.state.currentUser.id
+    }
+  },
+
+  methods: {
+    async logout() {
+      await doFetch('get', '/sessions/logout')
+      this.$router.push('/').catch(() => {})
+      this.$store.commit(CURRENTUSER_SET, {})
+    }
+  }
 })
 </script>
 
@@ -10,6 +24,7 @@ export default Vue.extend({
   <nav>
     <router-link to="/recipes">Rezepte</router-link>
     <router-link to="/planner">Wochenplan</router-link>
+    <a v-if="loggedIn" href="#" @click.prevent="logout" id="logout">Abmelden</a>
   </nav>
 </template>
 
@@ -26,6 +41,12 @@ export default Vue.extend({
 
     &:hover {
       color: #dddddd;
+    }
+
+    &#logout {
+      position: absolute;
+      right: 0;
+      top: 5px;
     }
   }
 </style>

@@ -1,3 +1,4 @@
+export const INIT_APP = 'INIT_APP'
 export const CHANGE_GROUP = 'CHANGE_GROUP'
 export const CHANGE_STARTDATE = 'CHANGE_STARTDATE'
 export const LOAD_DISHES = 'LOAD_DISHES'

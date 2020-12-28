@@ -16,7 +16,7 @@ const auth = {
     return function (req, res, next) {
       log.push('auth.requireJWT')
       if (req.headers.authorization === 'test-token') {
-        req.user = { ...testUser, loggedIn: true }
+        req.user = testUser
       }
       next()
     }
@@ -54,7 +54,7 @@ describe('SessionRouter', () => {
         .expect(200)
         .expect('Content-Type', /json/)
         .then(response => {
-          response.body.should.deepEqual({ loggedIn: false })
+          response.body.id.should.be.undefined()
         })
     })
 
@@ -67,7 +67,6 @@ describe('SessionRouter', () => {
         .then(response => {
           response.body.should.deepEqual({
             id: 4711,
-            loggedIn: true,
             access_code: 'test-access-code'
           })
         })

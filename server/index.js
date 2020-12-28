@@ -55,7 +55,7 @@ app.use('/images', express.static(path.join(DIRNAME, '..', 'data', 'images')))
 
 app.use(function(err, req, res, next) { // eslint-disable-line no-unused-vars
   logger.error(err)
-  res.status(500).json({error: err.toString()})
+  res.status(err.httpStatus || 500).json({ error: err.message || err.toString() })
 })
 
 app.listen(PORT, async () => {

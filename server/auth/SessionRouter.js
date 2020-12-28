@@ -2,24 +2,20 @@ import express from 'express'
 
 export default ({ auth }) => {
   function getUserInfo(req, res) {
-    const user = req.user || {}
-    user.loggedIn = !!user.id
+    const user = { ...(req.user || {}) }
+    delete user.password
     res.json(user)
-  }
-
-  async function login(req, res) {
-    res.json({ token: auth.signIn(req, res) })
   }
 
   function logout(req, res) {
     auth.logout(res)
-    res.redirect('/')
+    res.json({})
   }
 
   const router = express.Router()
 
   router.get('/', auth.requireJWT({ allowAnonymous: true }), getUserInfo)
-  router.post('/', auth.requireLogin(), login)
+  router.post('/', auth.requireLogin(), getUserInfo)
   router.get('/logout', logout)
 
   return router

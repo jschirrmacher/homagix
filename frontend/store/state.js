@@ -1,5 +1,6 @@
 export function getDefaultState() {
   return {
+    currentUser: {},
     startDate: new Date(),
     weekplan: [],
     dishes: [],

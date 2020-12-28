@@ -16,8 +16,10 @@ import {
   INGREDIENT_CHANGED,
   STARTDATE_CHANGED,
   DISHES_LOADED,
+  CURRENTUSER_SET,
 } from './mutation_types.js'
-import { CHANGE_GROUP, CHANGE_STARTDATE, LOAD_DISHES } from './action_types.js'
+import { CHANGE_GROUP, CHANGE_STARTDATE, INIT_APP, LOAD_DISHES } from './action_types.js'
+import jwt_decode from 'jwt-decode'
 
 function eqItem(item) {
   const name = item.name.toLowerCase()
@@ -47,6 +49,20 @@ async function updateWeekplan(context) {
 }
 
 export const actions = {
+  [INIT_APP](context) {
+    const match = document.cookie.match(/\btoken=([^;]*)/)
+    if (match) {
+      const token = jwt_decode(match[1])
+      if (token.exp && token.exp < +new Date()) {
+        const user = {
+          id: token.sub,
+          firstName: token.firstName,
+        }
+        context.commit(CURRENTUSER_SET, user)
+      }
+    }
+  },
+
   async [CHANGE_STARTDATE](context, { startDate }) {
     context.commit(STARTDATE_CHANGED, { startDate })
     await updateWeekplan(context)

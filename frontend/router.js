@@ -6,7 +6,7 @@ import Recipe from '@/components/Recipe'
 import NotFoundComponent from '@/components/NotFoundComponent'
 import store from '@/store'
 import { LOAD_DISHES } from '@/store/action_types'
-import openDialog from '@/lib/openDialog'
+import { openDialog } from '@/lib/dialogs'
 
 Vue.use(VueRouter)
 
@@ -19,12 +19,13 @@ export default new VueRouter({
       name: 'planner',
       path: '/planner',
       component: Planner,
-      beforeEnter(to, from, next) {
-        if (store.currentUser) {
+      async beforeEnter(to, from, next) {
+        if (store.state.currentUser.id) {
           next()
-        } else {
-          openDialog('LoginDialog')
+        } else if (openDialog('LoginDialog')) {
           next(false)
+        } else {
+          next('/')
         }
       }
     },

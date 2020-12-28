@@ -1,6 +1,7 @@
 <script>
 import Dialog from './Dialog'
-import openDialog from '@/lib/openDialog'
+import { openDialog, closeDialogs } from '@/lib/dialogs'
+import { CURRENTUSER_SET } from '../store/mutation_types'
 
 const defaultMessage = 'Gib deine E-Mail-Adresse und dein Passwort ein, um Zugriff auf deine Daten zu erhalten'
 
@@ -36,10 +37,13 @@ export default {
           throw Error(`${response.status} ${response.statusText}`)
         }
         const userInfo = await response.json()
-        if (userInfo.loggedIn) {
-          this.close()
+        if (userInfo.id) {
+          closeDialogs()
+          this.$store.commit(CURRENTUSER_SET, userInfo)
+          this.password = ''
+          this.$router.push('/planner')
         } else {
-          throw Error('Not logged in')
+          throw Error('Unerwarteter Fehler beim Anmelden')
         }
       } catch (error) {
         this.message = error.message
@@ -53,6 +57,7 @@ export default {
     },
 
     register() {
+      this.password = ''
       openDialog('RegisterDialog')
     }
   }
@@ -80,7 +85,7 @@ export default {
       <!--br>
       <a href="#" @click="close">Passwort vergessen?</a-->
       <br>
-      Neu hier? <a href="#" @click.prevent="register">Hier Registieren</a>
+      Neu hier? <a href="#" @click.prevent="register">Hier Registrieren</a>
     </form>
   </Dialog>
 </template>

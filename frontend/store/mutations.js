@@ -6,6 +6,10 @@ export const mutations = {
     Object.assign(state, getDefaultState())
   },
 
+  [types.CURRENTUSER_SET](state, user) {
+    state.currentUser = user
+  },
+
   [types.ERROR_OCCURED](state, error) {
     state.error = error
   },
