@@ -4,9 +4,9 @@ import request from 'supertest'
 import bodyParser from 'body-parser'
 import Router from './IngredientRouter.js'
 import Controller from './IngredientController.js'
-import models from './MockedModel.js'
-import { store } from './Store.mock.js'
-import Events from './Events.js'
+import models from './models/MockedModel.js'
+import { store } from './EventStore/Store.mock.js'
+import Events from './EventStore/Events.js'
 
 const jsonResult = func => async (req, res) => res.json(await func(req))
 const controller = Controller({ models, store })

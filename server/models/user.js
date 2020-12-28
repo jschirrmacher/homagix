@@ -1,4 +1,4 @@
-import Events from '../Events.js'
+import Events from '../EventStore/Events.js'
 
 export default function ({ store, models, modelWriter }) {
   const { userAdded, userRemoved, userChanged } = Events({ models })

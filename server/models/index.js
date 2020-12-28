@@ -1,4 +1,4 @@
-import Events from '../Events.js'
+import Events from '../EventStore/Events.js'
 import Dish from './dish.js'
 import Ingredient from './ingredient.js'
 import DishHistory from './dishHistory.js'

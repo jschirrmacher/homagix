@@ -1,5 +1,5 @@
-import Models from './models/index.js'
-import { store } from './Store.mock.js'
+import Models from './index.js'
+import { store } from '../EventStore/Store.mock.js'
 
 const modelWriter = {
   writeDish() {},

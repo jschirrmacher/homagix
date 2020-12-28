@@ -1,7 +1,7 @@
 /*eslint-env mocha*/
 import should from 'should'
-import Events from '../Events.js'
-import User from './User.js'
+import Events from '../EventStore/Events.js'
+import User from './user.js'
 
 const storeListener = {}
 const store = {

@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, unlinkSync, readdirSync, readFileSync, writeFile
 import { resolve } from 'path'
 import { Transform } from 'stream'
 import es from 'event-stream'
-import location from './Location.js'
+import location from '../lib/Location.js'
 
 const { DIRNAME } = location(import.meta.url)
 

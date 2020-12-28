@@ -4,9 +4,9 @@ import should from 'should'
 import EventStore from './EventStore.js'
 import path from 'path'
 import fs from 'fs'
-import logger from './MockLogger.js'
-import MockFS from './MockFS.js'
-import Location from './Location.js'
+import logger from '../lib/MockLogger.js'
+import MockFS from '../lib/MockFS.js'
+import Location from '../lib/Location.js'
 
 const { DIRNAME } = Location(import.meta.url)
 const basePath = path.resolve(DIRNAME, 'testdata')

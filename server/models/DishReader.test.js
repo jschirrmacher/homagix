@@ -2,11 +2,11 @@ import should from 'should'
 import fs from 'fs'
 import path from 'path'
 import DishReader from './DishReader.js'
-import MockFS from './MockFS.js'
+import MockFS from '../lib/MockFS.js'
 import models from './MockedModel.js'
-import Events from './Events.js'
-import Location from './Location.js'
-import { store, eventList } from './Store.mock.js'
+import Events from '../EventStore/Events.js'
+import Location from '../lib/Location.js'
+import { store, eventList } from '../EventStore/Store.mock.js'
 
 const { DIRNAME } = Location(import.meta.url)
 

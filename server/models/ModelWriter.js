@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import YAML from 'yaml'
-import { getIngredientById } from './models/ingredient.js'
+import { getIngredientById } from './ingredient.js'
 
 export default ({ basePath }) => {
   function writer(name) {

@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid'
-import Events from './Events.js'
+import Events from './EventStore/Events.js'
 
 export default ({ models, store }) => {
   const { ingredientUpdated, ingredientAdded } = Events({ models })

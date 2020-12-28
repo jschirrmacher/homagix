@@ -1,14 +1,14 @@
 import express from 'express'
-import Events from './Events.js'
+import Events from './EventStore/Events.js'
 import SessionRouter from './auth/SessionRouter.js'
 import AccountRouter from './auth/AccountRouter.js'
-import DishProposer from './DishProposer.js'
+import DishProposer from './Weekplan/DishProposer.js'
 import DishesRouter from './DishesRouter.js'
 import IngredientRouter from './IngredientRouter.js'
-import ProposalsRouter from './ProposalsRouter.js'
+import ProposalsRouter from './Weekplan/ProposalsRouter.js'
 import IngredientController from './IngredientController.js'
-import WeekplanController from './WeekplanController.js'
-import WeekplanRouter from './WeekplanRouter.js'
+import WeekplanController from './Weekplan/WeekplanController.js'
+import WeekplanRouter from './Weekplan/WeekplanRouter.js'
 
 function jsonResult(func) {
   return async (req, res) => {
