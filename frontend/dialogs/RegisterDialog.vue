@@ -2,59 +2,58 @@
 import Dialog from './Dialog'
 import { openDialog, closeDialogs } from '@/lib/dialogs'
 import { CURRENTUSER_SET } from '../store/mutation_types'
+import sendForm from '../lib/sendForm'
+import DialogFormField from './DialogFormField'
 
 const defaultMessage = 'Sag uns, wer Du bist, damit wir deine Planung wieder Dir zuordnen können:'
 
 export default {
   components: {
     Dialog,
+    DialogFormField,
   },
 
   data() {
     return  {
       message: defaultMessage,
       messageType: 'info',
-      email: '',
-      firstName: '',
-      password: '',
+      fields: {
+        email: '',
+        firstName: '',
+        password: '',
+      },
+      marked: {
+        email: false,
+        firstName: false,
+        password: false,
+      },
     }
   },
 
   methods: {
     async register() {
-      try {
-        const headers = {
-          'content-type': 'application/json'
-        }
-        const params = {
-          email: this.email,
-          firstName: this.firstName,
-          password: this.password,
-        }
-        const response = await fetch('/accounts', { body: JSON.stringify(params), headers, method: 'POST' })
-        if (!response.ok) {
-          if (response.status === 409) {
-            throw Error('Du bist bereits registriert - melde dich doch einfach an!')
-          }
-          throw Error(`${response.status} ${response.statusText}`)
-        }
-        const userInfo = await response.json()
-        if (userInfo.id) {
-          closeDialogs()
-          this.$store.commit(CURRENTUSER_SET, userInfo)
-          this.$router.push('/planner')
-        } else {
-          throw Error('Unerwarteter Fehler beim Registrieren')
-        }
-      } catch (error) {
-        this.message = error.message
+      const emptyFields = Object.entries(this.fields).filter(([name, value]) => !value).map(([name, value]) => name)
+      if (emptyFields.length) {
+        emptyFields.forEach(fieldName => this.marked[fieldName] = true)
+        this.message = 'Es sind noch nicht alle Felder gefüllt'
         this.messageType = 'error'
+        return
+      }
+      const userInfo = await sendForm('POST', '/accounts', this.fields, { 409: 'Du bist bereits registriert - melde dich doch einfach an!' })
+      if (userInfo.error || !userInfo.id) {
+        this.message = userInfo.error || 'Unerwarteter Fehler beim Registrieren'
+        this.messageType = 'error'
+      } else {
+        closeDialogs()
+        this.$store.commit(CURRENTUSER_SET, userInfo)
+        this.$router.push('/planner')
       }
     },
 
     clearError() {
       this.message = defaultMessage
       this.messageType = 'info'
+      Object.keys(this.marked).forEach(field => this.marked[field] = false)
     },
 
     login() {
@@ -69,24 +68,18 @@ export default {
     <h2>Als neuer Nutzer registieren</h2>
     <p :class="messageType">{{ message }}</p>
 
-    <form @submit.prevent="register">
-      <label>
-        E-Mail
-        <input type="email" v-model="email" name="email" autocomplete="current-email" @keydown="clearError">
-      </label>
-      <span class="field-info">An diese Adresse senden wir einen Zugangslink, wenn Du z.B. mal dein Passwort vergessen hast</span>
-
-      <label>
-        Vorname
-        <input type="text" v-model="firstName" name="firstName" autocomplete="given-name" @keydown="clearError">
-      </label>
-      <span class="field-info">Sag uns, wie wir Dich anreden sollen. Wir duzen grundsätzlich, das ist hoffetnlich Ok für Dich</span>
-
-      <label>
-        Passwort
-        <input type="password" v-model="password" name="password" autocomplete="current-password" @keydown="clearError">
-      </label>
-      <span class="field-info">Dein Kennwort, mit dem wir bei Anmeldungen prüfen können, dass Du es tatsächlich bist</span>
+    <form @submit.prevent="register" @keypress="clearError">
+      <DialogFormField label="E-Mail" type="email" name="email" v-model="fields.email" autocomplete="current-email" :marked="marked['email']"
+        :validation="/^[^\s@]+@\S+\.\S+$/"
+        validationMessage="Das sieht nicht nach einer gültigen E-Mail-Adresse aus"
+        defaultInfo="An diese Adresse senden wir einen Zugangslink, falls Du mal dein Passwort vergessen hast"
+      />
+      <DialogFormField label="Vorname" type="text" name="firstName" v-model="fields.firstName" autocomplete="given-name" :marked="marked['firstName']"
+        defaultInfo="Sag uns, wie wir Dich anreden sollen. Wir duzen grundsätzlich, das ist hoffetnlich Ok für Dich"
+      />
+      <DialogFormField label="Passwort" type="password" name="password" v-model="fields.password" autocomplete="current-password" :marked="marked['password']"
+        defaultInfo="Dein Kennwort, mit dem wir bei Anmeldungen prüfen können, dass Du es tatsächlich bist"
+      />
 
       <button type="submit">Registrieren</button>
 
@@ -100,24 +93,20 @@ export default {
   </Dialog>
 </template>
 
-<style lang="scss" scoped>
-  #RegisterDialog {
-    width: 500px;
-  }
+<style lang="scss">
+#RegisterDialog {
+  width: 500px;
 
-  input {
-    width: calc(100% - 120px);
-    float: right;
+  label {
+    display: flex;
+
+    .label-text {
+      flex: 0 0 120px;
+    }
   }
 
   .info {
     font-size: 14px;
   }
-
-  .field-info {
-    display: inline-block;
-    width: calc(100% - 120px);
-    margin: 0 0 1em 120px;
-    font-size: 14px;
-  }
+}
 </style>

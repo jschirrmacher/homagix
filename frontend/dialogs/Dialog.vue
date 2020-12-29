@@ -46,11 +46,6 @@ export default {
     box-shadow: 3px 3px 5px #555555;
     padding: 20px;
 
-    label {
-      display: block;
-      line-height: 2.2em;
-    }
-
     button {
       float: right;
       margin: 1em 10px;

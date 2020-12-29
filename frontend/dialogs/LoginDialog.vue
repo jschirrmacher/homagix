@@ -2,52 +2,39 @@
 import Dialog from './Dialog'
 import { openDialog, closeDialogs } from '@/lib/dialogs'
 import { CURRENTUSER_SET } from '../store/mutation_types'
+import sendForm from '../lib/sendForm'
+import DialogFormField from './DialogFormField'
 
 const defaultMessage = 'Gib deine E-Mail-Adresse und dein Passwort ein, um Zugriff auf deine Daten zu erhalten'
 
 export default {
   components: {
     Dialog,
+    DialogFormField,
   },
 
   data() {
     return  {
       message: defaultMessage,
       messageType: 'info',
-      email: '',
-      password: '',
+      fields: {
+        email: '',
+        password: '',
+      },
     }
   },
 
   methods: {
     async login() {
-      try {
-        const headers = {
-          'content-type': 'application/json'
-        }
-        const params = {
-          email: this.email,
-          password: this.password,
-        }
-        const response = await fetch('/sessions', { body: JSON.stringify(params), headers, method: 'POST' })
-        if (!response.ok) {
-          if (response.status === 401) {
-            throw Error('Unbekannter Benutzer')
-          }
-          throw Error(`${response.status} ${response.statusText}`)
-        }
-        const userInfo = await response.json()
-        if (userInfo.id) {
-          closeDialogs()
-          this.$store.commit(CURRENTUSER_SET, userInfo)
-          this.password = ''
-          this.$router.push('/planner')
-        } else {
-          throw Error('Unerwarteter Fehler beim Anmelden')
-        }
-      } catch (error) {
-        this.message = error.message
+      const userInfo = await sendForm('POST', '/sessions', this.fields, { 401: 'Unbekannter Benutzer' })
+      if (userInfo.error || !userInfo.id) {
+        this.message = userInfo.error || 'Unerwarteter Fehler beim Anmelden'
         this.messageType = 'error'
+      } else {
+        closeDialogs()
+        this.$store.commit(CURRENTUSER_SET, userInfo)
+        this.fields.password = ''
+        this.$router.push('/planner')
       }
     },
 
@@ -57,7 +44,7 @@ export default {
     },
 
     register() {
-      this.password = ''
+      this.fields.password = ''
       openDialog('RegisterDialog')
     }
   }
@@ -70,15 +57,8 @@ export default {
     <p :class="messageType">{{ message }}</p>
 
     <form @submit.prevent="login">
-      <label>
-        E-Mail
-        <input type="text" v-model="email" name="email" autocomplete="current-email" @keydown="clearError">
-      </label>
-
-      <label>
-        Passwort
-        <input type="password" v-model="password" name="password" autocomplete="current-password" @keydown="clearError">
-      </label>
+      <DialogFormField label="E-Mail" type="email" name="email" v-model="fields.email" autocomplete="current-email" :validation="/^[^\s@]+@\S+\.\S+$/" validationMessage="Das sieht nicht nach einer gültigen E-Mail-Adresse aus" />
+      <DialogFormField label="Passwort" type="password" name="password" v-model="fields.password" autocomplete="current-password" />
 
       <button type="submit">Anmelden</button>
 
@@ -90,13 +70,16 @@ export default {
   </Dialog>
 </template>
 
-<style lang="scss" scoped>
-  #LoginDialog {
-    width: 500px;
-  }
+<style lang="scss">
+#LoginDialog {
+  width: 500px;
 
-  input {
-    width: calc(100% - 100px);
-    float: right;
+  label {
+    display: flex;
+
+    .label-text {
+      width: 100px;
+    }
   }
+}
 </style>

@@ -46,7 +46,7 @@ export default {
       <span id="version">{{ version }}</span>
     </div>
 
-    <div v-if="error.message" class="error">
+    <div v-if="error.message" class="error-container">
       <span @click="clearError">×</span>
       {{ error.message }}
     </div>
@@ -119,8 +119,11 @@ html, body {
 }
 
 .error {
-  border: 2px solid red;
   color: red;
+}
+
+.error-container {
+  border: 2px solid red;
   margin: 10px;
   padding: 10px;
   
