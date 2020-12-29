@@ -11,4 +11,6 @@ export default [
   { name: "Zehen", step: 1 },
   { name: "Würfel", step: 1 },
   { name: "Bund", step: 1 },
+  { name: "TL", step: 1 },
+  { name: "EL", step: 1 },
 ]
