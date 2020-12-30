@@ -18,6 +18,7 @@ export default ({ models, store }) => {
 
   async function addIngredient(ingredient) {
     ingredient.id = uuid()
+    ingredient.group = 'other'
     await store.emit(ingredientAdded(ingredient))
     return ingredient
   }

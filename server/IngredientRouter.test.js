@@ -49,4 +49,9 @@ describe('IngredientRouter', () => {
     const result = await request(app).post('/').send({ name: 'new ingredient', unit: 'g' })
     result.body.id.should.match(/^[0-9a-f-]+$/)
   })
+
+  it('should use group "other" for new ingredients', async () => {
+    const result = await request(app).post('/').send({ name: 'new ingredient ' + (+new Date()), amount: 100, unit: 'g' })
+    result.body.group.should.equal('other')
+  })
 })
