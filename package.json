@@ -1,6 +1,6 @@
 {
   "name": "homagix",
-  "version": "3.1.0",
+  "version": "4.0.0",
   "description": "Makes food shopping easier",
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "connect-history-api-fallback": "^1.6.0",
+    "cookie-parser": "^1.4.5",
     "dialog-polyfill": "^0.5.4",
     "dotenv-flow": "^3.2.0",
     "event-stream": "^4.0.1",
@@ -35,6 +36,8 @@
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^3.1.2",
     "md5": "^2.3.0",
+    "mustache": "^4.1.0",
+    "nodemailer": "^6.4.17",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "uuid": "^8.3.2",

@@ -1,7 +1,6 @@
-import { config } from 'dotenv-flow'
-config()
 import path from 'path'
 import express from 'express'
+import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
 import Models from './models/index.js'
 import EventStore from './EventStore/EventStore.js'
@@ -27,6 +26,7 @@ const dishReader = DishReader({ store, models, basePath })
 
 const app = express()
 app.set('json spaces', 2)
+app.use(cookieParser())
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 const auth = Auth({ app, models, store, secretOrKey: process.env.SECRET })
@@ -41,14 +41,13 @@ async function setupHotLoading() {
 
 setupHotLoading()
 
-app.use(history())
-
 app.use((req, res, next) => {
   logger.info(req.method + ' ' + req.path)
   next()
 })
 
 app.use(router)
+app.use(history())
 app.use('/', express.static(path.join(DIRNAME, '..', 'build')))
 app.use('/', express.static(path.join(DIRNAME, '..', 'public')))
 app.use('/images', express.static(path.join(DIRNAME, '..', 'data', 'images')))

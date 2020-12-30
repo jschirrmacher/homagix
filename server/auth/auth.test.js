@@ -21,13 +21,6 @@ const models = {
       }
       throw `No user found with this e-mail address`
     },
-    getByAccessCode(code) {
-      const user = users.find(user => user.access_code === code)
-      if (user) {
-        return user
-      }
-      throw `No user found with this access code`
-    },
     getById(id) {
       const user = users.find(user => user.id === id)
       if (user) {

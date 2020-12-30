@@ -8,11 +8,12 @@ export default class AccessCodeStrategy extends Strategy {
   }
 
   authenticate(req) {
-    const accessCode = req.params.accessCode || req.cookies.accessCode
-    if (!accessCode) {
-      this.fail('no access code provided')
+    const accessCode = req.params.accessCode
+    const id = req.params.id
+    if (!accessCode || !id) {
+      this.fail('access code or id not provided')
     } else {
-      this.verify(accessCode, (err, info) => err ? this.fail(err) : this.success(info))
+      this.verify(accessCode, id, (err, info) => err ? this.fail(err) : this.success(info))
     }
   }
 }

@@ -1,7 +1,6 @@
 import passport from 'passport'
 import LoginStrategy from './LoginStrategy.js'
 import AccessCodeStrategy from './AccessCodeStrategy.js'
-import CodeAndHashStrategy from './CodeAndHashStrategy.js'
 import { Strategy as JwtStrategy } from 'passport-jwt'
 import 'express-session'
 import bcrypt from 'bcryptjs'
@@ -12,17 +11,12 @@ import md5 from 'md5'
 export default ({ app, models, store, secretOrKey }) => {
   const { userAdded, userChanged } = Events({ models })
 
-  function getLoginURL(req) {
-    return '/sessions/' + encodeURIComponent(req.params.accessCode) + '/' + encodeURIComponent(encodeURIComponent(req.originalUrl))
-  }
-
   function signIn(user, req, res) {
     const token = jsonwebtoken.sign({
       sub: user.id,
-      firstName: user.firstName,
-      accessToken: user.accessToken
+      firstName: user.firstName
     }, secretOrKey, { expiresIn: '24h' })
-    res.cookie('token', token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true })
+    res.cookie('token', token, { maxAge: 24 * 60 * 60 * 1000 })
     req.user = user
   }
 
@@ -37,16 +31,23 @@ export default ({ app, models, store, secretOrKey }) => {
     res.cookie('token', '', { maxAge: -1 })
   }
 
+  function generateAccessCode(user) {
+    user.accessCode = md5(process.hrtime())
+    store.emit(userChanged(user.id, user))
+  }
+
+  function resetAccessCode(user) {
+    user.accessCode = ''
+    store.emit(userChanged(user.id, user))
+  }
+
   function jwtFromRequest(req) {
     return (req.cookies && req.cookies.token) || req.headers.authorization
   }
 
-  // @todo move function to account router
-  function setPassword(accessCode, password) {
-    const user = models.user.getByAccessCode(accessCode)
-    const passwordHash = bcrypt.hashSync(password, 10)
-    store.emit(userChanged(user.id, { password: passwordHash }))
-    return {message: 'Passwort ist geändert'}
+  function setPassword(user, newPassword) {
+    user.password = bcrypt.hashSync(newPassword, 10)
+    store.emit(userChanged(user.id, user))
   }
 
   passport.use(new LoginStrategy(async (email, username, password, done) => {
@@ -69,26 +70,13 @@ export default ({ app, models, store, secretOrKey }) => {
     }
   }))
 
-  passport.use(new AccessCodeStrategy(async (accessCode, done) => {
+  passport.use(new AccessCodeStrategy(async (accessCode, id, done) => {
     try {
-      const user = models.user.getByAccessCode(accessCode)
-      if (!user.password) {
+      const user = models.user.getById(id)
+      if (user && user.accessCode === accessCode) {
         done(null, user)
       } else {
-        done('password is set so you cannot login without a hash code', false)
-      }
-    } catch (error) {
-      done(error, false)
-    }
-  }))
-
-  passport.use(new CodeAndHashStrategy(async (accessCode, hash, done) => {
-    try {
-      const user = models.user.getByAccessCode(accessCode)
-      if (user && user.hash && user.hash === hash) {
-        done(null, user)
-      } else {
-        done('invalid credentials', false)
+        done('unknown access code', false)
       }
     } catch (error) {
       done(error, false)
@@ -101,11 +89,7 @@ export default ({ app, models, store, secretOrKey }) => {
         if (err) {
           return next(err)
         } else if (!req.user && !user && !options.allowAnonymous) {
-          if (options.redirect) {
-            res.redirect(getLoginURL(req))
-          } else {
-            res.status(401).json({error: 'Not authenticated'})
-          }
+          res.status(401).json({error: 'Not authenticated'})
         } else if (!req.user && user) {
           signIn(user, req, res)
           next()
@@ -119,8 +103,7 @@ export default ({ app, models, store, secretOrKey }) => {
   app.use(passport.initialize())
   app.use(passport.session())
 
-  const requireCodeOrAuth = (options = {}) => authenticate(['jwt', 'access_code'], options)
-  const requireCodeAndHash = (options = {}) => authenticate('codeNHash', options)
+  const requireCode = (options = {}) => authenticate(['access_code'], options)
   const requireJWT = (options = {}) => authenticate('jwt', options)
   const requireLogin = (options = {}) => authenticate('login', options)
 
@@ -140,9 +123,10 @@ export default ({ app, models, store, secretOrKey }) => {
     register,
     setPassword,
     logout,
+    generateAccessCode,
+    resetAccessCode,
 
-    requireCodeOrAuth,
-    requireCodeAndHash,
+    requireCode,
     requireJWT,
     requireLogin,
     requireAdmin

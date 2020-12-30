@@ -1,9 +1,9 @@
 <script>
-import Dialog from './Dialog'
+import Dialog from '@/dialogs/Dialog'
 import { openDialog, closeDialogs } from '@/lib/dialogs'
-import { CURRENTUSER_SET } from '../store/mutation_types'
-import sendForm from '../lib/sendForm'
-import DialogFormField from './DialogFormField'
+import { CURRENTUSER_SET } from '@/store/mutation_types'
+import sendForm from '@/lib/sendForm'
+import DialogFormField from '@/dialogs/DialogFormField'
 
 const defaultMessage = 'Gib deine E-Mail-Adresse und dein Passwort ein, um Zugriff auf deine Daten zu erhalten'
 
@@ -33,7 +33,7 @@ export default {
       } else {
         closeDialogs()
         this.$store.commit(CURRENTUSER_SET, userInfo)
-        this.fields.password = ''
+        this.reset()
         this.$router.push('/planner')
       }
     },
@@ -43,8 +43,18 @@ export default {
       this.messageType = 'info'
     },
 
-    register() {
+    reset() {
+      this.clearError()
       this.fields.password = ''
+    },
+
+    lostPassword() {
+      this.reset()
+      openDialog('LostPasswordDialog')
+    },
+
+    register() {
+      this.reset()
       openDialog('RegisterDialog')
     }
   }
@@ -52,8 +62,7 @@ export default {
 </script>
 
 <template>
-  <Dialog id="LoginDialog">
-    <h2>Anmelden</h2>
+  <Dialog id="LoginDialog" title="Anmelden">
     <p :class="messageType">{{ message }}</p>
 
     <form @submit.prevent="login">
@@ -62,8 +71,8 @@ export default {
 
       <button type="submit">Anmelden</button>
 
-      <!--br>
-      <a href="#" @click="close">Passwort vergessen?</a-->
+      <br>
+      Passwort vergessen? <a href="#" @click="lostPassword">Zugangslink senden</a>
       <br>
       Neu hier? <a href="#" @click.prevent="register">Hier Registrieren</a>
     </form>

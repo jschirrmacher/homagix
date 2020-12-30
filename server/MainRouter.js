@@ -9,6 +9,10 @@ import ProposalsRouter from './Weekplan/ProposalsRouter.js'
 import IngredientController from './IngredientController.js'
 import WeekplanController from './Weekplan/WeekplanController.js'
 import WeekplanRouter from './Weekplan/WeekplanRouter.js'
+import nodemailer from 'nodemailer'
+import Mailer from './Mailer.js'
+
+const mailer = Mailer({ nodemailer })
 
 function jsonResult(func) {
   return async (req, res) => {
@@ -26,7 +30,7 @@ export default function ({ models, store, auth }) {
   const router = express.Router()
   const events = Events({ models })
   const sessionRouter = SessionRouter({ auth })
-  const accountRouter = AccountRouter({ auth, store, models })
+  const accountRouter = AccountRouter({ auth, store, models, mailer })
   const proposer = DishProposer({ models, store, events })
   const dishesRouter = DishesRouter({ models, store })
   const ingredientRouter = IngredientRouter({ controller: IngredientController({ models, store }), jsonResult })

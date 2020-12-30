@@ -1,9 +1,9 @@
 <script>
-import Dialog from './Dialog'
+import Dialog from '@/dialogs/Dialog'
 import { openDialog, closeDialogs } from '@/lib/dialogs'
-import { CURRENTUSER_SET } from '../store/mutation_types'
-import sendForm from '../lib/sendForm'
-import DialogFormField from './DialogFormField'
+import { CURRENTUSER_SET } from '@/store/mutation_types'
+import sendForm from '@/lib/sendForm'
+import DialogFormField from '@/dialogs/DialogFormField'
 
 const defaultMessage = 'Sag uns, wer Du bist, damit wir deine Planung wieder Dir zuordnen können:'
 
@@ -22,19 +22,14 @@ export default {
         firstName: '',
         password: '',
       },
-      marked: {
-        email: false,
-        firstName: false,
-        password: false,
-      },
+      marked: [],
     }
   },
 
   methods: {
     async register() {
-      const emptyFields = Object.entries(this.fields).filter(([name, value]) => !value).map(([name, value]) => name)
-      if (emptyFields.length) {
-        emptyFields.forEach(fieldName => this.marked[fieldName] = true)
+      this.marked = Object.entries(this.fields).filter(([name, value]) => !value).map(([name, value]) => name)
+      if (this.marked.length) {
         this.message = 'Es sind noch nicht alle Felder gefüllt'
         this.messageType = 'error'
         return
@@ -46,6 +41,7 @@ export default {
       } else {
         closeDialogs()
         this.$store.commit(CURRENTUSER_SET, userInfo)
+        this.reset()
         this.$router.push('/planner')
       }
     },
@@ -53,10 +49,16 @@ export default {
     clearError() {
       this.message = defaultMessage
       this.messageType = 'info'
-      Object.keys(this.marked).forEach(field => this.marked[field] = false)
+      this.marked = []
+    },
+
+    reset() {
+      this.clearError()
+      this.fields.password = ''
     },
 
     login() {
+      this.reset()
       openDialog('LoginDialog')
     }
   }
@@ -64,20 +66,22 @@ export default {
 </script>
 
 <template>
-  <Dialog id="RegisterDialog">
-    <h2>Als neuer Nutzer registieren</h2>
+  <Dialog id="RegisterDialog" title="Als neuer Nutzer registieren">
     <p :class="messageType">{{ message }}</p>
 
     <form @submit.prevent="register" @keypress="clearError">
-      <DialogFormField label="E-Mail" type="email" name="email" v-model="fields.email" autocomplete="current-email" :marked="marked['email']"
+      <DialogFormField label="E-Mail" type="email" name="email" v-model="fields.email" autocomplete="current-email"
+        :marked="marked.includes('email')"
         :validation="/^[^\s@]+@\S+\.\S+$/"
         validationMessage="Das sieht nicht nach einer gültigen E-Mail-Adresse aus"
         defaultInfo="An diese Adresse senden wir einen Zugangslink, falls Du mal dein Passwort vergessen hast"
       />
-      <DialogFormField label="Vorname" type="text" name="firstName" v-model="fields.firstName" autocomplete="given-name" :marked="marked['firstName']"
+      <DialogFormField label="Vorname" type="text" name="firstName" v-model="fields.firstName" autocomplete="given-name"
+        :marked="marked.includes('firstName')"
         defaultInfo="Sag uns, wie wir Dich anreden sollen. Wir duzen grundsätzlich, das ist hoffetnlich Ok für Dich"
       />
-      <DialogFormField label="Passwort" type="password" name="password" v-model="fields.password" autocomplete="current-password" :marked="marked['password']"
+      <DialogFormField label="Passwort" type="password" name="password" v-model="fields.password" autocomplete="current-password"
+        :marked="marked.includes('password')"
         defaultInfo="Dein Kennwort, mit dem wir bei Anmeldungen prüfen können, dass Du es tatsächlich bist"
       />
 

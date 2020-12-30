@@ -48,10 +48,6 @@ export default function ({ store, models, modelWriter }) {
       throw Error(`User '${userId}' doesn't exist`)
     },
 
-    getByAccessCode() {
-      throw Error(`No user found with this access code`)
-    },
-
     getByEMail(email, throwIfNotFound = true) {
       const user = byEmail[email]
       if (user || !throwIfNotFound) {

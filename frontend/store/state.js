@@ -10,6 +10,10 @@ export function getDefaultState() {
     accepted: [],
     declined: [],
     error: {},
+    alert: {
+      title: '',
+      message: '',
+    },
     units: [],
     activeItemId: undefined,
     itemGroups: {

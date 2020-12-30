@@ -1,3 +1,1 @@
 NODE_ENV=test
-SECRET=my-extremely-confidential-SECRET
-PORT=8200

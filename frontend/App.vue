@@ -3,19 +3,14 @@ import { mapState } from 'vuex'
 import { CLEAR_ERROR, GET_INGREDIENTS, GET_UNITS, SET_ACTIVE_ITEM } from './store/mutation_types'
 import { CHANGE_STARTDATE } from './store/action_types'
 import Navigation from '@/components/Navigation.vue'
-import RegisterDialog from '@/dialogs/RegisterDialog.vue'
-import LoginDialog from '@/dialogs/LoginDialog.vue'
+import RegisterDialog from '@/AuthDialogs/RegisterDialog.vue'
+import LoginDialog from '@/AuthDialogs/LoginDialog.vue'
+import LostPasswordDialog from '@/AuthDialogs/LostPasswordDialog.vue'
+import Alert from '@/dialogs/Alert.vue'
 
 export default {
-  components: { Navigation, RegisterDialog, LoginDialog },
+  components: { Navigation, RegisterDialog, LoginDialog, LostPasswordDialog, Alert },
 
-  data() {
-    return {
-      version: process.env.PACKAGE_VERSION
-    }
-  },
-
-  
   computed: {
     ...mapState(['error']),
   },
@@ -43,7 +38,6 @@ export default {
     <div class="title">
       <h1>Homagix</h1>
       <Navigation />
-      <span id="version">{{ version }}</span>
     </div>
 
     <div v-if="error.message" class="error-container">
@@ -55,8 +49,10 @@ export default {
       <router-view></router-view>
     </div>
 
+    <Alert />
     <LoginDialog />
     <RegisterDialog />
+    <LostPasswordDialog />
 
   </div>
 </template>
@@ -101,15 +97,6 @@ html, body {
   input {
     font: 1em Arial, helvetica, sans-serif;
     border: none;
-  }
-}
-
-#version {
-  float: right;
-  font-size: 12px;
-
-  &:before {
-    content: 'Version '
   }
 }
 

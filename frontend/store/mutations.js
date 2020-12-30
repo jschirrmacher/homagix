@@ -18,6 +18,10 @@ export const mutations = {
     state.error = {}
   },
 
+  [types.ALERT](state, alert) {
+    state.alert = alert
+  },
+
   [types.STARTDATE_CHANGED](state, { startDate }) {
     state.startDate = new Date(startDate)
   },

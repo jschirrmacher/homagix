@@ -4,14 +4,7 @@ import dialogPolyfill from 'dialog-polyfill'
 export default {
   props: {
     id: String,
-    defaultMessage: String,
-  },
-
-  data() {
-    return {
-      message: this.defaultMessage,
-      messageType: 'info',
-    }
+    title: String,
   },
 
   mounted() {
@@ -29,6 +22,8 @@ export default {
 <template>
   <dialog :id="id" ref="dialog">
     <span class="close-box" @click="close">×</span>
+
+    <h2>{{ title }}</h2>
     
     <div @close="close">
       <slot />

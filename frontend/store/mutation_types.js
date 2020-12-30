@@ -1,5 +1,6 @@
 export const ERROR_OCCURED = 'ERROR_OCCURED'
 export const CLEAR_ERROR = 'CLEAR_ERROR'
+export const ALERT = 'ALERT'
 
 export const CURRENTUSER_SET = 'CURRENTUSER_SET'
 
