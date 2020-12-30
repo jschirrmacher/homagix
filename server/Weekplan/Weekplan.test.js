@@ -16,6 +16,7 @@ const history = [
   ['2020-12-19', 'c'],
   ['2020-12-21', 'a'],
   ['2020-12-20', 'b'],
+  ['2020-12-27', 'd'],
 ]
 
 const models = {
@@ -66,7 +67,21 @@ describe('WeekplanController.getWeekplan', () => {
 
   it('should keep past days without history entries empty', () => {
     controller.getWeekplan('2020-12-20', [], new Date('2020-12-24T10:00:00'))
-      .map(e => e.dish && e.dish.id)
-      .should.deepEqual(['b', 'a', undefined, undefined, 'd', 'c', 'b'])
+      .map(e => ({ date: e.date, id: e.dish && e.dish.id }))
+      .should.deepEqual([
+        { date: '2020-12-20', id: 'b' },
+        { date: '2020-12-21', id: 'a' },
+        { date: '2020-12-22', id: undefined },
+        { date: '2020-12-23', id: undefined },
+        { date: '2020-12-24', id: 'd' },
+        { date: '2020-12-25', id: 'c' },
+        { date: '2020-12-26', id: 'b' }
+      ])
+  })
+
+  it('should include all requested dates', () => {
+    controller.getWeekplan('2020-12-22', [], new Date('2020-12-30T10:00:00'))
+      .map(e => e.date)
+      .should.deepEqual(['2020-12-22', '2020-12-23', '2020-12-24', '2020-12-25', '2020-12-26', '2020-12-27', '2020-12-28' ])
   })
 })
