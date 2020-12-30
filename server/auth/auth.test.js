@@ -112,52 +112,6 @@ describe('auth', () => {
     })
   })
 
-  describe('requireCodeAndHash', () => {
-    it('should authenticate with access code and hash', done => {
-      const middleware = auth.requireCodeAndHash()
-      const req = {params: {accessCode: 'test-access', hash: 'test-hash'}}
-      const res = makeExpectedResult()
-      middleware(req, res, err => {
-        should(err).be.undefined()
-        req.user.should.have.property('id')
-        req.user.id.should.equal(4713)
-        done()
-      })
-    })
-
-    it('should not authenticate without access code', done => {
-      const middleware = auth.requireCodeAndHash()
-      const req = {params: {hash: 'test-hash'}}
-      const res = makeExpectedResult({status: 401, json: {error: 'Not authenticated'}})
-      middleware(req, res, () => should().fail())
-      done()
-    })
-
-    it('should not authenticate without hash', done => {
-      const middleware = auth.requireCodeAndHash()
-      const req = {params: {accessCode: 'test-access'}}
-      const res = makeExpectedResult({status: 401, json: {error: 'Not authenticated'}})
-      middleware(req, res, () => should().fail())
-      done()
-    })
-
-    it('should not authenticate if wrong access code is provided', done => {
-      const middleware = auth.requireCodeAndHash()
-      const req = {params: {accessCode: 'wrong-access', hash: 'test-hash'}}
-      const res = makeExpectedResult({status: 401, json: {error: 'Not authenticated'}})
-      middleware(req, res, () => should().fail())
-      done()
-    })
-
-    it('should not authenticate if wrong hash is provided', done => {
-      const middleware = auth.requireCodeAndHash()
-      const req = {params: {accessCode: 'test-access', hash: 'wrong-hash'}}
-      const res = makeExpectedResult({status: 401, json: {error: 'Not authenticated'}})
-      middleware(req, res, () => should().fail())
-      done()
-    })
-  })
-
   describe('requireJWT', () => {
     it('should authenticate with JWT in header', done => {
       const middleware = auth.requireJWT()
@@ -174,49 +128,6 @@ describe('auth', () => {
 
     it('should authenticate with JWT in cookie', done => {
       const middleware = auth.requireJWT()
-      const token = jsonwebtoken.sign({sub: 4712}, secretOrKey, {expiresIn: '24h'})
-      const req = {body: {email: 'test3@example.com'}, cookies: {token}}
-      const res = makeExpectedResult()
-      middleware(req, res, err => {
-        should(err).be.undefined()
-        req.user.should.have.property('id')
-        req.user.id.should.equal(4712)
-        done()
-      })
-    })
-  })
-
-  describe('requireCodeOrAuth', () => {
-    it('should authenticate with access code if password is not set', done => {
-      const middleware = auth.requireCodeOrAuth()
-      const req = {
-        body: {email: 'test3@example.com'},
-        params: {accessCode: 'test-access', hash: 'test-hash'},
-        headers: {}
-      }
-      const res = makeExpectedResult()
-      middleware(req, res, err => {
-        should(err).be.undefined()
-        req.user.should.have.property('id')
-        req.user.id.should.equal(4713)
-        done()
-      })
-    })
-
-    it('should not authenticate with access code if password is set', done => {
-      const middleware = auth.requireCodeOrAuth()
-      const req = {
-        body: {email: 'test3@example.com'},
-        params: {accessCode: 'test-access-1', hash: 'test-hash'},
-        headers: {}
-      }
-      const res = makeExpectedResult({status: 401, json: {error: 'Not authenticated'}})
-      middleware(req, res, () => should().fail())
-      done()
-    })
-
-    it('should authenticate with JWT token', done => {
-      const middleware = auth.requireCodeOrAuth()
       const token = jsonwebtoken.sign({sub: 4712}, secretOrKey, {expiresIn: '24h'})
       const req = {body: {email: 'test3@example.com'}, cookies: {token}}
       const res = makeExpectedResult()
@@ -281,8 +192,7 @@ describe('auth', () => {
   it('should change the password', async () => {
     storedData.length = 0
     const user = models.user.getById(4713)
-    const result = await auth.setPassword(user.access_code, 'new-password')
-    result.should.deepEqual({message: 'Passwort ist geändert'})
+    await auth.setPassword(user, 'new-password')
     storedData.length.should.equal(1)
     storedData[0].should.have.properties(['type', 'id', 'user'])
     storedData[0].type.should.equal('userChanged')
