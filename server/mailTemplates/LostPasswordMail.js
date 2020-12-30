@@ -1,4 +1,4 @@
-const html = `<p>Hallo {{ firstName }},</p>
+const html = `<p>Hallo {{ user.firstName }},</p>
 
 <p>Du hast offenbar Dein Passwort für {{{ baseUrl }}} vergessen und einen Zugangslink bestellt, über den Du Dir ein neues Passwort setzen kannst.</p>
 
