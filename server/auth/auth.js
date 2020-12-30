@@ -47,6 +47,7 @@ export default ({ app, models, store, secretOrKey }) => {
 
   function setPassword(user, newPassword) {
     user.password = bcrypt.hashSync(newPassword, 10)
+    user.accessCode = ''
     store.emit(userChanged(user.id, user))
   }
 

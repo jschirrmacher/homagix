@@ -199,4 +199,11 @@ describe('auth', () => {
     storedData[0].id.should.equal(4713)
     storedData[0].user.password.should.startWith('$2a$10$')
   })
+
+  it('should clear the access code after setting the password', async () => {
+    storedData.length = 0
+    const user = models.user.getById(4713)
+    await auth.setPassword(user, 'new-password')
+    storedData[0].user.accessCode.should.equal('')
+  })
 })
