@@ -16,7 +16,7 @@
     "node": "14"
   },
   "scripts": {
-    "start": "node server",
+    "start": "node -r dotenv-flow/config server",
     "build": "webpack --config config/webpack.conf.cjs",
     "lint": "eslint server/**/*.js frontend/**/*.js",
     "test": "nyc mocha --color --exit server/**/*.test.js frontend/**/*.test.js"
