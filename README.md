@@ -28,7 +28,7 @@ Dishes are stored in a `/data/dishes` folder using YAML format. This looks like 
       in klarem Wasser ausspülen. Äpfel waschen, entkernen und in Scheiben
       schneiden. Camemberts auf einem zweiten Backblech verteilen, mit der Hälfte
       des Honigs einstreichen und mit den Apfelscheiben dazwischen ca. 12 Minuten
-      bei 180° im Ofen backen, bis der Apfel weich ist. In einer Pfanne die
+      bei 180°C im Ofen backen, bis der Apfel weich ist. In einer Pfanne die
       Frühlingszwiebelringe in Öl anschwitzen, Linsen dazu geben und 3 Minuten
       anbraten. Mit Salz und Pfeffer abschmecken. Restlichen Honig, Senf, Öl, 5 EL
       Wasser und etwas Essig in einer Salatschüssel zu einem Dressing mischen.
@@ -38,7 +38,7 @@ Dishes are stored in a `/data/dishes` folder using YAML format. This looks like 
 The image must be placed in `/data/images`.
 
 Make sure that you use the correct format `amount unit name` for each ingredient and use only the units
-defined in https://github.com/jschirrmacher/homagix/blob/master/server/models/units.js
+defined in [/server/models/units.js](./blob/master/server/models/units.js)
 
 You need to restart the server when you add a new dish or make changes to an existing one.
 
@@ -46,6 +46,15 @@ You need to restart the server when you add a new dish or make changes to an exi
 
     git clone https://github.com/jschirrmacher/homagix.git
     npm install --production
+    # Add some dishes (as described above) in `/data/dishes`.
     npm start
 
-There is also a Docker container available [here](https://hub.docker.com/r/joschi64/homagix)
+Alternatively, if you have [Docker](https://docs.docker.com/get-docker/) installed, you can use [a Docker image](https://hub.docker.com/r/joschi64/homagix). To use it, create a `data` folder locally containing some dishes you want to use, and enter this command:
+
+    docker run -it --rm -v ${pwd}/data:/app/data -p 8200:8200 joschi64/homagix
+
+You should set the configuration to match your environment. To do this, copy `.env` to `.env.production` and
+change whatever is nececessary. Please note, that changing `SECRET` will make stored password hashes invalid,
+so all users need to reset their passwords. This requires that the SMTP settings specify a valid SMTP server.
+
+If you use the docker image, you can set the environment via `-e` parameters, or, you could mount the `.env.production` file too, by adding `-v ${pwd}/.env.production:/app/.env.production`.
