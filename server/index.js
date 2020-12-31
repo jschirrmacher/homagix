@@ -6,18 +6,17 @@ import Models from './models/index.js'
 import EventStore from './EventStore/EventStore.js'
 import DishReader from './models/DishReader.js'
 import MainRouter from './MainRouter.js'
-import Location from './lib/Location.js'
 import ModelWriter from './models/ModelWriter.js'
 import history from 'connect-history-api-fallback'
 import Auth from './auth/auth.js'
 
 const nodeEnv = process.env.NODE_ENV || 'development'
 const logger = console
-const { DIRNAME } = Location(import.meta.url)
+const DIRNAME = path.resolve(path.dirname(''))
 
 const PORT = process.env.PORT || 8200
 
-const basePath = path.join(DIRNAME, '..', 'data')
+const basePath = path.join(DIRNAME, 'data')
 const store = EventStore({ basePath, logger })
 const modelWriter = ModelWriter({ basePath })
 const models = Models({ store, modelWriter })
@@ -47,10 +46,10 @@ app.use((req, res, next) => {
 })
 
 app.use(router)
-app.use(history())
-app.use('/', express.static(path.join(DIRNAME, '..', 'build')))
-app.use('/', express.static(path.join(DIRNAME, '..', 'public')))
-app.use('/images', express.static(path.join(DIRNAME, '..', 'data', 'images')))
+app.use(history({ verbose: true }))
+app.use('/', express.static(path.join(DIRNAME, 'build')))
+app.use('/', express.static(path.join(DIRNAME, 'public')))
+app.use('/images', express.static(path.join(DIRNAME, 'data', 'images')))
 
 app.use(function(err, req, res, next) { // eslint-disable-line no-unused-vars
   logger.error(err)

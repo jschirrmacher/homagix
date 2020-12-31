@@ -2,10 +2,9 @@ import path from 'path'
 import { Transform } from 'stream'
 import { addDish, getDishById } from '../models/dish.js'
 import { addIngredient, updateIngredient, getIngredientById } from '../models/ingredient.js'
-import Location from '../Location.js'
 import ModelWriter from '../ModelWriter.js'
 
-const { DIRNAME } = Location(import.meta.url)
+const DIRNAME = path.resolve(path.dirname(''))
 const basePath = path.join(DIRNAME, '..', '..', 'data')
 const modelWriter = ModelWriter({ basePath })
 

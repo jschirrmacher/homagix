@@ -5,14 +5,10 @@ import DishReader from './DishReader.js'
 import MockFS from '../lib/MockFS.js'
 import models from './MockedModel.js'
 import Events from '../EventStore/Events.js'
-import Location from '../lib/Location.js'
 import { store, eventList } from '../EventStore/Store.mock.js'
 
-const { DIRNAME } = Location(import.meta.url)
-
 const events = Events({ models })
-
-const basePath = path.resolve(DIRNAME, 'testdata')
+const basePath = path.resolve(path.dirname(''), 'testdata')
 const mockFS = MockFS({ basePath })
 
 describe('DishReader', () => {

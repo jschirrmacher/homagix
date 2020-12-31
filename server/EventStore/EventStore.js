@@ -2,9 +2,9 @@ import { existsSync, mkdirSync, unlinkSync, readdirSync, readFileSync, writeFile
 import { resolve } from 'path'
 import { Transform } from 'stream'
 import es from 'event-stream'
-import location from '../lib/Location.js'
+import path from 'path'
 
-const { DIRNAME } = location(import.meta.url)
+const DIRNAME = path.resolve(path.dirname(''))
 
 class JsonStringify extends Transform {
   constructor(options = {}) {
@@ -18,7 +18,7 @@ class JsonStringify extends Transform {
   }
 }
 
-export default ({ basePath, migrationsPath, logger = console }) => {
+export default ({ basePath, migrationsPath = '', logger = console }) => {
   const listeners = {}
   let ready
   let changeStream

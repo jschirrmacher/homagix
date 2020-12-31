@@ -6,9 +6,8 @@ import path from 'path'
 import fs from 'fs'
 import logger from '../lib/MockLogger.js'
 import MockFS from '../lib/MockFS.js'
-import Location from '../lib/Location.js'
 
-const { DIRNAME } = Location(import.meta.url)
+const DIRNAME = path.resolve(path.dirname(''), 'server', 'EventStore')
 const basePath = path.resolve(DIRNAME, 'testdata')
 const migrationsPath = path.join(basePath, 'migrations')
 const changes_1js = fs.readFileSync(path.resolve(DIRNAME, 'testMigrator.js')).toString()
