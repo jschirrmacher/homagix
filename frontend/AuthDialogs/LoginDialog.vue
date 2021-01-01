@@ -55,7 +55,8 @@ export default {
 
     register() {
       this.reset()
-      openDialog('RegisterDialog')
+      closeDialogs()
+      this.$router.push('/register').catch(() => {})
     }
   }
 }

@@ -22,7 +22,7 @@ function byId(listId) {
 }
 
 function getDishes(listId) {
-  return lists[listId].dishes
+  return lists[listId] ? lists[listId].dishes : []
 }
 
 export default function ({ store, events, modelWriter }) {

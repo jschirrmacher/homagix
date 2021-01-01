@@ -4,6 +4,7 @@ import Planner from '@/components/Planner'
 import RecipesList from '@/components/RecipesList'
 import Recipe from '@/components/Recipe'
 import ChangePasswordView from '@/views/ChangePasswordView'
+import RegisterView from '@/views/RegisterView'
 import NotFoundComponent from '@/components/NotFoundComponent'
 import store from '@/store'
 import { LOAD_DISHES } from '@/store/action_types'
@@ -49,6 +50,7 @@ export default new VueRouter({
       }
     },
     { name: 'set-password', path: '/setPassword', component: ChangePasswordView },
+    { name: 'register', path: '/register', component: RegisterView },
     { path: '*', component: NotFoundComponent }
   ]
 })

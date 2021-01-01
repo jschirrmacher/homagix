@@ -4,6 +4,17 @@ import { doFetch } from '@/lib/api'
 import { CURRENTUSER_SET } from '../store/mutation_types'
 import { mapState } from 'vuex'
 
+const invitationMailSubject = 'Einladung zu Homagix'
+const invitationMailBody = `Hallo!
+
+ich möchte dich gern einladen, eine gemeinsam Einkaufsliste zu bearbeiten.
+Bitte klicke auf den folgenden Link, um die Einladung anzunehmen:
+
+{{ link }}
+
+Viele Grüße
+{{ firstName }}`
+
 export default Vue.extend({
   data() {
     return {
@@ -34,8 +45,20 @@ export default Vue.extend({
       this.$store.commit(CURRENTUSER_SET, {})
     },
 
-    changePwd() {
-      this.$router.push('/setPassword').catch(() => {})
+    navigate(dest) {
+      this.$router.push(dest).catch(() => {})
+    },
+
+    invite() {
+      const vars = {
+        link: location.origin + '/register?inviteFrom=' + this.currentUser.id,
+        firstName: this.currentUser.firstName
+      }
+      function replaceFunc(match) {
+        return vars[match.replace(/[\{}\s]*/g, '')] || match
+      }
+      const body = encodeURIComponent(invitationMailBody.replace(/{{\s*(\w+)\s*}}/gs, replaceFunc))
+      window.location = 'mailto:?subject=' + encodeURIComponent(invitationMailSubject) + '&body=' + body
     },
 
     openMenu(event) {
@@ -56,10 +79,10 @@ export default Vue.extend({
     <div class="submenu right" @click="openMenu" @mouseleave="closeMenu">
       {{ currentUser.firstName || 'Nicht angemeldet' }}
       <ul>
-        <li v-if="loggedIn" @click.prevent="logout" >Abmelden</li>
-        <li v-if="loggedIn" @click="changePwd" >Passwort ändern</li>
-        <li v-if="loggedIn" @click="invite" >Jemanden einladen</li>
         <li id="version" data-info="version">{{ version }}</li>
+        <li v-if="loggedIn" @click="invite" >Jemanden einladen</li>
+        <li v-if="loggedIn" @click="navigate('/setPassword')" >Passwort ändern</li>
+        <li v-if="loggedIn" @click.prevent="logout" >Abmelden</li>
       </ul>
     </div>
   </nav>

@@ -1,22 +1,19 @@
 <script>
 import { mapState } from 'vuex'
 import { CLEAR_ERROR, GET_INGREDIENTS, GET_UNITS, SET_ACTIVE_ITEM } from './store/mutation_types'
-import { CHANGE_STARTDATE } from './store/action_types'
 import Navigation from '@/components/Navigation.vue'
-import RegisterDialog from '@/AuthDialogs/RegisterDialog.vue'
 import LoginDialog from '@/AuthDialogs/LoginDialog.vue'
 import LostPasswordDialog from '@/AuthDialogs/LostPasswordDialog.vue'
 import Alert from '@/dialogs/Alert.vue'
 
 export default {
-  components: { Navigation, RegisterDialog, LoginDialog, LostPasswordDialog, Alert },
+  components: { Navigation, LoginDialog, LostPasswordDialog, Alert },
 
   computed: {
     ...mapState(['error']),
   },
 
   mounted() {
-    this.$store.dispatch(CHANGE_STARTDATE, { startDate: new Date() })
     this.$store.dispatch(GET_INGREDIENTS)
     this.$store.dispatch(GET_UNITS)
   },
@@ -51,7 +48,6 @@ export default {
 
     <Alert />
     <LoginDialog />
-    <RegisterDialog />
     <LostPasswordDialog />
 
   </div>

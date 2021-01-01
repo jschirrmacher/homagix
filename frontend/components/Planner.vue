@@ -3,12 +3,19 @@ import { mapState, mapGetters } from 'vuex'
 import WeekPlan from '@/components/WeekPlan'
 import ShoppingList from '@/components/ShoppingList'
 import { SHOPPING_DONE } from '../store/mutation_types'
+import { CHANGE_STARTDATE } from '../store/action_types'
 
 export default {
   components: { WeekPlan, ShoppingList },
+
   computed: {
     ...mapGetters(['shoppinglist', 'itemsInShoppingList']),
   },
+
+  mounted() {
+    this.$store.dispatch(CHANGE_STARTDATE, { startDate: new Date() })
+  },
+
   methods: {
     print() {
       window.print()
