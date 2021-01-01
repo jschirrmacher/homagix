@@ -18,34 +18,42 @@ const allDishes = {
   44: {id: '44', name: 'I', last: '2018-09-01', ingredients: []}
 }
 
+const dishLists = {
+  7: { users: [7], dishes: ['1', '8', '12', '17', '23', '25', '29', '43', '44']},
+  24: { users: [24], dishes: ['8', '25']}
+}
+
 const models = {
   dish: {
-    getAll() {
-      return Object.values(allDishes)
-    },
+    getAll: () => Object.values(allDishes),
+    getDishById: (id) => allDishes[id]
   },
-
-  ingredient: {
-    byId(id) {
-      return allIngredients[id]
-    }
-  }
+  ingredient: { byId: id => allIngredients[id] },
+  dishList: { getDishes: listId => dishLists[listId].dishes },
 }
+
+const userA = { id: 7 }
+const userB = { id: 24 }
 
 describe('DishProposer', () => {
   it('should return a list of dish proposals', () => {
-    const proposer = DishProposer({models})
-    const result = proposer.get()
+    const proposer = DishProposer({ models })
+    const result = proposer.get(userA)
     result.should.be.an.Array()
   })
 
   it('should propose the 7 dishes which are the longest not served', () => {
-    const proposer = DishProposer({models})
-    proposer.get().map(d => d.id).should.deepEqual(['17', '43', '1', '44', '8', '12', '23'])
+    const proposer = DishProposer({ models })
+    proposer.get(userA).map(d => d.id).should.deepEqual(['17', '43', '1', '44', '8', '12', '23'])
   })
 
   it('should propose 7 dishes with some ids inhibited', () => {
     const proposer = DishProposer({models})
-    proposer.get(['12', '1', '33']).map(d => d.id).should.deepEqual(['17', '43', '44', '8', '23', '25', '29'])
+    proposer.get(userA, ['12', '1', '33']).map(d => d.id).should.deepEqual(['17', '43', '44', '8', '23', '25', '29'])
+  })
+
+  it('should propose only dishes from own list', () => {
+    const proposer = DishProposer({ models })
+    proposer.get(userB).map(d => d.id).should.deepEqual(['8', '25'])
   })
 })

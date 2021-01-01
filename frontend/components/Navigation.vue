@@ -58,6 +58,7 @@ export default Vue.extend({
       <ul>
         <li v-if="loggedIn" @click.prevent="logout" >Abmelden</li>
         <li v-if="loggedIn" @click="changePwd" >Passwort ändern</li>
+        <li v-if="loggedIn" @click="invite" >Jemanden einladen</li>
         <li id="version" data-info="version">{{ version }}</li>
       </ul>
     </div>

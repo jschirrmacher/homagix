@@ -4,10 +4,10 @@ export default ({ models, store, events }) => {
   }
 
   return {
-    get(inhibited = []) {
-      return models.dish.getAll()
-        .filter(dish => !dish.alwaysOnList)
-        .filter(dish => !inhibited.some(id => id === dish.id))
+    get(user, inhibited = []) {
+      return models.dishList.getDishes(user.id)
+        .filter(dishId => !inhibited.some(id => id === dishId))
+        .map(dishId => models.dish.getDishById(dishId))
         .sort((a, b) => getDate(a) - getDate(b))
         .slice(0, 7)
     },

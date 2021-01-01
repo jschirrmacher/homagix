@@ -20,6 +20,7 @@ export default ({ basePath }) => {
   const dishesWriter = writer('dishes')
   const ingredientsWriter = writer('ingredients')
   const usersWriter = writer('users')
+  const dishListWriter = writer('dishLists')
 
   return {
     writeDish(dish) {
@@ -46,6 +47,10 @@ export default ({ basePath }) => {
 
     removeUser(id) {
       usersWriter(id, null)
+    },
+
+    writeDishlist(listId, list) {
+      dishListWriter(listId, list)
     }
   }
 }

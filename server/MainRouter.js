@@ -35,7 +35,7 @@ export default function ({ models, store, auth }) {
   const dishesRouter = DishesRouter({ models, store })
   const ingredientRouter = IngredientRouter({ controller: IngredientController({ models, store }), jsonResult })
   const proposalsRouter = ProposalsRouter({ proposer })
-  const weekplanRouter = WeekplanRouter({ controller: WeekplanController({ models, proposer }), jsonResult })
+  const weekplanRouter = WeekplanRouter({ controller: WeekplanController({ models, proposer }), jsonResult, auth })
   
   router.use('/sessions', sessionRouter)
   router.use('/accounts', accountRouter)

@@ -65,6 +65,32 @@ export default function ({ models }) {
       assert(id, 'No id')
       assert(!user.email || user.email.match(/.+@.+\..+/), 'email has wrong format')
       return { type: 'userChanged', id, user }
-    }
+    },
+
+    invite(user, listId) {
+      assert(user, 'no user')
+      assert(user.id, 'no user id')
+      assert(listId, 'no list id')
+      const list = models.dishList.byId(listId)
+      assert(list)
+      assert(list.users.includes(user.id), 'user has no access to list')
+      return { type: 'invite', userId: user.id, listId }
+    },
+
+    addDishToList(dish, listId) {
+      assert(dish, 'no dish')
+      assert(dish.id, 'no dish id')
+      assert(listId, 'no list id')
+      assert(models.dishList.byId(listId), 'unkown dishList')
+      return { type: 'addDishToList', dishId: dish.id, listId }
+    },
+
+    removeDishFromList(dish, listId) {
+      assert(dish, 'no dish')
+      assert(dish.id, 'no dish id')
+      assert(listId, 'no list id')
+      assert(models.dishList.byId(listId), 'unkown dishList')
+      return { type: 'removeDishFromList', dishId: dish.id, listId }
+    },
   }
 }
