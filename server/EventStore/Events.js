@@ -67,14 +67,11 @@ export default function ({ models }) {
       return { type: 'userChanged', id, user }
     },
 
-    invite(user, listId) {
+    invitationAccepted(user, listId) {
       assert(user, 'no user')
       assert(user.id, 'no user id')
       assert(listId, 'no list id')
-      const list = models.dishList.byId(listId)
-      assert(list)
-      assert(list.users.includes(user.id), 'user has no access to list')
-      return { type: 'invite', userId: user.id, listId }
+      return { type: 'invitationAccepted', userId: user.id, listId }
     },
 
     addDishToList(dish, listId) {

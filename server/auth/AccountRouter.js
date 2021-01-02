@@ -7,8 +7,10 @@ function sendUserInfo(req, res) {
   res.json(result)
 }
 
-export default ({ auth, models, mailer }) => {
-  function register(req, res, next) {
+export default ({ auth, models, store, mailer }) => {
+  const { invitationAccepted } = models.getEvents()
+  
+  async function register(req, res, next) {
     try {
       if (models.user.getByEMail(req.body.email, false)) {
         throw new HTTPError(409, 'User already exists')
@@ -19,6 +21,9 @@ export default ({ auth, models, mailer }) => {
         password: req.body.password,
       }
       auth.register(user, req, res)
+      if (req.body.inviteFrom) {
+        await store.emit(invitationAccepted(user, req.body.inviteFrom))
+      }
       sendUserInfo(req, res)
     } catch (error) {
       next(error)

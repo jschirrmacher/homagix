@@ -1,5 +1,5 @@
 export default function ({ store, events, modelWriter }) {
-  const { userAdded, userRemoved, userChanged } = events
+  const { userAdded, userRemoved, userChanged, invitationAccepted } = events
   const byEmail = {}
   const users = {}
   let adminIsDefined = false
@@ -30,6 +30,11 @@ export default function ({ store, events, modelWriter }) {
       byEmail[event.user.email] = users[event.user.id]
     }
     modelWriter.writeUser(event.user)
+  })
+
+  store.on(invitationAccepted, event => {
+    users[event.userId].listId = event.listId
+    modelWriter.writeUser(users[event.userId])
   })
 
   return {
