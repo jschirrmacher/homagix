@@ -1,12 +1,9 @@
-import Events from '../EventStore/Events.js'
-
-export default function ({ store, models, modelWriter }) {
-  const { userAdded, userRemoved, userChanged } = Events({ models })
+export default function ({ store, events, modelWriter }) {
+  const { userAdded, userRemoved, userChanged } = events
   const byEmail = {}
   const users = {}
   let adminIsDefined = false
 
-  
   store.on(userAdded, event => {
     users[event.user.id] = event.user
     if (event.user.email) {

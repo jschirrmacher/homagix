@@ -6,7 +6,6 @@ import Router from './IngredientRouter.js'
 import Controller from './IngredientController.js'
 import models from './models/MockedModel.js'
 import { store } from './EventStore/Store.mock.js'
-import Events from './EventStore/Events.js'
 
 const jsonResult = func => async (req, res) => res.json(await func(req))
 const controller = Controller({ models, store })
@@ -17,7 +16,7 @@ app.use(router)
 
 describe('IngredientRouter', () => {
   before(()=> {
-    const { dishAdded, ingredientAdded, ingredientAssigned } = Events({ models })
+    const { dishAdded, ingredientAdded, ingredientAssigned } = models.getEvents()
     store.dispatch(dishAdded({ id: '_', name: 'default', alwaysOnList: true }))
     store.dispatch(ingredientAdded({ id: '1', name: 'Milch', unit: 'L', group: 'cooled' }))
     store.dispatch(ingredientAssigned('_', 1, 3))

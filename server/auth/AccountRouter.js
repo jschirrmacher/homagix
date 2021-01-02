@@ -1,11 +1,5 @@
 import express from 'express'
-
-class HTTPError extends Error {
-  constructor(code, message) {
-    super(message)
-    this.code = code
-  }
-}
+import HTTPError from '../lib/HTTPError.js'
 
 function sendUserInfo(req, res) {
   const result = { ...(req.user || {}) }

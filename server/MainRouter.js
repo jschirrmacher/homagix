@@ -1,5 +1,4 @@
 import express from 'express'
-import Events from './EventStore/Events.js'
 import SessionRouter from './auth/SessionRouter.js'
 import AccountRouter from './auth/AccountRouter.js'
 import DishProposer from './Weekplan/DishProposer.js'
@@ -28,10 +27,9 @@ function jsonResult(func) {
 
 export default function ({ models, store, auth }) {
   const router = express.Router()
-  const events = Events({ models })
   const sessionRouter = SessionRouter({ auth })
   const accountRouter = AccountRouter({ auth, store, models, mailer })
-  const proposer = DishProposer({ models, store, events })
+  const proposer = DishProposer({ models, store })
   const dishesRouter = DishesRouter({ models, store })
   const ingredientRouter = IngredientRouter({ controller: IngredientController({ models, store }), jsonResult })
   const proposalsRouter = ProposalsRouter({ proposer })

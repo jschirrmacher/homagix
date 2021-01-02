@@ -2,11 +2,10 @@ import fs from 'fs'
 import path from 'path'
 import YAML from 'yaml'
 import { v4 as uuid } from 'uuid'
-import Events from '../EventStore/Events.js'
 import units from './units.js'
 
 export default function ({ store, models, basePath }) {
-  const { dishAdded, ingredientAdded, ingredientAssigned } = Events({ models })
+  const { dishAdded, ingredientAdded, ingredientAssigned } = models.getEvents()
 
   function extractIngredientComponents(item) {
     const matches = item.match(/^\s*([\d.,]*)\s*(\w+)\.?\s*(.*)$/)

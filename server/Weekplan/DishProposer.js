@@ -1,4 +1,4 @@
-export default ({ models, store, events }) => {
+export default ({ models, store }) => {
   function getDate(dish) {
     return new Date(dish.last || 0)
   }
@@ -16,7 +16,7 @@ export default ({ models, store, events }) => {
       accepted.forEach((id, index) => {
         const newDate = new Date(date)
         newDate.setDate(newDate.getDate() + index)
-        store.emit(events.served(id, newDate))
+        store.emit(models.getEvents().served(id, newDate))
       })
       return { accepted, date }
     }

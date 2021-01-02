@@ -28,7 +28,7 @@ const modelWriter = {
 const models = {}
 models.user = User({ models, store, modelWriter })
 
-const { userAdded } = Events({ models })
+const { userAdded } = models.getEvents()
 
 describe('Models.user', () => {
   beforeEach(() => models.user.reset())

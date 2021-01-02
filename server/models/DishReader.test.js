@@ -4,10 +4,9 @@ import path from 'path'
 import DishReader from './DishReader.js'
 import MockFS from '../lib/MockFS.js'
 import models from './MockedModel.js'
-import Events from '../EventStore/Events.js'
 import { store, eventList } from '../EventStore/Store.mock.js'
 
-const events = Events({ models })
+const events = models.getEvents()
 const basePath = path.resolve(path.dirname(''), 'testdata')
 const mockFS = MockFS({ basePath })
 

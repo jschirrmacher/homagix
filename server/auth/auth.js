@@ -5,11 +5,10 @@ import { Strategy as JwtStrategy } from 'passport-jwt'
 import 'express-session'
 import bcrypt from 'bcryptjs'
 import jsonwebtoken from 'jsonwebtoken'
-import Events from '../EventStore/Events.js'
 import md5 from 'md5'
 
 export default ({ app, models, store, secretOrKey }) => {
-  const { userAdded, userChanged } = Events({ models })
+  const { userAdded, userChanged } = models.getEvents()
 
   function signIn(user, req, res) {
     const token = jsonwebtoken.sign({
