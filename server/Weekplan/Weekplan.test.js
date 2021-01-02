@@ -32,7 +32,7 @@ const models = {
   dish: {
     byId: (id) => dishes[id]
   },
-  dishList: { getDishes: listId => dishLists[listId] },
+  dishList: { getById: listId => dishLists[listId] },
 }
 
 const proposer = {

@@ -29,7 +29,7 @@ const models = {
     getDishById: (id) => allDishes[id]
   },
   ingredient: { byId: id => allIngredients[id] },
-  dishList: { getDishes: listId => dishLists[listId].dishes },
+  dishList: { getById: listId => dishLists[listId].dishes },
 }
 
 const userA = { id: 7 }

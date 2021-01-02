@@ -5,7 +5,7 @@ export default ({ models, store, events }) => {
 
   return {
     get(user, inhibited = []) {
-      return models.dishList.getDishes(user.id)
+      return (models.dishList.getById(user.id) || [])
         .filter(dishId => !inhibited.some(id => id === dishId))
         .map(dishId => models.dish.getDishById(dishId))
         .sort((a, b) => getDate(a) - getDate(b))
