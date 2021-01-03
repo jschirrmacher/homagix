@@ -55,7 +55,7 @@ export default function ({ store, events, modelWriter }) {
       if (item.id) {
         return this.byId(item.id)
       }
-      const pattern = new RegExp(strict ? ('^' + item.name + '$') : item.name)
+      const pattern = new RegExp(strict ? ('^' + item.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$') : item.name)
       return Object.values(ingredients.byId).find(i => i.name.match(pattern))
     }
   }
