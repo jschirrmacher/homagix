@@ -20,10 +20,10 @@ const history = [
 ]
 
 const dishLists = {
-  7: { users: [7], dishes: ['a', 'b', 'c', 'd']},
+  '7': ['a', 'b', 'c', 'd'],
 }
 
-const user = { id: 7 }
+const user = { id: '7' }
 
 const models = {
   dishHistory: {
@@ -74,15 +74,15 @@ describe('WeekplanController.getWeekplan', () => {
 
   it('should keep past days without history entries empty', () => {
     controller.getWeekplan(user, '2020-12-20', [], new Date('2020-12-24T10:00:00'))
-      .map(e => ({ date: e.date, id: e.dish && e.dish.id }))
+      .map(e => ({ date: e.date, dishId: e.dishId }))
       .should.deepEqual([
-        { date: '2020-12-20', id: 'b' },
-        { date: '2020-12-21', id: 'a' },
-        { date: '2020-12-22', id: undefined },
-        { date: '2020-12-23', id: undefined },
-        { date: '2020-12-24', id: 'd' },
-        { date: '2020-12-25', id: 'c' },
-        { date: '2020-12-26', id: 'b' }
+        { date: '2020-12-20', dishId: 'b' },
+        { date: '2020-12-21', dishId: 'a' },
+        { date: '2020-12-22', dishId: undefined },
+        { date: '2020-12-23', dishId: undefined },
+        { date: '2020-12-24', dishId: 'd' },
+        { date: '2020-12-25', dishId: 'c' },
+        { date: '2020-12-26', dishId: 'b' }
       ])
   })
 

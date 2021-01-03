@@ -1,4 +1,4 @@
-import { ERROR_OCCURED, WEEKPLAN_LOADED } from '../store/mutation_types.js'
+import { DISH_CHANGED, ERROR_OCCURED, WEEKPLAN_LOADED } from '../store/mutation_types.js'
 
 function encodeParameter([key, val]) {
   const value = val instanceof Array ? val.join(',') : val
@@ -57,6 +57,18 @@ export async function fetchWeekplan(startDate, declined) {
       throw result
     }
     return [WEEKPLAN_LOADED, { weekplan: result }]
+  } catch (error) {
+    return [ERROR_OCCURED, { message: 'Error accessing server', details: error }]
+  }
+}
+
+export async function setFavorite(dishId, isFavorite) {
+  try {
+    const result = await doFetch(isFavorite ? 'post' : 'delete', '/dishes/' + dishId + '/favorites')
+    if (result.error) {
+      throw result
+    }
+    return [DISH_CHANGED, { dish: result }]
   } catch (error) {
     return [ERROR_OCCURED, { message: 'Error accessing server', details: error }]
   }

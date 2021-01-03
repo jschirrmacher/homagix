@@ -10,7 +10,8 @@ export default {
   },
   
   computed: {
-    ...mapState(['weekplan', 'startDate']),
+    ...mapState(['weekplan', 'startDate', 'dishes']),
+
     startDate: {
       get() {
         return this.$store.state.startDate.toISOString().replace(/T.*$/, '')
@@ -45,6 +46,10 @@ export default {
     toggleAcceptance(dishId) {
       this.$store.dispatch(TOGGLE_ACCEPTANCE, { dishId })
     },
+
+    dish(dishId) {
+      return this.dishes.find(dish => dish.id === dishId)
+    }
   }
 }
 </script>
@@ -57,11 +62,11 @@ export default {
   </h2>
   <div class="pager" @click="addToDate(-1)">▲</div>
   <ul>
-    <li v-for="entry in weekplan" :key="entry.day" :class="{ past: past(entry.date) }">
+    <li v-for="entry in weekplan" :key="entry.date" :class="{ past: past(entry.date) }">
       <span class="day">{{ formatDate(entry.date) }}</span>
-      <Dish v-if="entry.dish && entry.dish.id" :id="entry.dish.id" :name="entry.dish.name" :lastServed="entry.dish.last" :ingredients="entry.dish.items">
-        <button class="inline delete" title="Ablehnen" @click="() => decline(entry.dish.id)">×</button>
-        <button class="inline accept" title="Annehmen" @click="() => toggleAcceptance(entry.dish.id)">✓</button>
+      <Dish v-if="entry.dishId" :dish="dish(entry.dishId)">
+        <button class="inline delete" title="Ablehnen" @click="() => decline(entry.dishId)">×</button>
+        <button class="inline accept" title="Annehmen" @click="() => toggleAcceptance(entry.dishId)">✓</button>
       </Dish>
     </li>
   </ul>

@@ -28,7 +28,7 @@ export default Vue.extend({
   <h2>Rezepte</h2>
   <ul id="recipes">
     <li v-for="dish in sortedDishes" :key="dish.id">
-      <Dish :id="dish.id" :name="dish.name" :lastServed="dish.last" :ingredients="dish.items" />
+      <Dish :dish="dish" />
     </li>
   </ul>
 </div>

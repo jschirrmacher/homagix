@@ -6,13 +6,13 @@ export default ({ models, store, proposer }) => {
       .getFrom(user, startingAt)
       .sort((a, b) => a[0].localeCompare(b[0]))
       .slice(0, 7)
-      .map(([date, dishId]) => ({ [date]: models.dish.byId(dishId) }))
+      .map(([date, id]) => ({ [date]: { id } }))
     )
     const proposals = proposer.get(user, inhibited)
     return Array(7).fill(0).map((_, index) => {
       const date = new Date(+new Date(startingAt) + 86400000 * index).toISOString().split('T')[0]
       const dish = history[date] || (new Date(date) >= today ? proposals.shift() : {})
-      return { date, dish, served: !!history[date] }
+      return { date, dishId: dish.id, served: !!history[date] }
     })
   }
 

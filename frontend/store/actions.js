@@ -1,4 +1,4 @@
-import { loadData, doFetch, fetchWeekplan } from '../lib/api.js'
+import { loadData, doFetch, fetchWeekplan, setFavorite } from '../lib/api.js'
 import {
   GET_INGREDIENTS,
   INGREDIENTS_LOADED,
@@ -18,7 +18,7 @@ import {
   DISHES_LOADED,
   CURRENTUSER_SET,
 } from './mutation_types.js'
-import { CHANGE_GROUP, CHANGE_STARTDATE, INIT_APP, LOAD_DISHES } from './action_types.js'
+import { ADD_FAVORITE, CHANGE_GROUP, CHANGE_STARTDATE, INIT_APP, LOAD_DISHES, REMOVE_FAVORITE } from './action_types.js'
 import jwt_decode from 'jwt-decode'
 
 function eqItem(item) {
@@ -159,5 +159,15 @@ export const actions = {
     doFetch('put', '/ingredients/' + ingredient.id, { group })
     ingredient.group = group
     context.commit(INGREDIENT_CHANGED, { ingredient })
+  },
+
+  async [ADD_FAVORITE](context, { dishId }) {
+    const args = await setFavorite(dishId, true)
+    context.commit(...args)
+  },
+
+  async [REMOVE_FAVORITE](context, { dishId }) {
+    const args = await setFavorite(dishId, false)
+    context.commit(...args)
   },
 }

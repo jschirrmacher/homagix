@@ -34,6 +34,10 @@ export const mutations = {
     state.dishes = dishes
   },
 
+  [types.DISH_CHANGED](state, { dish }) {
+    state.dishes = state.dishes.map(d => d.id === dish.id ? dish : d)
+  },
+
   [types.INGREDIENTS_LOADED](state, { ingredients, standards }) {
     state.allIngredients = ingredients
     state.standardItems = standards

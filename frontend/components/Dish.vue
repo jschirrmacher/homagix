@@ -1,24 +1,15 @@
 <script>
 import IngredientList from '@/components/IngredientList'
 import { mapState } from 'vuex'
+import { ADD_FAVORITE, REMOVE_FAVORITE } from '../store/action_types'
 
 export default {
   components: { IngredientList },
 
   props: {
-    id: {
-      type: String,
+    dish: {
+      type: Object,
     },
-    name: {
-      type: String,
-    },
-    lastServed: {
-      type: String,
-    },
-    ingredients: {
-      type: Array,
-      default: () => []
-    }
   },
 
   data() {
@@ -28,25 +19,29 @@ export default {
   },
 
   computed: {
-    ...mapState(['allIngredients', 'accepted']),
+    ...mapState(['allIngredients', 'accepted', 'currentUser']),
 
     servedDate() {
-      return this.lastServed ? (new Date(this.lastServed)).toLocaleString(navigator.language, { dateStyle: 'medium' }) : 'noch nie'
+      return this.dish.last ? (new Date(this.dish.last)).toLocaleString(navigator.language, { dateStyle: 'medium' }) : 'noch nie'
     },
 
     classNames() {
       const names = ['dish']
       this.opened && names.push('opened')
-      this.accepted.includes(this.id) && names.push('accepted')
+      this.accepted.includes(this.dish.id) && names.push('accepted')
       return names.join(' ')
     },
 
     dishIngredients() {
-      return this.ingredients.map(i => ({ ...this.allIngredients.find(item => item.id === i.id), amount: i.amount }))
+      return this.dish.items.map(i => ({ ...this.allIngredients.find(item => item.id === i.id), amount: i.amount }))
     },
 
     slug() {
-      return '/recipes/' + this.id + '/' + this.name.replace(/\s+/g, '-').replace(/[^\w-]/g, '').toLowerCase()
+      return '/recipes/' + this.dish.id + '/' + this.dish.name.replace(/\s+/g, '-').replace(/[^\w-]/g, '').toLowerCase()
+    },
+
+    favorite() {
+      return this.dish.isFavorite ? '★' : '☆'
     }
   },
 
@@ -55,8 +50,8 @@ export default {
       this.opened = !this.opened
     },
 
-    getSlug() {
-
+    toggleFavorite() {
+      this.$store.dispatch(this.dish.isFavorite ? REMOVE_FAVORITE : ADD_FAVORITE, { dishId: this.dish.id })
     }
   }
 }
@@ -67,9 +62,10 @@ export default {
     <span class="openclose" @click="toggleOpen"></span>
     <slot />
     <router-link :to="slug">
-      {{name}}
+      {{ dish.name }}
     </router-link>
-    <span class="servedDate">{{servedDate}}</span>
+    <span class="servedDate">{{ servedDate }}</span>
+    <a v-if="currentUser && currentUser.id" href="#" @click.prevent="toggleFavorite">{{ favorite }}</a>
     <div v-if="opened" class="ingredient-list">
       <IngredientList :items="dishIngredients" />
     </div>

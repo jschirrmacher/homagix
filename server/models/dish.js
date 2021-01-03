@@ -58,5 +58,10 @@ export default function ({ store, events, modelWriter }) {
     byId: getDishById,
     byName: getDishByName,
     getStandardIngredients,
+    
+    reset() {
+      dishes.byId = {}
+      dishes.byName = {}
+    },
   }
 }

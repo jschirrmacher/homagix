@@ -75,20 +75,18 @@ export default function ({ models }) {
       return { type: 'invitationAccepted', userId: user.id, listId }
     },
 
-    addDishToList(dish, listId) {
-      assert(dish, 'no dish')
-      assert(dish.id, 'no dish id')
+    addDishToList(dishId, listId) {
+      assert(dishId, 'no dish id')
       assert(listId, 'no list id')
-      assert(models.dishList.byId(listId), 'unkown dishList')
-      return { type: 'addDishToList', dishId: dish.id, listId }
+      assert(models.dishList.getById(listId), 'unkown dishList')
+      return { type: 'addDishToList', dishId, listId }
     },
 
-    removeDishFromList(dish, listId) {
-      assert(dish, 'no dish')
-      assert(dish.id, 'no dish id')
+    removeDishFromList(dishId, listId) {
+      assert(dishId, 'no dish id')
       assert(listId, 'no list id')
-      assert(models.dishList.byId(listId), 'unkown dishList')
-      return { type: 'removeDishFromList', dishId: dish.id, listId }
+      assert(models.dishList.getById(listId), 'unkown dishList')
+      return { type: 'removeDishFromList', dishId, listId }
     },
   }
 }
