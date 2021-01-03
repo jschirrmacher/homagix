@@ -2,43 +2,22 @@
 import should from 'should'
 import jsonwebtoken from 'jsonwebtoken'
 import AuthFactory from './auth.js'
-import models from '../models/MockedModel.js'
+import Store from '../EventStore/Store.mock.js'
+import Models from '../models/MockedModel.js'
 
 const app = {
   use() {}
 }
+const store = Store()
+const models = Models({ store })
 const users = [
   {id: 4711, email: 'test@example.com', access_code: 'test-access-1', password: '$2a$10$5cblct/kPaZQ5uh9jNKIVu8.oGiOPDPGB4iZRdNp0E1miYl6jTqXm'},
   {id: 4712, email: 'test2@example.com'},
   {id: 4713, email: 'test3@example.com', access_code: 'test-access', hash: 'test-hash'}
 ]
-models.user = {
-  getByEMail(email) {
-    const user = users.find(user => user.email === email)
-    if (user) {
-      return user
-    }
-    throw `No user found with this e-mail address`
-  },
-  getById(id) {
-    const user = users.find(user => user.id === id)
-    if (user) {
-      return user
-    }
-    throw `No user found with this id`
-  },
-  adminIsDefined: true,
-}
-
-const storedData = []
-const store = {
-  emit(entry) {
-    storedData.push(entry)
-  }
-}
+users.forEach(user => store.emit(models.getEvents().userAdded(user)))
 
 const secretOrKey = 'secret-key'
-
 const auth = AuthFactory({app, models, store, secretOrKey})
 
 function expect(expected) {
@@ -188,20 +167,21 @@ describe('auth', () => {
   })
 
   it('should change the password', async () => {
-    storedData.length = 0
+    const eventList = store.eventList()
+    eventList.length = 0
     const user = models.user.getById(4713)
     await auth.setPassword(user, 'new-password')
-    storedData.length.should.equal(1)
-    storedData[0].should.have.properties(['type', 'id', 'user'])
-    storedData[0].type.should.equal('userChanged')
-    storedData[0].id.should.equal(4713)
-    storedData[0].user.password.should.startWith('$2a$10$')
+    eventList.length.should.equal(1)
+    eventList[0].should.have.properties(['type', 'id', 'user'])
+    eventList[0].type.should.equal('userChanged')
+    eventList[0].id.should.equal(4713)
+    eventList[0].user.password.should.startWith('$2a$10$')
   })
 
   it('should clear the access code after setting the password', async () => {
-    storedData.length = 0
+    store.eventList().length = 0
     const user = models.user.getById(4713)
     await auth.setPassword(user, 'new-password')
-    storedData[0].user.accessCode.should.equal('')
+    store.eventList()[0].user.accessCode.should.equal('')
   })
 })

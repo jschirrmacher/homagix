@@ -33,12 +33,13 @@ export default function ({ models }) {
       return { type: 'ingredientAssigned', dishId, ingredientId, amount }
     },
 
-    served(dishId, date) {
+    served(dishId, date, listId) {
       assert(dishId, 'No dishId')
       assert(date, 'No date')
+      assert(listId, 'No listId')
       assert(models.dish.byId(dishId), 'Dish not found')
       assert(date instanceof Date, `date should be of type 'Date'`)
-      return { type: 'served', dishId, date: date.toISOString().replace(/T.*$/, '') }
+      return { type: 'served', dishId, listId, date: date.toISOString().replace(/T.*$/, '') }
     },
 
     ingredientUpdated(ingredientId, name, value) {
