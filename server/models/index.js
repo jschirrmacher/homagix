@@ -2,7 +2,7 @@ import Events from '../EventStore/Events.js'
 import Dish from './dish.js'
 import Ingredient from './ingredient.js'
 import DishHistory from './dishHistory.js'
-import DishList from './dishlist.js'
+import DishList from './dishList.js'
 import User from './user.js'
 
 export default function ({ store, modelWriter }) {
