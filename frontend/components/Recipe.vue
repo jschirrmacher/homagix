@@ -42,12 +42,13 @@ export default Vue.extend({
           {{ ingredient.amount }} {{ ingredient.unit }} {{ ingredient.name }}
         </li>
       </ul>
+      <p v-if="dish.source" class="source">Quelle: {{ dish.source }}</p>
     </section>
 
     <h2>{{ dish.name }}</h2>
 
     <article>
-      {{ dish.recipe }}
+      {{ dish.recipe || 'Es gibt bisher noch keine Beschreibung, wie das Gericht zubereitet wird.' }}
     </article>
 
     <button @click="$router.go(-1)">Zurück</button>
@@ -72,7 +73,16 @@ export default Vue.extend({
     }
   }
 
+  .source {
+    float: right;
+    background: #eeeeee;
+    margin-top: 0;
+    padding: 5px 10px;
+    border: 1px solid #aaaaaa;
+  }
+
   article {
     margin-bottom: 1em;
+    padding-top: 5px;
   }
 </style>
