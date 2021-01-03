@@ -1,7 +1,6 @@
 /*eslint-env mocha*/
 import should from 'should'
-import Events from '../EventStore/Events.js'
-import User from './user.js'
+import models from '../models/MockedModel.js'
 
 const storeListener = {}
 const store = {
@@ -20,13 +19,6 @@ const testPerson = {
   email: 'test@example.com',
   firstName: 'Tom',
 }
-
-const modelWriter = {
-  writeUser() {}
-}
-
-const models = {}
-models.user = User({ models, store, modelWriter })
 
 const { userAdded } = models.getEvents()
 

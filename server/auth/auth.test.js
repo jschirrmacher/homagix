@@ -2,34 +2,32 @@
 import should from 'should'
 import jsonwebtoken from 'jsonwebtoken'
 import AuthFactory from './auth.js'
+import models from '../models/MockedModel.js'
 
 const app = {
   use() {}
 }
-const Model = {}
 const users = [
   {id: 4711, email: 'test@example.com', access_code: 'test-access-1', password: '$2a$10$5cblct/kPaZQ5uh9jNKIVu8.oGiOPDPGB4iZRdNp0E1miYl6jTqXm'},
   {id: 4712, email: 'test2@example.com'},
   {id: 4713, email: 'test3@example.com', access_code: 'test-access', hash: 'test-hash'}
 ]
-const models = {
-  user: {
-    getByEMail(email) {
-      const user = users.find(user => user.email === email)
-      if (user) {
-        return user
-      }
-      throw `No user found with this e-mail address`
-    },
-    getById(id) {
-      const user = users.find(user => user.id === id)
-      if (user) {
-        return user
-      }
-      throw `No user found with this id`
-    },
-    adminIsDefined: true
-  }
+models.user = {
+  getByEMail(email) {
+    const user = users.find(user => user.email === email)
+    if (user) {
+      return user
+    }
+    throw `No user found with this e-mail address`
+  },
+  getById(id) {
+    const user = users.find(user => user.id === id)
+    if (user) {
+      return user
+    }
+    throw `No user found with this id`
+  },
+  adminIsDefined: true,
 }
 
 const storedData = []
@@ -41,7 +39,7 @@ const store = {
 
 const secretOrKey = 'secret-key'
 
-const auth = AuthFactory({app, Model, models, store, secretOrKey})
+const auth = AuthFactory({app, models, store, secretOrKey})
 
 function expect(expected) {
   if (typeof expected === 'function') {
