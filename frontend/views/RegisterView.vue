@@ -4,7 +4,7 @@ import { CURRENTUSER_SET } from '@/store/mutation_types'
 import sendForm from '@/lib/sendForm'
 import DialogFormField from '@/dialogs/DialogFormField'
 
-const defaultMessage = 'Sag uns, wer Du bist, damit wir deine Planung wieder Dir zuordnen können:'
+const defaultMessage = 'Sag uns, wer Du bist, damit wir Deine Planung wieder Dir zuordnen können:'
 
 export default {
   components: {
@@ -76,15 +76,15 @@ export default {
         :marked="marked.includes('email')"
         :validation="/^[^\s@]+@\S+\.\S+$/"
         validationMessage="Das sieht nicht nach einer gültigen E-Mail-Adresse aus"
-        defaultInfo="An diese Adresse senden wir einen Zugangslink, falls Du mal dein Passwort vergessen hast"
+        defaultInfo="An diese Adresse senden wir einen Zugangslink, falls Du mal Dein Passwort vergessen hast"
       />
       <DialogFormField label="Vorname" type="text" name="firstName" v-model="fields.firstName" autocomplete="given-name"
         :marked="marked.includes('firstName')"
-        defaultInfo="Sag uns, wie wir Dich anreden sollen. Wir duzen grundsätzlich, das ist hoffetnlich Ok für Dich"
+        defaultInfo="Sag uns, wie wir Dich anreden sollen. Wir duzen grundsätzlich, das ist hoffentlich Ok für Dich"
       />
       <DialogFormField label="Passwort" type="password" name="password" v-model="fields.password" autocomplete="current-password"
         :marked="marked.includes('password')"
-        defaultInfo="Dein Kennwort, mit dem wir bei Anmeldungen prüfen können, dass Du es tatsächlich bist"
+        defaultInfo="Vergib' ein Passwort, um Deinen Zugang zu schützen"
       />
 
       <button type="submit">Registrieren</button>
