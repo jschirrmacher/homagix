@@ -52,8 +52,8 @@ describe('DishProposer', () => {
     proposer.get(userA, ['12', '1', '33']).map(d => d.id).should.deepEqual(['17', '43', '44', '8', '23', '25', '29'])
   })
 
-  it('should propose only dishes from own list', () => {
+  it('should propose dishes from own list first', () => {
     const proposer = DishProposer({ models })
-    proposer.get(userB).map(d => d.id).should.deepEqual(['8', '25'])
+    proposer.get(userB).map(d => d.id).should.deepEqual(['8', '25', '17', '43', '1', '44', '12'])
   })
 })

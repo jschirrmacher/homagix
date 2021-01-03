@@ -4,7 +4,6 @@ import AccountRouter from './auth/AccountRouter.js'
 import DishProposer from './Weekplan/DishProposer.js'
 import DishesRouter from './DishesRouter.js'
 import IngredientRouter from './IngredientRouter.js'
-import ProposalsRouter from './Weekplan/ProposalsRouter.js'
 import IngredientController from './IngredientController.js'
 import WeekplanController from './Weekplan/WeekplanController.js'
 import WeekplanRouter from './Weekplan/WeekplanRouter.js'
@@ -29,17 +28,15 @@ export default function ({ models, store, auth }) {
   const router = express.Router()
   const sessionRouter = SessionRouter({ auth })
   const accountRouter = AccountRouter({ auth, store, models, mailer })
-  const proposer = DishProposer({ models, store })
+  const proposer = DishProposer({ models })
   const dishesRouter = DishesRouter({ models, store })
   const ingredientRouter = IngredientRouter({ controller: IngredientController({ models, store }), jsonResult })
-  const proposalsRouter = ProposalsRouter({ proposer })
-  const weekplanRouter = WeekplanRouter({ controller: WeekplanController({ models, proposer }), jsonResult, auth })
+  const weekplanRouter = WeekplanRouter({ controller: WeekplanController({ models, store, proposer }), jsonResult, auth })
   
   router.use('/sessions', sessionRouter)
   router.use('/accounts', accountRouter)
   router.use('/dishes', dishesRouter)
   router.use('/ingredients', ingredientRouter)
-  router.use('/proposals', proposalsRouter)
   router.use('/weekplan', weekplanRouter)
 
   return router

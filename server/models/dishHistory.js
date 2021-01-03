@@ -1,11 +1,15 @@
 const history = {}
 
-function served({ dishId, date }) {
-  history[date] = dishId
+function served({ dishId, date, listId = '' }) {
+  history[listId] = history[listId] || {}
+  history[listId][date] = dishId
 }
 
-function getFrom(date) {
-  return Object.entries(history)
+function getFrom(user, date) {
+  const ownHistory = history[user.listId || user.id] || {}
+  const commonHistory = history[''] || {}
+  const list = { ...ownHistory, ...commonHistory }
+  return Object.entries(list)
     .filter(([d]) => d >= date)
 }
 

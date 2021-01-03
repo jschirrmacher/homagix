@@ -27,7 +27,7 @@ const user = { id: 7 }
 
 const models = {
   dishHistory: {
-    getFrom: (date) => history.filter(([d]) => d >= date)
+    getFrom: (user, date) => history.filter(([d]) => d >= date)
   },
   dish: {
     byId: (id) => dishes[id]

@@ -148,11 +148,9 @@ export const actions = {
   },
 
   [SHOPPING_DONE]: async (context) => {
-    const data = {
-      accepted: context.state.accepted,
-      date: context.state.startDate.toISOString()
-    }
-    await doFetch('post', '/proposals/fix', data)
+    const data = { accepted: context.state.accepted }
+    const date = context.state.startDate.toISOString().split('T')[0]
+    await doFetch('post', '/weekplan/' + date + '/fix', data)
     context.commit(SHOPPING_DONE)
     await updateWeekplan(context)
   },

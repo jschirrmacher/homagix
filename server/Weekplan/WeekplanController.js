@@ -1,9 +1,9 @@
-export default ({ models, proposer }) => {
+export default ({ models, store, proposer }) => {
   function getWeekplan(user, startingAt, inhibited, today) {
     today = today || new Date()
     today.setHours(0, 0, 0, 0)
     const history = Object.assign({}, ...models.dishHistory
-      .getFrom(startingAt)
+      .getFrom(user, startingAt)
       .sort((a, b) => a[0].localeCompare(b[0]))
       .slice(0, 7)
       .map(([date, dishId]) => ({ [date]: models.dish.byId(dishId) }))
@@ -16,7 +16,17 @@ export default ({ models, proposer }) => {
     })
   }
 
+  function fixPlan(user, date, accepted) {
+    accepted.forEach((id, index) => {
+      const newDate = new Date(date)
+      newDate.setDate(newDate.getDate() + index)
+      store.emit(models.getEvents().served(id, newDate, user.listId || user.id))
+    })
+    return { accepted, date }
+  }
+
   return {
     getWeekplan,
+    fixPlan,
   }
 }

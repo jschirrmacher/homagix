@@ -1,24 +1,27 @@
-export default ({ models, store }) => {
-  function getDate(dish) {
-    return new Date(dish.last || 0)
-  }
-
+export default ({ models }) => {
   return {
     get(user, inhibited = []) {
-      return (models.dishList.getById(user.id) || [])
-        .filter(dishId => !inhibited.some(id => id === dishId))
-        .map(dishId => models.dish.getDishById(dishId))
-        .sort((a, b) => getDate(a) - getDate(b))
+      const favorites = models.dishList.getById(user.listId || user.id) || []
+      function getDate(dish) {
+        return new Date(dish.last || 0)
+      }
+    
+      function compare(a, b) {
+        const aIsFav = favorites.includes(a.id)
+        const bIsFav = favorites.includes(b.id)
+        if (aIsFav && !bIsFav) {
+          return -1
+        } else if (!aIsFav && bIsFav) {
+          return 1
+        } else {
+          return getDate(a) - getDate(b)
+        }
+      }
+    
+      return models.dish.getAll().filter(dish => !dish.alwaysOnList)
+        .filter(dish => !inhibited.some(id => id === dish.id))
+        .sort(compare)
         .slice(0, 7)
     },
-  
-    fix(accepted, date) {
-      accepted.forEach((id, index) => {
-        const newDate = new Date(date)
-        newDate.setDate(newDate.getDate() + index)
-        store.emit(models.getEvents().served(id, newDate))
-      })
-      return { accepted, date }
-    }
   }
 }
