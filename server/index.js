@@ -9,6 +9,7 @@ import MainRouter from './MainRouter.js'
 import ModelWriter from './models/ModelWriter.js'
 import history from 'connect-history-api-fallback'
 import Auth from './auth/auth.js'
+import listRoutes from './lib/listRoutes.js'
 
 const nodeEnv = process.env.NODE_ENV || 'development'
 const logger = console
@@ -61,3 +62,5 @@ app.listen(PORT, async () => {
   await store.replay()
   logger.info(`Listening on http://localhost:${PORT} (NODE_ENV=${nodeEnv})`)
 })
+
+console.log(listRoutes(app))

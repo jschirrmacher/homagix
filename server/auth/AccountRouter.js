@@ -10,7 +10,7 @@ function sendUserInfo(req, res) {
 export default ({ auth, models, store, mailer }) => {
   const { invitationAccepted } = models.getEvents()
   
-  async function register(req, res, next) {
+  async function registerNewUser(req, res, next) {
     try {
       if (models.user.getByEMail(req.body.email, false)) {
         throw new HTTPError(409, 'User already exists')
@@ -30,7 +30,7 @@ export default ({ auth, models, store, mailer }) => {
     }
   }
 
-  async function sendLink(req, res, next) {
+  async function sendAccessLink(req, res, next) {
     try {
       const user = models.user.getByEMail(req.body.email, false)
       if (user) {
@@ -62,9 +62,9 @@ export default ({ auth, models, store, mailer }) => {
   }
 
   const router = express.Router()
-  router.post('/accessLinks', sendLink)
+  router.post('/accessLinks', sendAccessLink)
   router.get('/:id/access-codes/:accessCode', auth.requireCode(), resetPassword)
   router.patch('/:id', auth.requireJWT(), updatePassword)
-  router.post('/', register)
+  router.post('/', registerNewUser)
   return router
 }

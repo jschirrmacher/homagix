@@ -4,8 +4,8 @@ export default function ({ models, store, auth, jsonResult }) {
   const router = express.Router()
   const { addDishToList, removeDishFromList } = models.getEvents()
 
-  function getAllDishes(user) {
-    const favorites = user ? (models.dishList.getById(user.listId || user.id) || []) : []
+  function getAllDishes(req) {
+    const favorites = req.user ? (models.dishList.getById(req.user.listId || req.user.id) || []) : []
     return { dishes: models.dish.getAll().map(dish => ({ ...dish, isFavorite: favorites.includes(dish.id) })) }
   }
 
@@ -16,9 +16,17 @@ export default function ({ models, store, auth, jsonResult }) {
     return { ...models.dish.byId(dishId), isFavorite: favorites.includes(dishId) }
   }
 
-  router.get('/', auth.requireJWT({ allowAnonymous: true }), jsonResult(req => getAllDishes(req.user)))
-  router.post('/:id/favorites', auth.requireJWT(), jsonResult(req => setFavorite(req.user, req.params.id, true)))
-  router.delete('/:id/favorites', auth.requireJWT(), jsonResult(req => setFavorite(req.user, req.params.id, false)))
+  function addFavorite(req) {
+    return setFavorite(req.user, req.params.id, true)
+  }
+
+  function removeFavorite(req) {
+    return setFavorite(req.user, req.params.id, false)
+  }
+
+  router.get('/', auth.requireJWT({ allowAnonymous: true }), jsonResult(getAllDishes))
+  router.post('/:id/favorites', auth.requireJWT(), jsonResult(addFavorite))
+  router.delete('/:id/favorites', auth.requireJWT(), jsonResult(removeFavorite))
 
   return router
 }

@@ -13,15 +13,18 @@ import Mailer from './Mailer.js'
 const mailer = Mailer({ nodemailer })
 
 function jsonResult(func) {
-  return async (req, res) => {
-    try {
-      const result = await func(req)
-      res.json(result)
-    } catch (error) {
-      console.error(error)
-      res.status(500).json({ error })
+  const fn = {
+    async [func.name](req, res) {
+      try {
+        const result = await func(req)
+        res.json(result)
+      } catch (error) {
+        console.error(error)
+        res.status(500).json({ error })
+      }
     }
   }
+  return fn[func.name]
 }
 
 export default function ({ models, store, auth }) {
