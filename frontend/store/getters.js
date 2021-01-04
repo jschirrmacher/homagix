@@ -25,9 +25,8 @@ function addDetails(state) {
 function getProposedOrStandardItems(state) {
   return [
     ...state.weekplan
-      .filter(p => p.dish && state.accepted.includes(p.dish.id))
-      .map(p => p.dish.items)
-      .flat(),
+      .filter(p => p.dishId && state.accepted.includes(p.dishId))
+      .flatMap(p => state.dishes.find(d => d.id === p.dishId).items),
     ...state.standardItems
   ]
 }
