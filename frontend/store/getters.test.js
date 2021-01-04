@@ -1,13 +1,14 @@
 import 'should'
 import store from './index.js'
-import { INGREDIENTS_LOADED, ACCEPTANCE_CHANGED, CHANGES_CHANGED, RESET_STORE, WEEKPLAN_LOADED } from './mutation_types.js'
+import { INGREDIENTS_LOADED, ACCEPTANCE_CHANGED, CHANGES_CHANGED, RESET_STORE, WEEKPLAN_LOADED, DISHES_LOADED } from './mutation_types.js'
 import { dishes, ingredients } from './test_dishes.js'
 
 describe('Store getters', () => {
   beforeEach(() => {
     store.commit(RESET_STORE)
     store.commit(INGREDIENTS_LOADED, { ingredients: Object.values(ingredients), standards: [] })
-    store.commit(WEEKPLAN_LOADED, { weekplan: Object.values(dishes).map(dish => ({ date: dish.lastServed, dish, served: true })) })
+    store.commit(DISHES_LOADED, { dishes: Object.values(dishes) })
+    store.commit(WEEKPLAN_LOADED, { weekplan: Object.values(dishes).map(dish => ({ date: dish.lastServed, dishId: dish.id, served: true })) })
   })
 
   describe('shoppinglist', () => {
