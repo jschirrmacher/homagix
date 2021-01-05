@@ -19,6 +19,19 @@ export default {
 
   computed: {
     ...mapState(['activeItemId']),
+
+    itemGroups() {
+      const groups = {}
+      let currentGroup = ''
+      this.items.forEach(item => {
+        if (item.group.id !== currentGroup) {
+          currentGroup = item.group.id
+          groups[currentGroup] = { title: item.group.title, items: [] }
+        }
+        groups[currentGroup].items.push(item)
+      })
+      return groups
+    }
   },
 
   methods: {
@@ -38,23 +51,37 @@ export default {
 </script>
 
 <template>
-  <ul>
-    <Ingredient v-for="item in items" :key="item.id"
-      :class="{active: item.id === activeItemId}"
-      :item="item"
-      :canEditAmount="canEdit(item)"
-      @click="setActive(item)"
-      @blur="setInactive()"
-    >
-      <slot v-bind:item="item" />
-    </Ingredient>
-  </ul>
+  <div>
+    <div v-for="(group, groupId) in itemGroups" :key="groupId">
+      <div class="groupTitle" :class="groupId">{{ group.title }}</div>
+      <ul>
+        <Ingredient v-for="item in group.items" :key="item.id"
+          :class="{active: item.id === activeItemId}"
+          :item="item"
+          :canEditAmount="canEdit(item)"
+          @click="setActive(item)"
+          @blur="setInactive()"
+        >
+          <slot v-bind:item="item" />
+        </Ingredient>
+      </ul>
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
+ul {
+  margin: 0;
+}
+
 @media print {
   ul {
     column-count: 2;
+    
+    li {
+      font-size: 80%;
+      max-height: 24px;
+    }
   }
 }
 </style>

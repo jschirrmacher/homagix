@@ -131,12 +131,18 @@ export default {
   }
 
   @media print {
-    .pager {
-      display: none;
+    & > ul > li {
+      min-height: 0;
+      padding-bottom: 2px;
+
+      .day {
+        display: inline;
+        background: transparent;
+      }
     }
 
-    .day {
-      display: inline-block;
+    .pager {
+      display: none;
     }
   }
 }

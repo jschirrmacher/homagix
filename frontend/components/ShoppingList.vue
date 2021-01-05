@@ -61,9 +61,13 @@ export default {
 <style lang="scss">
 .group {
   display: none;
+  margin-left: 100px;
+}
+
+.group,
+.groupTitle {
   font-size: 14px;
   line-height: 1.4em;
-  margin-left: 100px;
   border: none;
   background: transparent;
   -webkit-appearance: none;
@@ -75,39 +79,41 @@ export default {
   -ms-text-align-last: center;
   text-align-last: center;
 
-  &.fruit {
-    background-color: darkgreen;
-    color: #eecc00;
-  }
+  @media screen {
+    &.fruit {
+      background-color: darkgreen;
+      color: #eecc00;
+    }
 
-  &.breakfast {
-    background-color: #eecc00;
-    color: saddlebrown;
-  }
+    &.breakfast {
+      background-color: #eecc00;
+      color: saddlebrown;
+    }
 
-  &.meat {
-    background-color: darkred;
-    color: #eecc00;
-  }
+    &.meat {
+      background-color: darkred;
+      color: #eecc00;
+    }
 
-  &.cooled {
-    background-color: cornflowerblue;
-    color: white;
-  }
+    &.cooled {
+      background-color: cornflowerblue;
+      color: white;
+    }
 
-  &.tinned {
-    background-color: lightgrey;
-    color: black;
-  }
+    &.tinned {
+      background-color: lightgrey;
+      color: black;
+    }
 
-  &.drinks {
-    background-color: yellowgreen;
-    color: #eecc00;
-  }
+    &.drinks {
+      background-color: yellowgreen;
+      color: #eecc00;
+    }
 
-  &.frozen {
-    background-color: blue;
-    color: white;
+    &.frozen {
+      background-color: blue;
+      color: white;
+    }
   }
 }
 

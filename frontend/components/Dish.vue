@@ -64,7 +64,7 @@ export default {
     <router-link :to="slug">
       {{ dish.name }}
     </router-link>
-    <a v-if="currentUser && currentUser.id" href="#" @click.prevent="toggleFavorite">{{ favorite }}</a>
+    <a v-if="currentUser && currentUser.id" href="#" class="favorite" @click.prevent="toggleFavorite">{{ favorite }}</a>
     <div v-if="opened" class="ingredient-list">
       <div class="servedDate">Zuletzt am {{ servedDate }}</div>
       <IngredientList :items="dishIngredients" />
@@ -121,6 +121,10 @@ export default {
     &:not(.accepted),
     .openclose
     {
+      display: none;
+    }
+
+    .favorite {
       display: none;
     }
   }
