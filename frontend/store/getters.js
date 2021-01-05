@@ -50,7 +50,7 @@ function compareItems(a, b) {
 export const getters = {
   proposedItems(state) {
     return state.weekplan
-    .filter(p => state.accepted.includes(p.dish.id))
+    .filter(p => state.accepted.includes(p.dishId))
     .map(p => p.dish.items)
     .flat()
     .map(addDetails(state))
