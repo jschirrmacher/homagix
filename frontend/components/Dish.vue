@@ -64,9 +64,9 @@ export default {
     <router-link :to="slug">
       {{ dish.name }}
     </router-link>
-    <span class="servedDate">{{ servedDate }}</span>
     <a v-if="currentUser && currentUser.id" href="#" @click.prevent="toggleFavorite">{{ favorite }}</a>
     <div v-if="opened" class="ingredient-list">
+      <div class="servedDate">Zuletzt am {{ servedDate }}</div>
       <IngredientList :items="dishIngredients" />
     </div>
   </div>
@@ -87,17 +87,9 @@ export default {
   }
 
   &:not(.served) .servedDate {
-    background: #aaaaaa;
-    position: relative;
-    right: 50px;
-    padding: 2px 5px;
-    border-radius: 4px;
-    color: white;
+    background: #eeeeee;
+    padding: 2px 22px;
     font-size: 80%;
-    vertical-align: text-top;
-    margin-left: 1em;
-    float: right;
-    margin-right: -50px;
   }
 
   .openclose {
