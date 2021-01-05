@@ -15,7 +15,7 @@ export default {
   components: { IngredientList, NewItem },
 
   computed: {
-    ...mapState(['itemGroups']),
+    ...mapState(['itemGroups', 'activeItemId']),
     ...mapGetters(['shoppinglist', 'itemsInShoppingList']),
   },
 
@@ -58,11 +58,12 @@ export default {
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .group {
-  float: right;
+  display: none;
   font-size: 14px;
   line-height: 1.4em;
+  margin-left: 100px;
   border: none;
   background: transparent;
   -webkit-appearance: none;
@@ -76,17 +77,17 @@ export default {
 
   &.fruit {
     background-color: darkgreen;
-    color: yellow;
+    color: #eecc00;
   }
 
   &.breakfast {
-    background-color: yellow;
+    background-color: #eecc00;
     color: saddlebrown;
   }
 
   &.meat {
     background-color: darkred;
-    color: yellow;
+    color: #eecc00;
   }
 
   &.cooled {
@@ -101,13 +102,17 @@ export default {
 
   &.drinks {
     background-color: yellowgreen;
-    color: yellow;
+    color: #eecc00;
   }
 
   &.frozen {
     background-color: blue;
     color: white;
   }
+}
+
+.active:not(.removed) .group {
+  display: block;
 }
 
 .restore {

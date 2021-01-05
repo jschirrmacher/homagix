@@ -99,6 +99,7 @@ html, body {
 .content {
   max-width: 800px;
   margin: 0 auto;
+  padding: 10px 1em;
 }
 
 .error {
@@ -161,6 +162,21 @@ button.inline {
 
   &.delete {
     color: red;
+  }
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+  }
+
+  h1 {
+    padding: 10px;
+  }
+
+  button,
+  .group {
+    display: none;
   }
 }
 </style>

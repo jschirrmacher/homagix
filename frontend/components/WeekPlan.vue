@@ -76,22 +76,38 @@ export default {
 
 <style lang="scss">
 .weekplan {
-  @media (min-width: 640px) {
-    .pager {
-      text-align: center;
-      background: #eeeeee;
-      cursor: pointer;
-      user-select: none;
+  .pager {
+    text-align: center;
+    background: #eeeeee;
+    cursor: pointer;
+    user-select: none;
 
-      &:hover {
-        background: #dddddd;
-      }
-
-      &:active {
-        background: #cccccc;
-      }
+    &:hover {
+      background: #dddddd;
     }
 
+    &:active {
+      background: #cccccc;
+    }
+  }
+
+  > ul > li {
+    > .day {
+      background: #eecc00;
+      padding: 2px 5px;
+      font-size: 13px;
+      display: block;
+      margin-bottom: 1px;
+    }
+
+    &.past {
+      .servedDate, .accept, .delete {
+        display: none;
+      }
+    }
+  }
+
+  @media (min-width: 640px) {
     > ul {
       margin: 0;
 
@@ -103,18 +119,12 @@ export default {
           border-top: 1px solid #bbbbbb;
         }
 
-        .day {
-          background: #eecc00;
-          padding: 2px 5px;
-          font-size: 13px;
-        }
-
         &.past {
           background: #f7f7f7;
+        }
 
-          .servedDate, .accept, .delete {
-            display: none;
-          }
+        .day {
+          display: inline;
         }
       }
     }
@@ -125,7 +135,7 @@ export default {
       display: none;
     }
 
-    day {
+    .day {
       display: inline-block;
     }
   }

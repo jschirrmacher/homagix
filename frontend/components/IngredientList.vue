@@ -17,6 +17,10 @@ export default {
     }
   },
 
+  computed: {
+    ...mapState(['activeItemId']),
+  },
+
   methods: {
     setActive(item) {
       this.$store.commit(SET_ACTIVE_ITEM, { itemId: item.id })
@@ -27,7 +31,7 @@ export default {
     },
 
     canEdit(item) {
-      return this.canEditAmount && item.id === this.$store.state.activeItemId
+      return this.canEditAmount && item.id === this.activeItemId
     }
   }
 }
@@ -36,6 +40,7 @@ export default {
 <template>
   <ul>
     <Ingredient v-for="item in items" :key="item.id"
+      :class="{active: item.id === activeItemId}"
       :item="item"
       :canEditAmount="canEdit(item)"
       @click="setActive(item)"

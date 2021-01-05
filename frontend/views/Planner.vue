@@ -37,24 +37,3 @@ export default {
     <button v-if="itemsInShoppingList" @click="completed">Erledigt</button>
   </div>
 </template>
-
-<style lang="scss">
-.Planner {
-  padding: 10px 1em;
-}
-
-@media print {
-  @page {
-    size: A4 portrait;
-  }
-
-  h1 {
-    padding: 10px;
-  }
-
-  button,
-  .group {
-    display: none;
-  }
-}
-</style>
