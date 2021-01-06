@@ -54,6 +54,7 @@
   "devDependencies": {
     "css-loader": "^2.1.1",
     "eslint": "^7.17.0",
+    "eslint-config-prettier": "^7.1.0",
     "eslint-loader": "^4.0.2",
     "file-loader": "^3.0.1",
     "husky": "^5.0.6",
