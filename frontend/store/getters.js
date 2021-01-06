@@ -22,11 +22,15 @@ function addDetails(state) {
   }
 }
 
+function getItemsFromWeekplan(state) {
+  return state.weekplan
+    .filter(p => p.dishId && state.accepted.includes(p.dishId))
+    .flatMap(p => state.dishes.find(d => d.id === p.dishId).items)
+}
+
 function getProposedOrStandardItems(state) {
   return [
-    ...state.weekplan
-      .filter(p => p.dishId && state.accepted.includes(p.dishId))
-      .flatMap(p => state.dishes.find(d => d.id === p.dishId).items),
+    ...getItemsFromWeekplan(state),
     ...state.standardItems
   ]
 }
@@ -49,12 +53,9 @@ function compareItems(a, b) {
 
 export const getters = {
   proposedItems(state) {
-    return state.weekplan
-    .filter(p => state.accepted.includes(p.dishId))
-    .map(p => p.dish.items)
-    .flat()
-    .map(addDetails(state))
-    .reduce(addIfNotAlreadyIn, [])
+    return getItemsFromWeekplan(state)
+      .map(addDetails(state))
+      .reduce(addIfNotAlreadyIn, [])
   },
 
   shoppinglist(state) {

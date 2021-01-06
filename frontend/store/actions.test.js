@@ -2,7 +2,7 @@ import 'should'
 import fetch from 'node-fetch'
 import nock from 'nock'
 import store from './index.js'
-import { REMOVE_ITEM, INGREDIENTS_LOADED, ACCEPTANCE_CHANGED, ADD_ITEM, CHANGES_CHANGED, RESTORE_ITEM, UPDATE_AMOUNT, RESET_STORE, STARTDATE_CHANGED, WEEKPLAN_LOADED } from './mutation_types.js'
+import { REMOVE_ITEM, INGREDIENTS_LOADED, ACCEPTANCE_CHANGED, ADD_ITEM, CHANGES_CHANGED, RESTORE_ITEM, UPDATE_AMOUNT, RESET_STORE, STARTDATE_CHANGED, WEEKPLAN_LOADED, DISHES_LOADED } from './mutation_types.js'
 import { dishes, ingredients } from './test_dishes.js'
 import { setBaseUrl } from '../lib/api.js'
 import { CHANGE_STARTDATE } from './action_types.js'
@@ -16,7 +16,8 @@ const standards = [
 
 function setupStore(standards) {
   store.commit(INGREDIENTS_LOADED, { ingredients: Object.values(ingredients), standards })
-  store.commit(WEEKPLAN_LOADED, { weekplan: Object.values(dishes).map(dish => ({ date: dish.lastServed, dish, served: true })) })
+  store.commit(DISHES_LOADED, { dishes: Object.values(dishes) })
+  store.commit(WEEKPLAN_LOADED, { weekplan: Object.values(dishes).map(dish => ({ date: dish.lastServed, dishId: dish.id, served: true })) })
   store.commit(ACCEPTANCE_CHANGED, { accepted: [ dishes.brot.id ] })
 }
 
