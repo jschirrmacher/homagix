@@ -1,5 +1,6 @@
 <script>
 import dialogPolyfill from 'dialog-polyfill'
+import 'dialog-polyfill/dist/dialog-polyfill.css'
 
 export default {
   props: {
@@ -46,9 +47,11 @@ dialog {
     margin: 1em 10px;
   }
 
-  &::backdrop,
-  & + .backdrop {
-    background: rgba(0, 0, 0, 0.6);
+  &::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+  }
+  & + div.backdrop {
+    background: rgba(0, 0, 0, 0.5);
   }
 
   .close-box {
