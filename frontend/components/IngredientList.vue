@@ -9,12 +9,12 @@ export default {
   props: {
     items: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     canEditAmount: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   computed: {
@@ -31,7 +31,7 @@ export default {
         groups[currentGroup].items.push(item)
       })
       return groups
-    }
+    },
   },
 
   methods: {
@@ -45,8 +45,8 @@ export default {
 
     canEdit(item) {
       return this.canEditAmount && item.id === this.activeItemId
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -55,8 +55,10 @@ export default {
     <div v-for="(group, groupId) in itemGroups" :key="groupId">
       <div class="groupTitle" :class="groupId">{{ group.title }}</div>
       <ul>
-        <Ingredient v-for="item in group.items" :key="item.id"
-          :class="{active: item.id === activeItemId}"
+        <Ingredient
+          v-for="item in group.items"
+          :key="item.id"
+          :class="{ active: item.id === activeItemId }"
           :item="item"
           :canEditAmount="canEdit(item)"
           @click="setActive(item)"
@@ -77,7 +79,7 @@ ul {
 @media print {
   ul {
     column-count: 2;
-    
+
     li {
       font-size: 80%;
       max-height: 24px;

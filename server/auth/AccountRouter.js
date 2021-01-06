@@ -9,7 +9,7 @@ function sendUserInfo(req, res) {
 
 export default ({ auth, models, store, mailer }) => {
   const { invitationAccepted } = models.getEvents()
-  
+
   async function registerNewUser(req, res, next) {
     try {
       if (models.user.getByEMail(req.body.email, false)) {

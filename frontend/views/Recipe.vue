@@ -12,7 +12,9 @@ export default Vue.extend({
     ...mapState(['dishes', 'allIngredients']),
 
     dish() {
-      return (this.dishes && this.dishes.find(dish => dish.id === this.id)) || {}
+      return (
+        (this.dishes && this.dishes.find(dish => dish.id === this.id)) || {}
+      )
     },
 
     ingredients() {
@@ -26,14 +28,14 @@ export default Vue.extend({
         }
         return { ...ingredient, amount: item.amount }
       })
-    }
-  }
+    },
+  },
 })
 </script>
 
 <template>
   <div>
-    <img v-if="dish.image" :src="'/images/' + dish.image">
+    <img v-if="dish.image" :src="'/images/' + dish.image" />
 
     <h2>{{ dish.name }}</h2>
 
@@ -48,7 +50,10 @@ export default Vue.extend({
     </section>
 
     <article>
-      {{ dish.recipe || 'Es gibt bisher noch keine Beschreibung, wie das Gericht zubereitet wird.' }}
+      {{
+        dish.recipe ||
+        'Es gibt bisher noch keine Beschreibung, wie das Gericht zubereitet wird.'
+      }}
     </article>
 
     <button @click="$router.go(-1)">Zurück</button>
@@ -56,58 +61,58 @@ export default Vue.extend({
 </template>
 
 <style lang="scss" scoped>
+img {
+  width: 640px;
+  max-width: 66%;
+  padding: 1em 0;
+}
+
+#ingredients {
+  float: right;
+  border: 1px solid #dddddd;
+  padding: 20px 10px 10px;
+  margin: 1em 0 10px 10px;
+
+  h3 {
+    margin-top: 0;
+  }
+}
+
+.source {
+  float: right;
+  background: #eeeeee;
+  margin-top: 0;
+  padding: 5px 10px;
+  border: 1px solid #aaaaaa;
+}
+
+article {
+  margin-bottom: 1em;
+  padding-top: 5px;
+}
+
+@media (max-width: 640px) {
   img {
-    width: 640px;
-    max-width: 66%;
-    padding: 1em 0;
+    max-width: 100%;
+    padding: 5px 0 0;
+  }
+
+  h2 {
+    margin: 5px 0 10px;
   }
 
   #ingredients {
-    float: right;
-    border: 1px solid #dddddd;
-    padding: 20px 10px 10px;
-    margin: 1em 0 10px 10px;
+    float: none;
+    margin: 0;
+    padding-top: 10px;
 
     h3 {
-      margin-top: 0;
-    }
-  }
-
-  .source {
-    float: right;
-    background: #eeeeee;
-    margin-top: 0;
-    padding: 5px 10px;
-    border: 1px solid #aaaaaa;
-  }
-
-  article {
-    margin-bottom: 1em;
-    padding-top: 5px;
-  }
-
-  @media (max-width: 640px) {
-    img {
-      max-width: 100%;
-      padding: 5px 0 0;
-    }
-
-    h2 {
-      margin: 5px 0 10px;
-    }
-
-    #ingredients {
-      float: none;
       margin: 0;
-      padding-top: 10px;
+    }
 
-      h3 {
-        margin: 0;
-      }
-
-      ul {
-        margin: 5px 0 0;
-      }
+    ul {
+      margin: 5px 0 0;
     }
   }
+}
 </style>

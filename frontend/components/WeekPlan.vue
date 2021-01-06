@@ -6,9 +6,9 @@ import { DISH_DECLINED, TOGGLE_ACCEPTANCE } from '../store/mutation_types'
 
 export default {
   components: {
-    Dish
+    Dish,
   },
-  
+
   computed: {
     ...mapState(['weekplan', 'startDate', 'dishes']),
 
@@ -20,13 +20,17 @@ export default {
         if (startDate) {
           this.$store.dispatch(CHANGE_STARTDATE, { startDate })
         }
-      }
-    }
+      },
+    },
   },
 
   methods: {
     formatDate(date) {
-      return (new Date(date)).toLocaleDateString(navigator.language, { weekday: 'short', day: 'numeric', month: 'numeric' })
+      return new Date(date).toLocaleDateString(navigator.language, {
+        weekday: 'short',
+        day: 'numeric',
+        month: 'numeric',
+      })
     },
 
     addToDate(offset) {
@@ -36,7 +40,7 @@ export default {
     },
 
     past(date) {
-      return date < (new Date()).toISOString().split('T')[0]
+      return date < new Date().toISOString().split('T')[0]
     },
 
     decline(dishId) {
@@ -49,29 +53,45 @@ export default {
 
     dish(dishId) {
       return this.dishes.find(dish => dish.id === dishId)
-    }
-  }
+    },
+  },
 }
 </script>
 
 <template>
-<div class="weekplan">
-  <h2>
-    Wochenplan beginnend ab
-    <input type="date" v-model="startDate" autocomplete="off">
-  </h2>
-  <div class="pager" @click="addToDate(-1)">▲</div>
-  <ul>
-    <li v-for="entry in weekplan" :key="entry.date" :class="{ past: past(entry.date) }">
-      <span class="day">{{ formatDate(entry.date) }}</span>
-      <Dish v-if="entry.dishId" :dish="dish(entry.dishId)">
-        <button class="inline delete" title="Ablehnen" @click="() => decline(entry.dishId)">×</button>
-        <button class="inline accept" title="Annehmen" @click="() => toggleAcceptance(entry.dishId)">✓</button>
-      </Dish>
-    </li>
-  </ul>
-  <div class="pager" @click="addToDate(1)">▼</div>
-</div>
+  <div class="weekplan">
+    <h2>
+      Wochenplan beginnend ab
+      <input type="date" v-model="startDate" autocomplete="off" />
+    </h2>
+    <div class="pager" @click="addToDate(-1)">▲</div>
+    <ul>
+      <li
+        v-for="entry in weekplan"
+        :key="entry.date"
+        :class="{ past: past(entry.date) }"
+      >
+        <span class="day">{{ formatDate(entry.date) }}</span>
+        <Dish v-if="entry.dishId" :dish="dish(entry.dishId)">
+          <button
+            class="inline delete"
+            title="Ablehnen"
+            @click="() => decline(entry.dishId)"
+          >
+            ×
+          </button>
+          <button
+            class="inline accept"
+            title="Annehmen"
+            @click="() => toggleAcceptance(entry.dishId)"
+          >
+            ✓
+          </button>
+        </Dish>
+      </li>
+    </ul>
+    <div class="pager" @click="addToDate(1)">▼</div>
+  </div>
 </template>
 
 <style lang="scss">
@@ -101,7 +121,9 @@ export default {
     }
 
     &.past {
-      .servedDate, .accept, .delete {
+      .servedDate,
+      .accept,
+      .delete {
         display: none;
       }
     }

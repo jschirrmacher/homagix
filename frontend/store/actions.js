@@ -18,7 +18,14 @@ import {
   DISHES_LOADED,
   CURRENTUSER_SET,
 } from './mutation_types.js'
-import { ADD_FAVORITE, CHANGE_GROUP, CHANGE_STARTDATE, INIT_APP, LOAD_DISHES, REMOVE_FAVORITE } from './action_types.js'
+import {
+  ADD_FAVORITE,
+  CHANGE_GROUP,
+  CHANGE_STARTDATE,
+  INIT_APP,
+  LOAD_DISHES,
+  REMOVE_FAVORITE,
+} from './action_types.js'
 import jwt_decode from 'jwt-decode'
 
 function eqItem(item) {
@@ -44,7 +51,10 @@ function neItem(item) {
 }
 
 async function updateWeekplan(context) {
-  const args = await fetchWeekplan(context.state.startDate, context.state.declined)
+  const args = await fetchWeekplan(
+    context.state.startDate,
+    context.state.declined
+  )
   context.commit(...args)
 }
 
@@ -93,7 +103,8 @@ export const actions = {
     const changes = context.state.changes.filter(neItem(item))
     const proposed = context.getters.proposedItems.find(eqItem(item))
     const standard = context.state.standardItems.find(eqItem(item))
-    const amount = (proposed ? proposed.amount : 0) + (standard ? standard.amount : 0)
+    const amount =
+      (proposed ? proposed.amount : 0) + (standard ? standard.amount : 0)
     if (amount) {
       changes.push({ ...item, amount: -amount })
     }
@@ -109,8 +120,8 @@ export const actions = {
     async function createNewItem(newItem) {
       const item = await doFetch('post', '/ingredients', newItem)
       context.commit(INGREDIENTS_LOADED, {
-        ingredients: [ ...context.state.allIngredients, item ],
-        standards: context.state.standardItems
+        ingredients: [...context.state.allIngredients, item],
+        standards: context.state.standardItems,
       })
       return item
     }
@@ -119,8 +130,11 @@ export const actions = {
       const existing = context.state.changes.find(eqItem(item))
       if (existing) {
         const cmpFunc = eqItem(item)
-        const replaceItem = { ...existing, amount: +existing.amount + item.amount }
-        return context.state.changes.map(i => cmpFunc(i) ? replaceItem : i)
+        const replaceItem = {
+          ...existing,
+          amount: +existing.amount + item.amount,
+        }
+        return context.state.changes.map(i => (cmpFunc(i) ? replaceItem : i))
       } else {
         if (!item.id) {
           return [...context.state.changes, await createNewItem(item)]
@@ -136,18 +150,26 @@ export const actions = {
   async [UPDATE_AMOUNT](context, { item, newAmount }) {
     function getChangedChanges(item, amount) {
       if (context.state.changes.find(eqItem(item))) {
-        return context.state.changes.map(i => i.id !== item.id ? i : { ...i, amount })
+        return context.state.changes.map(i =>
+          i.id !== item.id ? i : { ...i, amount }
+        )
       } else {
-        return [ ...context.state.changes, { ...item, amount } ]
+        return [...context.state.changes, { ...item, amount }]
       }
     }
 
-    const proposedItem = [...context.getters.proposedItems, ...context.state.standardItems].find(eqItem(item))
-    const changes = getChangedChanges(item, proposedItem ? newAmount - proposedItem.amount : newAmount)
+    const proposedItem = [
+      ...context.getters.proposedItems,
+      ...context.state.standardItems,
+    ].find(eqItem(item))
+    const changes = getChangedChanges(
+      item,
+      proposedItem ? newAmount - proposedItem.amount : newAmount
+    )
     context.commit(CHANGES_CHANGED, { changes })
   },
 
-  [SHOPPING_DONE]: async (context) => {
+  [SHOPPING_DONE]: async context => {
     const data = { accepted: context.state.accepted }
     const date = context.state.startDate.toISOString().split('T')[0]
     await doFetch('post', '/weekplan/' + date + '/fix', data)

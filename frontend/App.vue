@@ -1,6 +1,11 @@
 <script>
 import { mapState } from 'vuex'
-import { CLEAR_ERROR, GET_INGREDIENTS, GET_UNITS, SET_ACTIVE_ITEM } from './store/mutation_types'
+import {
+  CLEAR_ERROR,
+  GET_INGREDIENTS,
+  GET_UNITS,
+  SET_ACTIVE_ITEM,
+} from './store/mutation_types'
 import Navigation from '@/components/Navigation.vue'
 import LoginDialog from '@/AuthDialogs/LoginDialog.vue'
 import LostPasswordDialog from '@/AuthDialogs/LostPasswordDialog.vue'
@@ -25,8 +30,8 @@ export default {
 
     deactivateActiveItem() {
       this.$store.commit(SET_ACTIVE_ITEM, { itemId: null })
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -49,12 +54,12 @@ export default {
     <Alert />
     <LoginDialog />
     <LostPasswordDialog />
-
   </div>
 </template>
 
 <style lang="scss">
-html, body {
+html,
+body {
   font-family: Arial, Helvetica, sans-serif;
   padding: 0;
   margin: 0;
@@ -64,11 +69,11 @@ html, body {
 .title {
   margin: 0;
   padding: 10px 10px 5px;
-  background: linear-gradient(to bottom right, #F0A30A, rgb(240, 205, 10));
+  background: linear-gradient(to bottom right, #f0a30a, rgb(240, 205, 10));
   overflow: hidden;
 
   h1 {
-    color: #FFFF00;
+    color: #ffff00;
     position: relative;
     float: left;
     font-size: 28px;
@@ -83,7 +88,7 @@ html, body {
       top: -0.07em;
       width: 0.55em;
       height: 0.55em;
-      border: .19em none #FFFF00;
+      border: 0.19em none #ffff00;
       border-top-style: solid;
       border-left-style: solid;
       transform: scale(1, 0.66) rotate(45deg);
@@ -110,7 +115,7 @@ html, body {
   border: 2px solid red;
   margin: 10px;
   padding: 10px;
-  
+
   span {
     cursor: pointer;
   }

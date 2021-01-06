@@ -5,7 +5,7 @@ export default ({ models }) => {
       function getDate(dish) {
         return new Date(dish.last || 0)
       }
-    
+
       function compare(a, b) {
         const aIsFav = favorites.includes(a.id)
         const bIsFav = favorites.includes(b.id)
@@ -17,8 +17,10 @@ export default ({ models }) => {
           return getDate(a) - getDate(b)
         }
       }
-    
-      return models.dish.getAll().filter(dish => !dish.alwaysOnList)
+
+      return models.dish
+        .getAll()
+        .filter(dish => !dish.alwaysOnList)
         .filter(dish => !inhibited.some(id => id === dish.id))
         .sort(compare)
         .slice(0, 7)

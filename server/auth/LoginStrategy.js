@@ -12,7 +12,9 @@ export default class LoginStrategy extends Strategy {
     if (!(body.email || body.username) && !body.password) {
       this.fail('no credentials provided')
     } else {
-      this.verify(body.email, body.username, body.password, (err, info) => err ? this.fail(err) : this.success(info))
+      this.verify(body.email, body.username, body.password, (err, info) =>
+        err ? this.fail(err) : this.success(info)
+      )
     }
   }
 }

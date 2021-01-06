@@ -4,11 +4,15 @@ export default ({ controller, jsonResult, auth }) => {
   const router = express.Router()
 
   function getArrayParam(params, name) {
-    return ((params[name] && params[name].split(',')) || [])
+    return (params[name] && params[name].split(',')) || []
   }
 
   function getWeekplan(req) {
-    return controller.getWeekplan(req.user, req.params.date, getArrayParam(req.query, 'inhibit'))
+    return controller.getWeekplan(
+      req.user,
+      req.params.date,
+      getArrayParam(req.query, 'inhibit')
+    )
   }
 
   function fixPlan(req) {

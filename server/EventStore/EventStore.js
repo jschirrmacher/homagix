@@ -1,4 +1,13 @@
-import { existsSync, mkdirSync, unlinkSync, readdirSync, readFileSync, writeFileSync, createReadStream, createWriteStream } from 'fs'
+import {
+  existsSync,
+  mkdirSync,
+  unlinkSync,
+  readdirSync,
+  readFileSync,
+  writeFileSync,
+  createReadStream,
+  createWriteStream,
+} from 'fs'
 import { resolve } from 'path'
 import { Transform } from 'stream'
 import es from 'event-stream'
@@ -37,7 +46,9 @@ export default ({ basePath, migrationsPath = '', logger = console }) => {
       try {
         const oldEventsFile = resolve(basePath, `events-${fromVersion}.json`)
         if (existsSync(oldEventsFile)) {
-          const readStream = createReadStream(oldEventsFile).pipe(es.split()).pipe(es.parse())
+          const readStream = createReadStream(oldEventsFile)
+            .pipe(es.split())
+            .pipe(es.parse())
           readStream.on('end', pResolve)
           readStream.on('error', error => {
             logger.error(error)
@@ -60,7 +71,7 @@ export default ({ basePath, migrationsPath = '', logger = console }) => {
 
   function dispatch(event) {
     try {
-      (listeners[event.type] || []).forEach(listener => listener(event))
+      ;(listeners[event.type] || []).forEach(listener => listener(event))
     } catch (error) {
       logger.error(error)
       logger.debug(error.stack)
@@ -72,24 +83,31 @@ export default ({ basePath, migrationsPath = '', logger = console }) => {
   }
   migrationsPath = migrationsPath || resolve(DIRNAME, 'migrations')
   const versionFile = resolve(basePath, 'state.json')
-  const eventsVersionNo = !existsSync(versionFile) ? 0 : JSON.parse(readFileSync(versionFile).toString()).versionNo || 0
-  const migrationFiles = (existsSync(migrationsPath) ? readdirSync(migrationsPath) : [])
+  const eventsVersionNo = !existsSync(versionFile)
+    ? 0
+    : JSON.parse(readFileSync(versionFile).toString()).versionNo || 0
+  const migrationFiles = (existsSync(migrationsPath)
+    ? readdirSync(migrationsPath)
+    : []
+  )
     .filter(name => parseInt(name) > eventsVersionNo)
     .map(name => resolve(migrationsPath, name))
   const versionNo = eventsVersionNo + migrationFiles.length
   const eventsFileName = resolve(basePath, `events-${versionNo}.json`)
   if (eventsVersionNo < versionNo) {
     logger.info(`Migrating data from ${eventsVersionNo} to ${versionNo}`)
-    ready = Promise.all(migrationFiles.map(async file => new (await import(file)).default()))
-      .then(migrators => migrate(basePath, eventsVersionNo, migrators)
-      .then(() => writeFileSync(versionFile, JSON.stringify({ versionNo })))
-      .then(() => logger.info('Migration successful'))
-      .then(openChangeStream)
+    ready = Promise.all(
+      migrationFiles.map(async file => new (await import(file)).default())
+    ).then(migrators =>
+      migrate(basePath, eventsVersionNo, migrators)
+        .then(() => writeFileSync(versionFile, JSON.stringify({ versionNo })))
+        .then(() => logger.info('Migration successful'))
+        .then(openChangeStream)
     )
   } else {
     openChangeStream()
     ready = Promise.resolve()
-  }    
+  }
 
   return {
     dispatch,
@@ -100,9 +118,11 @@ export default ({ basePath, migrationsPath = '', logger = console }) => {
         const stream = createReadStream(eventsFileName)
           .pipe(es.split())
           .pipe(es.parse())
-          .pipe(es.mapSync(event => {
-            dispatch(event)
-          }))
+          .pipe(
+            es.mapSync(event => {
+              dispatch(event)
+            })
+          )
 
         return new Promise(resolve => {
           stream.on('end', resolve)
@@ -138,6 +158,6 @@ export default ({ basePath, migrationsPath = '', logger = console }) => {
 
     end() {
       changeStream.end()
-    }
+    },
   }
 }

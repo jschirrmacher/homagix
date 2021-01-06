@@ -13,8 +13,10 @@ export default Vue.extend({
     ...mapState(['dishes']),
 
     sortedDishes() {
-      return [...this.dishes.filter(d => !d.alwaysOnList)].sort((d1, d2) => d1.name.localeCompare(d2.name))
-    }
+      return [...this.dishes.filter(d => !d.alwaysOnList)].sort((d1, d2) =>
+        d1.name.localeCompare(d2.name)
+      )
+    },
   },
 
   mounted() {
@@ -24,12 +26,12 @@ export default Vue.extend({
 </script>
 
 <template>
-<div>
-  <h2>Rezepte</h2>
-  <ul id="recipes">
-    <li v-for="dish in sortedDishes" :key="dish.id">
-      <Dish :dish="dish" />
-    </li>
-  </ul>
-</div>
+  <div>
+    <h2>Rezepte</h2>
+    <ul id="recipes">
+      <li v-for="dish in sortedDishes" :key="dish.id">
+        <Dish :dish="dish" />
+      </li>
+    </ul>
+  </div>
 </template>

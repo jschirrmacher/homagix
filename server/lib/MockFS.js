@@ -1,7 +1,7 @@
 import path from 'path'
 import fs from 'fs'
 
-export default function ({ basePath, logger = console }) { 
+export default function ({ basePath, logger = console }) {
   return {
     cleanup() {
       fs.rmdirSync(basePath, { recursive: true })
@@ -17,6 +17,6 @@ export default function ({ basePath, logger = console }) {
           logger.error(error)
         }
       })
-    }
+    },
   }
 }

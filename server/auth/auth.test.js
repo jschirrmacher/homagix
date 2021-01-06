@@ -6,19 +6,29 @@ import Store from '../EventStore/Store.mock.js'
 import Models from '../models/MockedModel.js'
 
 const app = {
-  use() {}
+  use() {},
 }
 const store = Store()
 const models = Models({ store })
 const users = [
-  {id: 4711, email: 'test@example.com', access_code: 'test-access-1', password: '$2a$10$5cblct/kPaZQ5uh9jNKIVu8.oGiOPDPGB4iZRdNp0E1miYl6jTqXm'},
-  {id: 4712, email: 'test2@example.com'},
-  {id: 4713, email: 'test3@example.com', access_code: 'test-access', hash: 'test-hash'}
+  {
+    id: 4711,
+    email: 'test@example.com',
+    access_code: 'test-access-1',
+    password: '$2a$10$5cblct/kPaZQ5uh9jNKIVu8.oGiOPDPGB4iZRdNp0E1miYl6jTqXm',
+  },
+  { id: 4712, email: 'test2@example.com' },
+  {
+    id: 4713,
+    email: 'test3@example.com',
+    access_code: 'test-access',
+    hash: 'test-hash',
+  },
 ]
 users.forEach(user => store.emit(models.getEvents().userAdded(user)))
 
 const secretOrKey = 'secret-key'
-const auth = AuthFactory({app, models, store, secretOrKey})
+const auth = AuthFactory({ app, models, store, secretOrKey })
 
 function expect(expected) {
   if (typeof expected === 'function') {
@@ -41,7 +51,7 @@ function makeExpectedResult(expectedValues = {}) {
     status: wrap(expectedValues, 'status'),
     json: wrap(expectedValues, 'json'),
     cookie: wrap(expectedValues, 'cookie'),
-    called: {status: false, json: false, cookie: false}
+    called: { status: false, json: false, cookie: false },
   }
 
   function wrap(expectedValues, name) {
@@ -60,7 +70,7 @@ describe('auth', () => {
   describe('requireLogin', () => {
     it('should authenticate with e-mail and password', done => {
       const middleware = auth.requireLogin()
-      const req = {body: {email: 'test@example.com', password: 'test-pwd'}}
+      const req = { body: { email: 'test@example.com', password: 'test-pwd' } }
       const res = makeExpectedResult()
       middleware(req, res, err => {
         should(err).be.undefined()
@@ -72,8 +82,8 @@ describe('auth', () => {
 
     it('should generate a JWT if authenticated with e-mail and password', done => {
       const middleware = auth.requireLogin()
-      const req = {body: {email: 'test@example.com', password: 'test-pwd'}}
-      const res = makeExpectedResult({cookie: checkCookie})
+      const req = { body: { email: 'test@example.com', password: 'test-pwd' } }
+      const res = makeExpectedResult({ cookie: checkCookie })
       middleware(req, res, () => {
         res.called.cookie.should.be.true()
         done()
@@ -82,8 +92,11 @@ describe('auth', () => {
 
     it('should not authenticate with e-mail and wrong password', done => {
       const middleware = auth.requireLogin()
-      const req = {body: {email: 'test@example.com', password: 'wrong-pwd'}}
-      const res = makeExpectedResult({status: 401, json: {error: 'Not authenticated'}})
+      const req = { body: { email: 'test@example.com', password: 'wrong-pwd' } }
+      const res = makeExpectedResult({
+        status: 401,
+        json: { error: 'Not authenticated' },
+      })
       middleware(req, res, () => should().fail())
       done()
     })
@@ -92,8 +105,13 @@ describe('auth', () => {
   describe('requireJWT', () => {
     it('should authenticate with JWT in header', done => {
       const middleware = auth.requireJWT()
-      const authorization = jsonwebtoken.sign({sub: 4712}, secretOrKey, {expiresIn: '24h'})
-      const req = {body: {email: 'test3@example.com'}, headers: {authorization}}
+      const authorization = jsonwebtoken.sign({ sub: 4712 }, secretOrKey, {
+        expiresIn: '24h',
+      })
+      const req = {
+        body: { email: 'test3@example.com' },
+        headers: { authorization },
+      }
       const res = makeExpectedResult()
       middleware(req, res, err => {
         should(err).be.undefined()
@@ -105,8 +123,10 @@ describe('auth', () => {
 
     it('should authenticate with JWT in cookie', done => {
       const middleware = auth.requireJWT()
-      const token = jsonwebtoken.sign({sub: 4712}, secretOrKey, {expiresIn: '24h'})
-      const req = {body: {email: 'test3@example.com'}, cookies: {token}}
+      const token = jsonwebtoken.sign({ sub: 4712 }, secretOrKey, {
+        expiresIn: '24h',
+      })
+      const req = { body: { email: 'test3@example.com' }, cookies: { token } }
       const res = makeExpectedResult()
       middleware(req, res, err => {
         should(err).be.undefined()
@@ -121,10 +141,10 @@ describe('auth', () => {
     it('should require a user to be admin', done => {
       models.user.adminIsDefined = true
       const middleware = auth.requireAdmin()
-      const req = {user: {id: 4711}}
-      const res = makeExpectedResult({status: 403, message: 'Not allowed'})
+      const req = { user: { id: 4711 } }
+      const res = makeExpectedResult({ status: 403, message: 'Not allowed' })
       middleware(req, res, err => {
-        err.should.deepEqual({status: 403, message: 'Not allowed'})
+        err.should.deepEqual({ status: 403, message: 'Not allowed' })
         done()
       })
     })
@@ -132,7 +152,7 @@ describe('auth', () => {
     it('should allow access for admins', done => {
       models.user.adminIsDefined = true
       const middleware = auth.requireAdmin()
-      const req = {user: {id: 4712, isAdmin: true}}
+      const req = { user: { id: 4712, isAdmin: true } }
       const res = makeExpectedResult()
       middleware(req, res, err => {
         should(err).be.undefined()
@@ -143,7 +163,7 @@ describe('auth', () => {
     it('should allow access if no admin is defined', done => {
       models.user.adminIsDefined = false
       const middleware = auth.requireAdmin()
-      const req = {user: {id: 4711}}
+      const req = { user: { id: 4711 } }
       const res = makeExpectedResult()
       middleware(req, res, err => {
         should(err).be.undefined()
@@ -160,7 +180,7 @@ describe('auth', () => {
         name.should.equal('token')
         should(value).equal('')
         cookieIsCleared = true
-      }
+      },
     })
     cookieIsCleared.should.be.true()
     done()

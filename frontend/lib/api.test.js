@@ -9,7 +9,7 @@ api.setBaseUrl(baseName)
 
 const state = {
   accepted: [1, 2],
-  declined: [3, 4]
+  declined: [3, 4],
 }
 
 describe('api', () => {
@@ -31,21 +31,32 @@ describe('api', () => {
     })
 
     it('should send query parameters for GET method', async () => {
-      const request = nock(baseName).get('/route').query({ data: true }).reply(200, { success: true })
+      const request = nock(baseName)
+        .get('/route')
+        .query({ data: true })
+        .reply(200, { success: true })
       await api.doFetch('get', '/route', { data: true })
       request.isDone().should.be.true()
     })
 
     it('should send parameters as JSON in body for POST method', async () => {
-      const request = nock(baseName).post('/route', { data: true }).reply(200, { success: true })
+      const request = nock(baseName)
+        .post('/route', { data: true })
+        .reply(200, { success: true })
       await api.doFetch('post', '/route', { data: true })
       request.isDone().should.be.true()
     })
 
     it('should report errors as an object', async () => {
-      nock(baseName).get('/route').replyWithError({ message: 'something aweful happened', code: 403 })
+      nock(baseName)
+        .get('/route')
+        .replyWithError({ message: 'something aweful happened', code: 403 })
       const result = await api.doFetch('get', '/route')
-      result.should.deepEqual({ httpStatus: 403, error: 'request to http://test/route failed, reason: something aweful happened'})
+      result.should.deepEqual({
+        httpStatus: 403,
+        error:
+          'request to http://test/route failed, reason: something aweful happened',
+      })
     })
   })
 
@@ -56,8 +67,10 @@ describe('api', () => {
 
     it('should prepare GET parameters', async () => {
       const context = { state, commit() {} }
-      const request = nock(baseName).get('/route?accepted=1,2&inhibit=3,4').reply(200, { success: true })
-      await (api.loadData('/route', 'mutation'))(context)
+      const request = nock(baseName)
+        .get('/route?accepted=1,2&inhibit=3,4')
+        .reply(200, { success: true })
+      await api.loadData('/route', 'mutation')(context)
       request.isDone().should.be.true()
     })
 
@@ -66,10 +79,12 @@ describe('api', () => {
         state,
         commit(...args) {
           args.should.deepEqual(['mutation', { success: true }])
-        }
+        },
       }
-      const request = nock(baseName).get('/route?accepted=1,2&inhibit=3,4').reply(200, { success: true })
-      await (api.loadData('/route', 'mutation'))(context)
+      const request = nock(baseName)
+        .get('/route?accepted=1,2&inhibit=3,4')
+        .reply(200, { success: true })
+      await api.loadData('/route', 'mutation')(context)
       request.isDone().should.be.true()
     })
   })

@@ -1,4 +1,3 @@
-
 <script>
 import { mapState } from 'vuex'
 import { UPDATE_AMOUNT } from '../store/mutation_types'
@@ -7,12 +6,12 @@ export default {
   props: {
     item: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     canEditAmount: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   computed: {
@@ -35,7 +34,8 @@ export default {
 
 <template>
   <li :class="itemClass" @click.stop="$emit('click')">
-    <input type="number"
+    <input
+      type="number"
       class="amount"
       min="0"
       :step="getStep(item.unit)"
@@ -43,7 +43,7 @@ export default {
       :disabled="!canEditAmount"
       @change="event => amountChanged(item, +event.target.value)"
       @blur="$emit('blur')"
-    >
+    />
     <span class="unit">{{ item.unit }}</span>
     {{ item.name }}
     <slot v-bind:item="item" />
@@ -81,7 +81,8 @@ li {
   color: #888888;
   text-decoration: line-through;
 
-  .amount, .unit {
+  .amount,
+  .unit {
     visibility: hidden;
   }
 

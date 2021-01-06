@@ -9,7 +9,10 @@ export default class mig2 extends Transform {
   _transform(event, encoding, callback) {
     event.type = event.type.replace(/-(.)/g, (m, p) => p.toUpperCase())
 
-    if ((event.type === 'served' || event.type === 'ingredientAssigned') && event.dish) {
+    if (
+      (event.type === 'served' || event.type === 'ingredientAssigned') &&
+      event.dish
+    ) {
       event.dishId = event.dish
       delete event.dish
     }

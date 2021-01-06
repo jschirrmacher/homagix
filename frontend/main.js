@@ -11,7 +11,7 @@ new Vue({
   router,
   store,
   components: { App },
-  template: '<App/>'
+  template: '<App/>',
 })
 
 store.dispatch(INIT_APP)

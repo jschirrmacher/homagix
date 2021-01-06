@@ -25,13 +25,15 @@ export default ({ basePath }) => {
   return {
     writeDish(dish) {
       const data = Object.assign({}, dish, {
-        items: dish.items && dish.items.map(ingredient => {
-          const item = getIngredientById(ingredient.id)
-          if (!item) {
-            throw Error('Ingredient not found: ' + JSON.stringify(ingredient))
-          }
-          return `${ingredient.amount} ${item.unit} ${item.name}`
-        })
+        items:
+          dish.items &&
+          dish.items.map(ingredient => {
+            const item = getIngredientById(ingredient.id)
+            if (!item) {
+              throw Error('Ingredient not found: ' + JSON.stringify(ingredient))
+            }
+            return `${ingredient.amount} ${item.unit} ${item.name}`
+          }),
       })
       delete data.id
       dishesWriter(dish.id, data)
@@ -51,6 +53,6 @@ export default ({ basePath }) => {
 
     writeDishlist(listId, list) {
       dishListWriter(listId, list)
-    }
+    },
   }
 }

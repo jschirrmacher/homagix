@@ -26,7 +26,7 @@ export default {
 
     failed() {
       return !!this.validationError
-    }
+    },
   },
 
   methods: {
@@ -37,8 +37,8 @@ export default {
       } else {
         this.validationError = ''
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -46,10 +46,16 @@ export default {
   <label :class="{ marked }">
     <div class="label-text">{{ label }}</div>
     <div class="field-container">
-      <input :type="type" v-model="value" :name="name" :autocomplete="autocomplete" @input="validate">
+      <input
+        :type="type"
+        v-model="value"
+        :name="name"
+        :autocomplete="autocomplete"
+        @input="validate"
+      />
       <div class="field-info" :class="{ failed }">{{ info }}</div>
     </div>
-  </label>  
+  </label>
 </template>
 
 <style lang="scss" scoped>

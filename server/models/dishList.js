@@ -12,12 +12,12 @@ function removeDish(writer, { dishId, listId }) {
 }
 
 export default function ({ store, events, modelWriter }) {
-  const curry = (f) => (data) => f(modelWriter.writeDishlist, data)
+  const curry = f => data => f(modelWriter.writeDishlist, data)
   store
     .on(events.addDishToList, curry(addDish))
     .on(events.removeDishFromList, curry(removeDish))
 
   return {
-    getById: (listId) => lists[listId],
+    getById: listId => lists[listId],
   }
 }

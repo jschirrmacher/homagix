@@ -35,7 +35,7 @@ export default Vue.extend({
       } else {
         return 'Info'
       }
-    }
+    },
   },
 
   methods: {
@@ -52,13 +52,19 @@ export default Vue.extend({
     invite() {
       const vars = {
         link: location.origin + '/register?inviteFrom=' + this.currentUser.id,
-        firstName: this.currentUser.firstName
+        firstName: this.currentUser.firstName,
       }
       function replaceFunc(match) {
         return vars[match.replace(/[\{}\s]*/g, '')] || match
       }
-      const body = encodeURIComponent(invitationMailBody.replace(/{{\s*(\w+)\s*}}/gs, replaceFunc))
-      window.location = 'mailto:?subject=' + encodeURIComponent(invitationMailSubject) + '&body=' + body
+      const body = encodeURIComponent(
+        invitationMailBody.replace(/{{\s*(\w+)\s*}}/gs, replaceFunc)
+      )
+      window.location =
+        'mailto:?subject=' +
+        encodeURIComponent(invitationMailSubject) +
+        '&body=' +
+        body
     },
 
     openMenu(event) {
@@ -67,8 +73,8 @@ export default Vue.extend({
 
     closeMenu(event) {
       event.target.closest('.submenu').classList.remove('open')
-    }
-  }
+    },
+  },
 })
 </script>
 
@@ -80,78 +86,80 @@ export default Vue.extend({
       {{ currentUser.firstName || 'Nicht angemeldet' }}
       <ul>
         <li id="version" data-info="version">{{ version }}</li>
-        <li v-if="loggedIn" @click="invite" >Jemanden einladen</li>
-        <li v-if="loggedIn" @click="navigate('/setPassword')" >Passwort ändern</li>
-        <li v-if="loggedIn" @click.prevent="logout" >Abmelden</li>
+        <li v-if="loggedIn" @click="invite">Jemanden einladen</li>
+        <li v-if="loggedIn" @click="navigate('/setPassword')">
+          Passwort ändern
+        </li>
+        <li v-if="loggedIn" @click.prevent="logout">Abmelden</li>
       </ul>
     </div>
   </nav>
 </template>
 
 <style scoped lang="scss">
-  nav {
-    display: block;
-    padding-top: 10px;
+nav {
+  display: block;
+  padding-top: 10px;
 
-    .submenu {
-      cursor: pointer;
+  .submenu {
+    cursor: pointer;
 
-      &:before {
-        content: '▾';
-      }
+    &:before {
+      content: '▾';
+    }
 
-      &.right {
-        float: right;
-
-        ul {
-          left: auto;
-          right: 0;
-        }
-      }
-
-      &.open ul {
-        display: block;
-      }
+    &.right {
+      float: right;
 
       ul {
-        display: none;
-        position: absolute;
-        z-index: 10000;
-        list-style: none;
-        left: 0;
-        border: 1px solid #aaaaaa;
-        margin-top: 0;
-        box-shadow: 0 0 4px #aaaaaa;
+        left: auto;
+        right: 0;
+      }
+    }
 
-        li {
-          background: white;
-          padding: 7px;
+    &.open ul {
+      display: block;
+    }
 
-          &:not([data-info]):hover {
-            background: #eeeeee;
-          }
+    ul {
+      display: none;
+      position: absolute;
+      z-index: 10000;
+      list-style: none;
+      left: 0;
+      border: 1px solid #aaaaaa;
+      margin-top: 0;
+      box-shadow: 0 0 4px #aaaaaa;
 
-          &[data-info] {
-            cursor: default;
-          }
+      li {
+        background: white;
+        padding: 7px;
+
+        &:not([data-info]):hover {
+          background: #eeeeee;
+        }
+
+        &[data-info] {
+          cursor: default;
         }
       }
     }
   }
+}
 
-  a {
-    color: white;
-    text-decoration: none;
-    margin-right: 10px;
+a {
+  color: white;
+  text-decoration: none;
+  margin-right: 10px;
 
-    &:hover {
-      color: #dddddd;
-    }
+  &:hover {
+    color: #dddddd;
   }
+}
 
-  #version {
-    &:before {
-      content: 'Version '
-    }
+#version {
+  &:before {
+    content: 'Version ';
   }
+}
 </style>

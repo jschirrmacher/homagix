@@ -22,7 +22,7 @@ function jsonResult(func) {
         console.error(error)
         res.status(500).json({ error })
       }
-    }
+    },
   }
   return fn[func.name]
 }
@@ -33,9 +33,16 @@ export default function ({ models, store, auth }) {
   const accountRouter = AccountRouter({ auth, store, models, mailer })
   const proposer = DishProposer({ models })
   const dishesRouter = DishesRouter({ models, store, jsonResult, auth })
-  const ingredientRouter = IngredientRouter({ controller: IngredientController({ models, store }), jsonResult })
-  const weekplanRouter = WeekplanRouter({ controller: WeekplanController({ models, store, proposer }), jsonResult, auth })
-  
+  const ingredientRouter = IngredientRouter({
+    controller: IngredientController({ models, store }),
+    jsonResult,
+  })
+  const weekplanRouter = WeekplanRouter({
+    controller: WeekplanController({ models, store, proposer }),
+    jsonResult,
+    auth,
+  })
+
   router.use('/sessions', sessionRouter)
   router.use('/accounts', accountRouter)
   router.use('/dishes', dishesRouter)

@@ -7,7 +7,7 @@ import Events from '../EventStore/Events.js'
 const store = Store()
 const models = {}
 const events = Events({ models })
-models.user = User({ store, events, modelWriter: { writeUser() {} }})
+models.user = User({ store, events, modelWriter: { writeUser() {} } })
 
 const testPerson = {
   id: '4711',
@@ -42,6 +42,8 @@ describe('Models.user', () => {
 
   it('should throw if a user is not found by email', () => {
     store.emit(userAdded(testPerson))
-    should(() => models.user.getByEMail('unknown@example.com')).throw(`No user found with this e-mail address`)
+    should(() => models.user.getByEMail('unknown@example.com')).throw(
+      `No user found with this e-mail address`
+    )
   })
 })

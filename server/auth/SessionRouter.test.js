@@ -27,7 +27,10 @@ const auth = {
   requireLogin() {
     return function (req, res, next) {
       log.push('auth.requireLogin')
-      if (req.body.email === 'test@example.com' && req.body.password === 'test-password') {
+      if (
+        req.body.email === 'test@example.com' &&
+        req.body.password === 'test-password'
+      ) {
         req.user = testUser
       }
       next()
@@ -41,12 +44,12 @@ const auth = {
 
   logout() {
     log.push('auth.logout')
-  }
+  },
 }
 
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-const router = SessionRouter({express, auth})
+const router = SessionRouter({ express, auth })
 app.use('/session', router)
 
 describe('SessionRouter', () => {
@@ -75,7 +78,7 @@ describe('SessionRouter', () => {
           response.body.should.deepEqual({
             id: 4711,
             email: 'test@example.com',
-            access_code: 'test-access-code'
+            access_code: 'test-access-code',
           })
         })
     })
@@ -86,7 +89,12 @@ describe('SessionRouter', () => {
       return request(app)
         .post('/session')
         .set('Content-Type', 'application/json')
-        .send(JSON.stringify({ email: 'test@example.com', password: 'test-password' }))
+        .send(
+          JSON.stringify({
+            email: 'test@example.com',
+            password: 'test-password',
+          })
+        )
         .expect(200)
         .expect('Content-Type', /json/)
         .then(response => {

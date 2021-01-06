@@ -3,7 +3,10 @@ const dishes = {
   byName: {},
 }
 
-export function addDish(writer, { id, name, source, alwaysOnList, items, recipe, image }) {
+export function addDish(
+  writer,
+  { id, name, source, alwaysOnList, items, recipe, image }
+) {
   const dish = { id: '' + id, name, items: items || [] }
   alwaysOnList && (dish.alwaysOnList = true)
   source && (dish.source = source)
@@ -47,7 +50,7 @@ export function getStandardIngredients() {
 }
 
 export default function ({ store, events, modelWriter }) {
-  const curry = (f) => (data) => f(modelWriter.writeDish, data)
+  const curry = f => data => f(modelWriter.writeDish, data)
   store
     .on(events.dishAdded, curry(addDish))
     .on(events.ingredientAssigned, curry(assignIngredient))
@@ -58,7 +61,7 @@ export default function ({ store, events, modelWriter }) {
     byId: getDishById,
     byName: getDishByName,
     getStandardIngredients,
-    
+
     reset() {
       dishes.byId = {}
       dishes.byName = {}

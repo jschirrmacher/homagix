@@ -11,10 +11,14 @@ export default ({ app, models, store, secretOrKey }) => {
   const { userAdded, userChanged } = models.getEvents()
 
   function signIn(user, req, res) {
-    const token = jsonwebtoken.sign({
-      sub: user.id,
-      firstName: user.firstName
-    }, secretOrKey, { expiresIn: '24h' })
+    const token = jsonwebtoken.sign(
+      {
+        sub: user.id,
+        firstName: user.firstName,
+      },
+      secretOrKey,
+      { expiresIn: '24h' }
+    )
     res.cookie('token', token, { maxAge: 24 * 60 * 60 * 1000 })
     req.user = user
   }
@@ -50,46 +54,54 @@ export default ({ app, models, store, secretOrKey }) => {
     store.emit(userChanged(user.id, user))
   }
 
-  passport.use(new LoginStrategy(async (email, username, password, done) => {
-    try {
-      const user = email ? models.user.getByEMail(email) : models.user.getByAccessCode(username)
-      bcrypt.compare(password, user.password, async (err, isValid) => {
-        done(err, isValid ? user : false)
-      })
-    } catch (error) {
-      done(error, false)
-    }
-  }))
-
-  passport.use(new JwtStrategy({jwtFromRequest, secretOrKey}, async (payload, done) => {
-    try {
-      const user = models.user.getById(payload.sub)
-      done(null, user)
-    } catch (error) {
-      done(error, false)
-    }
-  }))
-
-  passport.use(new AccessCodeStrategy(async (accessCode, id, done) => {
-    try {
-      const user = models.user.getById(id)
-      if (user && user.accessCode === accessCode) {
-        done(null, user)
-      } else {
-        done('unknown access code', false)
+  passport.use(
+    new LoginStrategy(async (email, username, password, done) => {
+      try {
+        const user = email
+          ? models.user.getByEMail(email)
+          : models.user.getByAccessCode(username)
+        bcrypt.compare(password, user.password, async (err, isValid) => {
+          done(err, isValid ? user : false)
+        })
+      } catch (error) {
+        done(error, false)
       }
-    } catch (error) {
-      done(error, false)
-    }
-  }))
+    })
+  )
+
+  passport.use(
+    new JwtStrategy({ jwtFromRequest, secretOrKey }, async (payload, done) => {
+      try {
+        const user = models.user.getById(payload.sub)
+        done(null, user)
+      } catch (error) {
+        done(error, false)
+      }
+    })
+  )
+
+  passport.use(
+    new AccessCodeStrategy(async (accessCode, id, done) => {
+      try {
+        const user = models.user.getById(id)
+        if (user && user.accessCode === accessCode) {
+          done(null, user)
+        } else {
+          done('unknown access code', false)
+        }
+      } catch (error) {
+        done(error, false)
+      }
+    })
+  )
 
   function authenticate(type, options = {}) {
     return function (req, res, next) {
-      passport.authenticate(type, {session: false}, (err, user) => {
+      passport.authenticate(type, { session: false }, (err, user) => {
         if (err) {
           return next(err)
         } else if (!req.user && !user && !options.allowAnonymous) {
-          res.status(401).json({error: 'Not authenticated'})
+          res.status(401).json({ error: 'Not authenticated' })
         } else if (!req.user && user) {
           signIn(user, req, res)
           next()
@@ -108,9 +120,9 @@ export default ({ app, models, store, secretOrKey }) => {
   const requireLogin = (options = {}) => authenticate('login', options)
 
   function requireAdmin() {
-    return function(req, res, next) {
+    return function (req, res, next) {
       if ((!req.user || !req.user.isAdmin) && models.user.adminIsDefined) {
-        next({status: 403, message: 'Not allowed'})
+        next({ status: 403, message: 'Not allowed' })
       } else {
         next()
       }
@@ -129,6 +141,6 @@ export default ({ app, models, store, secretOrKey }) => {
     requireCode,
     requireJWT,
     requireLogin,
-    requireAdmin
+    requireAdmin,
   }
 }

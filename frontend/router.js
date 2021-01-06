@@ -29,7 +29,7 @@ export default new VueRouter({
         } else {
           next('/')
         }
-      }
+      },
     },
     { name: 'recipes', path: '/recipes', component: RecipesList },
     {
@@ -47,15 +47,18 @@ export default new VueRouter({
       },
       beforeUpdate(to, from, next) {
         next(dishExists(to.params.id))
-      }
+      },
     },
-    { name: 'set-password', path: '/setPassword', component: ChangePasswordView },
+    {
+      name: 'set-password',
+      path: '/setPassword',
+      component: ChangePasswordView,
+    },
     { name: 'register', path: '/register', component: RegisterView },
-    { path: '*', component: NotFoundComponent }
-  ]
+    { path: '*', component: NotFoundComponent },
+  ],
 })
 
 function dishExists(id) {
   return store.state.dishes.find(dish => dish.id === id)
 }
-

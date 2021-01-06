@@ -27,7 +27,7 @@ const dishReader = DishReader({ store, models, basePath })
 const app = express()
 app.set('json spaces', 2)
 app.use(cookieParser())
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 const auth = Auth({ app, models, store, secretOrKey: process.env.SECRET })
 const router = MainRouter({ models, store, auth })
@@ -52,7 +52,8 @@ app.use('/', express.static(path.join(DIRNAME, 'build')))
 app.use('/', express.static(path.join(DIRNAME, 'public')))
 app.use('/images', express.static(path.join(DIRNAME, 'data', 'images')))
 
-app.use(function(err, req, res, next) { // eslint-disable-line no-unused-vars
+app.use(function (err, req, res, next) {
+  // eslint-disable-line no-unused-vars
   logger.error(err)
   res.status(err.code || 500).json({ error: err.message || err.toString() })
 })

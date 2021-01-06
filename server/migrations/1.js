@@ -9,7 +9,9 @@ export default class mig1 extends Transform {
   _transform(event, encoding, callback) {
     if (event.type === 'dish-updated' || event.type === 'dishes-updated') {
       if (event.name !== 'last') {
-        throw Error(`Update of dish's attribute '${event.name}' is not expected`)
+        throw Error(
+          `Update of dish's attribute '${event.name}' is not expected`
+        )
       }
       event.type = 'served'
       event.dish = event.id

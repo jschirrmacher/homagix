@@ -3,12 +3,12 @@ import { mapState, mapGetters } from 'vuex'
 import IngredientList from './IngredientList'
 import NewItem from './NewItem'
 import { REMOVE_ITEM, RESTORE_ITEM } from '../store/mutation_types'
-import { CHANGE_GROUP } from '../store/action_types'
+import { CHANGE_GROUP } from '../store/action_types'
 
 export default {
   data() {
     return {
-      preset: {}
+      preset: {},
     }
   },
 
@@ -33,7 +33,7 @@ export default {
     changeGroup(ingredient, group) {
       this.$store.dispatch(CHANGE_GROUP, { ingredient, group })
     },
-  }
+  },
 }
 </script>
 
@@ -44,11 +44,38 @@ export default {
       <span v-if="!itemsInShoppingList">ist leer</span>
     </h2>
 
-    <IngredientList v-if="itemsInShoppingList" :items="shoppinglist" v-slot:default="slotProps" :canEditAmount="true">
-      <button v-if="slotProps.item.amount > 0" class="inline delete" title="Von der Liste streichen" @click="remove(slotProps.item)">×</button>
-      <button v-if="slotProps.item.amount <= 0" class="inline restore" title="Wieder hinzufügen" @click="restore(slotProps.item)">+</button>
-      <select :class="'group ' + slotProps.item.group.id" @change="changeGroup(slotProps.item, $event.target.value)">
-        <option v-for="(opt, key) in itemGroups" :key="key" :value="key" :selected="key === slotProps.item.group.id">
+    <IngredientList
+      v-if="itemsInShoppingList"
+      :items="shoppinglist"
+      v-slot:default="slotProps"
+      :canEditAmount="true"
+    >
+      <button
+        v-if="slotProps.item.amount > 0"
+        class="inline delete"
+        title="Von der Liste streichen"
+        @click="remove(slotProps.item)"
+      >
+        ×
+      </button>
+      <button
+        v-if="slotProps.item.amount <= 0"
+        class="inline restore"
+        title="Wieder hinzufügen"
+        @click="restore(slotProps.item)"
+      >
+        +
+      </button>
+      <select
+        :class="'group ' + slotProps.item.group.id"
+        @change="changeGroup(slotProps.item, $event.target.value)"
+      >
+        <option
+          v-for="(opt, key) in itemGroups"
+          :key="key"
+          :value="key"
+          :selected="key === slotProps.item.group.id"
+        >
           {{ opt.title }}
         </option>
       </select>

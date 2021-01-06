@@ -5,7 +5,8 @@ import { CURRENTUSER_SET } from '@/store/mutation_types'
 import sendForm from '@/lib/sendForm'
 import DialogFormField from '@/dialogs/DialogFormField'
 
-const defaultMessage = 'Gib deine E-Mail-Adresse und dein Passwort ein, um Zugriff auf deine Daten zu erhalten'
+const defaultMessage =
+  'Gib deine E-Mail-Adresse und dein Passwort ein, um Zugriff auf deine Daten zu erhalten'
 
 export default {
   components: {
@@ -14,7 +15,7 @@ export default {
   },
 
   data() {
-    return  {
+    return {
       message: defaultMessage,
       messageType: 'info',
       fields: {
@@ -26,7 +27,9 @@ export default {
 
   methods: {
     async login() {
-      const userInfo = await sendForm('POST', '/sessions', this.fields, { 401: 'Unbekannter Benutzer' })
+      const userInfo = await sendForm('POST', '/sessions', this.fields, {
+        401: 'Unbekannter Benutzer',
+      })
       if (userInfo.error || !userInfo.id) {
         this.message = userInfo.error || 'Unerwarteter Fehler beim Anmelden'
         this.messageType = 'error'
@@ -57,8 +60,8 @@ export default {
       this.reset()
       closeDialogs()
       this.$router.push('/register').catch(() => {})
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -67,14 +70,29 @@ export default {
     <p :class="messageType">{{ message }}</p>
 
     <form @submit.prevent="login">
-      <DialogFormField label="E-Mail" type="email" name="email" v-model="fields.email" autocomplete="current-email" :validation="/^[^\s@]+@\S+\.\S+$/" validationMessage="Das sieht nicht nach einer gültigen E-Mail-Adresse aus" />
-      <DialogFormField label="Passwort" type="password" name="password" v-model="fields.password" autocomplete="current-password" />
+      <DialogFormField
+        label="E-Mail"
+        type="email"
+        name="email"
+        v-model="fields.email"
+        autocomplete="current-email"
+        :validation="/^[^\s@]+@\S+\.\S+$/"
+        validationMessage="Das sieht nicht nach einer gültigen E-Mail-Adresse aus"
+      />
+      <DialogFormField
+        label="Passwort"
+        type="password"
+        name="password"
+        v-model="fields.password"
+        autocomplete="current-password"
+      />
 
       <button type="submit">Anmelden</button>
 
-      <br>
-      Passwort vergessen? <a href="#" @click="lostPassword">Zugangslink senden</a>
-      <br>
+      <br />
+      Passwort vergessen?
+      <a href="#" @click="lostPassword">Zugangslink senden</a>
+      <br />
       Neu hier? <a href="#" @click.prevent="register">Hier Registrieren</a>
     </form>
   </Dialog>

@@ -5,7 +5,10 @@ export default function ({ models }) {
       const err = new Error()
       Error.prepareStackTrace = (err, stack) => stack.map(e => e.getFileName())
       const currentfile = err.stack.shift()
-      const callerFile = err.stack.find(s => s !== currentfile).split(/[\\/]/).pop()
+      const callerFile = err.stack
+        .find(s => s !== currentfile)
+        .split(/[\\/]/)
+        .pop()
       Error.prepareStackTrace = originalFunc
       throw `Read model '${callerFile}', event '${event.type}': ${message}`
     }
@@ -21,7 +24,13 @@ export default function ({ models }) {
     ingredientAdded(ingredient) {
       assert(!!ingredient, 'No ingredient')
       assert(ingredient.name, 'Missing name')
-      return { type: 'ingredientAdded', id: ingredient.id, unit: ingredient.unit, name: ingredient.name, group: ingredient.group }
+      return {
+        type: 'ingredientAdded',
+        id: ingredient.id,
+        unit: ingredient.unit,
+        name: ingredient.name,
+        group: ingredient.group,
+      }
     },
 
     ingredientAssigned(dishId, ingredientId, amount) {
@@ -39,7 +48,12 @@ export default function ({ models }) {
       assert(listId, 'No listId')
       assert(models.dish.byId(dishId), 'Dish not found')
       assert(date instanceof Date, `date should be of type 'Date'`)
-      return { type: 'served', dishId, listId, date: date.toISOString().replace(/T.*$/, '') }
+      return {
+        type: 'served',
+        dishId,
+        listId,
+        date: date.toISOString().replace(/T.*$/, ''),
+      }
     },
 
     ingredientUpdated(ingredientId, name, value) {
@@ -64,7 +78,10 @@ export default function ({ models }) {
 
     userChanged(id, user) {
       assert(id, 'No id')
-      assert(!user.email || user.email.match(/.+@.+\..+/), 'email has wrong format')
+      assert(
+        !user.email || user.email.match(/.+@.+\..+/),
+        'email has wrong format'
+      )
       return { type: 'userChanged', id, user }
     },
 

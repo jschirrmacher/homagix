@@ -10,5 +10,5 @@ Dein Team von {{{ baseUrl }}}</p>
 
 export default {
   subject: 'Dein Zugang zu {{{ baseUrl }}}',
-  html
+  html,
 }

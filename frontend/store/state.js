@@ -24,8 +24,8 @@ export function getDefaultState() {
       tinned: { order: 5, title: 'Nahrungsmittel' },
       drinks: { order: 6, title: 'Getränke' },
       frozen: { order: 7, title: 'Tiefgekühlt' },
-      other: { order: 8, title: 'Sonstiges' }
-    }
+      other: { order: 8, title: 'Sonstiges' },
+    },
   }
 }
 

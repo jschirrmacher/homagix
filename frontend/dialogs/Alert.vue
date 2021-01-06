@@ -13,8 +13,8 @@ export default {
   methods: {
     close() {
       closeDialogs()
-    }
-  }
+    },
+  },
 }
 </script>
 

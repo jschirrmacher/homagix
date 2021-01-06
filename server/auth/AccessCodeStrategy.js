@@ -13,7 +13,9 @@ export default class AccessCodeStrategy extends Strategy {
     if (!accessCode || !id) {
       this.fail('access code or id not provided')
     } else {
-      this.verify(accessCode, id, (err, info) => err ? this.fail(err) : this.success(info))
+      this.verify(accessCode, id, (err, info) =>
+        err ? this.fail(err) : this.success(info)
+      )
     }
   }
 }

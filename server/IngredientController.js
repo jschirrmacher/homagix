@@ -6,7 +6,9 @@ export default ({ models, store }) => {
   async function getIngredients() {
     return {
       ingredients: await models.ingredient.getAll(),
-      standards: models.dish.getStandardIngredients().map(i => ({...models.ingredient.byId(i.id), ...i}))
+      standards: models.dish
+        .getStandardIngredients()
+        .map(i => ({ ...models.ingredient.byId(i.id), ...i })),
     }
   }
 

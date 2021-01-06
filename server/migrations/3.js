@@ -1,7 +1,11 @@
 import path from 'path'
 import { Transform } from 'stream'
 import { addDish, getDishById } from '../models/dish.js'
-import { addIngredient, updateIngredient, getIngredientById } from '../models/ingredient.js'
+import {
+  addIngredient,
+  updateIngredient,
+  getIngredientById,
+} from '../models/ingredient.js'
 import ModelWriter from '../ModelWriter.js'
 
 const DIRNAME = path.resolve(path.dirname(''))

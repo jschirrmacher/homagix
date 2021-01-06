@@ -2,21 +2,21 @@
 export default {
   props: {
     id: {
-      type: String
+      type: String,
     },
     list: {
       type: Array,
-      default: () => {}
+      default: () => {},
     },
     value: {
       type: String,
-    }
+    },
   },
 
   data() {
     return {
       selectedIndex: -1,
-      suggestions: []
+      suggestions: [],
     }
   },
 
@@ -27,10 +27,13 @@ export default {
       },
 
       set(value) {
-        const item = this.list.find(item => item.name === value) || { id: null, name: value }
+        const item = this.list.find(item => item.name === value) || {
+          id: null,
+          name: value,
+        }
         this.$emit('input', item)
-      }
-    }
+      },
+    },
   },
 
   methods: {
@@ -54,8 +57,11 @@ export default {
 
     handleKey(event) {
       if (['ArrowDown', 'ArrowUp'].includes(event.code)) {
-        const direction = (event.code === 'ArrowDown') ? 1 : -1
-        this.selectedIndex = Math.max(-1, Math.min(this.list.length -1, this.selectedIndex + direction))
+        const direction = event.code === 'ArrowDown' ? 1 : -1
+        this.selectedIndex = Math.max(
+          -1,
+          Math.min(this.list.length - 1, this.selectedIndex + direction)
+        )
       } else if ('Enter' === event.code) {
         if (this.selectedIndex >= 0) {
           this.search = this.suggestions[this.selectedIndex].name
@@ -71,13 +77,14 @@ export default {
       const pattern = new RegExp(this.search, 'i')
       this.suggestions = this.list.filter(item => item.name.match(pattern))
     },
-  }
+  },
 }
 </script>
 
 <template>
   <div class="autocomplete" :id="id">
-    <input type="text"
+    <input
+      type="text"
       v-model="search"
       @keyup="handleKey"
       role="combobox"
@@ -92,7 +99,9 @@ export default {
       :aria-activedescendant="activeDescendant"
     />
     <ul role="listbox" id="newItem-name-autocomplete-result-list">
-      <li v-for="(item, index) in suggestions " :key="item.id"
+      <li
+        v-for="(item, index) in suggestions"
+        :key="item.id"
         @click="selectItem"
         :class="itemClass(index)"
         :data-index="index"
@@ -114,7 +123,8 @@ export default {
     width: 100%;
   }
 
-  input:focus + ul, ul:hover {
+  input:focus + ul,
+  ul:hover {
     display: inline;
   }
 
@@ -132,7 +142,8 @@ export default {
     li {
       padding: 4px;
 
-      &:hover, &.selected {
+      &:hover,
+      &.selected {
         background: #eeeeee;
       }
     }

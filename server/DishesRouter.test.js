@@ -10,7 +10,7 @@ const auth = {
   requireJWT: () => (req, res, next) => {
     req.user = testUser
     next()
-  }
+  },
 }
 const store = Store()
 const models = Models({ store })
@@ -35,7 +35,9 @@ describe('DishesRouter', () => {
     store.emit(models.getEvents().dishAdded({ id: '4711', name: 'Butter' }))
     store.emit(models.getEvents().addDishToList('4711', '42'))
     const result = await request(app).get('/')
-    result.body.dishes.should.deepEqual([{ id: '4711', name: 'Butter', items: [], isFavorite: true }])
+    result.body.dishes.should.deepEqual([
+      { id: '4711', name: 'Butter', items: [], isFavorite: true },
+    ])
   })
 
   it('should mark dishes as favorite', async () => {

@@ -2,18 +2,25 @@ export default ({ models, store, proposer }) => {
   function getWeekplan(user, startingAt, inhibited, today) {
     today = today || new Date()
     today.setHours(0, 0, 0, 0)
-    const history = Object.assign({}, ...models.dishHistory
-      .getFrom(user, startingAt)
-      .sort((a, b) => a[0].localeCompare(b[0]))
-      .slice(0, 7)
-      .map(([date, id]) => ({ [date]: { id } }))
+    const history = Object.assign(
+      {},
+      ...models.dishHistory
+        .getFrom(user, startingAt)
+        .sort((a, b) => a[0].localeCompare(b[0]))
+        .slice(0, 7)
+        .map(([date, id]) => ({ [date]: { id } }))
     )
     const proposals = proposer.get(user, inhibited)
-    return Array(7).fill(0).map((_, index) => {
-      const date = new Date(+new Date(startingAt) + 86400000 * index).toISOString().split('T')[0]
-      const dish = history[date] || (new Date(date) >= today ? proposals.shift() : {})
-      return { date, dishId: dish.id, served: !!history[date] }
-    })
+    return Array(7)
+      .fill(0)
+      .map((_, index) => {
+        const date = new Date(+new Date(startingAt) + 86400000 * index)
+          .toISOString()
+          .split('T')[0]
+        const dish =
+          history[date] || (new Date(date) >= today ? proposals.shift() : {})
+        return { date, dishId: dish.id, served: !!history[date] }
+      })
   }
 
   function fixPlan(user, date, accepted) {

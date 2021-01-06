@@ -1,10 +1,14 @@
 const headers = {
-  'content-type': 'application/json'
+  'content-type': 'application/json',
 }
 
 export default async function (method, url, fields, expectedHttpErrors = {}) {
   try {
-    const response = await fetch(url, { body: JSON.stringify(fields), headers, method })
+    const response = await fetch(url, {
+      body: JSON.stringify(fields),
+      headers,
+      method,
+    })
     if (!response.ok) {
       if (expectedHttpErrors && expectedHttpErrors[response.status]) {
         return { error: expectedHttpErrors[response.status] }

@@ -16,14 +16,18 @@ export default function ({ store, events, modelWriter }) {
   })
 
   store.on(userRemoved, event => {
-    delete(byEmail[users[event.id].email])
-    delete(users[event.id])
+    delete byEmail[users[event.id].email]
+    delete users[event.id]
     modelWriter.removeUser(event.id)
   })
 
   store.on(userChanged, event => {
-    if (event.user.email && users[event.id].email && byEmail[users[event.id].email]) {
-      delete(byEmail[users[event.id].email])
+    if (
+      event.user.email &&
+      users[event.id].email &&
+      byEmail[users[event.id].email]
+    ) {
+      delete byEmail[users[event.id].email]
     }
     Object.assign(users[event.user.id], event.user)
     if (event.user.email) {
@@ -63,13 +67,13 @@ export default function ({ store, events, modelWriter }) {
     reset() {
       function clear(obj) {
         for (var key in obj) {
-          if (Object.prototype.hasOwnProperty.call(obj,key)) {
+          if (Object.prototype.hasOwnProperty.call(obj, key)) {
             delete obj[key]
           }
         }
       }
       clear(byEmail)
       clear(users)
-    }
+    },
   }
 }

@@ -8,7 +8,12 @@ const aliases = {}
 const ingredientFields = ['name', 'unit', 'group']
 
 export function addIngredient(writer, { id, name, unit, group }) {
-  const ingredient = { id: '' + id, name: name.trim(), unit, group: group || '' }
+  const ingredient = {
+    id: '' + id,
+    name: name.trim(),
+    unit,
+    group: group || '',
+  }
   const existing = ingredients.byName[name.toLowerCase()]
   if (existing) {
     aliases['' + id] = existing.id
@@ -41,7 +46,7 @@ export function getIngredientByName(name) {
 }
 
 export default function ({ store, events, modelWriter }) {
-  const curry = (f) => (data) => f(modelWriter.writeIngredient, data)
+  const curry = f => data => f(modelWriter.writeIngredient, data)
   store
     .on(events.ingredientAdded, curry(addIngredient))
     .on(events.ingredientUpdated, curry(updateIngredient))
@@ -55,8 +60,12 @@ export default function ({ store, events, modelWriter }) {
       if (item.id) {
         return this.byId(item.id)
       }
-      const pattern = new RegExp(strict ? ('^' + item.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$') : item.name)
+      const pattern = new RegExp(
+        strict
+          ? '^' + item.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$'
+          : item.name
+      )
       return Object.values(ingredients.byId).find(i => i.name.match(pattern))
-    }
+    },
   }
 }

@@ -8,9 +8,7 @@
       "name": "Attach",
       "port": 9229,
       "request": "attach",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
+      "skipFiles": ["<node_internals>/**"],
       "type": "pwa-node"
     },
     {
@@ -26,9 +24,7 @@
       "name": "Backend Tests",
       "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
       "request": "launch",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
+      "skipFiles": ["<node_internals>/**"],
       "type": "pwa-node"
     },
     {
@@ -44,9 +40,7 @@
       "name": "Frontend Tests",
       "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
       "request": "launch",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
+      "skipFiles": ["<node_internals>/**"],
       "type": "pwa-node"
     },
     {
@@ -57,15 +51,13 @@
         "999999",
         "--colors",
         "${workspaceFolder}/frontend/**/*.test.js",
-        "${workspaceFolder}/server/**/*.test.js",
+        "${workspaceFolder}/server/**/*.test.js"
       ],
       "internalConsoleOptions": "openOnSessionStart",
       "name": "All Tests",
       "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
       "request": "launch",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
+      "skipFiles": ["<node_internals>/**"],
       "type": "pwa-node"
     },
     {
@@ -78,9 +70,7 @@
         "dotenv-flow/config",
         "${workspaceFolder}/server/index.js"
       ],
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
+      "skipFiles": ["<node_internals>/**"],
       "program": ""
     }
   ]

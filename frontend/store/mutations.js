@@ -35,7 +35,7 @@ export const mutations = {
   },
 
   [types.DISH_CHANGED](state, { dish }) {
-    state.dishes = state.dishes.map(d => d.id === dish.id ? dish : d)
+    state.dishes = state.dishes.map(d => (d.id === dish.id ? dish : d))
   },
 
   [types.INGREDIENTS_LOADED](state, { ingredients, standards }) {
@@ -44,7 +44,9 @@ export const mutations = {
   },
 
   [types.INGREDIENT_CHANGED](state, { ingredient }) {
-    state.allIngredients = state.allIngredients.map(i => i.id === ingredient.id ? ingredient : i)
+    state.allIngredients = state.allIngredients.map(i =>
+      i.id === ingredient.id ? ingredient : i
+    )
   },
 
   [types.UNITS_LOADED](state, { units }) {
@@ -73,5 +75,5 @@ export const mutations = {
 
   [types.SET_ACTIVE_ITEM](state, { itemId }) {
     state.activeItemId = itemId
-  }
+  },
 }

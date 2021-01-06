@@ -22,7 +22,11 @@ export default {
     ...mapState(['allIngredients', 'accepted', 'currentUser']),
 
     servedDate() {
-      return this.dish.last ? (new Date(this.dish.last)).toLocaleString(navigator.language, { dateStyle: 'medium' }) : 'noch nie'
+      return this.dish.last
+        ? new Date(this.dish.last).toLocaleString(navigator.language, {
+            dateStyle: 'medium',
+          })
+        : 'noch nie'
     },
 
     classNames() {
@@ -33,16 +37,27 @@ export default {
     },
 
     dishIngredients() {
-      return this.dish.items.map(i => ({ ...this.allIngredients.find(item => item.id === i.id), amount: i.amount }))
+      return this.dish.items.map(i => ({
+        ...this.allIngredients.find(item => item.id === i.id),
+        amount: i.amount,
+      }))
     },
 
     slug() {
-      return '/recipes/' + this.dish.id + '/' + this.dish.name.replace(/\s+/g, '-').replace(/[^\w-]/g, '').toLowerCase()
+      return (
+        '/recipes/' +
+        this.dish.id +
+        '/' +
+        this.dish.name
+          .replace(/\s+/g, '-')
+          .replace(/[^\w-]/g, '')
+          .toLowerCase()
+      )
     },
 
     favorite() {
       return this.dish.isFavorite ? '★' : '☆'
-    }
+    },
   },
 
   methods: {
@@ -51,9 +66,12 @@ export default {
     },
 
     toggleFavorite() {
-      this.$store.dispatch(this.dish.isFavorite ? REMOVE_FAVORITE : ADD_FAVORITE, { dishId: this.dish.id })
-    }
-  }
+      this.$store.dispatch(
+        this.dish.isFavorite ? REMOVE_FAVORITE : ADD_FAVORITE,
+        { dishId: this.dish.id }
+      )
+    },
+  },
 }
 </script>
 
@@ -64,7 +82,13 @@ export default {
     <router-link :to="slug">
       {{ dish.name }}
     </router-link>
-    <a v-if="currentUser && currentUser.id" href="#" class="favorite" @click.prevent="toggleFavorite">{{ favorite }}</a>
+    <a
+      v-if="currentUser && currentUser.id"
+      href="#"
+      class="favorite"
+      @click.prevent="toggleFavorite"
+      >{{ favorite }}</a
+    >
     <div v-if="opened" class="ingredient-list">
       <div class="servedDate">Zuletzt am {{ servedDate }}</div>
       <IngredientList :items="dishIngredients" />
@@ -99,7 +123,7 @@ export default {
     border-width: 0px 0 12px 12px;
     border-color: transparent #888888 #888888 transparent;
     transform: rotate(-45deg);
-    transition: transform .3s;
+    transition: transform 0.3s;
     cursor: pointer;
   }
 
@@ -119,8 +143,7 @@ export default {
 
     .servedDate,
     &:not(.accepted),
-    .openclose
-    {
+    .openclose {
       display: none;
     }
 

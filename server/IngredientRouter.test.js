@@ -17,10 +17,16 @@ app.use(bodyParser.json())
 app.use(router)
 
 describe('IngredientRouter', () => {
-  before(()=> {
-    const { dishAdded, ingredientAdded, ingredientAssigned } = models.getEvents()
+  before(() => {
+    const {
+      dishAdded,
+      ingredientAdded,
+      ingredientAssigned,
+    } = models.getEvents()
     store.dispatch(dishAdded({ id: '_', name: 'default', alwaysOnList: true }))
-    store.dispatch(ingredientAdded({ id: '1', name: 'Milch', unit: 'L', group: 'cooled' }))
+    store.dispatch(
+      ingredientAdded({ id: '1', name: 'Milch', unit: 'L', group: 'cooled' })
+    )
     store.dispatch(ingredientAssigned('_', 1, 3))
   })
 
@@ -29,7 +35,7 @@ describe('IngredientRouter', () => {
       .get('/')
       .expect('Content-Type', /json/)
       .expect(200)
-    
+
     result.body.should.have.properties(['ingredients', 'standards'])
     result.body.ingredients.should.be.instanceof(Array)
     result.body.standards.should.be.instanceof(Array)
@@ -37,22 +43,28 @@ describe('IngredientRouter', () => {
 
   it('should return ingredients from the standards list', async () => {
     const result = await request(app).get('/')
-    result.body.standards.should.deepEqual([{ id: '1', name: 'Milch', unit: 'L', amount: 3, group: 'cooled' }])
+    result.body.standards.should.deepEqual([
+      { id: '1', name: 'Milch', unit: 'L', amount: 3, group: 'cooled' },
+    ])
   })
 
   it('should add new ingredients', async () => {
-    const name = 'new ingredient ' + (+new Date())
+    const name = 'new ingredient ' + +new Date()
     await request(app).post('/').send({ name, unit: 'g' })
     models.ingredient.byName(name).should.not.be.undefined()
   })
 
   it('should create a uuid when adding new ingredients', async () => {
-    const result = await request(app).post('/').send({ name: 'new ingredient', unit: 'g' })
+    const result = await request(app)
+      .post('/')
+      .send({ name: 'new ingredient', unit: 'g' })
     result.body.id.should.match(/^[0-9a-f-]+$/)
   })
 
   it('should use group "other" for new ingredients', async () => {
-    const result = await request(app).post('/').send({ name: 'new ingredient ' + (+new Date()), amount: 100, unit: 'g' })
+    const result = await request(app)
+      .post('/')
+      .send({ name: 'new ingredient ' + +new Date(), amount: 100, unit: 'g' })
     result.body.group.should.equal('other')
   })
 })

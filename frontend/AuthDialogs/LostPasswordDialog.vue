@@ -5,7 +5,8 @@ import { CURRENTUSER_SET } from '@/store/mutation_types'
 import sendForm from '@/lib/sendForm'
 import DialogFormField from '@/dialogs/DialogFormField'
 
-const defaultMessage = 'Gib deine E-Mail-Adresse ein, Du erhältst dann eine E-Mail mit einem Link, über den Du Dein Passwort neu setzen kannst.'
+const defaultMessage =
+  'Gib deine E-Mail-Adresse ein, Du erhältst dann eine E-Mail mit einem Link, über den Du Dein Passwort neu setzen kannst.'
 
 export default {
   components: {
@@ -14,7 +15,7 @@ export default {
   },
 
   data() {
-    return  {
+    return {
       message: defaultMessage,
       messageType: 'info',
       fields: {
@@ -25,7 +26,11 @@ export default {
 
   methods: {
     async sendAccessLink() {
-      const result = await sendForm('POST', '/accounts/accessLinks', this.fields)
+      const result = await sendForm(
+        'POST',
+        '/accounts/accessLinks',
+        this.fields
+      )
       if (result.error) {
         this.message = result.error || 'Unerwarteter Fehler'
         this.messageType = 'error'
@@ -42,7 +47,7 @@ export default {
       this.message = defaultMessage
       this.messageType = 'info'
     },
-  }
+  },
 }
 </script>
 
@@ -51,8 +56,14 @@ export default {
     <p :class="messageType">{{ message }}</p>
 
     <form @submit.prevent="sendAccessLink">
-      <DialogFormField label="E-Mail" type="email" name="email" v-model="fields.email" autocomplete="current-email"
-        :validation="/^[^\s@]+@\S+\.\S+$/" validationMessage="Das sieht nicht nach einer gültigen E-Mail-Adresse aus"
+      <DialogFormField
+        label="E-Mail"
+        type="email"
+        name="email"
+        v-model="fields.email"
+        autocomplete="current-email"
+        :validation="/^[^\s@]+@\S+\.\S+$/"
+        validationMessage="Das sieht nicht nach einer gültigen E-Mail-Adresse aus"
       />
 
       <button type="submit">Link senden</button>

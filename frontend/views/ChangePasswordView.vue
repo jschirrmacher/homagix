@@ -5,7 +5,8 @@ import sendForm from '@/lib/sendForm'
 import { CURRENTUSER_SET } from '../store/mutation_types'
 import { alert } from '@/lib/dialogs'
 
-const defaultMessage = 'Gib hier 2x ein neues Passwort an, mit dem Du dich künftig anmelden willst.'
+const defaultMessage =
+  'Gib hier 2x ein neues Passwort an, mit dem Du dich künftig anmelden willst.'
 
 export default {
   components: {
@@ -20,7 +21,7 @@ export default {
         password: '',
         repeat: '',
       },
-      marked: []
+      marked: [],
     }
   },
 
@@ -35,7 +36,9 @@ export default {
     },
 
     async changePwd() {
-      this.marked = Object.entries(this.fields).filter(([name, value]) => !value).map(([name, value]) => name)
+      this.marked = Object.entries(this.fields)
+        .filter(([name, value]) => !value)
+        .map(([name, value]) => name)
       if (this.marked.length) {
         this.setMessage('error', 'Es sind noch nicht beide Felder gefüllt')
         return
@@ -45,9 +48,14 @@ export default {
         this.setMessage('error', 'Das Passwort wurde falsch wiederholt')
         return
       }
-      const userInfo = await sendForm('PATCH', '/accounts/' + this.currentUser.id, { password: this.fields.password })
+      const userInfo = await sendForm(
+        'PATCH',
+        '/accounts/' + this.currentUser.id,
+        { password: this.fields.password }
+      )
       if (userInfo.error || !userInfo.id) {
-        this.message = userInfo.error || 'Unerwarteter Fehler beim Passwort ändern'
+        this.message =
+          userInfo.error || 'Unerwarteter Fehler beim Passwort ändern'
         this.messageType = 'error'
       } else {
         this.$store.commit(CURRENTUSER_SET, userInfo)
@@ -66,7 +74,7 @@ export default {
       this.clearError()
       this.fields.password = ''
     },
-  }
+  },
 }
 </script>
 
@@ -77,13 +85,29 @@ export default {
     <p :class="messageType">{{ message }}</p>
 
     <form @submit.prevent="changePwd" @keypress="clearError">
-      <input type="text" name="username" value="joachim@dilab.co" autocomplete="username" class="hidden" />
-
-      <DialogFormField label="Neues Passwort" type="password" name="password" v-model="fields.password"
-        autocomplete="new-password" :marked="marked.includes('password')"
+      <input
+        type="text"
+        name="username"
+        value="joachim@dilab.co"
+        autocomplete="username"
+        class="hidden"
       />
-      <DialogFormField label="Passwort wiederholen" type="password" name="repeat" v-model="fields.repeat"
-        autocomplete="no" :marked="marked.includes('repeat')"
+
+      <DialogFormField
+        label="Neues Passwort"
+        type="password"
+        name="password"
+        v-model="fields.password"
+        autocomplete="new-password"
+        :marked="marked.includes('password')"
+      />
+      <DialogFormField
+        label="Passwort wiederholen"
+        type="password"
+        name="repeat"
+        v-model="fields.repeat"
+        autocomplete="no"
+        :marked="marked.includes('repeat')"
       />
 
       <button type="submit">Ändern</button>

@@ -10,7 +10,7 @@ export default function ({ store, modelWriter }) {
   const events = Events({ models })
 
   models.getEvents = () => events
-  
+
   models.dish = Dish({ store, events, modelWriter })
   models.ingredient = Ingredient({ store, events, modelWriter })
   models.dishHistory = DishHistory({ store, events, modelWriter })

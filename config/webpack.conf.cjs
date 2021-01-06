@@ -17,25 +17,27 @@ if (isDev) {
 }
 index.push(path.resolve(__dirname, '..', 'frontend', 'main.js'))
 plugins.push(new VueLoaderPlugin())
-plugins.push(new webpack.DefinePlugin({
-  'process.env': {
-    PACKAGE_VERSION: '"' + version + '"'
-  }
-}))
+plugins.push(
+  new webpack.DefinePlugin({
+    'process.env': {
+      PACKAGE_VERSION: '"' + version + '"',
+    },
+  })
+)
 
 module.exports = {
   mode,
-  entry: {index},
+  entry: { index },
   output: {
     path: path.resolve(__dirname, '..', 'build'),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
   },
   resolve: {
-    extensions: [ '.js', '.vue' ],
+    extensions: ['.js', '.vue'],
     alias: {
-      'vue$': isDev ? 'vue/dist/vue.js' : 'vue/dist/vue.runtime.min.js',
-      '@': path.resolve(__dirname, '..', 'frontend')
-    }
+      vue$: isDev ? 'vue/dist/vue.js' : 'vue/dist/vue.runtime.min.js',
+      '@': path.resolve(__dirname, '..', 'frontend'),
+    },
   },
   module: {
     rules: [
@@ -49,21 +51,21 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [ 'vue-style-loader', 'css-loader' ]
+        use: ['vue-style-loader', 'css-loader'],
       },
       {
         test: /\.scss$/,
         use: [
           isDev ? 'vue-style-loader' : MiniCSSExtractPlugin.loader,
           { loader: 'css-loader', options: { sourceMap: isDev } },
-          { loader: 'sass-loader', options: { sourceMap: isDev } }
-        ]
+          { loader: 'sass-loader', options: { sourceMap: isDev } },
+        ],
       },
       {
         test: /\.vue$/,
-        loader: { loader: 'vue-loader', options: { sourceMap: isDev } }
+        loader: { loader: 'vue-loader', options: { sourceMap: isDev } },
       },
-    ]
+    ],
   },
-  plugins
+  plugins,
 }
