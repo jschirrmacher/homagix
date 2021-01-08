@@ -21,9 +21,7 @@
     "build": "webpack --config config/webpack.conf.cjs",
     "lint": "eslint server/**/*.js frontend/**/*.js",
     "test": "NODE_ENV=test nyc mocha --color --exit server/*.test.js server/**/*.test.js frontend/**/*.test.js",
-    "postinstall": "husky install",
-    "prepublishOnly": "pinst --disable",
-    "postpublish": "pinst --enable"
+    "husky:install": "husky install"
   },
   "author": "joachimschirrmacher@gmail.com",
   "license": "MIT",
