@@ -140,6 +140,7 @@ export default {
 @media print {
   .dish {
     display: inline-block;
+    padding-bottom: 0;
 
     .servedDate,
     &:not(.accepted),

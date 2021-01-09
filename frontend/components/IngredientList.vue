@@ -77,12 +77,15 @@ ul {
 }
 
 @media print {
+  .groupTitle {
+    border-top: 1px solid black;
+  }
+  
   ul {
-    column-count: 2;
-
     li {
-      font-size: 80%;
       max-height: 24px;
+      display: inline-block;
+      width: 50%;
     }
   }
 }

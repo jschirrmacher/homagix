@@ -67,7 +67,7 @@ li {
 
   &[disabled] {
     border-color: transparent;
-    background: white;
+    background: transparent;
   }
 }
 
