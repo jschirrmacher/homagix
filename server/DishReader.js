@@ -2,9 +2,9 @@ import fs from 'fs'
 import path from 'path'
 import YAML from 'yaml'
 import { v4 as uuid } from 'uuid'
-import units from './units.js'
+import units from './models/units.js'
 
-export default function ({ store, models, basePath }) {
+export default function ({ store, models }) {
   const { dishAdded, ingredientAdded, ingredientAssigned } = models.getEvents()
 
   function extractIngredientComponents(item) {
@@ -16,7 +16,20 @@ export default function ({ store, models, basePath }) {
     return { amount, unit, name }
   }
 
-  function loadIngredients() {
+  function addItems(dishId, item) {
+    const existing = models.ingredient.byExample(item, true)
+    if (existing) {
+      store.dispatch(
+        ingredientAssigned(dishId, existing.id, item.amount)
+      )
+    } else {
+      item.id = uuid()
+      store.dispatch(ingredientAdded(item))
+      store.dispatch(ingredientAssigned(dishId, item.id, item.amount))
+    }
+  }
+
+  function loadIngredients(basePath) {
     const dir = path.resolve(basePath, 'ingredients')
     if (!fs.existsSync(dir)) {
       return
@@ -31,7 +44,7 @@ export default function ({ store, models, basePath }) {
     })
   }
 
-  function loadDishes() {
+  function loadDishes(basePath) {
     const dir = path.resolve(basePath, 'dishes')
     if (!fs.existsSync(dir)) {
       return
@@ -45,26 +58,17 @@ export default function ({ store, models, basePath }) {
       const items = dish.items
       delete dish.items
       store.dispatch(dishAdded(dish))
-      items &&
-        items.map(extractIngredientComponents).forEach(item => {
-          const existing = models.ingredient.byExample(item, true)
-          if (existing) {
-            store.dispatch(
-              ingredientAssigned(dish.id, existing.id, item.amount)
-            )
-          } else {
-            item.id = uuid()
-            store.dispatch(ingredientAdded(item))
-            store.dispatch(ingredientAssigned(dish.id, item.id, item.amount))
-          }
-        })
+      if (items && items.map) {
+        items.map(extractIngredientComponents).forEach(item => addItems(dish.id, item))
+      }
     })
   }
 
   return {
-    loadData() {
-      loadIngredients()
-      loadDishes()
+    loadData(basePath) {
+      loadIngredients(basePath)
+      loadDishes(basePath)
     },
+    addItems,
   }
 }

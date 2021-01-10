@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
 import Models from './models/index.js'
 import EventStore from './EventStore/EventStore.js'
-import DishReader from './models/DishReader.js'
+import DishReader from './DishReader.js'
 import MainRouter from './MainRouter.js'
 import ModelWriter from './models/ModelWriter.js'
 import history from 'connect-history-api-fallback'
@@ -22,7 +22,7 @@ const store = EventStore({ basePath, logger })
 const modelWriter = ModelWriter({ basePath })
 const models = Models({ store, modelWriter })
 
-const dishReader = DishReader({ store, models, basePath })
+const dishReader = DishReader({ store, models })
 
 const app = express()
 app.set('json spaces', 2)
@@ -52,14 +52,14 @@ app.use('/', express.static(path.join(DIRNAME, 'build')))
 app.use('/', express.static(path.join(DIRNAME, 'public')))
 app.use('/images', express.static(path.join(DIRNAME, 'data', 'images')))
 
+// eslint-disable-next-line no-unused-vars
 app.use(function (err, req, res, next) {
-  // eslint-disable-line no-unused-vars
   logger.error(err)
   res.status(err.code || 500).json({ error: err.message || err.toString() })
 })
 
 app.listen(PORT, async () => {
-  dishReader.loadData()
+  dishReader.loadData(basePath)
   await store.replay()
   logger.info(`Listening on http://localhost:${PORT} (NODE_ENV=${nodeEnv})`)
 })

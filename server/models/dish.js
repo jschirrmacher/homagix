@@ -3,6 +3,8 @@ const dishes = {
   byName: {},
 }
 
+const editableFields = ['name', 'recipe', 'source']
+
 export function addDish(
   writer,
   { id, name, source, alwaysOnList, items, recipe, image }
@@ -15,6 +17,21 @@ export function addDish(
   dishes.byId[dish.id] = dish
   dishes.byName[dish.name.toLowerCase()] = dish
   writer(dish)
+}
+
+export function updateDish(writer, { id, ...rest }) {
+  const dish = dishes.byId[id]
+  if (!dish) {
+    throw Error(`Dish #${id} not found`)
+  }
+  if (Object.keys(rest).reduce((write, field) => {
+      if (editableFields.includes(field)) {
+      dish[field] = rest[field]
+      write = true
+    }
+  }, false)) {
+    writer(dish)
+  }
 }
 
 export function assignIngredient(writer, { dishId, ingredientId, amount }) {
@@ -53,6 +70,7 @@ export default function ({ store, events, modelWriter }) {
   const curry = f => data => f(modelWriter.writeDish, data)
   store
     .on(events.dishAdded, curry(addDish))
+    .on(events.dishModified, curry(updateDish))
     .on(events.ingredientAssigned, curry(assignIngredient))
     .on(events.served, curry(serve))
 

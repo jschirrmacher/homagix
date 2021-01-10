@@ -21,6 +21,12 @@ export default function ({ models }) {
       return { type: 'dishAdded', ...dish }
     },
 
+    dishModified(dishPartial) {
+      assert(!!dishPartial, 'No dish')
+      assert(dishPartial.id, 'No dish id')
+      return { type: 'dishModified', ...dishPartial }
+    },
+
     ingredientAdded(ingredient) {
       assert(!!ingredient, 'No ingredient')
       assert(ingredient.name, 'Missing name')

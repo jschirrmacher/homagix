@@ -2,9 +2,9 @@ import should from 'should'
 import fs from 'fs'
 import path from 'path'
 import DishReader from './DishReader.js'
-import MockFS from '../lib/MockFS.js'
-import Store from '../EventStore/Store.mock.js'
-import Models from './MockedModel.js'
+import MockFS from './lib/MockFS.js'
+import Store from './EventStore/Store.mock.js'
+import Models from './models/MockedModel.js'
 
 const store = Store()
 const models = Models({ store })
@@ -27,7 +27,7 @@ describe('DishReader', () => {
     mockFS.setupFiles({
       'dishes/1.yaml': "name: 'test dish'\nitems:\n  - 1 Stk item 1",
     })
-    DishReader({ store, models, basePath }).loadData()
+    DishReader({ store, models }).loadData(basePath)
     store
       .eventList()
       .find(event => event.type === 'dishAdded')
@@ -38,7 +38,7 @@ describe('DishReader', () => {
     mockFS.setupFiles({
       'dishes/1.yaml': "name: 'test dish'\nitems:\n  - 1 Stk new item",
     })
-    DishReader({ store, models, basePath }).loadData()
+    DishReader({ store, models }).loadData(basePath)
     const event = store
       .eventList()
       .find(event => event.type === 'ingredientAdded')
@@ -55,7 +55,7 @@ describe('DishReader', () => {
     mockFS.setupFiles({
       'dishes/1.yaml': "name: 'test dish'\nitems:\n  - 500 g existing item",
     })
-    DishReader({ store, models, basePath }).loadData()
+    DishReader({ store, models }).loadData(basePath)
     should(
       store.eventList().find(event => event.type === 'ingredientAdded')
     ).be.undefined()
@@ -66,7 +66,7 @@ describe('DishReader', () => {
       'dishes/1.yaml':
         "name: 'test dish'\nitems:\n  - 1 Stk new item\n  - 500 g other item",
     })
-    DishReader({ store, models, basePath }).loadData()
+    DishReader({ store, models }).loadData(basePath)
     const events = store
       .eventList()
       .filter(event => event.type === 'ingredientAssigned')
@@ -78,7 +78,7 @@ describe('DishReader', () => {
     mockFS.setupFiles({
       'dishes/1.yaml': "name: 'test dish'\nitems:\n  - 1 Stk item w/o id",
     })
-    DishReader({ store, models, basePath }).loadData()
+    DishReader({ store, models }).loadData(basePath)
     const item = models.ingredient.getAll().pop()
     should(item.id).not.be.undefined()
     item.id.should.be.instanceOf(String)
@@ -89,7 +89,7 @@ describe('DishReader', () => {
     mockFS.setupFiles({
       'dishes/1.yaml': "name: 'test dish'\nitems:\n  - 1 item w/o unit",
     })
-    DishReader({ store, models, basePath }).loadData()
+    DishReader({ store, models }).loadData(basePath)
     const item = models.ingredient.getAll().pop()
     item.unit.should.equal('Stk')
   })
