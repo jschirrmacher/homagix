@@ -17,6 +17,7 @@ if (isDev) {
 }
 index.push(path.resolve(__dirname, '..', 'frontend', 'main.js'))
 plugins.push(new VueLoaderPlugin())
+plugins.push(new webpack.SourceMapDevToolPlugin({ filename: '[file].map' }))
 plugins.push(
   new webpack.DefinePlugin({
     'process.env': {

@@ -1,20 +1,47 @@
 <script>
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { LOAD_DISHES } from '../store/action_types'
+import { MODIFY_DISH, LOAD_DISHES } from '../store/action_types'
+import EditableField from '@/components/EditableField.vue'
+
+function mapDishField(field, defaultValue = '') {
+  return {
+    [field]: {
+      get() {
+        const getDish = () => (this.dishes && this.dishes.find(dish => dish.id === this.id)) || {}
+        return this.changes[field] || getDish()[field] || defaultValue
+      },
+      set(value) {
+        this.changes[field] = value.trim()
+        this.triggerSave()
+      }
+    }
+  }
+}
 
 export default Vue.extend({
+  components: {
+    EditableField,
+  },
+
   props: {
     id: String,
+  },
+  
+  data() {
+    return {
+      changes: {},
+      timer: undefined,
+    }
   },
 
   computed: {
     ...mapState(['dishes', 'allIngredients']),
+    ...mapDishField('name'),
+    ...mapDishField('recipe'),
 
     dish() {
-      return (
-        (this.dishes && this.dishes.find(dish => dish.id === this.id)) || {}
-      )
+      return (this.dishes && this.dishes.find(dish => dish.id === this.id)) || {}
     },
 
     ingredients() {
@@ -30,6 +57,26 @@ export default Vue.extend({
       })
     },
   },
+
+  methods: {
+    async save() {
+      await this.$store.dispatch(MODIFY_DISH, { dish: { ...this.dish, ...this.changes } })
+      this.changes = {}
+    },
+
+    triggerSave() {
+      this.timer && clearTimeout(this.timer)
+      this.timer = setTimeout(async () => {
+        this.timer = undefined
+        this.save()
+      }, 3000)
+    },
+
+    async goBack() {
+      await this.save()
+      this.$router.go(-1)
+    }
+  }
 })
 </script>
 
@@ -37,7 +84,7 @@ export default Vue.extend({
   <div>
     <img v-if="dish.image" :src="'/images/' + dish.image" />
 
-    <h2>{{ dish.name }}</h2>
+    <EditableField tag="h2" v-model="name" placeholder="Name" />
 
     <section id="ingredients">
       <h3>Zutaten</h3>
@@ -49,14 +96,9 @@ export default Vue.extend({
       <p v-if="dish.source" class="source">Quelle: {{ dish.source }}</p>
     </section>
 
-    <article>
-      {{
-        dish.recipe ||
-        'Es gibt bisher noch keine Beschreibung, wie das Gericht zubereitet wird.'
-      }}
-    </article>
+    <EditableField tag="article" v-model="recipe" placeholder="Es gibt bisher noch keine Beschreibung, wie das Gericht zubereitet wird." />
 
-    <button @click="$router.go(-1)">Zurück</button>
+    <button @click="goBack">Zurück</button>
   </div>
 </template>
 

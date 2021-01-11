@@ -20,6 +20,7 @@ import {
 } from './mutation_types.js'
 import {
   ADD_FAVORITE,
+  MODIFY_DISH,
   CHANGE_GROUP,
   CHANGE_STARTDATE,
   INIT_APP,
@@ -177,8 +178,8 @@ export const actions = {
     await updateWeekplan(context)
   },
 
-  [CHANGE_GROUP](context, { ingredient, group }) {
-    doFetch('put', '/ingredients/' + ingredient.id, { group })
+  async [CHANGE_GROUP](context, { ingredient, group }) {
+    await doFetch('put', '/ingredients/' + ingredient.id, { group })
     ingredient.group = group
     context.commit(INGREDIENT_CHANGED, { ingredient })
   },
@@ -192,4 +193,9 @@ export const actions = {
     const args = await setFavorite(dishId, false)
     context.commit(...args)
   },
+
+  async [MODIFY_DISH](context, { dish }) {
+    await doFetch('PATCH', '/dishes/' + dish.id, dish)
+    context.commit(DISHES_LOADED, { dishes: context.state.dishes.map(d => d.id === dish.id ? dish : d)})
+  }
 }

@@ -25,10 +25,9 @@ export function updateDish(writer, { id, ...rest }) {
     throw Error(`Dish #${id} not found`)
   }
   if (Object.keys(rest).reduce((write, field) => {
-      if (editableFields.includes(field)) {
-      dish[field] = rest[field]
-      write = true
-    }
+    const changed = editableFields.includes(field) && rest[field] !== dish[field]
+    changed && (dish[field] = rest[field])
+    return write || changed
   }, false)) {
     writer(dish)
   }
