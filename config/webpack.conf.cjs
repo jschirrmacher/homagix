@@ -17,7 +17,6 @@ if (isDev) {
 }
 index.push(path.resolve(__dirname, '..', 'frontend', 'main.js'))
 plugins.push(new VueLoaderPlugin())
-plugins.push(new webpack.SourceMapDevToolPlugin({ filename: '[file].map' }))
 plugins.push(
   new webpack.DefinePlugin({
     'process.env': {
@@ -32,7 +31,9 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, '..', 'build'),
     filename: 'bundle.js',
+    sourceMapFilename: '[name].js.map',
   },
+  devtool: 'source-map',
   resolve: {
     extensions: ['.js', '.vue'],
     alias: {
