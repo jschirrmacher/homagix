@@ -45,7 +45,11 @@ export default {
 
     content: {
       get() {
-        return this.value || (!this.hasFocus && this.placeholder) || ''
+        if (this.value) {
+          return this.value.split(/\n+/).join('<br><br>')
+        } else {
+          return (!this.hasFocus && this.placeholder) || ''
+        }
       },
       set(newValue) {
         this.value = newValue
@@ -61,7 +65,12 @@ export default {
     ref="editable"
     contenteditable
     v-on="listeners"
-  >
-    {{ content }}
-  </component>
+    v-html="content"
+  />
 </template>
+
+<style lang="scss" scoped>
+  p {
+    margin-top: 0;
+  }
+</style>
