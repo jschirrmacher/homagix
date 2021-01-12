@@ -14,7 +14,12 @@ export default {
     placeholder: {
       type: String,
       default: '',
-    }
+    },
+
+    editable: {
+      type: Boolean,
+      default: true,
+    },
   },
 
   data() {
@@ -62,8 +67,7 @@ export default {
 <template>
   <component
     :is="tag"
-    ref="editable"
-    contenteditable
+    :contenteditable="editable"
     v-on="listeners"
     v-html="content"
   />

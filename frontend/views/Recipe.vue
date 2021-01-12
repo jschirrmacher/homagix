@@ -36,12 +36,16 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapState(['dishes', 'allIngredients']),
+    ...mapState(['dishes', 'allIngredients', 'currentUser']),
     ...mapDishField('name'),
     ...mapDishField('recipe'),
 
     dish() {
       return (this.dishes && this.dishes.find(dish => dish.id === this.id)) || {}
+    },
+
+    editable() {
+      return !!this.currentUser.id
     },
 
     ingredients() {
@@ -84,7 +88,7 @@ export default Vue.extend({
   <div>
     <img v-if="dish.image" :src="'/images/' + dish.image" />
 
-    <EditableField tag="h2" v-model="name" placeholder="Name" />
+    <EditableField tag="h2" v-model="name" :editable="editable" placeholder="Name" />
 
     <section id="ingredients">
       <h3>Zutaten</h3>
@@ -96,7 +100,9 @@ export default Vue.extend({
       <p v-if="dish.source" class="source">Quelle: {{ dish.source }}</p>
     </section>
 
-    <EditableField tag="article" v-model="recipe" placeholder="Es gibt bisher noch keine Beschreibung, wie das Gericht zubereitet wird." />
+    <EditableField tag="article" v-model="recipe" :editable="editable"
+      placeholder="Es gibt bisher noch keine Beschreibung, wie das Gericht zubereitet wird."
+    />
 
     <button @click="goBack">Zurück</button>
   </div>
