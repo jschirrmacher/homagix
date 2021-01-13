@@ -1,3 +1,12 @@
 {
-  "debug.javascript.suggestPrettyPrinting": true
+  "debug.javascript.suggestPrettyPrinting": true,
+  "mochaExplorer.exit": true,
+  "mochaExplorer.files": ["frontend/**/*.test.js", "server/**/*.test.js"],
+  "mochaExplorer.require": "",
+  "mochaExplorer.debuggerConfig": "All Tests",
+  "mochaExplorer.esmLoader": true,
+  "mochaExplorer.ignore": ["./node_modules"],
+  "mochaExplorer.logpanel": true,
+  "mochaExplorer.mochaPath": "node_modules/mocha",
+  "mochaExplorer.pruneFiles": true
 }
