@@ -116,8 +116,13 @@ export default ({ app, models, store, secretOrKey }) => {
   app.use(passport.session())
 
   const requireCode = (options = {}) => authenticate(['access_code'], options)
+  const checkJWT = (options = {}) => authenticate('jwt', { ...options, allowAnonymous: true })
   const requireJWT = (options = {}) => authenticate('jwt', options)
   const requireLogin = (options = {}) => authenticate('login', options)
+
+  function requireAuth() {
+    return (req, res, next) => req.user ? next() : next({ status: 401, message: 'Not authenticated' })
+  }
 
   function requireAdmin() {
     return function (req, res, next) {
@@ -140,7 +145,9 @@ export default ({ app, models, store, secretOrKey }) => {
 
     requireCode,
     requireJWT,
+    checkJWT,
     requireLogin,
+    requireAuth,
     requireAdmin,
   }
 }

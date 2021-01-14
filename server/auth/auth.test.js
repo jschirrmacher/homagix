@@ -102,6 +102,41 @@ describe('auth', () => {
     })
   })
 
+  describe('checkJWT', () => {
+    it('should add the user to the request if a valid JWT is found in the header', (done) => {
+      const middleware = auth.checkJWT()
+      const authorization = jsonwebtoken.sign({ sub: 4712 }, secretOrKey, {
+        expiresIn: '24h',
+      })
+      const req = {
+        body: { email: 'test3@example.com' },
+        headers: { authorization },
+      }
+      const res = makeExpectedResult()
+      middleware(req, res, err => {
+        should(err).be.undefined()
+        req.user.should.have.property('id')
+        req.user.id.should.equal(4712)
+        done()
+      })
+    })
+
+    it('should add the user to the request if a valid JWT is given in cookie', done => {
+      const middleware = auth.requireJWT()
+      const token = jsonwebtoken.sign({ sub: 4712 }, secretOrKey, {
+        expiresIn: '24h',
+      })
+      const req = { body: { email: 'test3@example.com' }, cookies: { token } }
+      const res = makeExpectedResult()
+      middleware(req, res, err => {
+        should(err).be.undefined()
+        req.user.should.have.property('id')
+        req.user.id.should.equal(4712)
+        done()
+      })
+    })
+  })
+
   describe('requireJWT', () => {
     it('should authenticate with JWT in header', done => {
       const middleware = auth.requireJWT()
