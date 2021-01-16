@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import YAML from 'yaml'
 import { v4 as uuid } from 'uuid'
-import units from './models/units.js'
+import units from '../models/units.js'
 
 export default function ({ store, models }) {
   const { dishAdded, ingredientAdded, ingredientAssigned } = models.getEvents()

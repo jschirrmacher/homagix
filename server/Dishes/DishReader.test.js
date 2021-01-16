@@ -2,9 +2,9 @@ import should from 'should'
 import fs from 'fs'
 import path from 'path'
 import DishReader from './DishReader.js'
-import MockFS from './lib/MockFS.js'
-import Store from './EventStore/Store.mock.js'
-import Models from './models/MockedModel.js'
+import MockFS from '../lib/MockFS.js'
+import Store from '../EventStore/Store.mock.js'
+import Models from '../models/MockedModel.js'
 
 const store = Store()
 const models = Models({ store })

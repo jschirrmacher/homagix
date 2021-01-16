@@ -5,9 +5,9 @@ import bodyParser from 'body-parser'
 import Controller from './DishController.js'
 import Router from './DishesRouter.js'
 import DishReader from './DishReader.js'
-import Store from './EventStore/Store.mock.js'
-import Models from './models/MockedModel.js'
-import auth, { validToken, adminToken } from './auth/MockAuth.js'
+import Store from '../EventStore/Store.mock.js'
+import Models from '../models/MockedModel.js'
+import auth, { validToken, adminToken } from '../auth/MockAuth.js'
 
 const store = Store()
 const models = Models({ store })

@@ -4,8 +4,8 @@ import request from 'supertest'
 import bodyParser from 'body-parser'
 import Router from './IngredientRouter.js'
 import Controller from './IngredientController.js'
-import Store from './EventStore/Store.mock.js'
-import Models from './models/MockedModel.js'
+import Store from '../EventStore/Store.mock.js'
+import Models from '../models/MockedModel.js'
 
 const store = Store()
 const models = Models({ store })
