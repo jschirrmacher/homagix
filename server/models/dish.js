@@ -7,9 +7,9 @@ const editableFields = ['name', 'recipe', 'source']
 
 export function addDish(
   writer,
-  { id, name, source, alwaysOnList, items, recipe, image }
+  { id, name, source, alwaysOnList, items, recipe, image, ownedBy }
 ) {
-  const dish = { id: '' + id, name, items: items || [] }
+  const dish = { id: '' + id, name, items: items || [], ownedBy }
   alwaysOnList && (dish.alwaysOnList = true)
   source && (dish.source = source)
   recipe && (dish.recipe = recipe)

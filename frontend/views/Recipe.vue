@@ -45,7 +45,15 @@ export default Vue.extend({
     },
 
     editable() {
-      return !!this.currentUser.id
+      if (this.currentUser.id) {
+        if (this.currentUser.isAdmin) {
+          return true
+        }
+        if ([this.currentUser.listId, this.currentUser.id].includes(this.dish.ownedBy)) {
+          return true
+        }
+      }
+      return false
     },
 
     ingredients() {
@@ -64,7 +72,12 @@ export default Vue.extend({
 
   methods: {
     async save() {
-      await this.$store.dispatch(MODIFY_DISH, { dish: { ...this.dish, ...this.changes } })
+      const dish = {
+        ...this.dish,
+        ...this.changes,
+        ownedBy: this.currentUser.listId || this.currentUser.id
+      }
+      await this.$store.dispatch(MODIFY_DISH, { dish })
       this.changes = {}
     },
 

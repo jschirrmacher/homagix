@@ -18,6 +18,7 @@ export default function ({ store, events, modelWriter }) {
     .on(events.removeDishFromList, curry(removeDish))
 
   return {
+    reset: () => Object.assign(lists, {}),
     getById: listId => lists[listId],
   }
 }

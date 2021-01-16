@@ -2,6 +2,8 @@ import express from 'express'
 import SessionRouter from './auth/SessionRouter.js'
 import AccountRouter from './auth/AccountRouter.js'
 import DishProposer from './Weekplan/DishProposer.js'
+import DishReader from './DishReader.js'
+import DishController from './DishController.js'
 import DishesRouter from './DishesRouter.js'
 import IngredientRouter from './IngredientRouter.js'
 import IngredientController from './IngredientController.js'
@@ -32,7 +34,9 @@ export default function ({ models, store, auth }) {
   const sessionRouter = SessionRouter({ auth })
   const accountRouter = AccountRouter({ auth, store, models, mailer })
   const proposer = DishProposer({ models })
-  const dishesRouter = DishesRouter({ models, store, jsonResult, auth })
+  const dishReader = DishReader({ store, models })
+  const dishController = DishController({ store, models, dishReader })
+  const dishesRouter = DishesRouter({ jsonResult, auth, dishController })
   const ingredientRouter = IngredientRouter({
     controller: IngredientController({ models, store }),
     jsonResult,

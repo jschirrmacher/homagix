@@ -1,68 +1,41 @@
 import express from 'express'
-import { v4 as uuid } from 'uuid'
 
-export default function ({ models, store, auth, jsonResult, dishReader }) {
+export default function ({ auth, jsonResult, dishController }) {
   const router = express.Router()
-  const { addDishToList, removeDishFromList } = models.getEvents()
+  const { checkJWT, requireJWT } = auth
+  const assertOwner = () => (req, res, next) => {
+    if (dishController.isOwner(req.user, req.params.id)) {
+      next()
+    } else {
+      res.status(403).json({ error: 'Not allowed to update a foreign dish' })
+    }
+  }
 
   function getAllDishes(req) {
-    const favorites = req.user
-      ? models.dishList.getById(req.user.listId || req.user.id) || []
-      : []
-    return {
-      dishes: models.dish
-        .getAll()
-        .map(dish => ({ ...dish, isFavorite: favorites.includes(dish.id) })),
-    }
+    return { dishes: dishController.getAll(req.user) }
   }
 
-  function getSingleDish(user, dishId) {
-    const favorites = user
-      ? models.dishList.getById(user.listId || user.id)
-      : []
-    return {
-      ...models.dish.byId(dishId),
-      isFavorite: favorites.includes(dishId),
-    }
+  function addDish(req) {
+    return dishController.addDish(req.body, req.user)
   }
 
-  async function addDish(req) {
-    const id = uuid()
-    await store.emit(models.getEvents().dishAdded({ id, name: req.body.name, recipe: req.body.recipe, source: req.body.source }))
-    if (req.body.items && req.body.items.forEach) {
-      req.body.items.forEach(item => dishReader.addItems(id, item))
-    }
-    return getSingleDish(req.user, id)
-  }
-
-  async function updateDish(req) {
-    await store.emit(models.getEvents().dishModified({ id: req.params.id, ...req.body }))
-    return getSingleDish(req.user, req.params.id)
-  }
-
-  async function setFavorite(user, dishId, isFavorite) {
-    const event = isFavorite ? addDishToList : removeDishFromList
-    await store.emit(event(dishId, user.listId || user.id))
-    return getSingleDish(user, dishId)
+  function updateDish(req) {
+    return dishController.updateDish(req.params.id, req.body, req.user)
   }
 
   function addFavorite(req) {
-    return setFavorite(req.user, req.params.id, true)
+    return dishController.setFavorite(req.user, req.params.id, true)
   }
 
   function removeFavorite(req) {
-    return setFavorite(req.user, req.params.id, false)
+    return dishController.setFavorite(req.user, req.params.id, false)
   }
 
-  router.get(
-    '/',
-    auth.requireJWT({ allowAnonymous: true }),
-    jsonResult(getAllDishes)
-  )
-  router.post('/', auth.requireJWT(), jsonResult(addDish))
-  router.patch('/:id', auth.requireJWT(), jsonResult(updateDish))
-  router.post('/:id/favorites', auth.requireJWT(), jsonResult(addFavorite))
-  router.delete('/:id/favorites', auth.requireJWT(), jsonResult(removeFavorite))
+  router.get('/', checkJWT(), jsonResult(getAllDishes))
+  router.post('/', requireJWT(), jsonResult(addDish))
+  router.patch('/:id', requireJWT(), assertOwner(), jsonResult(updateDish))
+  router.post('/:id/favorites', requireJWT(), jsonResult(addFavorite))
+  router.delete('/:id/favorites', requireJWT(), jsonResult(removeFavorite))
 
   return router
 }
