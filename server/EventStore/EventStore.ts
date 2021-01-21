@@ -1,0 +1,178 @@
+import {
+  existsSync,
+  mkdirSync,
+  unlinkSync,
+  readdirSync,
+  readFileSync,
+  writeFileSync,
+  createReadStream,
+  createWriteStream,
+} from 'fs'
+import { resolve } from 'path'
+import { Transform, TransformOptions } from 'stream'
+import es from 'event-stream'
+import path from 'path'
+
+type Logger = {
+  error: (msg: unknown) => void
+  info: (msg: unknown) => void
+  debug: (msg: unknown) => void
+}
+
+const DIRNAME = path.resolve(path.dirname(''))
+
+export type Store = {
+  dispatch(event: Event): void
+  replay(): Promise<void>
+  on(type, func): Store
+  emit(event): Promise<void>
+  deleteAll(): void
+  end(): void
+}
+
+class JsonStringify extends Transform {
+  constructor(options = {} as TransformOptions) {
+    options.objectMode = true
+    super(options)
+  }
+
+  _transform(event: unknown, encoding: BufferEncoding, done: () => void) {
+    this.push(JSON.stringify(event) + '\n')
+    done()
+  }
+}
+
+export default ({ basePath, migrationsPath = '', logger = console }: { basePath: string, migrationsPath?: string, logger?: Logger }): Store => {
+  const listeners = {}
+  let ready: Promise<void>
+  let changeStream: WriteStream
+
+  function openChangeStream() {
+    try {
+      changeStream = createWriteStream(eventsFileName, { flags: 'a' })
+      changeStream.on('error', logger.error)
+    } catch (error) {
+      logger.error(error)
+    }
+  }
+
+  function migrate(basePath: string, fromVersion: string, migrators: WritableStream[]) {
+    return new Promise((pResolve: (value?: unknown) => void, reject: (reason?: unknown) => void) => {
+      try {
+        const oldEventsFile = resolve(basePath, `events-${fromVersion}.json`)
+        if (existsSync(oldEventsFile)) {
+          const readStream = createReadStream(oldEventsFile)
+            .pipe(es.split())
+            .pipe(es.parse())
+          readStream.on('end', pResolve)
+          readStream.on('error', (error: unknown) => {
+            logger.error(error)
+            reject(error)
+          })
+
+          migrators
+            .reduce((stream, migrator) => stream.pipe(migrator), readStream)
+            .pipe(new JsonStringify())
+            .pipe(createWriteStream(eventsFileName))
+        } else {
+          pResolve()
+        }
+      } catch (error) {
+        logger.error(error)
+        reject(error)
+      }
+    })
+  }
+
+  function dispatch(event) {
+    try {
+      (listeners[event.type] || []).forEach(listener => listener(event))
+    } catch (error) {
+      logger.error(error)
+      logger.debug(error.stack)
+    }
+  }
+
+  if (!existsSync(basePath)) {
+    mkdirSync(basePath)
+  }
+  migrationsPath = migrationsPath || resolve(DIRNAME, 'migrations')
+  const versionFile = resolve(basePath, 'state.json')
+  const eventsVersionNo = !existsSync(versionFile)
+    ? 0
+    : JSON.parse(readFileSync(versionFile).toString()).versionNo || 0
+  const migrationFiles = (existsSync(migrationsPath)
+    ? readdirSync(migrationsPath)
+    : []
+  )
+    .filter(name => parseInt(name) > eventsVersionNo)
+    .map(name => resolve(migrationsPath, name))
+  const versionNo = eventsVersionNo + migrationFiles.length
+  const eventsFileName = resolve(basePath, `events-${versionNo}.json`)
+  if (eventsVersionNo < versionNo) {
+    logger.info(`Migrating data from ${eventsVersionNo} to ${versionNo}`)
+    ready = Promise.all(
+      migrationFiles.map(async file => await import(file))
+    ).then(migrators =>
+      migrate(basePath, eventsVersionNo, migrators)
+        .then(() => writeFileSync(versionFile, JSON.stringify({ versionNo })))
+        .then(() => logger.info('Migration successful'))
+        .then(openChangeStream)
+    )
+  } else {
+    openChangeStream()
+    ready = Promise.resolve()
+  }
+
+  return {
+    dispatch,
+
+    async replay(): Promise<void> {
+      try {
+        await ready
+        const stream = createReadStream(eventsFileName)
+          .pipe(es.split())
+          .pipe(es.parse())
+          .pipe(
+            es.mapSync((event: unknown) => {
+              dispatch(event)
+            })
+          )
+
+        return new Promise(resolve => {
+          stream.on('end', resolve)
+          stream.on('error', logger.error)
+        })
+      } catch (error) {
+        logger.error(error)
+      }
+    },
+
+    on(type, func): Store {
+      listeners[type.name] = listeners[type.name] || []
+      listeners[type.name].push(func)
+      return this
+    },
+
+    async emit(event): Promise<void> {
+      try {
+        await ready
+        const completeEvent = { ts: new Date(), ...event }
+        changeStream.write(JSON.stringify(completeEvent) + '\n')
+        dispatch(completeEvent)
+      } catch (error) {
+        logger.error(error)
+      }
+    },
+
+    deleteAll(): void {
+      if (existsSync(eventsFileName)) {
+        unlinkSync(eventsFileName)
+      }
+    },
+
+    end(): void {
+      changeStream.end()
+    },
+  }
+}

@@ -7,6 +7,10 @@ import mocha from 'mocha'
 const baseName = 'http://test'
 api.setBaseUrl(baseName)
 
+const emptyFunc = () => {
+  // Don't to anything
+}
+
 const state = {
   accepted: [1, 2],
   declined: [3, 4],
@@ -66,7 +70,7 @@ describe('api', () => {
     })
 
     it('should prepare GET parameters', async () => {
-      const context = { state, commit() {} }
+      const context = { state, commit: emptyFunc }
       const request = nock(baseName)
         .get('/route?accepted=1,2&inhibit=3,4')
         .reply(200, { success: true })

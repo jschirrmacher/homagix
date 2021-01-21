@@ -13,16 +13,23 @@
     },
     {
       "args": [
+        "-x",
+        ".ts",
+        "-r",
+        "dotenv-flow/config",
+        "--",
+        "node_modules/.bin/mocha",
         "-u",
         "bdd",
         "--timeout",
         "999999",
         "--colors",
-        "${workspaceFolder}/server/**/*.test.js"
+        "--exit",
+        "${workspaceFolder}/server/**/*.test.ts"
       ],
       "internalConsoleOptions": "openOnSessionStart",
       "name": "Backend Tests",
-      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+      "program": "${workspaceFolder}/node_modules/.bin/babel-node",
       "request": "launch",
       "skipFiles": ["<node_internals>/**"],
       "type": "pwa-node"
@@ -45,6 +52,12 @@
     },
     {
       "args": [
+        "-x",
+        ".ts",
+        "-r",
+        "dotenv-flow/config",
+        "--",
+        "node_modules/.bin/mocha",
         "-u",
         "bdd",
         "--timeout",
@@ -55,7 +68,7 @@
       ],
       "internalConsoleOptions": "openOnSessionStart",
       "name": "All Tests",
-      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+      "program": "${workspaceFolder}/node_modules/.bin/babel-node",
       "request": "launch",
       "skipFiles": ["<node_internals>/**"],
       "type": "pwa-node"
