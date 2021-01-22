@@ -1,12 +1,12 @@
-import { Transform } from 'stream'
+import { Transform, TransformOptions, TransformCallback } from 'stream'
 
 export default class testMigration extends Transform {
-  constructor(options = {}) {
+  constructor(options = {} as TransformOptions) {
     options.objectMode = true
     super(options)
   }
 
-  _transform(event, encoding, callback) {
+  _transform(event: { name: string }, encoding: BufferEncoding, callback: TransformCallback) {
     event.name = 'Migrated event'
     this.push(event)
     callback()

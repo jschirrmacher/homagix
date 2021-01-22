@@ -6,7 +6,7 @@ type FileSystemMock = {
   setupFiles(list: Record<string, string>): void
 }
 
-export default function ({ basePath, logger = console}: { basePath: string, logger: { error: (msg: string) => void} }): FileSystemMock {
+export default function ({ basePath, logger = console}: { basePath: string, logger?: { error: (msg: string) => void} }): FileSystemMock {
   return {
     cleanup(): void {
       fs.rmdirSync(basePath, { recursive: true })

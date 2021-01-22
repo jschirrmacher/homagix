@@ -28,10 +28,11 @@ describe('DishReader', () => {
       'dishes/1.yaml': "name: 'test dish'\nitems:\n  - 1 Stk item 1",
     })
     DishReader({ store, models }).loadData(basePath)
-    store
+    const addedEvent = store
       .eventList()
       .find(event => event.type === 'dishAdded')
-      .should.deepEqual({ type: 'dishAdded', name: 'test dish', id: '1' })
+
+    should(addedEvent).deepEqual({ type: 'dishAdded', name: 'test dish', id: '1' })
   })
 
   it('should create new ingredients', () => {
@@ -42,7 +43,7 @@ describe('DishReader', () => {
     const event = store
       .eventList()
       .find(event => event.type === 'ingredientAdded')
-    event.should.containDeep({
+    should(event).containDeep({
       type: 'ingredientAdded',
       unit: 'Stk',
       name: 'new item',
@@ -80,9 +81,9 @@ describe('DishReader', () => {
     })
     DishReader({ store, models }).loadData(basePath)
     const item = models.ingredient.getAll().pop()
-    should(item.id).not.be.undefined()
-    item.id.should.be.instanceOf(String)
-    item.id.should.not.equal('')
+    should(item && item.id).not.be.undefined()
+    should(item && item.id).be.instanceOf(String)
+    should(item && item.id).not.equal('')
   })
 
   it('should use a unit default', () => {
@@ -91,6 +92,6 @@ describe('DishReader', () => {
     })
     DishReader({ store, models }).loadData(basePath)
     const item = models.ingredient.getAll().pop()
-    item.unit.should.equal('Stk')
+    should(item && item.unit).equal('Stk')
   })
 })
