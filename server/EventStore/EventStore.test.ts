@@ -13,12 +13,13 @@ const migrationsPath = path.join(basePath, 'migrations')
 const changes_1js = fs
   .readFileSync(path.resolve(DIRNAME, 'testMigrator.ts'))
   .toString()
+const index_1 = 'import m1 from "./1"; export default [new m1()]'
 const events =
   JSON.stringify({ type: 'testEvent', id: 1, name: 'Test event' }) + '\n'
 const mockFS = MockFS({ basePath, logger })
 
-function testEvent(data?: unknown[]) {
-  return { type: 'testEvent', ...data }
+function testEvent(param1?: number, param2?: string) {
+  return { type: 'testEvent', param1, param2 }
 }
 
 let store: Store
@@ -26,10 +27,11 @@ let store: Store
 describe('EventStore', () => {
   beforeEach(() => {
     logger.reset()
+    mockFS.cleanup()
   })
 
-  afterEach(() => {
-    store && store.end()
+  afterEach(async () => {
+    store && await store.end()
     logger.log.should.deepEqual([])
     mockFS.cleanup()
   })
@@ -38,7 +40,9 @@ describe('EventStore', () => {
     mockFS.setupFiles({ 'events-0.json': events })
     store = EventStore({ basePath, migrationsPath })
     const eventList = [] as unknown[]
-    store.on(testEvent, (event: unknown) => eventList.push(event))
+    store.on(testEvent, (event: unknown) => {
+      eventList.push(event)
+    })
     await store.replay()
     eventList.should.deepEqual([
       { type: 'testEvent', id: 1, name: 'Test event' },
@@ -48,14 +52,15 @@ describe('EventStore', () => {
   it('should apply migrations', async () => {
     mockFS.setupFiles({
       'events-0.json': events,
-      'migrations/1.js': changes_1js,
+      'migrations/index.ts': index_1,
+      'migrations/1.ts': changes_1js,
     })
     store = EventStore({ basePath, migrationsPath, logger })
     const eventList = [] as unknown[]
     store.on(testEvent, (event: unknown) => eventList.push(event))
     await store.replay()
     eventList.length.should.equal(1)
-    eventList[0].should.containDeep({
+    should(eventList[0]).containDeep({
       type: 'testEvent',
       name: 'Migrated event',
     })
@@ -74,10 +79,11 @@ describe('EventStore', () => {
     mockFS.setupFiles({
       'events-0.json': events,
       'state.json': '{"versionNo":1}',
-      'migrations/1.js': changes_1js,
+      'migrations/index.ts': index_1,
+      'migrations/1.ts': changes_1js,
     })
     store = EventStore({ basePath, migrationsPath, logger })
-    store.on(testEvent, should({}).fail())
+    store.on(testEvent, () => should({}).fail())
     await store.replay()
   })
 
@@ -90,12 +96,12 @@ describe('EventStore', () => {
     delivered.should.be.true()
   })
 
-  it('should use additional event data', async () => {
+  it('should keep event data', async () => {
     store = EventStore({ basePath, migrationsPath })
     let data
     store.on(testEvent, (event: unknown) => (data = event))
     await store.replay()
-    await store.emit(testEvent({ additional: 123 }))
-    data.should.containDeep({ additional: 123 })
+    await store.emit(testEvent(123, 'abc'))
+    should(data).containDeep({ param1: 123, param2: 'abc' })
   })
 })
