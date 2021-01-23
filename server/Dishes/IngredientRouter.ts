@@ -1,18 +1,20 @@
-import express from 'express'
+import express, { Request, Router } from 'express'
+import { JSONHandler } from '../MainRouter'
 import units from '../models/units'
+import { IngredientController } from './IngredientController'
 
-export default function ({ controller, jsonResult }) {
+export default function ({ controller, jsonResult }: { controller: IngredientController, jsonResult: JSONHandler }): Router {
   const router = express.Router()
 
   function getAvailableUnits() {
     return units
   }
 
-  function setIngredientGroup(req) {
+  function setIngredientGroup(req: Request) {
     return controller.setIngredientGroup(req.params.id, req.body.group)
   }
 
-  function addIngredient(req) {
+  function addIngredient(req: Request) {
     return controller.addIngredient(req.body)
   }
 

@@ -5,12 +5,22 @@ import { v4 as uuid } from 'uuid'
 import units from '../models/units'
 import { Store } from '../EventStore/EventStore'
 import { Models } from '../models'
-import { Ingredient } from '../models/ingredient'
 
-export default function ({ store, models }: { store: Store, models: Models }) {
+type Item = {
+  amount: number
+  unit: string
+  name: string
+}
+
+type DishReader = {
+  loadData(basePath: string): void
+  addItems(dishId: string, item: Item): void
+}
+
+export default function ({ store, models }: { store: Store, models: Models }): DishReader {
   const { dishAdded, ingredientAdded, ingredientAssigned } = models.getEvents()
 
-  function extractIngredientComponents(itemString: string): Ingredient {
+  function extractItemProperties(itemString: string): Item {
     const matches = itemString.match(/^\s*([\d.,]*)\s*(\w+)\.?\s*(.*)$/)
     const amount = (matches ? +matches[1] : 1) || 1
     const hasUnit = matches && units.map(u => u.name).includes(matches[2])
@@ -19,16 +29,14 @@ export default function ({ store, models }: { store: Store, models: Models }) {
     return { amount, unit, name }
   }
 
-  function addItems(dishId: string, item: Ingredient) {
+  function addItems(dishId: string, item: Item): void {
     const existing = models.ingredient.byExample(item, true)
-    if (existing) {
-      store.dispatch(
-        ingredientAssigned(dishId, existing.id, item.amount)
-      )
+    if (existing && existing.id) {
+      store.dispatch(ingredientAssigned(dishId, existing.id, item.amount))
     } else {
-      item.id = uuid()
-      store.dispatch(ingredientAdded(item))
-      store.dispatch(ingredientAssigned(dishId, item.id, item.amount))
+      const id = uuid()
+      store.dispatch(ingredientAdded({ id, name: item.name, unit: item.unit, group: 'other' }))
+      store.dispatch(ingredientAssigned(dishId, id, item.amount))
     }
   }
 
@@ -62,7 +70,7 @@ export default function ({ store, models }: { store: Store, models: Models }) {
       delete dish.items
       store.dispatch(dishAdded(dish))
       if (items && items.map) {
-        items.map(extractIngredientComponents).forEach(item => addItems(dish.id, item))
+        items.map(extractItemProperties).forEach(item => addItems(dish.id, item))
       }
     })
   }

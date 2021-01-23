@@ -1,9 +1,11 @@
+import { NextFunction, Request, Response } from "express"
+
 export const testUser = { id: '42', listId: '007' }
 export const testAdmin = { id: '007', isAdmin: true }
 export const validToken = 'user-token'
 export const adminToken = 'admin-token'
 
-function readToken(req) {
+function readToken(req: Request): void {
   const match = req.headers?.authorization?.match(/Bearer (.*)/)
   if (match && match.length === 2) {
     const token = match[1]
@@ -15,7 +17,7 @@ function readToken(req) {
   }
 }
 
-function requireAuth(req, res, next) {
+function requireAuth(req: Request, res: Response, next: NextFunction): void {
   if (req.user) {
     next()
   } else {
@@ -24,14 +26,14 @@ function requireAuth(req, res, next) {
 }
 
 const auth = {
-  checkJWT: () => (req, res, next) => {
+  checkJWT: () => (req: Request, res: Response, next: NextFunction): void => {
     readToken(req)
     next()
   },
   
   requireAuth,
 
-  requireJWT: () => (req, res, next) => {
+  requireJWT: () => (req: Request, res: Response, next: NextFunction): void => {
     readToken(req)
     requireAuth(req, res, next)
   }

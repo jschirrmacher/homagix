@@ -15,7 +15,7 @@ export default class mig2 extends Transform {
     super(options)
   }
 
-  _transform(event: Event, encoding: BufferEncoding, callback: TransformCallback) {
+  _transform(event: Event, encoding: BufferEncoding, callback: TransformCallback): void {
     event.type = event.type.replace(/-(.)/g, (m, p) => p.toUpperCase())
 
     if (

@@ -1,12 +1,12 @@
 /*eslint-env mocha*/
 import should from 'should'
 import request from 'supertest'
-import express from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import bodyParser from 'body-parser'
 import SessionRouter from './SessionRouter'
 
 const app = express()
-const log = []
+const log = [] as string[]
 const testUser = {
   id: 4711,
   email: 'test@example.com',
@@ -15,7 +15,7 @@ const testUser = {
 
 const auth = {
   requireJWT() {
-    return function (req, res, next) {
+    return function (req: Request, res: Response, next: NextFunction) {
       log.push('auth.requireJWT')
       if (req.headers.authorization === 'test-token') {
         req.user = testUser
@@ -25,7 +25,7 @@ const auth = {
   },
 
   requireLogin() {
-    return function (req, res, next) {
+    return function (req: Request, res: Response, next: NextFunction) {
       log.push('auth.requireLogin')
       if (
         req.body.email === 'test@example.com' &&
@@ -49,7 +49,7 @@ const auth = {
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-const router = SessionRouter({ express, auth })
+const router = SessionRouter({ auth })
 app.use('/session', router)
 
 describe('SessionRouter', () => {

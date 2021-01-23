@@ -18,7 +18,7 @@ type Logger = {
 }
 
 export type EventType = { name: string }
-export interface Event { type: string }
+export type Event = Record<string, unknown>
 export type Listener = (event: Event) => void
 
 const DIRNAME = path.resolve(path.dirname(''))
@@ -43,7 +43,7 @@ class JsonStringify extends Transform {
   }
 }
 
-export default ({ basePath, migrationsPath = resolve(DIRNAME, 'migrations'), logger = console }: { basePath: string, migrationsPath?: string, logger?: Logger }): Store => {
+export default ({ basePath, migrationsPath = resolve(DIRNAME, 'server', 'migrations'), logger = console }: { basePath: string, migrationsPath?: string, logger?: Logger }): Store => {
   const listeners = {} as Record<string, Listener[]>
   const eventFile = (version: number) => resolve(basePath, `events-${version}.json`)
 
@@ -75,7 +75,7 @@ export default ({ basePath, migrationsPath = resolve(DIRNAME, 'migrations'), log
     const eventsVersionNo = parseInt(existsSync(versionFile) && JSON.parse(readFileSync(versionFile).toString()).versionNo) || 0
     const migrationsExist = existsSync(migrationsPath) && existsSync(resolve(migrationsPath, 'index.ts'))
 
-    const allMigrations = (migrationsExist ? require(migrationsPath).default : []) as WritableStream[]
+    const allMigrations = (migrationsExist ? (await import(migrationsPath)).default : []) as WritableStream[]
     const relevantMigrations = allMigrations.slice(eventsVersionNo)
     const versionNo = allMigrations.length
     if (eventsVersionNo < versionNo) {
@@ -89,7 +89,7 @@ export default ({ basePath, migrationsPath = resolve(DIRNAME, 'migrations'), log
 
   function dispatch(event: Event) {
     try {
-      (listeners[event.type] || []).forEach(listener => listener(event))
+      (listeners[(event as { type: string }).type] || []).forEach(listener => listener(event))
     } catch (error) {
       logger.error(error)
       logger.debug(error.stack)
@@ -116,30 +116,24 @@ export default ({ basePath, migrationsPath = resolve(DIRNAME, 'migrations'), log
         const stream = createReadStream(eventsInfo.eventsFileName)
           .pipe(es.split())
           .pipe(es.parse())
-          .pipe(es.mapSync((event: Event) => {
-            dispatch(event)
-          }))
+          .pipe(es.mapSync(dispatch))
 
         await new Promise((resolve, reject) => {
-          stream.on('end', (arg: unknown) => {
-            resolve(arg)
-          })
-          stream.on('error', (error: unknown) => {
-            reject(error)
-          })
+          stream.on('end', resolve)
+          stream.on('error', reject)
         })
       } catch (error) {
         logger.error(error)
       }
     },
 
-    on(type: EventType, func): Store {
+    on(type: EventType, func: Listener): Store {
       listeners[type.name] = listeners[type.name] || []
       listeners[type.name].push(func)
       return this
     },
 
-    async emit(event): Promise<void> {
+    async emit(event: Record<string, unknown>): Promise<void> {
       try {
         const info = await migrationsCompleted
         const completeEvent = { ts: new Date(), ...event }

@@ -1,13 +1,9 @@
 import { Models } from "."
-import { Store } from "../EventStore/EventStore"
+import { Event, Store } from "../EventStore/EventStore"
 import { ModelWriter } from "./ModelWriter"
 
 type DishId = string
 type ListId = string
-type Params = {
-  dishId: DishId
-  listId: ListId
-}
 type WriterFunction = (listId: ListId, dishList: DishList) => void
 
 export type DishList = DishId[]
@@ -19,13 +15,15 @@ export type DishListModel = {
 
 const lists = {} as Record<ListId, DishList>
 
-function addDish(writer: WriterFunction, { dishId, listId }: Params) {
+function addDish(writer: WriterFunction, event: Event) {
+  const { dishId, listId } = event as { dishId: DishId, listId: ListId }
   lists[listId] = lists[listId] || []
   lists[listId].includes(dishId) || lists[listId].push(dishId)
   writer(listId, lists[listId])
 }
 
-function removeDish(writer: WriterFunction, { dishId, listId }: Params) {
+function removeDish(writer: WriterFunction, event: Event) {
+  const { dishId, listId } = event as { dishId: DishId, listId: ListId }
   lists[listId] = lists[listId].filter(id => id !== dishId)
   writer(listId, lists[listId])
 }
@@ -33,8 +31,8 @@ function removeDish(writer: WriterFunction, { dishId, listId }: Params) {
 export default function ({ store, models, modelWriter }: { store: Store, models: Models, modelWriter: ModelWriter}): DishListModel {
   const { addDishToList, removeDishFromList } = models.getEvents()
   store
-    .on(addDishToList, (params: Params) => addDish(modelWriter.writeDishlist, params))
-    .on(removeDishFromList, (params: Params) => removeDish(modelWriter.writeDishlist, params))
+    .on(addDishToList, (event) => addDish(modelWriter.writeDishlist, event))
+    .on(removeDishFromList, (event) => removeDish(modelWriter.writeDishlist, event))
 
   return {
     reset: () => Object.assign(lists, {}),

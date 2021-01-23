@@ -1,5 +1,5 @@
 import { Models } from "."
-import { Store } from "../EventStore/EventStore"
+import { Event, Store } from "../EventStore/EventStore"
 import { ModelWriter } from "./ModelWriter"
 
 export type User = {
@@ -24,41 +24,41 @@ export default function ({ store, models, modelWriter }: { store: Store, models:
   const users = {} as Record<string, User>
   let adminIsDefined = false
 
-  store.on(userAdded, (event: { user: User}) => {
-    users[event.user.id] = event.user
-    if (event.user.email) {
-      byEmail[event.user.email] = event.user
+  store.on(userAdded, (event: Event) => {
+    const { user } = event as { user: User }
+    users[user.id] = user
+    if (user.email) {
+      byEmail[user.email] = user
     }
-    if (event.user.isAdmin) {
+    if (user.isAdmin) {
       adminIsDefined = true
     }
-    modelWriter.writeUser(event.user)
+    modelWriter.writeUser(user)
   })
 
-  store.on(userRemoved, (event: { id: string }) => {
-    delete byEmail[users[event.id].email]
-    delete users[event.id]
-    modelWriter.removeUser(event.id)
+  store.on(userRemoved, (event: Event) => {
+    const { id } = event as { id: string }
+    delete byEmail[users[id].email]
+    delete users[id]
+    modelWriter.removeUser(id)
   })
 
-  store.on(userChanged, (event: { id: string, user: Partial<User> }) => {
-    if (
-      event.user.email &&
-      users[event.id].email &&
-      byEmail[users[event.id].email]
-    ) {
-      delete byEmail[users[event.id].email]
+  store.on(userChanged, (event: Event) => {
+    const { id, user } = event as { id: string, user: Partial<User> }
+    if ( user.email && users[id].email && byEmail[users[id].email] ) {
+      delete byEmail[users[id].email]
     }
-    Object.assign(users[event.id], { ...event.user, id: event.id })
-    if (event.user.email) {
-      byEmail[event.user.email] = users[event.id]
+    Object.assign(users[id], { ...user, id })
+    if (user.email) {
+      byEmail[user.email] = users[id]
     }
-    modelWriter.writeUser(users[event.id])
+    modelWriter.writeUser(users[id])
   })
 
-  store.on(invitationAccepted, (event: { userId: string, listId: string }) => {
-    users[event.userId].listId = event.listId
-    modelWriter.writeUser(users[event.userId])
+  store.on(invitationAccepted, (event: Event) => {
+    const { userId, listId } = event as { userId: string, listId: string }
+    users[userId].listId = listId
+    modelWriter.writeUser(users[userId])
   })
 
   return {

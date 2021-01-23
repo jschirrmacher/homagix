@@ -47,8 +47,7 @@ export default ({ basePath }: { basePath: string }): ModelWriter => {
             return `${ingredient.amount} ${item.unit} ${item.name}`
           }),
       })
-      delete data.id
-      dishesWriter(dish.id as string, data)
+      dishesWriter(dish.id as string, { ...data, id: undefined })
     },
 
     writeIngredient(ingredient: Ingredient): void {

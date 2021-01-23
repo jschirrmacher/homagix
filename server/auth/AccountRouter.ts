@@ -1,16 +1,21 @@
-import express from 'express'
+import express, { NextFunction, Request, Response, Router } from 'express'
+import { Store } from '../EventStore/EventStore'
 import HTTPError from '../lib/HTTPError'
+import { Mailer } from '../Mailer'
+import { Models } from '../models'
+import { User } from '../models/user'
+import { Auth, AuthUser } from './auth'
 
-function sendUserInfo(req, res) {
-  const result = { ...(req.user || {}) }
+function sendUserInfo(req: Request, res: Response): void {
+  const result = { ...(req.user || {}) } as AuthUser
   delete result.password
   res.json(result)
 }
 
-export default ({ auth, models, store, mailer }) => {
+export default ({ auth, models, store, mailer }: { auth: Auth, models: Models, store: Store, mailer: Mailer}): Router => {
   const { invitationAccepted } = models.getEvents()
 
-  async function registerNewUser(req, res, next) {
+  async function registerNewUser(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       if (models.user.getByEMail(req.body.email, false)) {
         throw new HTTPError(409, 'User already exists')
@@ -30,7 +35,7 @@ export default ({ auth, models, store, mailer }) => {
     }
   }
 
-  async function sendAccessLink(req, res, next) {
+  async function sendAccessLink(req: Request, res: Response, next: NextFunction) {
     try {
       const user = models.user.getByEMail(req.body.email, false)
       if (user) {
@@ -43,18 +48,18 @@ export default ({ auth, models, store, mailer }) => {
     }
   }
 
-  function resetPassword(req, res, next) {
+  function resetPassword(req: Request, res: Response, next: NextFunction) {
     try {
-      auth.signIn(req.user, req, res)
+      auth.signIn(req.user as User, req, res)
       res.redirect('/setPassword')
     } catch (error) {
       next(error)
     }
   }
 
-  function updatePassword(req, res, next) {
+  function updatePassword(req: Request, res: Response, next: NextFunction) {
     try {
-      auth.setPassword(req.user, req.body.password)
+      auth.setPassword(req.user as User, req.body.password)
       sendUserInfo(req, res)
     } catch (error) {
       next(error)

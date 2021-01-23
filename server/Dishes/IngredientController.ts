@@ -8,9 +8,9 @@ type IngredientListResult = {
   standards: Ingredient[]
 }
 
-type IngredientController = {
+export type IngredientController = {
   getIngredients(): Promise<IngredientListResult>
-  setIngredientGroup(id: string, group: string): Promise<Ingredient | undefined>
+  setIngredientGroup(id: string, group: string): Promise<Ingredient>
   addIngredient(ingredient: Ingredient): Promise<Ingredient>
 }
 
@@ -26,9 +26,9 @@ export default ({ models, store }: { models: Models, store: Store }): Ingredient
     }
   }
 
-  async function setIngredientGroup(id: string, group: string): Promise<Ingredient | undefined> {
+  async function setIngredientGroup(id: string, group: string): Promise<Ingredient> {
     await store.emit(ingredientUpdated(id, 'group', group))
-    return models.ingredient.byId(id)
+    return models.ingredient.byId(id) as Ingredient
   }
 
   async function addIngredient(ingredient: Ingredient): Promise<Ingredient> {

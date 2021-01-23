@@ -1,13 +1,20 @@
 import Mustache from 'mustache'
+import NodeMailer from 'nodemailer'
+import SMTPTransport from 'nodemailer/lib/smtp-transport'
+
+type Variables = Record<string, string | Record<string, string | undefined> | undefined>
+
+export type Mailer = {
+  send(to: string, templateName: string, variables: Variables): Promise<unknown>
+}
 
 const baseUrl =
   process.env.BASEURL || 'http://localhost:' + (process.env.PORT || 8200)
 const from = process.env.MAIL_FROM || 'me@localhost'
 
-export default ({ nodemailer }) => {
-  async function send(to, templateName, variables) {
-    const template = (await import('./mailTemplates/' + templateName + '.js'))
-      .default
+export default ({ nodeMailer }: { nodeMailer: typeof NodeMailer }): Mailer => {
+  async function send(to: string, templateName: string, variables: Record<string, string>): Promise<unknown> {
+    const template = (await require('./mailTemplates/' + templateName)).default
     return new Promise((resolve, reject) => {
       const subject = Mustache.render(template.subject, {
         baseUrl,
@@ -20,13 +27,14 @@ export default ({ nodemailer }) => {
     })
   }
 
-  const transporter = nodemailer.createTransport({
+  const transportOptions: SMTPTransport.Options = {
     host: process.env.SMTP_HOST || 'smtp.ethereal.email',
-    port: process.env.SMTP_PORT || 587,
+    port: parseInt(process.env.SMTP_PORT || '587'),
     auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASSWORD,
+      user: process.env.SMTP_USER as string,
+      pass: process.env.SMTP_PASSWORD as string,
     },
-  })
+  }
+  const transporter = nodeMailer.createTransport(transportOptions)
   return { send }
 }
