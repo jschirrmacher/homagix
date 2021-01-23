@@ -1,6 +1,6 @@
-import { Event, EventType, Listener } from './EventStore'
+import { Event, EventType, Listener, Store } from './EventStore'
 
-export default () => {
+export default (): Store & { eventList: () => Event[] } => {
   const listeners = {} as Record<string, Listener[]>
   const eventList = [] as Event[]
 
@@ -17,7 +17,7 @@ export default () => {
 
     dispatch(event: Event) {
       eventList.push(event)
-      ;(listeners[event.type] || []).forEach(listener => listener(event))
+      ;(listeners[(event as { type: string }).type] || []).forEach(listener => listener(event))
     },
 
     async emit(event: Event) {

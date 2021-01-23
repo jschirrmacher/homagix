@@ -1,5 +1,5 @@
 import { Models } from "."
-import { Store } from "../EventStore/EventStore"
+import { Event, Store } from "../EventStore/EventStore"
 import { ModelWriter } from "./ModelWriter"
 
 type IngredientId = string
@@ -11,19 +11,13 @@ export type Ingredient = {
   group: string
 }
 
-type UpdateParams = {
-  ingredientId: IngredientId,
-  name: string,
-  value: string
-}
-
 type WriterFunction = (ingredient: Ingredient) => void
 
 export type IngredientModel = {
   getAll(): Ingredient[]
   byId(id: IngredientId): Ingredient | undefined
   byName(name: string): Ingredient | undefined
-  byExample(item: Ingredient, strict?: boolean): Ingredient | undefined
+  byExample(item: Partial<Ingredient>, strict?: boolean): Ingredient | undefined
 }
 
 const ingredients = {
@@ -35,7 +29,8 @@ const aliases = {} as Record<IngredientId, IngredientId>
 
 const ingredientFields = ['name', 'unit', 'group']
 
-export function addIngredient(writer: WriterFunction, data: Ingredient): void {
+export function addIngredient(writer: WriterFunction, event: Event): void {
+  const data = event as Ingredient
   const ingredient = {
     id: '' + data.id,
     name: data.name.trim(),
@@ -53,7 +48,8 @@ export function addIngredient(writer: WriterFunction, data: Ingredient): void {
   }
 }
 
-export function updateIngredient(writer: WriterFunction, { ingredientId, name, value }: UpdateParams): void {
+export function updateIngredient(writer: WriterFunction, event: Event): void {
+  const { ingredientId, name, value } = event as { ingredientId: IngredientId, name: string, value: string }
   if (!ingredientFields.includes(name)) {
     throw Error(`Trying to set an unknown field of ingredient`)
   }
@@ -63,6 +59,10 @@ export function updateIngredient(writer: WriterFunction, { ingredientId, name, v
   }
   ingredient[name as keyof Ingredient] = value
   writer(ingredient)
+}
+
+function getAll(): Ingredient[] {
+  return Object.values(ingredients.byId)
 }
 
 export function getIngredientById(id: IngredientId): Ingredient | undefined {
@@ -76,30 +76,30 @@ export function getIngredientByName(name: string): Ingredient | undefined {
   return ingredients.byName[name]
 }
 
+function byExample(item: Partial<Ingredient>, strict = false): Ingredient | undefined {
+  if (item.id) {
+    return ingredients.byId[item.id]
+  }
+  if (item.name) {
+    const pattern = new RegExp(
+      strict
+        ? '^' + item.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$'
+        : item.name
+    )
+    return Object.values(ingredients.byId).find(i => i.name.match(pattern))
+  }
+}
+
 export default function ({ store, models, modelWriter }: { store: Store, models: Models, modelWriter: ModelWriter }): IngredientModel {
   const { ingredientAdded, ingredientUpdated } = models.getEvents()
   store
-    .on(ingredientAdded, (ingredient: Ingredient) => addIngredient(modelWriter.writeIngredient, ingredient))
-    .on(ingredientUpdated, (params: UpdateParams) => updateIngredient(modelWriter.writeIngredient, params))
+    .on(ingredientAdded, (event) => addIngredient(modelWriter.writeIngredient, event))
+    .on(ingredientUpdated, (event) => updateIngredient(modelWriter.writeIngredient, event))
 
   return {
-    getAll(): Ingredient[] {
-      return Object.values(ingredients.byId)
-    },
-
+    getAll,
     byId: getIngredientById,
     byName: getIngredientByName,
-
-    byExample(item: Ingredient, strict = false): Ingredient | undefined {
-      if (item.id) {
-        return ingredients.byId[item.id]
-      }
-      const pattern = new RegExp(
-        strict
-          ? '^' + item.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$'
-          : item.name
-      )
-      return Object.values(ingredients.byId).find(i => i.name.match(pattern))
-    },
+    byExample,
   }
 }

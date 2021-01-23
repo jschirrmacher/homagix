@@ -4,7 +4,7 @@ import { Models } from '../models'
 import { Dish } from '../models/dish'
 import { User } from '../models/user'
 
-type DishController = {
+export type DishController = {
   getAll(user?: User): Dish[]
   addDish(data: Dish, user: User): Promise<Dish>
   updateDish(id: string, dishPartial: Partial<Dish>, user: User): Promise<Dish>

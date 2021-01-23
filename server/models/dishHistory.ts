@@ -1,5 +1,5 @@
 import { Models } from "."
-import { Store } from "../EventStore/EventStore"
+import { Event, Store } from "../EventStore/EventStore"
 import { User } from "./user"
 
 export type HistoryModel = {
@@ -9,7 +9,8 @@ export type HistoryModel = {
 type HistoryEntry = Record<string, string>
 const history = {} as Record<string, HistoryEntry>
 
-function served({ dishId, date, listId = '' }: { dishId: string, date: string, listId?: string}) {
+function served(event: Event): void {
+  const { dishId, date, listId = '' } = event as { dishId: string, date: string, listId?: string}
   history[listId] = history[listId] || {}
   history[listId][date] = dishId
 }

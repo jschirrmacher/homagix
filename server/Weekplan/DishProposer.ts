@@ -1,12 +1,21 @@
-export default ({ models }) => {
+import { Models } from "../models"
+import { Dish } from "../models/dish"
+import { User } from "../models/user"
+
+export type DishProposer = {
+  get(user: User, inhibited?: string[]): Dish[]
+}
+
+export default ({ models }: { models: Models}): DishProposer => {
   return {
-    get(user, inhibited = []) {
+    get(user: User, inhibited = []): Dish[] {
       const favorites = models.dishList.getById(user.listId || user.id) || []
-      function getDate(dish) {
+
+      function getDate(dish: Dish): Date {
         return new Date(dish.last || 0)
       }
 
-      function compare(a, b) {
+      function compare(a: Dish, b: Dish) {
         const aIsFav = favorites.includes(a.id)
         const bIsFav = favorites.includes(b.id)
         if (aIsFav && !bIsFav) {
@@ -14,7 +23,7 @@ export default ({ models }) => {
         } else if (!aIsFav && bIsFav) {
           return 1
         } else {
-          return getDate(a) - getDate(b)
+          return +getDate(a) - +getDate(b)
         }
       }
 

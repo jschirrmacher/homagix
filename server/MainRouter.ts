@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express'
+import express, { Request, RequestHandler, Response, Router } from 'express'
 import SessionRouter from './auth/SessionRouter'
 import AccountRouter from './auth/AccountRouter'
 import DishProposer from './Weekplan/DishProposer'
@@ -11,10 +11,16 @@ import WeekplanController from './Weekplan/WeekplanController'
 import WeekplanRouter from './Weekplan/WeekplanRouter'
 import nodemailer from 'nodemailer'
 import Mailer from './Mailer'
+import { Models } from './models'
+import { Store } from './EventStore/EventStore'
+import { Auth } from './auth/auth'
 
 const mailer = Mailer({ nodemailer })
 
-function jsonResult(func: (req: Request) => Promise<Record<string, unknown>>) {
+type RouteHandler = (req: Request) => Record<string, unknown> | Promise<Record<string, unknown>> | Array<Record<string, unknown>> | Promise<Array<Record<string, unknown>>>
+export type JSONHandler = (func: RouteHandler) => RequestHandler
+
+export function jsonResult(func: RouteHandler): RequestHandler {
   const fn = {
     async [func.name](req: Request, res: Response) {
       try {
@@ -29,7 +35,7 @@ function jsonResult(func: (req: Request) => Promise<Record<string, unknown>>) {
   return fn[func.name]
 }
 
-export default function ({ models, store, auth }) {
+export default function ({ models, store, auth }: { models: Models, store: Store, auth: Auth}): Router {
   const router = express.Router()
   const sessionRouter = SessionRouter({ auth })
   const accountRouter = AccountRouter({ auth, store, models, mailer })

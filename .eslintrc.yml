@@ -3,7 +3,6 @@ env:
   es6: true
   node: true
   mocha: true
-  typescript: true
 parser: "@typescript-eslint/parser"
 parserOptions:
   ecmaVersion: 2020

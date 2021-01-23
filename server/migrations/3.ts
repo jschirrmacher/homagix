@@ -6,7 +6,7 @@ import {
   updateIngredient,
   getIngredientById,
   Ingredient,
-} from '../models/ingredient.js'
+} from '../models/ingredient'
 import ModelWriter from '../models/ModelWriter'
 
 const DIRNAME = path.resolve(path.dirname(''))
@@ -19,44 +19,42 @@ export default class mig3 extends Transform {
     super(options)
   }
 
-  _transform(event: any, encoding: BufferEncoding, callback: TransformCallback) {
+  _transform(event: Record<string, unknown>, encoding: BufferEncoding, callback: TransformCallback): void {
     switch (event.type) {
       case 'dishAdded': {
-        const dish = event
-        delete dish.type
-        dish.items = dish.items || []
-        addDish(modelWriter.writeDish, dish)
+        delete event.type
+        event.items = event.items || []
+        addDish(modelWriter.writeDish, event)
         break
       }
 
       case 'ingredientAdded': {
-        const ingredient = event
-        delete ingredient.type
-        ingredient.unit = ingredient.unit.name || ingredient.unit
-        addIngredient(modelWriter.writeIngredient, ingredient)
+        delete event.type
+        event.unit = (event.unit as { name: string }).name || event.unit
+        addIngredient(modelWriter.writeIngredient, event)
         break
       }
 
       case 'ingredientAssigned': {
-        const dish = getDishById(event.dishId)
+        const dish = getDishById(event.dishId as string)
         if (!dish) {
           throw Error(`Dish #${event.dishId} not found`)
         }
-        if (!getIngredientById(event.ingredientId)) {
+        if (!getIngredientById(event.ingredientId as string)) {
           throw Error(`Ingredient #${event.ingredientId} not found`)
         }
         dish.items = dish.items || []
-        dish.items.push({ amount: event.amount, id: event.ingredientId })
+        dish.items.push({ amount: event.amount as number, id: event.ingredientId as string })
         addDish(modelWriter.writeDish, dish)
         break
       }
 
       case 'ingredientUpdated': {
-        const ingredient = getIngredientById(event.ingredientId)
+        const ingredient = getIngredientById(event.ingredientId as string)
         if (!ingredient) {
           throw Error(`Ingredient #${event.ingredientId} not found`)
         }
-        ingredient[event.name as keyof Ingredient] = event.value
+        ingredient[event.name as keyof Ingredient] = event.value as string
         updateIngredient(modelWriter.writeIngredient, event)
         break
       }

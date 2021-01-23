@@ -1,20 +1,20 @@
 export default {
-  log: [],
+  log: [] as string[][],
 
-  debug: function (msg) {
+  debug: function (msg: string): void {
     this.log.push(['debug', msg])
   },
-  info: function (msg) {
+  info: function (msg: string): void {
     this.log.push(['info', msg])
   },
-  warn: function (msg) {
+  warn: function (msg: string): void {
     this.log.push(['warn', msg])
   },
-  error: function (msg) {
+  error: function (msg: string): void {
     this.log.push(['error', msg])
   },
 
-  reset: function () {
+  reset: function (): void {
     this.log.length = 0
   },
 }
