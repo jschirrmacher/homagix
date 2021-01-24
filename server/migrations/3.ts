@@ -1,4 +1,3 @@
-import path from 'path'
 import { Transform, TransformOptions, TransformCallback } from 'stream'
 import { addDish, getDishById } from '../models/dish'
 import {
@@ -8,9 +7,9 @@ import {
   Ingredient,
 } from '../models/ingredient'
 import ModelWriter from '../models/ModelWriter'
+import Config from '../Config'
 
-const DIRNAME = path.resolve(path.dirname(''))
-const basePath = path.join(DIRNAME, '..', '..', 'data')
+const { dataDir: basePath } = Config()
 const modelWriter = ModelWriter({ basePath })
 
 export default class mig3 extends Transform {

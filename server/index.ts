@@ -10,17 +10,14 @@ import ModelWriter from './models/ModelWriter'
 import history from 'connect-history-api-fallback'
 import Auth from './auth/auth'
 import listRoutes from './lib/listRoutes'
+import Config from './Config'
 
-const nodeEnv = process.env.NODE_ENV || 'development'
 const logger = console
-const baseDir = path.resolve(__dirname, '..')
 
-const PORT = process.env.PORT || 8200
+const { nodeEnv, baseDir, dataDir, migrationsPath, PORT } = Config({ logger })
 
-const basePath = path.resolve(baseDir ,'data')
-const migrationsPath = path.resolve(__dirname, 'migrations')
-const store = EventStore({ basePath, logger, migrationsPath })
-const modelWriter = ModelWriter({ basePath })
+const store = EventStore({ basePath: dataDir, logger, migrationsPath })
+const modelWriter = ModelWriter({ basePath: dataDir })
 const models = Models({ store, modelWriter })
 
 const dishReader = DishReader({ store, models })
@@ -34,13 +31,13 @@ const auth = Auth({ app, models, store, secretOrKey: process.env.SECRET || '' })
 const router = MainRouter({ models, store, auth })
 
 async function setupHotLoading() {
-  if (process.env.NODE_ENV === 'development') {
-    const webpack = await require('./WebpackAdapter')
-    webpack.setup(app, logger)
-  }
+  const webpack = await import('./WebpackAdapter')
+  webpack.setup(app)
 }
 
-setupHotLoading()
+if (process.env.NODE_ENV === 'development') {
+  setupHotLoading()
+}
 
 app.use((req, res, next) => {
   logger.info(req.method + ' ' + req.path)
@@ -49,9 +46,9 @@ app.use((req, res, next) => {
 
 app.use(router)
 app.use(history({}))
-app.use('/', express.static(path.join(baseDir, 'build')))
+app.use('/', express.static(path.join(__dirname, '..', 'frontend')))
 app.use('/', express.static(path.join(baseDir, 'public')))
-app.use('/images', express.static(path.join(baseDir, 'data', 'images')))
+app.use('/images', express.static(path.join(dataDir, 'images')))
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use(function (err: {code?: number, message?: string}, req: Request, res: Response, next: NextFunction) {
@@ -60,7 +57,7 @@ app.use(function (err: {code?: number, message?: string}, req: Request, res: Res
 })
 
 app.listen(PORT, async () => {
-  dishReader.loadData(basePath)
+  dishReader.loadData(dataDir)
   await store.replay()
   logger.info(`Listening on http://localhost:${PORT} (NODE_ENV=${nodeEnv})`)
 })

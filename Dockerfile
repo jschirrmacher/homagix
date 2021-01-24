@@ -19,4 +19,5 @@ USER node
 
 EXPOSE 8200
 ENV NODE_ENV production
+ENV BASEDIR /app
 CMD node server
