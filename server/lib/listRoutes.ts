@@ -59,8 +59,8 @@ function split(thing: string | { fast_slash: boolean }): string | string[] {
 export default function (app: Express): string {
   const routes = app._router.stack
     .flatMap(resolve.bind(null, []))
-    .filter(Boolean)
-    .map((e) => [e[0] + ' ' + e[1], e[2]])
+    .filter(e => e.length)
+    .map((e) => [e[0] + ' /' + e[1] as unknown as string, e[2] as unknown as string])
 
   const maxLen = routes.reduce(
     (max, route) => Math.max(max, route[0].length),

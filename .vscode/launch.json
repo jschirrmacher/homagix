@@ -77,14 +77,16 @@
       "type": "pwa-node",
       "request": "launch",
       "name": "Launch Server",
+      "program": "${workspaceFolder}/node_modules/.bin/babel-node",
       "args": [
+        "-x",
+        ".ts",
         "--inspect",
         "-r",
         "dotenv-flow/config",
-        "${workspaceFolder}/server/index.js"
+        "${workspaceFolder}/server/index.ts"
       ],
-      "skipFiles": ["<node_internals>/**"],
-      "program": ""
+      "skipFiles": ["<node_internals>/**"]
     }
   ]
 }

@@ -70,7 +70,8 @@ export default ({ basePath, migrationsPath, logger = console }: { basePath: stri
   async function doNecessaryMigrations(): Promise<string> {
     const versionFile = resolve(basePath, 'state.json')
     const eventsVersionNo = parseInt(existsSync(versionFile) && JSON.parse(readFileSync(versionFile).toString()).versionNo) || 0
-    const migrationsExist = existsSync(migrationsPath) && existsSync(resolve(migrationsPath, 'index.ts'))
+    const indexName = resolve(migrationsPath, 'index.' + __filename.replace(/^.*\.(\w+)$/, '$1'))
+    const migrationsExist = existsSync(migrationsPath) && existsSync(indexName)
 
     const allMigrations = (migrationsExist ? (await import(migrationsPath)).default : []) as WritableStream[]
     const relevantMigrations = allMigrations.slice(eventsVersionNo)
