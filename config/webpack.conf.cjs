@@ -29,7 +29,7 @@ module.exports = {
   mode,
   entry: { index },
   output: {
-    path: path.resolve(__dirname, '..', 'build'),
+    path: path.resolve(__dirname, '..', 'build', 'frontend'),
     filename: 'bundle.js',
     sourceMapFilename: '[name].js.map',
   },
