@@ -9,7 +9,6 @@ import {
 import { resolve } from 'path'
 import { Transform, TransformOptions } from 'stream'
 import es from 'event-stream'
-import path from 'path'
 
 type Logger = {
   error: (msg: unknown) => void
@@ -20,8 +19,6 @@ type Logger = {
 export type EventType = { name: string }
 export type Event = Record<string, unknown>
 export type Listener = (event: Event) => void
-
-const DIRNAME = path.resolve(path.dirname(''))
 
 export type Store = {
   dispatch(event: Event): void
@@ -43,7 +40,7 @@ class JsonStringify extends Transform {
   }
 }
 
-export default ({ basePath, migrationsPath = resolve(DIRNAME, 'server', 'migrations'), logger = console }: { basePath: string, migrationsPath?: string, logger?: Logger }): Store => {
+export default ({ basePath, migrationsPath, logger = console }: { basePath: string, migrationsPath: string, logger?: Logger }): Store => {
   const listeners = {} as Record<string, Listener[]>
   const eventFile = (version: number) => resolve(basePath, `events-${version}.json`)
 

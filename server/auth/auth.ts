@@ -23,6 +23,7 @@ export type Auth = {
   generateAccessCode(user: AuthUser): void
   resetAccessCode(user: AuthUser): void
 
+  authenticate(type: string | string[], options: { allowAnonymous?: boolean }): RequestHandler
   requireCode: MiddleWare,
   requireJWT: MiddleWare,
   checkJWT: MiddleWare,
@@ -31,7 +32,7 @@ export type Auth = {
   requireAdmin: MiddleWare,
 }
 
-export default ({ app, models, store, secretOrKey }: { app: Router, models: Models, store: Store, secretOrKey: string}): Record<string, unknown> => {
+export default ({ app, models, store, secretOrKey }: { app: Router, models: Models, store: Store, secretOrKey: string}): Auth => {
   const { userAdded, userChanged } = models.getEvents()
 
   function signIn(user: User, req: Request, res: Response): void {
@@ -83,7 +84,7 @@ export default ({ app, models, store, secretOrKey }: { app: Router, models: Mode
       try {
         const user = models.user.getByEMail(email) as AuthUser
         bcrypt.compare(password, user.password || '', async (err, isValid) => {
-          done(err, isValid ? user : false)
+          done(err && err.message, isValid ? user : false)
         })
       } catch (error) {
         done(error, false)
@@ -117,8 +118,8 @@ export default ({ app, models, store, secretOrKey }: { app: Router, models: Mode
     })
   )
 
-  function authenticate(type: string | string[], options = {} as { allowAnonymous?: boolean }) {
-    return function (req: Request, res: Response, next: NextFunction) {
+  function authenticate(type: string | string[], options = {} as { allowAnonymous?: boolean }): RequestHandler {
+    return function (req: Request, res: Response, next: NextFunction): void {
       passport.authenticate(type, { session: false }, (err, user) => {
         if (err) {
           return next(err)

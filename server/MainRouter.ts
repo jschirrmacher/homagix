@@ -9,13 +9,13 @@ import IngredientRouter from './Dishes/IngredientRouter'
 import IngredientController from './Dishes/IngredientController'
 import WeekplanController from './Weekplan/WeekplanController'
 import WeekplanRouter from './Weekplan/WeekplanRouter'
-import nodemailer from 'nodemailer'
+import nodeMailer from 'nodemailer'
 import Mailer from './Mailer'
 import { Models } from './models'
 import { Store } from './EventStore/EventStore'
 import { Auth } from './auth/auth'
 
-const mailer = Mailer({ nodemailer })
+const mailer = Mailer({ nodeMailer })
 
 type RouteHandler = (req: Request) => Record<string, unknown> | Promise<Record<string, unknown>> | Array<Record<string, unknown>> | Promise<Array<Record<string, unknown>>>
 export type JSONHandler = (func: RouteHandler) => RequestHandler

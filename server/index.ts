@@ -13,12 +13,13 @@ import listRoutes from './lib/listRoutes'
 
 const nodeEnv = process.env.NODE_ENV || 'development'
 const logger = console
-const DIRNAME = path.resolve(path.dirname(''))
+const baseDir = path.resolve(__dirname, '..')
 
 const PORT = process.env.PORT || 8200
 
-const basePath = path.join(DIRNAME, 'data')
-const store = EventStore({ basePath, logger })
+const basePath = path.resolve(baseDir ,'data')
+const migrationsPath = path.resolve(__dirname, 'migrations')
+const store = EventStore({ basePath, logger, migrationsPath })
 const modelWriter = ModelWriter({ basePath })
 const models = Models({ store, modelWriter })
 
@@ -29,12 +30,12 @@ app.set('json spaces', 2)
 app.use(cookieParser())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-const auth = Auth({ app, models, store, secretOrKey: process.env.SECRET })
+const auth = Auth({ app, models, store, secretOrKey: process.env.SECRET || '' })
 const router = MainRouter({ models, store, auth })
 
 async function setupHotLoading() {
   if (process.env.NODE_ENV === 'development') {
-    const webpack = await require('./Webpack')
+    const webpack = await require('./WebpackAdapter')
     webpack.setup(app, logger)
   }
 }
@@ -47,12 +48,12 @@ app.use((req, res, next) => {
 })
 
 app.use(router)
-app.use(history({ verbose: true }))
-app.use('/', express.static(path.join(DIRNAME, 'build')))
-app.use('/', express.static(path.join(DIRNAME, 'public')))
-app.use('/images', express.static(path.join(DIRNAME, 'data', 'images')))
+app.use(history({}))
+app.use('/', express.static(path.join(baseDir, 'build')))
+app.use('/', express.static(path.join(baseDir, 'public')))
+app.use('/images', express.static(path.join(baseDir, 'data', 'images')))
 
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use(function (err: {code?: number, message?: string}, req: Request, res: Response, next: NextFunction) {
   logger.error(err)
   res.status(err.code || 500).json({ error: err.message || err.toString() })
