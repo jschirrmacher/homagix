@@ -36,6 +36,8 @@
     },
     {
       "args": [
+        "--",
+        "node_modules/.bin/mocha",
         "-u",
         "bdd",
         "--timeout",
@@ -45,7 +47,7 @@
       ],
       "internalConsoleOptions": "openOnSessionStart",
       "name": "Frontend Tests",
-      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+      "program": "${workspaceFolder}/node_modules/.bin/babel-node",
       "request": "launch",
       "skipFiles": ["<node_internals>/**"],
       "type": "pwa-node"
