@@ -33,6 +33,7 @@ export default {
       const names = ['dish']
       this.opened && names.push('opened')
       this.accepted.includes(this.dish.id) && names.push('accepted')
+      this.dish.served && names.push('served')
       return names.join(' ')
     },
 

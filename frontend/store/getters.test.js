@@ -82,4 +82,16 @@ describe('Store getters', () => {
       store.getters.itemsInShoppingList.should.be.true()
     })
   })
+  
+  describe('maxServedDate', () => {
+    it('should return the maximum served date from the dishes', () => {
+      store.getters.maxServedDate.should.equal('2021-01-25')
+    })
+  })
+  
+  describe('nextDayToServe', () => {
+    it('should return the date of the next day when dishes should be served', () => {
+      store.getters.nextDayToServe.should.equal('2021-01-26')
+    })
+  })
 })

@@ -1,5 +1,5 @@
 <script>
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import Dish from '@/components/Dish'
 import { CHANGE_STARTDATE } from '../store/action_types'
 import { DISH_DECLINED, TOGGLE_ACCEPTANCE } from '../store/mutation_types'
@@ -11,6 +11,7 @@ export default {
 
   computed: {
     ...mapState(['weekplan', 'startDate', 'dishes']),
+    ...mapGetters(['maxServedDate']),
 
     startDate: {
       get() {
@@ -69,7 +70,7 @@ export default {
       <li
         v-for="entry in weekplan"
         :key="entry.date"
-        :class="{ past: past(entry.date) }"
+        :class="{ past: past(entry.date), planned: entry.date <= maxServedDate }"
       >
         <span class="day">{{ formatDate(entry.date) }}</span>
         <Dish v-if="entry.dishId" :dish="dish(entry.dishId)">
@@ -120,7 +121,7 @@ export default {
       margin-bottom: 1px;
     }
 
-    &.past {
+    &.planned {
       .servedDate,
       .accept,
       .delete {
@@ -141,7 +142,7 @@ export default {
           border-top: 1px solid #bbbbbb;
         }
 
-        &.past {
+        &.planned {
           background: #f7f7f7;
         }
 

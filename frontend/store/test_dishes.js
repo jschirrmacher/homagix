@@ -11,6 +11,7 @@ export const dishes = {
       { id: ingredients.mehl.id, amount: 500 },
       { id: ingredients.hefe.id, amount: 1 },
     ],
+    last: '2021-01-25',
   },
   kuchen: {
     id: 5,
@@ -18,6 +19,14 @@ export const dishes = {
       { id: ingredients.mehl.id, amount: 350 },
       { id: ingredients.hefe.id, amount: 0.5 },
       { id: ingredients.eier.id, amount: 3 },
+    ],
+    last: '2021-01-24',
+  },
+  pizza: {
+    id: 6,
+    items: [
+      { id: ingredients.mehl.id, amount: 350 },
+      { id: ingredients.hefe.id, amount: 0.5 },
     ],
   },
 }

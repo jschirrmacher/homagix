@@ -172,9 +172,12 @@ export const actions = {
 
   [SHOPPING_DONE]: async context => {
     const data = { accepted: context.state.accepted }
-    const date = context.state.startDate.toISOString().split('T')[0]
+    const weekStart = context.state.startDate.toISOString().split('T')[0]
+    const nextPlannable = context.getters.nextDayToServe
+    const date = weekStart > nextPlannable ? weekStart : nextPlannable
     await doFetch('post', '/weekplan/' + date + '/fix', data)
     context.commit(SHOPPING_DONE)
+    await context.dispatch(LOAD_DISHES)
     await updateWeekplan(context)
   },
 
