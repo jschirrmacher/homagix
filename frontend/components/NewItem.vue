@@ -1,21 +1,35 @@
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import { ADD_ITEM } from '../store/mutation_types'
 import { mapState } from 'vuex'
-import Autocomplete from './Autocomplete'
+import Autocomplete from './Autocomplete.vue'
 
-const defaultSettings = {
-  id: null,
-  amount: '1',
-  unit: { name: 'Pkg', step: 1 },
-  name: '',
+type Item = {
+  id: string
+  name: string
+  amount: string
+  unit: {
+    name: string
+    step: number
+  }
 }
 
-export default {
+const defaultSettings = {
+  id: '',
+  name: '',
+  amount: '1',
+  unit: {
+    name: 'Pkg',
+    step: 1
+  },
+}
+
+export default Vue.extend({
   components: { Autocomplete },
 
   data() {
     return {
-      item: { ...defaultSettings },
+      item: { ...defaultSettings } as Item,
     }
   },
 
@@ -24,7 +38,7 @@ export default {
   },
 
   methods: {
-    addItem() {
+    addItem(): void {
       const item = {
         id: this.item.id,
         name: this.item.name,
@@ -35,21 +49,21 @@ export default {
       this.reset()
     },
 
-    nameFieldChanged(item) {
+    nameFieldChanged(item: Item): void {
       this.item = {
         ...this.item,
         ...item,
         unit:
-          this.$store.state.units.find(u => u.name === item.unit) ||
+          this.$store.state.units.find((u) => u.name === item.unit) ||
           this.item.unit,
       }
     },
 
-    reset() {
+    reset(): void {
       this.item = { ...defaultSettings }
     },
   },
-}
+})
 </script>
 
 <template>

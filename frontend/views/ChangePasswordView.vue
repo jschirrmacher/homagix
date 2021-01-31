@@ -1,14 +1,15 @@
-<script>
-import DialogFormField from '@/dialogs/DialogFormField'
+<script lang="ts">
+import Vue from 'vue'
+import DialogFormField from '../dialogs/DialogFormField.vue'
 import { mapState } from 'vuex'
-import sendForm from '@/lib/sendForm'
+import sendForm from '../lib/sendForm'
 import { CURRENTUSER_SET } from '../store/mutation_types'
-import { alert } from '@/lib/dialogs'
+import { alert } from '../lib/dialogs'
 
 const defaultMessage =
   'Gib hier 2x ein neues Passwort an, mit dem Du dich künftig anmelden willst.'
 
-export default {
+export default Vue.extend({
   components: {
     DialogFormField,
   },
@@ -21,7 +22,7 @@ export default {
         password: '',
         repeat: '',
       },
-      marked: [],
+      marked: [] as string[],
     }
   },
 
@@ -30,12 +31,12 @@ export default {
   },
 
   methods: {
-    setMessage(type, message) {
+    setMessage(type: string, message: string): void {
       this.messageType = type
       this.message = message
     },
 
-    async changePwd() {
+    async changePwd(): Promise<void> {
       this.marked = Object.entries(this.fields)
         .filter(([name, value]) => !value)
         .map(([name, value]) => name)
@@ -65,17 +66,17 @@ export default {
       }
     },
 
-    clearError() {
+    clearError(): void {
       this.setMessage('info', defaultMessage)
       this.marked = []
     },
 
-    reset() {
+    reset(): void {
       this.clearError()
       this.fields.password = ''
     },
   },
-}
+})
 </script>
 
 <template>

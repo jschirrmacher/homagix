@@ -1,6 +1,6 @@
-<script>
-import Dialog from './Dialog'
-import { openDialog, closeDialogs } from '@/lib/dialogs'
+<script lang="ts">
+import Dialog from './Dialog.vue'
+import { closeDialogs } from '../lib/dialogs'
 import { mapState } from 'vuex'
 
 export default {
@@ -11,7 +11,7 @@ export default {
   computed: mapState(['alert']),
 
   methods: {
-    close() {
+    close(): void {
       closeDialogs()
     },
   },

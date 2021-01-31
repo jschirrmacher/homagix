@@ -1,10 +1,13 @@
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
-import Dish from '@/components/Dish'
+import Dish from './Dish.vue'
 import { CHANGE_STARTDATE } from '../store/action_types'
 import { DISH_DECLINED, TOGGLE_ACCEPTANCE } from '../store/mutation_types'
 
-export default {
+type DishData = {}
+
+export default Vue.extend({
   components: {
     Dish,
   },
@@ -14,10 +17,10 @@ export default {
     ...mapGetters(['maxServedDate']),
 
     startDate: {
-      get() {
+      get(): string {
         return this.$store.state.startDate.toISOString().replace(/T.*$/, '')
       },
-      set(startDate) {
+      set(startDate: string): void {
         if (startDate) {
           this.$store.dispatch(CHANGE_STARTDATE, { startDate })
         }
@@ -26,7 +29,7 @@ export default {
   },
 
   methods: {
-    formatDate(date) {
+    formatDate(date: string): string {
       return new Date(date).toLocaleDateString(navigator.language, {
         weekday: 'short',
         day: 'numeric',
@@ -34,29 +37,29 @@ export default {
       })
     },
 
-    addToDate(offset) {
+    addToDate(offset: number): void {
       const startDate = new Date(this.startDate)
       startDate.setDate(startDate.getDate() + offset)
       this.$store.dispatch(CHANGE_STARTDATE, { startDate })
     },
 
-    past(date) {
+    past(date: string): boolean {
       return date < new Date().toISOString().split('T')[0]
     },
 
-    decline(dishId) {
+    decline(dishId: string): void {
       this.$store.dispatch(DISH_DECLINED, { dishId })
     },
 
-    toggleAcceptance(dishId) {
+    toggleAcceptance(dishId: string): void {
       this.$store.dispatch(TOGGLE_ACCEPTANCE, { dishId })
     },
 
-    dish(dishId) {
-      return this.dishes.find(dish => dish.id === dishId)
+    dish(dishId: string): DishData {
+      return this.dishes.find((dish: { id: string }) => dish.id === dishId)
     },
   },
-}
+})
 </script>
 
 <template>

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import dialogPolyfill from 'dialog-polyfill'
 import 'dialog-polyfill/dist/dialog-polyfill.css'
 
@@ -8,13 +8,13 @@ export default {
     title: String,
   },
 
-  mounted() {
-    dialogPolyfill.registerDialog(this.$refs.dialog)
+  mounted(): void {
+    dialogPolyfill.registerDialog(this.$refs.dialog as HTMLDialogElement)
   },
 
   methods: {
-    close() {
-      this.$refs.dialog.close()
+    close(): void {
+      (this.$refs.dialog as HTMLDialogElement).close()
     },
   },
 }

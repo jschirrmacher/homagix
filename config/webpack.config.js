@@ -67,6 +67,13 @@ module.exports = {
         test: /\.vue$/,
         loader: { loader: 'vue-loader', options: { sourceMap: isDev } },
       },
+      {
+        test: /\.ts$/,
+        loader: { loader: 'babel-loader' },
+        options: {
+          appendTsSuffixTo: [/\.vue$/],
+        },
+      },
     ],
   },
   plugins,

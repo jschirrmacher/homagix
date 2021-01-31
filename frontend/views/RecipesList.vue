@@ -1,6 +1,6 @@
-<script>
+<script lang="ts">
 import Vue from 'vue'
-import Dish from '@/components/Dish'
+import Dish from '../components/Dish.vue'
 import { LOAD_DISHES } from '../store/action_types'
 import { mapState } from 'vuex'
 
@@ -12,14 +12,14 @@ export default Vue.extend({
   computed: {
     ...mapState(['dishes']),
 
-    sortedDishes() {
-      return [...this.dishes.filter(d => !d.alwaysOnList)].sort((d1, d2) =>
+    sortedDishes(): Array<{ id: string }> {
+      return [...this.dishes.filter((d: { alwaysOnList: boolean, name: string }) => !d.alwaysOnList)].sort((d1, d2) =>
         d1.name.localeCompare(d2.name)
       )
     },
   },
 
-  mounted() {
+  mounted(): void {
     this.$store.dispatch(LOAD_DISHES)
   },
 })

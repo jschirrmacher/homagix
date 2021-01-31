@@ -1,6 +1,7 @@
-<script>
+<script lang="ts">
 import Vue from 'vue'
-import { doFetch } from '@/lib/api'
+import 'vue-router'
+import { doFetch } from '../lib/api'
 import { CURRENTUSER_SET } from '../store/mutation_types'
 import { mapState } from 'vuex'
 
@@ -25,11 +26,11 @@ export default Vue.extend({
   computed: {
     ...mapState(['currentUser']),
 
-    loggedIn() {
+    loggedIn(): boolean {
       return this.currentUser.id
     },
 
-    accountMenuName() {
+    accountMenuName(): string {
       if (this.currentUser.id) {
         return this.currentUser.firstName
       } else {
@@ -39,17 +40,17 @@ export default Vue.extend({
   },
 
   methods: {
-    async logout() {
+    async logout(): Promise<void> {
       await doFetch('get', '/sessions/logout')
       this.$router.push('/').catch(() => {})
       this.$store.commit(CURRENTUSER_SET, {})
     },
 
-    navigate(dest) {
+    navigate(dest: string): void {
       this.$router.push(dest).catch(() => {})
     },
 
-    invite() {
+    invite(): void {
       const vars = {
         link: location.origin + '/register?inviteFrom=' + this.currentUser.id,
         firstName: this.currentUser.firstName,
@@ -60,19 +61,19 @@ export default Vue.extend({
       const body = encodeURIComponent(
         invitationMailBody.replace(/{{\s*(\w+)\s*}}/gs, replaceFunc)
       )
-      window.location =
+      window.location.href =
         'mailto:?subject=' +
         encodeURIComponent(invitationMailSubject) +
         '&body=' +
         body
     },
 
-    openMenu(event) {
-      event.target.closest('.submenu').classList.add('open')
+    openMenu(event: Event): void {
+      (event.target as HTMLElement).closest('.submenu')?.classList.add('open')
     },
 
-    closeMenu(event) {
-      event.target.closest('.submenu').classList.remove('open')
+    closeMenu(event: Event): void {
+      (event.target as HTMLElement).closest('.submenu')?.classList.remove('open')
     },
   },
 })

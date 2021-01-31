@@ -1,11 +1,12 @@
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
-import IngredientList from './IngredientList'
-import NewItem from './NewItem'
+import IngredientList from './IngredientList.vue'
+import NewItem from './NewItem.vue'
 import { REMOVE_ITEM, RESTORE_ITEM } from '../store/mutation_types'
 import { CHANGE_GROUP } from '../store/action_types'
 
-export default {
+export default Vue.extend({
   data() {
     return {
       preset: {},
@@ -20,21 +21,21 @@ export default {
   },
 
   methods: {
-    remove(item) {
+    remove(item): void {
       this.$store.dispatch(REMOVE_ITEM, { item })
     },
 
-    restore(item) {
+    restore(item): void {
       item.amount = item.originalAmount
       delete item.originalAmount
       this.$store.dispatch(RESTORE_ITEM, { item })
     },
 
-    changeGroup(ingredient, group) {
+    changeGroup(ingredient, group: string): void {
       this.$store.dispatch(CHANGE_GROUP, { ingredient, group })
     },
   },
-}
+})
 </script>
 
 <template>

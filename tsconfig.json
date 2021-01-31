@@ -8,7 +8,10 @@
 		"strict": true,
 		"isolatedModules": true,
 		"esModuleInterop": true,
-		"noImplicitAny": false
+		"noImplicitAny": false,
+		"allowSyntheticDefaultImports": true,
+		"sourceMap": true,
+		"lib": ["es2020"]
 	},
 	"include": [
 		"server"

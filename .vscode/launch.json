@@ -32,7 +32,10 @@
       "program": "${workspaceFolder}/node_modules/.bin/babel-node",
       "request": "launch",
       "skipFiles": ["<node_internals>/**"],
-      "type": "pwa-node"
+      "type": "pwa-node",
+      "env": {
+        "NODE_ENV": "test"
+      }
     },
     {
       "args": [
@@ -73,7 +76,10 @@
       "program": "${workspaceFolder}/node_modules/.bin/babel-node",
       "request": "launch",
       "skipFiles": ["<node_internals>/**"],
-      "type": "pwa-node"
+      "type": "pwa-node",
+      "env": {
+        "NODE_ENV": "test"
+      }
     },
     {
       "type": "pwa-node",

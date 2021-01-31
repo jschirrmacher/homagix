@@ -1,8 +1,8 @@
-<script>
-import { mapState } from 'vuex'
+<script lang="ts">
+import Vue from 'vue'
 import { UPDATE_AMOUNT } from '../store/mutation_types'
 
-export default {
+export default Vue.extend({
   props: {
     item: {
       type: Object,
@@ -15,21 +15,21 @@ export default {
   },
 
   computed: {
-    itemClass() {
+    itemClass(): string {
       return this.item.amount <= 0 ? 'removed' : ''
     },
   },
 
   methods: {
-    getStep(unit) {
+    getStep(unit: string): number {
       return unit === 'g' || unit === 'ml' ? 100 : 1
     },
 
-    amountChanged(item, newAmount) {
+    amountChanged(item, newAmount: number): void {
       this.$store.dispatch(UPDATE_AMOUNT, { item, newAmount })
     },
   },
-}
+})
 </script>
 
 <template>

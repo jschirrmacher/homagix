@@ -1,12 +1,16 @@
-<script>
-export default {
+<script lang="ts">
+import Vue, { PropType } from 'vue'
+
+type Item = { name: string }
+
+export default Vue.extend({
   props: {
     id: {
       type: String,
     },
     list: {
-      type: Array,
-      default: () => {},
+      type: Array as PropType<Item[]>,
+      default: () => [],
     },
     value: {
       type: String,
@@ -16,17 +20,17 @@ export default {
   data() {
     return {
       selectedIndex: -1,
-      suggestions: [],
+      suggestions: [] as Item[],
     }
   },
 
   computed: {
     search: {
-      get() {
+      get(): string {
         return this.value
       },
 
-      set(value) {
+      set(value: string): void {
         const item = this.list.find(item => item.name === value) || {
           id: null,
           name: value,
@@ -37,25 +41,26 @@ export default {
   },
 
   methods: {
-    activeDescendant() {
-      return this.selectedIndex >= 0 ? this.selectedIndex : ''
+    activeDescendant(): number | undefined {
+      return this.selectedIndex >= 0 ? this.selectedIndex : undefined
     },
 
-    itemClass(index) {
+    itemClass(index: number): string {
       return index === this.selectedIndex ? 'selected' : ''
     },
 
-    reset() {
+    reset(): void {
       this.suggestions = []
       this.selectedIndex = -1
     },
 
-    selectItem(event) {
-      this.search = this.suggestions[event.target.dataset.index].name
+    selectItem(event: Event): void {
+      const target = event.target as HTMLElement
+      this.search = this.suggestions[target.dataset.index || 0].name
       this.reset()
     },
 
-    handleKey(event) {
+    handleKey(event: { code: string }): void {
       if (['ArrowDown', 'ArrowUp'].includes(event.code)) {
         const direction = event.code === 'ArrowDown' ? 1 : -1
         this.selectedIndex = Math.max(
@@ -73,12 +78,12 @@ export default {
       }
     },
 
-    updateSuggestions() {
+    updateSuggestions(): void {
       const pattern = new RegExp(this.search, 'i')
       this.suggestions = this.list.filter(item => item.name.match(pattern))
     },
   },
-}
+})
 </script>
 
 <template>

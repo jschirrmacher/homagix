@@ -1,14 +1,26 @@
-<script>
+<script lang="ts">
+import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
-import Ingredient from './Ingredient'
+import Ingredient from './Ingredient.vue'
 import { SET_ACTIVE_ITEM } from '../store/mutation_types'
 
-export default {
+type IngredientGroup = {
+  id: string
+  title: string
+}
+
+type Item = {
+  id: string
+  name: string
+  group: IngredientGroup
+}
+
+export default Vue.extend({
   components: { Ingredient },
 
   props: {
     items: {
-      type: Array,
+      type: Array as PropType<Item[]>,
       default: () => [],
     },
     canEditAmount: {
@@ -20,7 +32,7 @@ export default {
   computed: {
     ...mapState(['activeItemId']),
 
-    itemGroups() {
+    itemGroups(): Record<string, IngredientGroup> {
       const groups = {}
       let currentGroup = ''
       this.items.forEach(item => {
@@ -35,19 +47,19 @@ export default {
   },
 
   methods: {
-    setActive(item) {
+    setActive(item: Item): void {
       this.$store.commit(SET_ACTIVE_ITEM, { itemId: item.id })
     },
 
-    setInactive() {
+    setInactive(): void {
       this.$store.commit(SET_ACTIVE_ITEM, { itemId: null })
     },
 
-    canEdit(item) {
+    canEdit(item: Item): boolean {
       return this.canEditAmount && item.id === this.activeItemId
     },
   },
-}
+})
 </script>
 
 <template>

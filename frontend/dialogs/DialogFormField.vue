@@ -1,11 +1,13 @@
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+
+export default Vue.extend({
   props: {
     label: String,
     type: String,
     name: String,
     defaultValue: String,
-    validation: RegExp | String,
+    validation: Object,
     validationMessage: String,
     autocomplete: String,
     defaultInfo: String,
@@ -20,17 +22,17 @@ export default {
   },
 
   computed: {
-    info() {
+    info(): string {
       return this.validationError || this.defaultInfo
     },
 
-    failed() {
+    failed(): boolean {
       return !!this.validationError
     },
   },
 
   methods: {
-    validate(event) {
+    validate(): void {
       this.$emit('input', this.value)
       if (this.value && this.validation && !this.value.match(this.validation)) {
         this.validationError = this.validationMessage || 'Ungültiger Wert'
@@ -39,7 +41,7 @@ export default {
       }
     },
   },
-}
+})
 </script>
 
 <template>

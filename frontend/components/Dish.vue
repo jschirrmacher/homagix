@@ -1,9 +1,16 @@
-<script>
-import IngredientList from '@/components/IngredientList'
+<script lang="ts">
+import Vue from 'vue'
+import IngredientList from './IngredientList.vue'
 import { mapState } from 'vuex'
 import { ADD_FAVORITE, REMOVE_FAVORITE } from '../store/action_types'
 
-export default {
+const dateStyle = {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric'
+}
+
+export default Vue.extend({
   components: { IngredientList },
 
   props: {
@@ -21,15 +28,13 @@ export default {
   computed: {
     ...mapState(['allIngredients', 'accepted', 'currentUser']),
 
-    servedDate() {
+    servedDate(): string {
       return this.dish.last
-        ? new Date(this.dish.last).toLocaleString(navigator.language, {
-            dateStyle: 'medium',
-          })
+        ? new Date(this.dish.last).toLocaleString(navigator.language, dateStyle)
         : 'noch nie'
     },
 
-    classNames() {
+    classNames(): string {
       const names = ['dish']
       this.opened && names.push('opened')
       this.accepted.includes(this.dish.id) && names.push('accepted')
@@ -37,14 +42,14 @@ export default {
       return names.join(' ')
     },
 
-    dishIngredients() {
+    dishIngredients(): Record<string, string> {
       return this.dish.items.map(i => ({
-        ...this.allIngredients.find(item => item.id === i.id),
+        ...this.allIngredients.find((item) => item.id === i.id),
         amount: i.amount,
       }))
     },
 
-    slug() {
+    slug(): string {
       return (
         '/recipes/' +
         this.dish.id +
@@ -56,24 +61,24 @@ export default {
       )
     },
 
-    favorite() {
+    favorite(): string {
       return this.dish.isFavorite ? '★' : '☆'
     },
   },
 
   methods: {
-    toggleOpen() {
+    toggleOpen(): void {
       this.opened = !this.opened
     },
 
-    toggleFavorite() {
+    toggleFavorite(): void {
       this.$store.dispatch(
         this.dish.isFavorite ? REMOVE_FAVORITE : ADD_FAVORITE,
         { dishId: this.dish.id }
       )
     },
   },
-}
+})
 </script>
 
 <template>

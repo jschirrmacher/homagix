@@ -1,8 +1,9 @@
-<script>
-import { openDialog } from '@/lib/dialogs'
-import { CURRENTUSER_SET } from '@/store/mutation_types'
-import sendForm from '@/lib/sendForm'
-import DialogFormField from '@/dialogs/DialogFormField'
+<script lang="ts">
+import { openDialog } from '../lib/dialogs'
+import { CURRENTUSER_SET } from '../store/mutation_types'
+import sendForm from '../lib/sendForm'
+import DialogFormField from '../dialogs/DialogFormField.vue'
+import 'vue-router'
 
 const defaultMessage =
   'Sag uns, wer Du bist, damit wir Deine Planung wieder Dir zuordnen können:'
@@ -26,7 +27,7 @@ export default {
           RegExp.$1,
       },
       requiredFields: ['email', 'firstName', 'password'],
-      marked: [],
+      marked: [] as string[],
     }
   },
 
