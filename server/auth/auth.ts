@@ -15,9 +15,15 @@ export type DoneFunction = (error: string | null, user: User | false) => void
 export type AuthUser = User & { accessCode?: string, password?: string }
 export type MiddleWare = (options?: Record<string, unknown>) => RequestHandler
 
+type NewUser = {
+  firstName: string
+  email: string
+  password: string
+}
+
 export type Auth = {
   signIn(user: User, req: Request, res: Response): void
-  register(user: User & { password: string }, req: Request, res: Response): void
+  register(user: NewUser, req: Request, res: Response): User
   setPassword(user: AuthUser, newPassword: string): void
   logout: (req: Response) => void,
   generateAccessCode(user: AuthUser): void
@@ -48,11 +54,15 @@ export default ({ app, models, store, secretOrKey }: { app: Router, models: Mode
     req.user = user
   }
 
-  function register(user: User & { password: string }, req: Request, res: Response): void {
-    user.id = md5(process.hrtime())
-    user.password = bcrypt.hashSync(user.password, 10)
+  function register(newUser: NewUser, req: Request, res: Response): User {
+    const user = {
+      ...newUser,
+      id: md5(process.hrtime()),
+      password: bcrypt.hashSync(newUser.password, 10),
+    }
     store.emit(userAdded(user))
     signIn(user, req, res)
+    return user
   }
 
   function logout(res: Response): void {
@@ -80,10 +90,10 @@ export default ({ app, models, store, secretOrKey }: { app: Router, models: Mode
   }
 
   passport.use(
-    new LoginStrategy(async (email: string, username: string, password: string, done: DoneFunction) => {
+    new LoginStrategy((email: string, username: string, password: string, done: DoneFunction) => {
       try {
         const user = models.user.getByEMail(email) as AuthUser
-        bcrypt.compare(password, user.password || '', async (err, isValid) => {
+        bcrypt.compare(password, user.password || '', (err, isValid) => {
           done(err && err.message, isValid ? user : false)
         })
       } catch (error) {
@@ -93,7 +103,7 @@ export default ({ app, models, store, secretOrKey }: { app: Router, models: Mode
   )
 
   passport.use(
-    new JwtStrategy({ jwtFromRequest, secretOrKey }, async (payload, done) => {
+    new JwtStrategy({ jwtFromRequest, secretOrKey }, (payload: { sub: string }, done: DoneFunction) => {
       try {
         const user = models.user.getById(payload.sub)
         done(null, user)
@@ -104,7 +114,7 @@ export default ({ app, models, store, secretOrKey }: { app: Router, models: Mode
   )
 
   passport.use(
-    new AccessCodeStrategy(async (accessCode: string, id: string, done: DoneFunction) => {
+    new AccessCodeStrategy((accessCode: string, id: string, done: DoneFunction) => {
       try {
         const user = models.user.getById(id) as AuthUser
         if (user && user.accessCode === accessCode) {

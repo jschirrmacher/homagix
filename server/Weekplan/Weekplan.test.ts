@@ -1,11 +1,17 @@
 import 'should'
+import { Models } from '../models'
+import { Dish } from '../models/dish'
+import { DishProposer } from './DishProposer'
 import WeekplanController from './WeekplanController'
+import Store from '../EventStore/Store.mock'
+
+const store = Store()
 
 const dishes = {
-  a: { id: 'a' },
-  b: { id: 'b' },
-  c: { id: 'c' },
-  d: { id: 'd' },
+  a: { id: 'a' } as Dish,
+  b: { id: 'b' } as Dish,
+  c: { id: 'c' } as Dish,
+  d: { id: 'd' } as Dish,
 }
 const history = [
   ['2020-12-14', 'd'],
@@ -23,7 +29,7 @@ const dishLists = {
   7: ['a', 'b', 'c', 'd'],
 }
 
-const user = { id: '7' }
+const user = { id: '7', firstName: 'Luigi', email: 'luigi@example.com' }
 
 const models = {
   dishHistory: {
@@ -33,15 +39,15 @@ const models = {
     byId: id => dishes[id],
   },
   dishList: { getById: listId => dishLists[listId] },
-}
+} as Models
 
 const proposer = {
-  get() {
+  get(): Dish[] {
     return [dishes.d, dishes.c, dishes.b]
   },
-}
+} as DishProposer
 
-const controller = WeekplanController({ models, proposer })
+const controller = WeekplanController({ models, proposer, store })
 
 describe('WeekplanController.getWeekplan', () => {
   it('should return a list of dishes and dates', () => {

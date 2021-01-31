@@ -1,4 +1,6 @@
 import 'should'
+import { Models } from '../models'
+import { User } from '../models/user'
 import DishProposer from './DishProposer'
 
 const allIngredients = {
@@ -48,10 +50,10 @@ const models = {
   },
   ingredient: { byId: id => allIngredients[id] },
   dishList: { getById: listId => dishLists[listId].dishes },
-}
+} as unknown as Models
 
-const userA = { id: 7 }
-const userB = { id: 24 }
+const userA = { id: '7', firstName: 'Mario', email: 'mario@example.com' } as User
+const userB = { id: '24', firstName: 'Luigi', email: 'luigi@example.com' } as User
 
 describe('DishProposer', () => {
   it('should return a list of dish proposals', () => {

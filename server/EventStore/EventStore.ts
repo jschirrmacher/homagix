@@ -40,7 +40,7 @@ class JsonStringify extends Transform {
   }
 }
 
-export default ({ basePath, migrationsPath, logger = console }: { basePath: string, migrationsPath: string, logger?: Logger }): Store => {
+export default ({ basePath, migrationsPath, logger = console }: { basePath: string, migrationsPath: string, logger?: Console }): Store => {
   const listeners = {} as Record<string, Listener[]>
   const eventFile = (version: number) => resolve(basePath, `events-${version}.json`)
 

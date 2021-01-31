@@ -55,7 +55,7 @@ describe('EventStore', () => {
       'migrations/index.ts': index_1,
       'migrations/1.ts': changes_1js,
     })
-    store = EventStore({ basePath, migrationsPath, logger })
+    store = EventStore({ basePath, migrationsPath, logger: logger as unknown as Console })
     const eventList = [] as unknown[]
     store.on(testEvent, (event: unknown) => eventList.push(event))
     await store.replay()
@@ -82,7 +82,7 @@ describe('EventStore', () => {
       'migrations/index.ts': index_1,
       'migrations/1.ts': changes_1js,
     })
-    store = EventStore({ basePath, migrationsPath, logger })
+    store = EventStore({ basePath, migrationsPath, logger: logger as unknown as Console })
     store.on(testEvent, () => should({}).fail())
     await store.replay()
   })

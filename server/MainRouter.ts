@@ -17,7 +17,7 @@ import { Auth } from './auth/auth'
 
 const mailer = Mailer({ nodeMailer })
 
-type RouteHandler = (req: Request) => Record<string, unknown> | Promise<Record<string, unknown>> | Array<Record<string, unknown>> | Promise<Array<Record<string, unknown>>>
+export type RouteHandler = (req: Request) => unknown | Promise<unknown>
 export type JSONHandler = (func: RouteHandler) => RequestHandler
 
 export function jsonResult(func: RouteHandler): RequestHandler {

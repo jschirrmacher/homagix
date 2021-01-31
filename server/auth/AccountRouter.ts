@@ -20,12 +20,12 @@ export default ({ auth, models, store, mailer }: { auth: Auth, models: Models, s
       if (models.user.getByEMail(req.body.email, false)) {
         throw new HTTPError(409, 'User already exists')
       }
-      const user = {
+      const newUser = {
         firstName: req.body.firstName,
         email: req.body.email,
         password: req.body.password,
       }
-      auth.register(user, req, res)
+      const user = auth.register(newUser, req, res)
       if (req.body.inviteFrom) {
         await store.emit(invitationAccepted(user, req.body.inviteFrom))
       }

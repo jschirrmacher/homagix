@@ -1,4 +1,4 @@
-export default {
+const mockLogger = {
   log: [] as string[][],
 
   debug: function (msg: string): void {
@@ -18,3 +18,5 @@ export default {
     this.log.length = 0
   },
 }
+
+export default mockLogger

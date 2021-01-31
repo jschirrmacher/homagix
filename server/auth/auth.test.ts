@@ -1,17 +1,14 @@
 /*eslint-env mocha*/
 import should from 'should'
-import jsonwebtoken from 'jsonwebtoken'
+import jsonwebtoken, { VerifyCallback } from 'jsonwebtoken'
 import AuthFactory from './auth'
 import Store from '../EventStore/Store.mock'
 import Models from '../models/MockedModel'
 import { User } from '../models/user'
+import express from 'express'
+import { mockRequest, mockResponse } from 'mock-req-res'
 
-const emptyFunc = () => {
-  // Don't do anything
-}
-const app = {
-  use: emptyFunc
-}
+const app = express()
 const store = Store()
 const models = Models({ store })
 const users = [
@@ -36,75 +33,53 @@ users.forEach(user => store.emit(models.getEvents().userAdded(user)))
 const secretOrKey = 'secret-key'
 const auth = AuthFactory({ app, models, store, secretOrKey })
 
-function expect(expected) {
-  if (typeof expected === 'function') {
-    return expected
-  } else {
-    return data => data.should.deepEqual(expected)
-  }
-}
-
-function checkCookie(name, value) {
-  name.should.equal('token')
-  jsonwebtoken.verify(value, secretOrKey, (err, decoded) => {
-    should(err).be.null()
-    decoded.should.have.properties(['iat', 'exp'])
-  })
-}
-
-function makeExpectedResult(expectedValues = {}) {
-  const res = {
-    status: wrap(expectedValues, 'status'),
-    json: wrap(expectedValues, 'json'),
-    cookie: wrap(expectedValues, 'cookie'),
-    called: { status: false, json: false, cookie: false },
-  }
-
-  function wrap(expectedValues, name) {
-    const func = expectedValues[name] ? expect(expectedValues[name]) : emptyFunc
-    return (...args) => {
-      res.called[name] = true
-      func(...args)
-      return res
-    }
-  }
-
-  return res
+function userId(user: Express.User | undefined): string {
+  should(user).not.be.undefined()
+  user && user.should.have.property('id')
+  return (user as { id: string })?.id
 }
 
 describe('auth', () => {
   describe('requireLogin', () => {
     it('should authenticate with e-mail and password', done => {
       const middleware = auth.requireLogin()
-      const req = { body: { email: 'test@example.com', password: 'test-pwd' }, user: undefined as User | undefined }
-      const res = makeExpectedResult()
+      const req = mockRequest({ body: { email: 'test@example.com', password: 'test-pwd' }, user: undefined as User | undefined })
+      const res = mockResponse()
       middleware(req, res, (err: unknown) => {
         should(err).be.undefined()
-        req.user && req.user.should.have.property('id')
-        req.user && req.user.id.should.equal('4711')
+        userId(req.user).should.equal('4711')
         done()
       })
     })
 
     it('should generate a JWT if authenticated with e-mail and password', done => {
       const middleware = auth.requireLogin()
-      const req = { body: { email: 'test@example.com', password: 'test-pwd' } }
-      const res = makeExpectedResult({ cookie: checkCookie })
+      const req = mockRequest({ body: { email: 'test@example.com', password: 'test-pwd' } })
+      const res = mockResponse()
       middleware(req, res, () => {
-        res.called.cookie.should.be.true()
-        done()
+        res.cookie.calledOnce.should.be.true()
+        res.cookie.args[0][1].should.not.be.empty()
+        jsonwebtoken.verify(res.cookie.args[0][1], secretOrKey, (err: unknown, decoded) => {
+          should(err).be.null()
+          decoded?.should.have.properties(['iat', 'exp'])
+          done()
+        })
       })
     })
 
-    it('should not authenticate with e-mail and wrong password', done => {
+    it('should not authenticate with e-mail and wrong password', (done) => {
       const middleware = auth.requireLogin()
-      const req = { body: { email: 'test@example.com', password: 'wrong-pwd' } }
-      const res = makeExpectedResult({
-        status: 401,
-        json: { error: 'Not authenticated' },
+      const req = mockRequest({ body: { email: 'test@example.com', password: 'wrong-pwd' } })
+      const res = mockResponse()
+      middleware(req, res, () => {
+        should({}).fail()
       })
-      middleware(req, res, () => should({}).fail())
-      done()
+      setTimeout(() => {
+        res.status.calledOnce.should.be.true()
+        res.status.args[0][0].should.equal(401)
+        res.json.calledOnceWith({ error: 'Not authenticated' }).should.be.true()
+        done()
+      }, 100)
     })
   })
 
@@ -114,16 +89,15 @@ describe('auth', () => {
       const authorization = jsonwebtoken.sign({ sub: 4712 }, secretOrKey, {
         expiresIn: '24h',
       })
-      const req = {
+      const req = mockRequest({
         body: { email: 'test3@example.com' },
         headers: { authorization },
         user: undefined as User | undefined
-      }
-      const res = makeExpectedResult()
+      })
+      const res = mockResponse()
       middleware(req, res, (err: unknown) => {
         should(err).be.undefined()
-        req.user && req.user.should.have.property('id')
-        req.user && req.user.id.should.equal('4712')
+        userId(req.user).should.equal('4712')
         done()
       })
     })
@@ -133,12 +107,11 @@ describe('auth', () => {
       const token = jsonwebtoken.sign({ sub: 4712 }, secretOrKey, {
         expiresIn: '24h',
       })
-      const req = { body: { email: 'test3@example.com' }, cookies: { token }, user: undefined as User | undefined }
-      const res = makeExpectedResult()
+      const req = mockRequest({ body: { email: 'test3@example.com' }, cookies: { token }, user: undefined as User | undefined })
+      const res = mockResponse()
       middleware(req, res, (err: unknown) => {
         should(err).be.undefined()
-        req.user && req.user.should.have.property('id')
-        req.user && req.user.id.should.equal('4712')
+        userId(req.user).should.equal('4712')
         done()
       })
     })
@@ -150,16 +123,15 @@ describe('auth', () => {
       const authorization = jsonwebtoken.sign({ sub: 4712 }, secretOrKey, {
         expiresIn: '24h',
       })
-      const req = {
+      const req = mockRequest({
         body: { email: 'test3@example.com' },
         headers: { authorization },
         user: undefined as User | undefined
-      }
-      const res = makeExpectedResult()
+      })
+      const res = mockResponse()
       middleware(req, res, (err: unknown) => {
         should(err).be.undefined()
-        req.user && req.user.should.have.property('id')
-        req.user && req.user.id.should.equal('4712')
+        userId(req.user).should.equal('4712')
         done()
       })
     })
@@ -169,12 +141,11 @@ describe('auth', () => {
       const token = jsonwebtoken.sign({ sub: 4712 }, secretOrKey, {
         expiresIn: '24h',
       })
-      const req = { body: { email: 'test3@example.com' }, cookies: { token }, user: undefined as User | undefined }
-      const res = makeExpectedResult()
+      const req = mockRequest({ body: { email: 'test3@example.com' }, cookies: { token }, user: undefined as User | undefined })
+      const res = mockResponse()
       middleware(req, res, (err: unknown) => {
         should(err).be.undefined()
-        req.user && req.user.should.have.property('id')
-        req.user && req.user.id.should.equal('4712')
+        userId(req.user).should.equal('4712')
         done()
       })
     })
@@ -184,8 +155,8 @@ describe('auth', () => {
     it('should require a user to be admin', done => {
       models.user.adminIsDefined = true
       const middleware = auth.requireAdmin()
-      const req = { user: { id: 4711 } }
-      const res = makeExpectedResult({ status: 403, message: 'Not allowed' })
+      const req = mockRequest({ user: { id: 4711 } })
+      const res = mockResponse({ status: 403, message: 'Not allowed' })
       middleware(req, res, (err: unknown) => {
         should(err).deepEqual({ status: 403, message: 'Not allowed' })
         done()
@@ -195,8 +166,8 @@ describe('auth', () => {
     it('should allow access for admins', done => {
       models.user.adminIsDefined = true
       const middleware = auth.requireAdmin()
-      const req = { user: { id: 4712, isAdmin: true } }
-      const res = makeExpectedResult()
+      const req = mockRequest({ user: { id: 4712, isAdmin: true } })
+      const res = mockResponse()
       middleware(req, res, (err: unknown) => {
         should(err).be.undefined()
         done()
@@ -206,8 +177,8 @@ describe('auth', () => {
     it('should allow access if no admin is defined', done => {
       models.user.adminIsDefined = false
       const middleware = auth.requireAdmin()
-      const req = { user: { id: 4711 } }
-      const res = makeExpectedResult()
+      const req = mockRequest({ user: { id: 4711 } })
+      const res = mockResponse()
       middleware(req, res, (err: unknown) => {
         should(err).be.undefined()
         models.user.adminIsDefined = true
@@ -216,35 +187,30 @@ describe('auth', () => {
     })
   })
 
-  it('should clear the cookie if logged out', done => {
-    let cookieIsCleared = false
-    auth.logout({
-      cookie(name: string, value: string) {
-        name.should.equal('token')
-        should(value).equal('')
-        cookieIsCleared = true
-      },
-    })
-    cookieIsCleared.should.be.true()
-    done()
+  it('should clear the cookie if logged out', async () => {
+    const response = mockResponse()
+    auth.logout(response)
+    response.cookie.calledOnce.should.be.true()
+    response.cookie.args[0][0].should.equal('token')
+    response.cookie.args[0][1].should.be.empty()
   })
 
   it('should change the password', async () => {
     const eventList = store.eventList()
     eventList.length = 0
     const user = models.user.getById('4713')
-    await auth.setPassword(user, 'new-password')
+    auth.setPassword(user, 'new-password')
     eventList.length.should.equal(1)
-    eventList[0].should.have.properties(['type', 'id', 'user'])
-    eventList[0].type.should.equal('userChanged')
-    eventList[0].id.should.equal('4713')
-    eventList[0].user.password.should.startWith('$2a$10$')
+    const event = eventList[0]
+    event.should.have.properties(['type', 'id', 'user'])
+    event.should.containDeep({ type: 'userChanged', id: '4713' })
+    ;(event.user as { password: string }).password.should.startWith('$2a$10$')
   })
 
   it('should clear the access code after setting the password', async () => {
     store.eventList().length = 0
     const user = models.user.getById('4713')
-    await auth.setPassword(user, 'new-password')
-    store.eventList()[0].user.accessCode.should.equal('')
+    auth.setPassword(user, 'new-password')
+    ;(store.eventList()[0].user as { accessCode: string }).accessCode.should.equal('')
   })
 })

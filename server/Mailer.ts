@@ -2,7 +2,7 @@ import Mustache from 'mustache'
 import NodeMailer from 'nodemailer'
 import SMTPTransport from 'nodemailer/lib/smtp-transport'
 
-type Variables = Record<string, string | Record<string, string | undefined> | undefined>
+type Variables = Record<string, unknown>
 
 export type Mailer = {
   send(to: string, templateName: string, variables: Variables): Promise<unknown>
@@ -13,7 +13,7 @@ const baseUrl =
 const from = process.env.MAIL_FROM || 'me@localhost'
 
 export default ({ nodeMailer }: { nodeMailer: typeof NodeMailer }): Mailer => {
-  async function send(to: string, templateName: string, variables: Record<string, string>): Promise<unknown> {
+  async function send(to: string, templateName: string, variables: Variables): Promise<unknown> {
     const template = (await require('./mailTemplates/' + templateName)).default
     return new Promise((resolve, reject) => {
       const subject = Mustache.render(template.subject, {

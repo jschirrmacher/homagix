@@ -8,10 +8,11 @@ import DishReader from './DishReader'
 import Store from '../EventStore/Store.mock'
 import Models from '../models/MockedModel'
 import auth, { validToken, adminToken } from '../auth/MockAuth'
+import { RouteHandler } from '../MainRouter'
 
 const store = Store()
 const models = Models({ store })
-const jsonResult = (func: (req: Request) => Promise<void>) => async (req: Request, res: Response) => res.json(await func(req))
+const jsonResult = (func: RouteHandler) => async (req: Request, res: Response) => res.json(await func(req))
 const dishReader = DishReader({ store, models })
 const dishController = Controller({ store, models, dishReader })
 const router = Router({ auth, jsonResult, dishController })

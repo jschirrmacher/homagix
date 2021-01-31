@@ -5,6 +5,7 @@ import DishReader from './DishReader'
 import MockFS from '../lib/MockFS'
 import Store from '../EventStore/Store.mock'
 import Models from '../models/MockedModel'
+import { Ingredient } from '../models/ingredient'
 
 const store = Store()
 const models = Models({ store })
@@ -51,7 +52,7 @@ describe('DishReader', () => {
   })
 
   it('should use existing ingredients', () => {
-    store.dispatch(events.ingredientAdded({ name: 'existing item', unit: 'g' }))
+    store.dispatch(events.ingredientAdded({ name: 'existing item', unit: 'g' } as Ingredient))
     store.eventList().length = 0
     mockFS.setupFiles({
       'dishes/1.yaml': "name: 'test dish'\nitems:\n  - 500 g existing item",
