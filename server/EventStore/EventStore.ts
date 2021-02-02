@@ -19,7 +19,7 @@ export type Store = {
   replay(): Promise<void>
   on(type: EventType, func: Listener): Store
   emit(event: Event): Promise<void>
-  end(): void
+  end(): Promise<void>
 }
 
 class JsonStringify extends Transform {
