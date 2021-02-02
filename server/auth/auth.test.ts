@@ -1,6 +1,6 @@
 /*eslint-env mocha*/
 import should from 'should'
-import jsonwebtoken, { VerifyCallback } from 'jsonwebtoken'
+import jsonwebtoken from 'jsonwebtoken'
 import AuthFactory from './auth'
 import Store from '../EventStore/Store.mock'
 import Models from '../models/MockedModel'

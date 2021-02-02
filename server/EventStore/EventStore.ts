@@ -10,12 +10,6 @@ import { resolve } from 'path'
 import { Transform, TransformOptions } from 'stream'
 import es from 'event-stream'
 
-type Logger = {
-  error: (msg: unknown) => void
-  info: (msg: unknown) => void
-  debug: (msg: unknown) => void
-}
-
 export type EventType = { name: string }
 export type Event = Record<string, unknown>
 export type Listener = (event: Event) => void
