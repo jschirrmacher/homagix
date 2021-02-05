@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import router from './router'
-import App from './App'
+import App from './App.vue'
 import store from './store'
 import { INIT_APP } from './store/action_types'
 

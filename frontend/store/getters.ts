@@ -70,16 +70,16 @@ export const getters = {
     return shoppingListFromState(state).sort(compareItems)
   },
 
-  itemsInShoppingList(state) {
+  itemsInShoppingList(state): boolean {
     return shoppingListFromState(state).some(item => item.amount)
   },
 
-  maxServedDate(state) {
-    const max = state.dishes.reduce((max, current) => Math.max(max, current.last ? new Date(current.last) : 0), 0)
+  maxServedDate(state): string {
+    const max = state.dishes.reduce((max, current) => Math.max(max, current.last ? +new Date(current.last) : 0), 0)
     return (new Date(max)).toISOString().split('T')[0]
   },
 
-  nextDayToServe(state) {
+  nextDayToServe(state): string {
     const lastServedDay = new Date(getters.maxServedDate(state))
     lastServedDay.setDate(lastServedDay.getDate() + 1)
     return lastServedDay.toISOString().split('T')[0]

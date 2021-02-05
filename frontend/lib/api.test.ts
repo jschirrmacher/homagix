@@ -1,8 +1,7 @@
-import 'should'
-import fetch from 'node-fetch'
+import should from 'should'
+import fetch, { RequestInit as FetchInit } from 'node-fetch'
 import nock from 'nock'
-import * as api from './api.js'
-import mocha from 'mocha'
+import * as api from './api'
 
 const baseName = 'http://test'
 api.setBaseUrl(baseName)
@@ -17,8 +16,8 @@ const state = {
 }
 
 describe('api', () => {
-  mocha.before(async () => {
-    global.fetch = await fetch
+  before(() => {
+    global.fetch = (input: RequestInfo, init?: RequestInit) => fetch(input.toString(), init as FetchInit) as unknown as Promise<Response>
   })
 
   describe('doFetch()', () => {
@@ -39,15 +38,18 @@ describe('api', () => {
         .get('/route')
         .query({ data: true })
         .reply(200, { success: true })
-      await api.doFetch('get', '/route', { data: true })
+      await api.doFetch('get', '/route', { data: 'true' })
       request.isDone().should.be.true()
     })
 
     it('should send parameters as JSON in body for POST method', async () => {
       const request = nock(baseName)
-        .post('/route', { data: true })
+        .post('/route', { data: 'true' })
         .reply(200, { success: true })
-      await api.doFetch('post', '/route', { data: true })
+      const response = (await api.doFetch('post', '/route', { data: 'true' }))
+      should(response.error).be.undefined()
+      response.should.have.property('success')
+      should(response['success']).be.true()
       request.isDone().should.be.true()
     })
 
@@ -66,7 +68,7 @@ describe('api', () => {
 
   describe('loadData()', () => {
     it('should return a function', () => {
-      api.loadData({}).should.be.instanceOf(Function)
+      api.loadData('', '').should.be.instanceOf(Function)
     })
 
     it('should prepare GET parameters', async () => {

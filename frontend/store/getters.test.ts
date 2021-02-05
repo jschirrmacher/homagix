@@ -1,5 +1,5 @@
 import 'should'
-import store from './index.js'
+import store from '.'
 import {
   INGREDIENTS_LOADED,
   ACCEPTANCE_CHANGED,
@@ -7,8 +7,8 @@ import {
   RESET_STORE,
   WEEKPLAN_LOADED,
   DISHES_LOADED,
-} from './mutation_types.js'
-import { dishes, ingredients } from './test_dishes.js'
+} from './mutation_types'
+import { dishes, ingredients } from './test_dishes'
 
 describe('Store getters', () => {
   beforeEach(() => {
@@ -20,7 +20,7 @@ describe('Store getters', () => {
     store.commit(DISHES_LOADED, { dishes: Object.values(dishes) })
     store.commit(WEEKPLAN_LOADED, {
       weekplan: Object.values(dishes).map(dish => ({
-        date: dish.lastServed,
+        date: dish.last,
         dishId: dish.id,
         served: true,
       })),

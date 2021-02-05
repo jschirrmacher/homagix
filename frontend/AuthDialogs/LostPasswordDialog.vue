@@ -1,8 +1,7 @@
 <script>
 import Dialog from '@/dialogs/Dialog'
-import { openDialog, closeDialogs, alert } from '@/lib/dialogs'
-import { CURRENTUSER_SET } from '@/store/mutation_types'
-import sendForm from '@/lib/sendForm'
+import { alert } from '../lib/dialogs'
+import sendForm from '../lib/sendForm'
 import DialogFormField from '@/dialogs/DialogFormField'
 
 const defaultMessage =

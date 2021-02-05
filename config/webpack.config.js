@@ -15,7 +15,7 @@ if (isDev) {
   plugins.push(new webpack.HotModuleReplacementPlugin())
   index.push('webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000')
 }
-index.push(path.resolve(__dirname, '..', 'frontend', 'main.js'))
+index.push(path.resolve(__dirname, '..', 'frontend', 'main.ts'))
 plugins.push(new VueLoaderPlugin())
 plugins.push(
   new webpack.DefinePlugin({
@@ -35,7 +35,7 @@ module.exports = {
   },
   devtool: 'source-map',
   resolve: {
-    extensions: ['.js', '.vue'],
+    extensions: ['.js', '.vue', '.ts'],
     alias: {
       vue$: isDev ? 'vue/dist/vue.js' : 'vue/dist/vue.runtime.min.js',
       '@': path.resolve(__dirname, '..', 'frontend'),
@@ -64,12 +64,8 @@ module.exports = {
         ],
       },
       {
-        test: /\.vue$/,
+        test: [/\.vue$/, /\.ts$/],
         loader: { loader: 'vue-loader', options: { sourceMap: isDev } },
-      },
-      {
-        test: /\.ts$/,
-        loader: { loader: 'babel-loader' },
       },
     ],
   },

@@ -6,9 +6,9 @@ import Recipe from '@/views/Recipe'
 import ChangePasswordView from '@/views/ChangePasswordView'
 import RegisterView from '@/views/RegisterView'
 import NotFoundComponent from '@/views/NotFoundComponent'
-import store from '@/store'
-import { LOAD_DISHES } from '@/store/action_types'
-import { openDialog } from '@/lib/dialogs'
+import store from '../store'
+import { LOAD_DISHES } from '../store/action_types'
+import { openDialog } from '../lib/dialogs'
 
 Vue.use(VueRouter)
 

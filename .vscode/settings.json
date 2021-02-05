@@ -1,7 +1,7 @@
 {
   "debug.javascript.suggestPrettyPrinting": true,
   "mochaExplorer.exit": true,
-  "mochaExplorer.files": ["frontend/**/*.test.js", "server/**/*.test.ts"],
+  "mochaExplorer.files": ["frontend/**/*.test.ts", "server/**/*.test.ts"],
   "mochaExplorer.require": ["@babel/register"],
   "mochaExplorer.debuggerConfig": "All Tests",
   "mochaExplorer.esmLoader": true,

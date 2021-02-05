@@ -1,4 +1,4 @@
-import { loadData, doFetch, fetchWeekplan, setFavorite } from '../lib/api.js'
+import { loadData, doFetch, fetchWeekplan, setFavorite } from '../lib/api'
 import {
   GET_INGREDIENTS,
   INGREDIENTS_LOADED,
@@ -17,7 +17,7 @@ import {
   STARTDATE_CHANGED,
   DISHES_LOADED,
   CURRENTUSER_SET,
-} from './mutation_types.js'
+} from './mutation_types'
 import {
   ADD_FAVORITE,
   MODIFY_DISH,
@@ -26,8 +26,9 @@ import {
   INIT_APP,
   LOAD_DISHES,
   REMOVE_FAVORITE,
-} from './action_types.js'
+} from './action_types'
 import jwt_decode from 'jwt-decode'
+import { Context } from 'vm'
 
 function eqItem(item) {
   const name = item.name.toLowerCase()
@@ -51,7 +52,7 @@ function neItem(item) {
   }
 }
 
-async function updateWeekplan(context) {
+async function updateWeekplan(context: Context): Promise<void> {
   const args = await fetchWeekplan(
     context.state.startDate,
     context.state.declined
@@ -60,10 +61,10 @@ async function updateWeekplan(context) {
 }
 
 export const actions = {
-  [INIT_APP](context) {
+  [INIT_APP](context: Context): void {
     const match = document.cookie.match(/\btoken=([^;]*)/)
     if (match) {
-      const token = jwt_decode(match[1])
+      const token = jwt_decode(match[1]) as { exp: number; sub: string; firstName: string }
       if (token.exp && token.exp < +new Date()) {
         const user = {
           id: token.sub,
@@ -74,7 +75,7 @@ export const actions = {
     }
   },
 
-  async [CHANGE_STARTDATE](context, { startDate }) {
+  async [CHANGE_STARTDATE](context: Context, { startDate }): Promise<void> {
     context.commit(STARTDATE_CHANGED, { startDate })
     await updateWeekplan(context)
   },
@@ -83,24 +84,24 @@ export const actions = {
 
   [GET_INGREDIENTS]: loadData('/ingredients', INGREDIENTS_LOADED),
 
-  async [GET_UNITS]({ commit }) {
+  async [GET_UNITS](context: Context): Promise<void> {
     const units = await doFetch('GET', '/ingredients/units')
-    commit(UNITS_LOADED, { units })
+    context.commit(UNITS_LOADED, { units })
   },
 
-  [TOGGLE_ACCEPTANCE]({ state, commit }, { dishId }) {
-    const accepted = state.accepted.includes(dishId)
-      ? state.accepted.filter(id => id !== dishId)
-      : [...state.accepted, dishId]
-    commit(ACCEPTANCE_CHANGED, { accepted })
+  [TOGGLE_ACCEPTANCE](context: Context, { dishId }: { dishId: string }): void {
+    const accepted = context.state.accepted.includes(dishId)
+      ? context.state.accepted.filter(id => id !== dishId)
+      : [...context.state.accepted, dishId]
+    context.commit(ACCEPTANCE_CHANGED, { accepted })
   },
 
-  async [DISH_DECLINED](context, { dishId }) {
+  async [DISH_DECLINED](context: Context, { dishId }: { dishId: string }): Promise<void> {
     context.commit(DISH_DECLINED, { dishId })
     await updateWeekplan(context)
   },
 
-  [REMOVE_ITEM](context, { item }) {
+  [REMOVE_ITEM](context: Context, { item }): void {
     const changes = context.state.changes.filter(neItem(item))
     const proposed = context.getters.proposedItems.find(eqItem(item))
     const standard = context.state.standardItems.find(eqItem(item))
@@ -112,12 +113,12 @@ export const actions = {
     context.commit(CHANGES_CHANGED, { changes })
   },
 
-  [RESTORE_ITEM](context, { item }) {
+  [RESTORE_ITEM](context: Context, { item }): void {
     const changes = context.state.changes.filter(neItem(item))
     context.commit(CHANGES_CHANGED, { changes })
   },
 
-  async [ADD_ITEM](context, { item }) {
+  async [ADD_ITEM](context: Context, { item }): Promise<void> {
     async function createNewItem(newItem) {
       const item = await doFetch('post', '/ingredients', newItem)
       context.commit(INGREDIENTS_LOADED, {
@@ -148,7 +149,7 @@ export const actions = {
     context.commit(CHANGES_CHANGED, { changes: await getChangedChanges(item) })
   },
 
-  async [UPDATE_AMOUNT](context, { item, newAmount }) {
+  async [UPDATE_AMOUNT](context: Context, { item, newAmount }): Promise<void> {
     function getChangedChanges(item, amount) {
       if (context.state.changes.find(eqItem(item))) {
         return context.state.changes.map(i =>
@@ -170,7 +171,7 @@ export const actions = {
     context.commit(CHANGES_CHANGED, { changes })
   },
 
-  [SHOPPING_DONE]: async context => {
+  async [SHOPPING_DONE](context: Context): Promise<void> {
     const data = { accepted: context.state.accepted }
     const weekStart = context.state.startDate.toISOString().split('T')[0]
     const nextPlannable = context.getters.nextDayToServe
@@ -181,23 +182,23 @@ export const actions = {
     await updateWeekplan(context)
   },
 
-  async [CHANGE_GROUP](context, { ingredient, group }) {
+  async [CHANGE_GROUP](context: Context, { ingredient, group }): Promise<void> {
     await doFetch('put', '/ingredients/' + ingredient.id, { group })
     ingredient.group = group
     context.commit(INGREDIENT_CHANGED, { ingredient })
   },
 
-  async [ADD_FAVORITE](context, { dishId }) {
+  async [ADD_FAVORITE](context: Context, { dishId }: { dishId: string }): Promise<void> {
     const args = await setFavorite(dishId, true)
     context.commit(...args)
   },
 
-  async [REMOVE_FAVORITE](context, { dishId }) {
+  async [REMOVE_FAVORITE](context: Context, { dishId }: { dishId: string }) : Promise<void>{
     const args = await setFavorite(dishId, false)
     context.commit(...args)
   },
 
-  async [MODIFY_DISH](context, { dish }) {
+  async [MODIFY_DISH](context: Context, { dish }): Promise<void> {
     await doFetch('PATCH', '/dishes/' + dish.id, dish)
     context.commit(DISHES_LOADED, { dishes: context.state.dishes.map(d => d.id === dish.id ? dish : d)})
   }

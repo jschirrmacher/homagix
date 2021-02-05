@@ -1,7 +1,6 @@
 import 'should'
-import fetch from 'node-fetch'
 import nock from 'nock'
-import store from './index.js'
+import store from '.'
 import {
   REMOVE_ITEM,
   INGREDIENTS_LOADED,
@@ -14,10 +13,14 @@ import {
   STARTDATE_CHANGED,
   WEEKPLAN_LOADED,
   DISHES_LOADED,
-} from './mutation_types.js'
-import { dishes, ingredients } from './test_dishes.js'
-import { setBaseUrl } from '../lib/api.js'
-import { CHANGE_STARTDATE } from './action_types.js'
+} from './mutation_types'
+import { dishes, ingredients } from './test_dishes'
+import { setBaseUrl } from '../lib/api'
+import { CHANGE_STARTDATE } from './action_types'
+
+// globalThis.fetch = async (input: RequestInfo, init?: RequestInit): Promise<Response> => {
+//   return new Response(JSON.stringify({ input, init }))
+// }
 
 const baseName = 'http://test'
 setBaseUrl(baseName)
@@ -34,7 +37,7 @@ function setupStore(standards) {
   store.commit(DISHES_LOADED, { dishes: Object.values(dishes) })
   store.commit(WEEKPLAN_LOADED, {
     weekplan: Object.values(dishes).map(dish => ({
-      date: dish.lastServed,
+      date: dish.last,
       dishId: dish.id,
       served: true,
     })),
@@ -44,7 +47,6 @@ function setupStore(standards) {
 
 describe('Store actions', () => {
   beforeEach(async () => {
-    global.fetch = await fetch
     store.commit(RESET_STORE)
   })
 
@@ -89,14 +91,15 @@ describe('Store actions', () => {
       })
       store.state.changes
         .map(item => ({ id: item.id, amount: item.amount }))
-        .should.deepEqual([{ id: 9, amount: 2 }])
+        .should.deepEqual([{ id: '9', amount: 2 }])
     })
 
     it('should add extra items', async () => {
       const item = { ...ingredients.hefe, amount: 2 }
       setupStore(standards)
       await store.dispatch(ADD_ITEM, { item })
-      store.state.changes[0].should.deepEqual(item)
+      const change = { ...store.state.changes[0] }
+      change.should.deepEqual(item)
     })
 
     it('should add extra items even if ingredient is unknown', async () => {
@@ -106,7 +109,8 @@ describe('Store actions', () => {
         .reply(200, { ...zucker, id: '1234-5678' })
       setupStore(standards)
       await store.dispatch(ADD_ITEM, { item: zucker })
-      store.state.changes[0].should.containDeep(zucker)
+      const change = { ...store.state.changes[0] }
+      change.should.containDeep(zucker)
     })
   })
 
@@ -185,7 +189,7 @@ describe('Store actions', () => {
       })
       store.state.changes
         .map(item => ({ id: item.id, amount: item.amount }))
-        .should.deepEqual([{ id: 9, amount: 2 }])
+        .should.deepEqual([{ id: '9', amount: 2 }])
     })
 
     it('should change amount of standard items', async () => {
@@ -220,7 +224,7 @@ describe('Store actions', () => {
       })
       store.state.changes
         .map(item => ({ id: item.id, amount: item.amount }))
-        .should.deepEqual([{ id: 9, amount: 3 }])
+        .should.deepEqual([{ id: '9', amount: 3 }])
     })
   })
 })

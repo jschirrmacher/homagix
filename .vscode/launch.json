@@ -39,6 +39,10 @@
     },
     {
       "args": [
+        "-x",
+        ".ts",
+        "-r",
+        "dotenv-flow/config",
         "--",
         "node_modules/.bin/mocha",
         "-u",
@@ -46,14 +50,17 @@
         "--timeout",
         "999999",
         "--colors",
-        "${workspaceFolder}/frontend/**/*.test.js"
+        "${workspaceFolder}/frontend/**/*.test.ts"
       ],
       "internalConsoleOptions": "openOnSessionStart",
       "name": "Frontend Tests",
       "program": "${workspaceFolder}/node_modules/.bin/babel-node",
       "request": "launch",
       "skipFiles": ["<node_internals>/**"],
-      "type": "pwa-node"
+      "type": "pwa-node",
+      "env": {
+        "NODE_ENV": "test"
+      }
     },
     {
       "args": [
@@ -68,8 +75,8 @@
         "--timeout",
         "999999",
         "--colors",
-        "${workspaceFolder}/frontend/**/*.test.js",
-        "${workspaceFolder}/server/**/*.test.js"
+        "${workspaceFolder}/server/**/*.test.ts",
+        "${workspaceFolder}/frontend/**/*.test.ts",
       ],
       "internalConsoleOptions": "openOnSessionStart",
       "name": "All Tests",

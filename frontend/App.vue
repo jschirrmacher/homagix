@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import { mapState } from 'vuex'
 import {
   CLEAR_ERROR,
@@ -6,10 +6,10 @@ import {
   GET_UNITS,
   SET_ACTIVE_ITEM,
 } from './store/mutation_types'
-import Navigation from '@/components/Navigation.vue'
-import LoginDialog from '@/AuthDialogs/LoginDialog.vue'
-import LostPasswordDialog from '@/AuthDialogs/LostPasswordDialog.vue'
-import Alert from '@/dialogs/Alert.vue'
+import Navigation from './components/Navigation.vue'
+import LoginDialog from './AuthDialogs/LoginDialog.vue'
+import LostPasswordDialog from './AuthDialogs/LostPasswordDialog.vue'
+import Alert from './dialogs/Alert.vue'
 
 export default {
   components: { Navigation, LoginDialog, LostPasswordDialog, Alert },

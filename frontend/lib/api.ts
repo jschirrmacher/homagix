@@ -2,25 +2,32 @@ import {
   DISH_CHANGED,
   ERROR_OCCURED,
   WEEKPLAN_LOADED,
-} from '../store/mutation_types.js'
+} from '../store/mutation_types'
 
-function encodeParameter([key, val]) {
+function encodeParameter([key, val]): string {
   const value = val instanceof Array ? val.join(',') : val
   return key + '=' + encodeURIComponent(value)
 }
 
-function prepareQueryParamers(params) {
+function prepareQueryParamers(params: Record<string, string>): string {
   return Object.entries(params).map(encodeParameter).join('&')
 }
 
 let baseUrl = ''
 
-export function setBaseUrl(url) {
+export function setBaseUrl(url: string): void {
   baseUrl = url
 }
 
-export async function doFetch(method, url, data) {
-  const options = { method, headers: { accept: 'application/json' } }
+type FetchError = {
+  error: string | Error
+  httpStatus: number
+}
+
+type FetchResult = FetchError | Record<string, unknown>
+
+export async function doFetch(method: string, url: string, data?: Record<string, string>): Promise<FetchResult> {
+  const options = { method, headers: { accept: 'application/json' } } as RequestInit
   if (data && !['get', 'options'].includes(method.toLowerCase())) {
     options.headers['content-type'] = 'application/json'
     options.body = JSON.stringify(data)
@@ -40,8 +47,8 @@ export async function doFetch(method, url, data) {
   }
 }
 
-export function loadData(url, mutationType) {
-  return async function (context) {
+export function loadData(url: string, mutationType: string) {
+  return async function (context: { state: { accepted: any[]; declined: any[] }; commit: (arg0: string, arg1: unknown) => void }): Promise<void> {
     try {
       const params = {
         accepted: context.state.accepted.join(','),
@@ -61,7 +68,7 @@ export function loadData(url, mutationType) {
   }
 }
 
-export async function fetchWeekplan(startDate, declined) {
+export async function fetchWeekplan(startDate: Date, declined: string[]): Promise<unknown[]> {
   try {
     const result = await doFetch(
       'get',
@@ -80,7 +87,7 @@ export async function fetchWeekplan(startDate, declined) {
   }
 }
 
-export async function setFavorite(dishId, isFavorite) {
+export async function setFavorite(dishId: string, isFavorite: boolean): Promise<unknown[]> {
   try {
     const result = await doFetch(
       isFavorite ? 'post' : 'delete',
