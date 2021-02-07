@@ -13,6 +13,7 @@ import {
   STARTDATE_CHANGED,
   WEEKPLAN_LOADED,
   DISHES_LOADED,
+  STANDARD_ITEMS_LOADED,
 } from './mutation_types'
 import { dishes, ingredients } from './test_dishes'
 import { setBaseUrl } from '../lib/api'
@@ -25,15 +26,13 @@ import { CHANGE_STARTDATE } from './action_types'
 const baseName = 'http://test'
 setBaseUrl(baseName)
 
-const standards = [
+const standardItems = [
   { id: '1234', name: 'standard item', unit: 'g', amount: 200 },
 ]
 
-function setupStore(standards) {
-  store.commit(INGREDIENTS_LOADED, {
-    ingredients: Object.values(ingredients),
-    standards,
-  })
+function setupStore(standardItems) {
+  store.commit(INGREDIENTS_LOADED, { allIngredients: Object.values(ingredients) })
+  store.commit(STANDARD_ITEMS_LOADED, { standardItems })
   store.commit(DISHES_LOADED, { dishes: Object.values(dishes) })
   store.commit(WEEKPLAN_LOADED, {
     weekplan: Object.values(dishes).map(dish => ({
@@ -85,7 +84,7 @@ describe('Store actions', () => {
 
   describe('ADD_ITEM', () => {
     it('should add amount to existing shopping list items', async () => {
-      setupStore(standards)
+      setupStore(standardItems)
       await store.dispatch(ADD_ITEM, {
         item: { ...ingredients.hefe, amount: 2 },
       })
@@ -96,7 +95,7 @@ describe('Store actions', () => {
 
     it('should add extra items', async () => {
       const item = { ...ingredients.hefe, amount: 2 }
-      setupStore(standards)
+      setupStore(standardItems)
       await store.dispatch(ADD_ITEM, { item })
       const change = { ...store.state.changes[0] }
       change.should.deepEqual(item)
@@ -107,7 +106,7 @@ describe('Store actions', () => {
       nock(baseName)
         .post('/ingredients')
         .reply(200, { ...zucker, id: '1234-5678' })
-      setupStore(standards)
+      setupStore(standardItems)
       await store.dispatch(ADD_ITEM, { item: zucker })
       const change = { ...store.state.changes[0] }
       change.should.containDeep(zucker)
@@ -116,7 +115,7 @@ describe('Store actions', () => {
 
   describe('REMOVE_ITEM', () => {
     it('should remove shopping list items by creating a change item with negative amount', async () => {
-      setupStore(standards)
+      setupStore(standardItems)
       await store.dispatch(REMOVE_ITEM, { item: ingredients.mehl })
       store.state.changes.length.should.equal(1)
       store.state.changes[0].id.should.equal(ingredients.mehl.id)
@@ -132,21 +131,19 @@ describe('Store actions', () => {
 
     it('should keep existing changes if a proposed item is removed', async () => {
       const item = { name: 'Zucker', amount: 50, unit: 'g' }
-      setupStore(standards)
+      setupStore(standardItems)
       store.commit(CHANGES_CHANGED, { changes: [item] })
       await store.dispatch(REMOVE_ITEM, { item: ingredients.mehl })
       store.state.changes.some(item => item.name === 'Zucker').should.be.true()
     })
 
     it('should create a change with negative amount for standard items', async () => {
-      store.commit(INGREDIENTS_LOADED, {
-        ingredients: Object.values(ingredients),
-        standards,
-      })
-      await store.dispatch(REMOVE_ITEM, { item: standards[0] })
+      store.commit(INGREDIENTS_LOADED, { allIngredients: Object.values(ingredients) })
+      store.commit(STANDARD_ITEMS_LOADED, { standardItems })
+      await store.dispatch(REMOVE_ITEM, { item: standardItems[0] })
       store.state.changes
         .map(item => ({ ...item }))
-        .should.deepEqual([{ ...standards[0], amount: -standards[0].amount }])
+        .should.deepEqual([{ ...standardItems[0], amount: -standardItems[0].amount }])
     })
 
     it('should create a change with the negative amount of an item which was both, proposed and standard', async () => {
@@ -164,7 +161,7 @@ describe('Store actions', () => {
   }),
     describe('RESTORE_ITEM', () => {
       it('should restore original amount', async () => {
-        setupStore(standards)
+        setupStore(standardItems)
         await store.dispatch(REMOVE_ITEM, { item: ingredients.mehl })
         await store.dispatch(RESTORE_ITEM, { item: ingredients.mehl })
         store.state.changes.should.be.empty()
@@ -172,7 +169,7 @@ describe('Store actions', () => {
 
       it('should restore original amount even if an additional amount was added', async () => {
         const item = { ...ingredients.mehl, amount: 100, unit: 'g' }
-        setupStore(standards)
+        setupStore(standardItems)
         await store.dispatch(ADD_ITEM, { item })
         await store.dispatch(REMOVE_ITEM, { item: ingredients.mehl })
         await store.dispatch(RESTORE_ITEM, { item: ingredients.mehl })
@@ -182,7 +179,7 @@ describe('Store actions', () => {
 
   describe('UPDATE_AMOUNT', () => {
     it('should change amount of proposed items', async () => {
-      setupStore(standards)
+      setupStore(standardItems)
       await store.dispatch(UPDATE_AMOUNT, {
         item: ingredients.hefe,
         newAmount: 3,
@@ -193,12 +190,10 @@ describe('Store actions', () => {
     })
 
     it('should change amount of standard items', async () => {
-      store.commit(INGREDIENTS_LOADED, {
-        ingredients: Object.values(ingredients),
-        standards,
-      })
+      store.commit(INGREDIENTS_LOADED, { allIngredients: Object.values(ingredients) })
+      store.commit(STANDARD_ITEMS_LOADED, { standardItems })
       await store.dispatch(UPDATE_AMOUNT, {
-        item: standards[0],
+        item: standardItems[0],
         newAmount: 150,
       })
       store.state.changes
@@ -214,7 +209,7 @@ describe('Store actions', () => {
     })
 
     it('should change amount of changed proposed items', async () => {
-      setupStore(standards)
+      setupStore(standardItems)
       await store.dispatch(ADD_ITEM, {
         item: { ...ingredients.hefe, amount: 2 },
       })

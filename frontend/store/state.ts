@@ -1,41 +1,9 @@
-type User = {
-  id: string
-  firstName: string
-}
+import { User, Dish, Ingredient, CompleteItem, Unit, ItemGroup, Proposal } from "../app-types"
 
-type Item = {
-  id: string
-  amount: number
-}
-
-export type Dish = {
-  id: string
-  name: string
-  recipe?: string
-  source?: string
-  last?: string
-  items: Item[]
-}
-
-type Ingredient = {
-  id: string
-  name: string
-  unit: string
-  group: string
-}
-
-type CompleteItem = Ingredient & { amount: number }
-
-type Unit = {
-  id: string
-  name: string
-  increment: number
-}
-
-type State = {
+export type State = {
   currentUser: User
   startDate: Date
-  weekplan: Dish[]
+  weekplan: Proposal[]
   dishes: Dish[]
   allIngredients: Ingredient[]
   standardItems: CompleteItem[]
@@ -43,7 +11,8 @@ type State = {
   accepted: string[]
   declined: string[]
   error: {
-    message?: string
+    message: string
+    details?: unknown
   }
   alert?: {
     title: string
@@ -51,10 +20,10 @@ type State = {
   }
   units: Unit[]
   activeItemId?: string
-  itemGroups: Record<string, { order: number, title: string }>
+  itemGroups: Record<string, ItemGroup>
 }
 
-const itemGroups = {
+export const itemGroups: Record<string, ItemGroup> = {
   fruit: { order: 1, title: 'Obst & Gemüse' },
   breakfast: { order: 2, title: 'Brot & Frühstück' },
   meat: { order: 3, title: 'Fleisch' },
@@ -76,7 +45,7 @@ export function getDefaultState(): State {
     changes: [],
     accepted: [],
     declined: [],
-    error: {},
+    error: undefined,
     alert: {
       title: '',
       message: '',

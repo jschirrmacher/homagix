@@ -67,10 +67,6 @@ describe('api', () => {
   })
 
   describe('loadData()', () => {
-    it('should return a function', () => {
-      api.loadData('', '').should.be.instanceOf(Function)
-    })
-
     it('should prepare GET parameters', async () => {
       const context = { state, commit: emptyFunc }
       const request = nock(baseName)

@@ -2,8 +2,8 @@
 import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
 import Dish from './Dish.vue'
-import { CHANGE_STARTDATE } from '../store/action_types'
-import { DISH_DECLINED, TOGGLE_ACCEPTANCE } from '../store/mutation_types'
+import { DISH_DECLINED, CHANGE_STARTDATE } from '../store/action_types'
+import { TOGGLE_ACCEPTANCE } from '../store/mutation_types'
 
 type DishData = {}
 

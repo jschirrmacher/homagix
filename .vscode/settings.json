@@ -8,5 +8,6 @@
   "mochaExplorer.ignore": ["./node_modules"],
   "mochaExplorer.logpanel": true,
   "mochaExplorer.mochaPath": "node_modules/mocha",
-  "mochaExplorer.pruneFiles": true
+  "mochaExplorer.pruneFiles": true,
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

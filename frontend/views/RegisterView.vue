@@ -45,10 +45,10 @@ export default {
         409: 'Du bist bereits registriert - melde dich doch einfach an!',
       })
       if (userInfo.error || !userInfo.id) {
-        this.message = userInfo.error || 'Unerwarteter Fehler beim Registrieren'
+        this.message = userInfo.error as string || 'Unerwarteter Fehler beim Registrieren'
         this.messageType = 'error'
       } else {
-        this.$store.commit(CURRENTUSER_SET, userInfo)
+        this.$store.commit(CURRENTUSER_SET, { currentUser: userInfo })
         this.reset()
         this.$router.push('/planner')
       }

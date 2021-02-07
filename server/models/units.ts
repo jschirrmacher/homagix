@@ -13,4 +13,6 @@ export default [
   { name: 'Bund', step: 1 },
   { name: 'TL', step: 1 },
   { name: 'EL', step: 1 },
+  { name: 'Scheiben', step: 1 },
+  { name: 'Knollen', step: 1 },
 ]

@@ -56,12 +56,12 @@ export default Vue.extend({
       )
       if (userInfo.error || !userInfo.id) {
         this.message =
-          userInfo.error || 'Unerwarteter Fehler beim Passwort ändern'
+          userInfo.error as string || 'Unerwarteter Fehler beim Passwort ändern'
         this.messageType = 'error'
       } else {
-        this.$store.commit(CURRENTUSER_SET, userInfo)
+        this.$store.commit(CURRENTUSER_SET, { currentUser: userInfo })
         this.reset()
-        alert('Das Passwort wurde geändert')
+        alert('Info', 'Das Passwort wurde geändert')
         this.$router.push('/planner')
       }
     },

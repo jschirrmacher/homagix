@@ -1,7 +1,6 @@
+import { CompleteItem, Dish, Ingredient, Proposal } from '../app-types'
 import {
-  DISH_CHANGED,
   ERROR_OCCURED,
-  WEEKPLAN_LOADED,
 } from '../store/mutation_types'
 
 function encodeParameter([key, val]): string {
@@ -9,7 +8,7 @@ function encodeParameter([key, val]): string {
   return key + '=' + encodeURIComponent(value)
 }
 
-function prepareQueryParamers(params: Record<string, string>): string {
+function prepareQueryParamers(params: Record<string, unknown>): string {
   return Object.entries(params).map(encodeParameter).join('&')
 }
 
@@ -26,7 +25,7 @@ type FetchError = {
 
 type FetchResult = FetchError | Record<string, unknown>
 
-export async function doFetch(method: string, url: string, data?: Record<string, string>): Promise<FetchResult> {
+export async function doFetch(method: string, url: string, data?: Record<string, unknown>): Promise<FetchResult> {
   const options = { method, headers: { accept: 'application/json' } } as RequestInit
   if (data && !['get', 'options'].includes(method.toLowerCase())) {
     options.headers['content-type'] = 'application/json'
@@ -68,7 +67,27 @@ export function loadData(url: string, mutationType: string) {
   }
 }
 
-export async function fetchWeekplan(startDate: Date, declined: string[]): Promise<unknown[]> {
+type CombinedIngredientsAndStandardItems = {
+  allIngredients: Ingredient[],
+  standardItems: CompleteItem[]
+}
+
+export async function fetchIngredientsAndStandardItems(): Promise<CombinedIngredientsAndStandardItems> {
+  try {
+    const result = await doFetch('get', '/ingredients') as { ingredients: Ingredient[], standards: CompleteItem[], error?: unknown }
+    if (result.error) {
+      throw { message: result.error, details: result }
+    }
+    return {
+      allIngredients: result.ingredients,
+      standardItems: result.standards
+    }
+  } catch (error) {
+    throw { message: 'Error accessing server', details: error }
+  }
+}
+
+export async function fetchWeekplan(startDate: Date, declined: string[]): Promise<Proposal[]> {
   try {
     const result = await doFetch(
       'get',
@@ -76,31 +95,25 @@ export async function fetchWeekplan(startDate: Date, declined: string[]): Promis
       { inhibit: declined.join(',') }
     )
     if (result.error) {
-      throw result
+      throw { message: result.error, details: result }
     }
-    return [WEEKPLAN_LOADED, { weekplan: result }]
+    return result as unknown as Proposal[]
   } catch (error) {
-    return [
-      ERROR_OCCURED,
-      { message: 'Error accessing server', details: error },
-    ]
+    throw { message: 'Error accessing server', details: error }
   }
 }
 
-export async function setFavorite(dishId: string, isFavorite: boolean): Promise<unknown[]> {
+export async function setFavorite(dishId: string, isFavorite: boolean): Promise<Dish> {
   try {
     const result = await doFetch(
       isFavorite ? 'post' : 'delete',
       '/dishes/' + dishId + '/favorites'
     )
     if (result.error) {
-      throw result
+      throw  { message: result.error, details: result }
     }
-    return [DISH_CHANGED, { dish: result }]
+    return result as Dish
   } catch (error) {
-    return [
-      ERROR_OCCURED,
-      { message: 'Error accessing server', details: error },
-    ]
+    throw { message: 'Error accessing server', details: error }
   }
 }

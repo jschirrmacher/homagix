@@ -28,7 +28,7 @@ export default (): Store & { eventList: () => Event[] } => {
       //
     },
 
-    end() {
+    async end() {
       //
     },
   }

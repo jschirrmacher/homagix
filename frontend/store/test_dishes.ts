@@ -1,4 +1,4 @@
-import { Dish } from './state'
+import { Dish } from '../app-types'
 
 export const ingredients = {
   mehl: { id: '7', unit: 'g', name: 'Mehl', group: 'tinned' },

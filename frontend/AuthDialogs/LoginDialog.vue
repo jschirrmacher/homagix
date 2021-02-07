@@ -35,7 +35,7 @@ export default {
         this.messageType = 'error'
       } else {
         closeDialogs()
-        this.$store.commit(CURRENTUSER_SET, userInfo)
+        this.$store.commit(CURRENTUSER_SET, { currentUser: userInfo })
         this.reset()
         this.$router.push('/planner')
       }

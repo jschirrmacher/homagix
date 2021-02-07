@@ -1,79 +1,77 @@
+import { CompleteItem, Dish, Ingredient, Proposal, Unit, User } from '../app-types'
 import * as types from './mutation_types'
-import { getDefaultState } from './state'
+import { getDefaultState, State } from './state'
 
 export const mutations = {
-  [types.RESET_STORE](state): void {
+  [types.RESET_STORE](state: State): void {
     Object.assign(state, getDefaultState())
   },
 
-  [types.CURRENTUSER_SET](state, user): void {
-    state.currentUser = user
+  [types.CURRENTUSER_SET](state: State, payload: { currentUser: User}): void {
+    state.currentUser = payload.currentUser
   },
 
-  [types.ERROR_OCCURED](state, error): void {
+  [types.ERROR_OCCURED](state: State, error: { message: string, details?: unknown }): void {
     state.error = error
   },
 
-  [types.CLEAR_ERROR](state): void {
-    state.error = {}
+  [types.CLEAR_ERROR](state: State): void {
+    state.error = undefined
   },
 
-  [types.ALERT](state, alert): void {
+  [types.ALERT](state: State, alert: { title: string; message: string }): void {
     state.alert = alert
   },
 
-  [types.STARTDATE_CHANGED](state, { startDate }): void {
+  [types.STARTDATE_CHANGED](state: State, { startDate }: { startDate: string }): void {
     state.startDate = new Date(startDate)
   },
 
-  [types.WEEKPLAN_LOADED](state, { weekplan }): void {
+  [types.WEEKPLAN_LOADED](state: State, { weekplan }: { weekplan: Proposal[] }): void {
     state.weekplan = weekplan
   },
 
-  [types.DISHES_LOADED](state, { dishes }): void {
+  [types.DISHES_LOADED](state: State, { dishes }: { dishes: Dish[] }): void {
     state.dishes = dishes
   },
 
-  [types.DISH_CHANGED](state, { dish }): void {
-    state.dishes = state.dishes.map(d => (d.id === dish.id ? dish : d))
+  [types.INGREDIENTS_LOADED](state: State, { allIngredients }: { allIngredients: Ingredient[], }): void {
+    state.allIngredients = allIngredients
   },
 
-  [types.INGREDIENTS_LOADED](state, { ingredients, standards }): void {
-    state.allIngredients = ingredients
-    state.standardItems = standards
+  [types.STANDARD_ITEMS_LOADED](state: State, { standardItems }: { standardItems: CompleteItem[] }): void {
+    state.standardItems = standardItems
   },
 
-  [types.INGREDIENT_CHANGED](state, { ingredient }): void {
+  [types.INGREDIENT_CHANGED](state: State, { ingredient }: { ingredient: Ingredient }): void {
     state.allIngredients = state.allIngredients.map(i =>
       i.id === ingredient.id ? ingredient : i
     )
   },
 
-  [types.UNITS_LOADED](state, { units }): void {
+  [types.UNITS_LOADED](state: State, { units }: { units: Unit[] }): void {
     state.units = units
   },
 
-  [types.ACCEPTANCE_CHANGED](state, { accepted }): void {
+  [types.ACCEPTANCE_CHANGED](state: State, { accepted }: { accepted: string[] }): void {
     state.accepted = accepted
   },
 
-  [types.DISH_DECLINED](state, { dishId }): void {
-    if (!state.declined.includes(dishId)) {
-      state.declined.push(dishId)
-    }
+  [types.DECLINED_CHANGED](state: State, { declined }: { declined: string[] }): void {
+    state.declined = declined
   },
 
-  [types.SHOPPING_DONE](state): void {
+  [types.SHOPPING_DONE](state: State): void {
     state.accepted = []
     state.declined = []
     state.changes = []
   },
 
-  [types.CHANGES_CHANGED](state, { changes }): void {
+  [types.CHANGES_CHANGED](state: State, { changes }: { changes: CompleteItem[] }): void {
     state.changes = changes
   },
 
-  [types.SET_ACTIVE_ITEM](state, { itemId }): void {
+  [types.SET_ACTIVE_ITEM](state: State, { itemId }: { itemId: string }): void {
     state.activeItemId = itemId
   },
 }

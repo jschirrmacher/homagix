@@ -1,6 +1,9 @@
+import { CompleteItem, Item, Proposal } from "../app-types"
+import { State } from './state'
+
 const logger = console
 
-function addIfNotAlreadyIn(array, element) {
+function addIfNotAlreadyIn(array: CompleteItem[], element: CompleteItem): CompleteItem[] {
   const existing = array.findIndex(el => el.id === element.id)
   if (existing !== -1) {
     if (array[existing].unit !== element.unit) {
@@ -18,35 +21,39 @@ function addIfNotAlreadyIn(array, element) {
   }
 }
 
-function addDetails(state) {
-  return function (i) {
-    const item = state.allIngredients.find(item => item.id === i.id) || i
+function addDetails(state: State) {
+  const defaultIngredient = { name: '', group: 'other', unit: 'Pkg' }
+  return function (item: Item): CompleteItem {
+    const ingredient = state.allIngredients.find(i => i.id === item.id) || { ...item, ...defaultIngredient }
     return {
-      ...i,
-      name: item.name,
-      unit: item.unit,
-      group: { ...state.itemGroups[item.group], id: item.group },
+      ...item,
+      name: ingredient.name,
+      unit: ingredient.unit,
+      group: {
+        id: ingredient.group,
+        ...state.itemGroups[ingredient.group],
+      },
     }
   }
 }
 
-function getItemsFromWeekplan(state) {
+function getItemsFromWeekplan(state: State): CompleteItem[] {
   return state.weekplan
     .filter(p => p.dishId && state.accepted.includes(p.dishId))
-    .flatMap(p => state.dishes.find(d => d.id === p.dishId).items)
+    .flatMap((p: Proposal) => state.dishes.find(d => d.id === p.dishId)?.items)
 }
 
-function getProposedOrStandardItems(state) {
+function getProposedOrStandardItems(state: State) {
   return [...getItemsFromWeekplan(state), ...state.standardItems]
 }
 
-function shoppingListFromState(state) {
+function shoppingListFromState(state: State) {
   return [...getProposedOrStandardItems(state), ...state.changes]
     .map(addDetails(state))
     .reduce(addIfNotAlreadyIn, [])
 }
 
-function compareItems(a, b) {
+function compareItems(a: CompleteItem, b: CompleteItem): number {
   if (a.group.order && !b.group.order) {
     return -1
   }
@@ -55,32 +62,40 @@ function compareItems(a, b) {
   }
   return (
     a.group.order - b.group.order ||
-    a.name.toLowerCase().localeCompare(b.name.toLowerCase)
+    a.name.toLowerCase().localeCompare(b.name.toLowerCase())
   )
 }
 
+export interface Getters {
+  proposedItems: CompleteItem[]
+  shoppinglist: CompleteItem[]
+  itemsInShoppingList: boolean
+  maxServedDate: string
+  nextDayToServe: string
+}
+
 export const getters = {
-  proposedItems(state) {
+  proposedItems(state: State): CompleteItem[] {
     return getItemsFromWeekplan(state)
       .map(addDetails(state))
       .reduce(addIfNotAlreadyIn, [])
   },
 
-  shoppinglist(state) {
+  shoppinglist(state: State): CompleteItem[] {
     return shoppingListFromState(state).sort(compareItems)
   },
 
-  itemsInShoppingList(state): boolean {
+  itemsInShoppingList(state: State): boolean {
     return shoppingListFromState(state).some(item => item.amount)
   },
 
-  maxServedDate(state): string {
+  maxServedDate(state: State): string {
     const max = state.dishes.reduce((max, current) => Math.max(max, current.last ? +new Date(current.last) : 0), 0)
     return (new Date(max)).toISOString().split('T')[0]
   },
 
-  nextDayToServe(state): string {
-    const lastServedDay = new Date(getters.maxServedDate(state))
+  nextDayToServe(state: State, getters: Getters): string {
+    const lastServedDay = new Date(getters.maxServedDate)
     lastServedDay.setDate(lastServedDay.getDate() + 1)
     return lastServedDay.toISOString().split('T')[0]
   },

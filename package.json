@@ -112,7 +112,7 @@
     "sinon": "^9.2.4",
     "style-loader": "^0.23.1",
     "supertest": "^4.0.2",
-    "typescript": "^4.1.3",
+    "typescript": "^4.2.0-dev.20210207",
     "url-loader": "^1.1.2",
     "util.promisify": "^1.0.1",
     "vue-loader": "^15.9.6",

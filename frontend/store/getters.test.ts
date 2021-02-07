@@ -7,16 +7,15 @@ import {
   RESET_STORE,
   WEEKPLAN_LOADED,
   DISHES_LOADED,
+  STANDARD_ITEMS_LOADED,
 } from './mutation_types'
 import { dishes, ingredients } from './test_dishes'
 
 describe('Store getters', () => {
   beforeEach(() => {
     store.commit(RESET_STORE)
-    store.commit(INGREDIENTS_LOADED, {
-      ingredients: Object.values(ingredients),
-      standards: [],
-    })
+    store.commit(INGREDIENTS_LOADED, { allIngredients: Object.values(ingredients) })
+    store.commit(STANDARD_ITEMS_LOADED, { standardItems: [] })
     store.commit(DISHES_LOADED, { dishes: Object.values(dishes) })
     store.commit(WEEKPLAN_LOADED, {
       weekplan: Object.values(dishes).map(dish => ({

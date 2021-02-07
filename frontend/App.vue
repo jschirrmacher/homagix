@@ -42,7 +42,7 @@ export default {
       <Navigation />
     </div>
 
-    <div v-if="error.message" class="error-container">
+    <div v-if="error && error.message" class="error-container">
       <span @click="clearError">×</span>
       {{ error.message }}
     </div>
