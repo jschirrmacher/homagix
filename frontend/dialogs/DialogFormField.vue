@@ -7,7 +7,7 @@ export default Vue.extend({
     type: String,
     name: String,
     defaultValue: String,
-    validation: Object,
+    validation: RegExp,
     validationMessage: String,
     autocomplete: String,
     defaultInfo: String,

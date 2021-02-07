@@ -1,5 +1,6 @@
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 import { UPDATE_AMOUNT } from '../store/mutation_types'
 
 export default Vue.extend({
@@ -15,6 +16,8 @@ export default Vue.extend({
   },
 
   computed: {
+    ...mapState(['units']),
+
     itemClass(): string {
       return this.item.amount <= 0 ? 'removed' : ''
     },
@@ -22,7 +25,8 @@ export default Vue.extend({
 
   methods: {
     getStep(unit: string): number {
-      return unit === 'g' || unit === 'ml' ? 100 : 1
+      const entry = this.units.find(u => u.name === unit)
+      return entry ? entry.step : 1
     },
 
     amountChanged(item, newAmount: number): void {
@@ -73,7 +77,7 @@ li {
 
 .unit {
   display: inline-block;
-  width: 45px;
+  width: 65px;
   text-align: left;
 }
 

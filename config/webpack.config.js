@@ -64,7 +64,11 @@ module.exports = {
         ],
       },
       {
-        test: [/\.vue$/, /\.ts$/],
+        test: /\.ts$/,
+        loader: { loader: 'babel-loader', options: { sourceMap: isDev } },
+      },
+      {
+        test: /\.vue$/,
         loader: { loader: 'vue-loader', options: { sourceMap: isDev } },
       },
     ],

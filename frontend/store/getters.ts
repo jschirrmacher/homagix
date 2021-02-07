@@ -37,17 +37,17 @@ function addDetails(state: State) {
   }
 }
 
-function getItemsFromWeekplan(state: State): CompleteItem[] {
+function getItemsFromWeekplan(state: State): Item[] {
   return state.weekplan
     .filter(p => p.dishId && state.accepted.includes(p.dishId))
-    .flatMap((p: Proposal) => state.dishes.find(d => d.id === p.dishId)?.items)
+    .flatMap((p: Proposal) => state.dishes.find(d => d.id === p.dishId)?.items as Item[])
 }
 
-function getProposedOrStandardItems(state: State) {
+function getProposedOrStandardItems(state: State): Item[] {
   return [...getItemsFromWeekplan(state), ...state.standardItems]
 }
 
-function shoppingListFromState(state: State) {
+function shoppingListFromState(state: State): CompleteItem[] {
   return [...getProposedOrStandardItems(state), ...state.changes]
     .map(addDetails(state))
     .reduce(addIfNotAlreadyIn, [])

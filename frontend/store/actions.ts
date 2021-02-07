@@ -99,7 +99,7 @@ export const actions: ActionTree<State, State> = {
 
   async [LOAD_DISHES](context: Context): Promise<void> {
     await guardWithTryCatch(context, async () => {
-      const dishes = await doFetch('GET', '/dishes') as unknown as Dish[]
+      const { dishes } = await doFetch('GET', '/dishes') as unknown as { dishes: Dish[] }
       context.commit(DISHES_LOADED, { dishes })
     })
   },
