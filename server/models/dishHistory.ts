@@ -1,6 +1,6 @@
-import { Models } from "."
-import { Event, Store } from "../EventStore/EventStore"
-import { User } from "./user"
+import { Models } from '.'
+import { Event, Store } from '../EventStore/EventStore'
+import { User } from './user'
 
 export type HistoryModel = {
   getFrom(user: User, date: string): string[][]
@@ -10,7 +10,11 @@ type HistoryEntry = Record<string, string>
 const history = {} as Record<string, HistoryEntry>
 
 function served(event: Event): void {
-  const { dishId, date, listId = '' } = event as { dishId: string, date: string, listId?: string}
+  const { dishId, date, listId = '' } = event as {
+    dishId: string
+    date: string
+    listId?: string
+  }
   history[listId] = history[listId] || {}
   history[listId][date] = dishId
 }
@@ -22,7 +26,13 @@ function getFrom(user: User, date: string) {
   return Object.entries(list).filter(([d]) => d >= date)
 }
 
-export default function ({ store, models }: { store: Store, models: Models }): HistoryModel {
+export default function ({
+  store,
+  models,
+}: {
+  store: Store
+  models: Models
+}): HistoryModel {
   const events = models.getEvents()
   store.on(events.served, served)
 

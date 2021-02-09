@@ -7,7 +7,7 @@ import { ADD_FAVORITE, REMOVE_FAVORITE } from '../store/action_types'
 const dateStyle = {
   day: 'numeric',
   month: 'short',
-  year: 'numeric'
+  year: 'numeric',
 }
 
 export default Vue.extend({
@@ -44,7 +44,7 @@ export default Vue.extend({
 
     dishIngredients(): Record<string, string> {
       return this.dish.items.map(i => ({
-        ...this.allIngredients.find((item) => item.id === i.id),
+        ...this.allIngredients.find(item => item.id === i.id),
         amount: i.amount,
       }))
     },

@@ -12,10 +12,24 @@ function sendUserInfo(req: Request, res: Response): void {
   res.json(result)
 }
 
-export default ({ auth, models, store, mailer }: { auth: Auth, models: Models, store: Store, mailer: Mailer}): Router => {
+export default ({
+  auth,
+  models,
+  store,
+  mailer,
+}: {
+  auth: Auth
+  models: Models
+  store: Store
+  mailer: Mailer
+}): Router => {
   const { invitationAccepted } = models.getEvents()
 
-  async function registerNewUser(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async function registerNewUser(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       if (models.user.getByEMail(req.body.email, false)) {
         throw new HTTPError(409, 'User already exists')
@@ -35,7 +49,11 @@ export default ({ auth, models, store, mailer }: { auth: Auth, models: Models, s
     }
   }
 
-  async function sendAccessLink(req: Request, res: Response, next: NextFunction) {
+  async function sendAccessLink(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const user = models.user.getByEMail(req.body.email, false)
       if (user) {

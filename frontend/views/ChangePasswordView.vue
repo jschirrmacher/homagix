@@ -56,7 +56,8 @@ export default Vue.extend({
       )
       if (userInfo.error || !userInfo.id) {
         this.message =
-          userInfo.error as string || 'Unerwarteter Fehler beim Passwort ändern'
+          (userInfo.error as string) ||
+          'Unerwarteter Fehler beim Passwort ändern'
         this.messageType = 'error'
       } else {
         this.$store.commit(CURRENTUSER_SET, { currentUser: userInfo })

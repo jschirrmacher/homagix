@@ -28,7 +28,9 @@ function resolve(path: string[], layer: Layer): RouteInfo {
       resolve.bind(null, path.concat(split(layer.route.path)))
     )
   } else if (layer.name === 'router' && layer.handle.stack) {
-    return layer.handle.stack.flatMap(resolve.bind(null, path.concat(split(layer.regexp))))
+    return layer.handle.stack.flatMap(
+      resolve.bind(null, path.concat(split(layer.regexp)))
+    )
   } else if (layer.method && layer.handle.name) {
     return [
       layer.method.toUpperCase(),
@@ -60,7 +62,10 @@ export default function (app: Express): string {
   const routes = app._router.stack
     .flatMap(resolve.bind(null, []))
     .filter(e => e.length)
-    .map((e) => [e[0] + ' /' + e[1] as unknown as string, e[2] as unknown as string])
+    .map(e => [
+      ((e[0] + ' /' + e[1]) as unknown) as string,
+      (e[2] as unknown) as string,
+    ])
 
   const maxLen = routes.reduce(
     (max, route) => Math.max(max, route[0].length),

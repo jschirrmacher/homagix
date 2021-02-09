@@ -14,7 +14,13 @@ export type IngredientController = {
   addIngredient(ingredient: Ingredient): Promise<Ingredient>
 }
 
-export default ({ models, store }: { models: Models, store: Store }): IngredientController => {
+export default ({
+  models,
+  store,
+}: {
+  models: Models
+  store: Store
+}): IngredientController => {
   const { ingredientUpdated, ingredientAdded } = models.getEvents()
 
   async function getIngredients(): Promise<IngredientListResult> {
@@ -22,11 +28,14 @@ export default ({ models, store }: { models: Models, store: Store }): Ingredient
       ingredients: await models.ingredient.getAll(),
       standards: models.dish
         .getStandardIngredients()
-        .map(i => ({ ...models.ingredient.byId(i.id) as Ingredient, ...i })),
+        .map(i => ({ ...(models.ingredient.byId(i.id) as Ingredient), ...i })),
     }
   }
 
-  async function setIngredientGroup(id: string, group: string): Promise<Ingredient> {
+  async function setIngredientGroup(
+    id: string,
+    group: string
+  ): Promise<Ingredient> {
     await store.emit(ingredientUpdated(id, 'group', group))
     return models.ingredient.byId(id) as Ingredient
   }

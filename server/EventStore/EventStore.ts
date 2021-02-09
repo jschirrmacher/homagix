@@ -34,11 +34,24 @@ class JsonStringify extends Transform {
   }
 }
 
-export default ({ basePath, migrationsPath, logger = console }: { basePath: string, migrationsPath: string, logger?: Console }): Store => {
+export default ({
+  basePath,
+  migrationsPath,
+  logger = console,
+}: {
+  basePath: string
+  migrationsPath: string
+  logger?: Console
+}): Store => {
   const listeners = {} as Record<string, Listener[]>
-  const eventFile = (version: number) => resolve(basePath, `events-${version}.json`)
+  const eventFile = (version: number) =>
+    resolve(basePath, `events-${version}.json`)
 
-  async function migrate(from: number, to: number, migrators: WritableStream[]): Promise<void> {
+  async function migrate(
+    from: number,
+    to: number,
+    migrators: WritableStream[]
+  ): Promise<void> {
     try {
       const eventsFile = eventFile(from)
       if (existsSync(eventsFile)) {
@@ -63,11 +76,20 @@ export default ({ basePath, migrationsPath, logger = console }: { basePath: stri
 
   async function doNecessaryMigrations(): Promise<string> {
     const versionFile = resolve(basePath, 'state.json')
-    const eventsVersionNo = parseInt(existsSync(versionFile) && JSON.parse(readFileSync(versionFile).toString()).versionNo) || 0
-    const indexName = resolve(migrationsPath, 'index.' + __filename.replace(/^.*\.(\w+)$/, '$1'))
+    const eventsVersionNo =
+      parseInt(
+        existsSync(versionFile) &&
+          JSON.parse(readFileSync(versionFile).toString()).versionNo
+      ) || 0
+    const indexName = resolve(
+      migrationsPath,
+      'index.' + __filename.replace(/^.*\.(\w+)$/, '$1')
+    )
     const migrationsExist = existsSync(migrationsPath) && existsSync(indexName)
 
-    const allMigrations = (migrationsExist ? (await import(migrationsPath)).default : []) as WritableStream[]
+    const allMigrations = (migrationsExist
+      ? (await import(migrationsPath)).default
+      : []) as WritableStream[]
     const relevantMigrations = allMigrations.slice(eventsVersionNo)
     const versionNo = allMigrations.length
     if (eventsVersionNo < versionNo) {
@@ -81,7 +103,9 @@ export default ({ basePath, migrationsPath, logger = console }: { basePath: stri
 
   function dispatch(event: Event) {
     try {
-      (listeners[(event as { type: string }).type] || []).forEach(listener => listener(event))
+      ;(listeners[(event as { type: string }).type] || []).forEach(listener =>
+        listener(event)
+      )
     } catch (error) {
       logger.error(error)
       logger.debug(error.stack)
@@ -91,13 +115,12 @@ export default ({ basePath, migrationsPath, logger = console }: { basePath: stri
   if (!existsSync(basePath)) {
     mkdirSync(basePath)
   }
-  const migrationsCompleted = doNecessaryMigrations()
-    .then(eventsFileName => {
-      const changeStream = createWriteStream(eventsFileName, { flags: 'a' })
-      changeStream.on('error', logger.error)
-  
-      return { eventsFileName, changeStream }
-    })
+  const migrationsCompleted = doNecessaryMigrations().then(eventsFileName => {
+    const changeStream = createWriteStream(eventsFileName, { flags: 'a' })
+    changeStream.on('error', logger.error)
+
+    return { eventsFileName, changeStream }
+  })
 
   return {
     dispatch,

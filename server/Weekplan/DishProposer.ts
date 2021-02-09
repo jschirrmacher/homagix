@@ -1,12 +1,12 @@
-import { Models } from "../models"
-import { Dish } from "../models/dish"
-import { User } from "../models/user"
+import { Models } from '../models'
+import { Dish } from '../models/dish'
+import { User } from '../models/user'
 
 export type DishProposer = {
   get(user: User, inhibited?: string[]): Dish[]
 }
 
-export default ({ models }: { models: Models}): DishProposer => {
+export default ({ models }: { models: Models }): DishProposer => {
   return {
     get(user: User, inhibited = []): Dish[] {
       const favorites = models.dishList.getById(user.listId || user.id) || []

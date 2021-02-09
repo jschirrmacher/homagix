@@ -35,7 +35,15 @@ export function jsonResult(func: RouteHandler): RequestHandler {
   return fn[func.name]
 }
 
-export default function ({ models, store, auth }: { models: Models, store: Store, auth: Auth}): Router {
+export default function ({
+  models,
+  store,
+  auth,
+}: {
+  models: Models
+  store: Store
+  auth: Auth
+}): Router {
   const router = express.Router()
   const sessionRouter = SessionRouter({ auth })
   const accountRouter = AccountRouter({ auth, store, models, mailer })

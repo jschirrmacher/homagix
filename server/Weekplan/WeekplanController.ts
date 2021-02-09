@@ -1,6 +1,6 @@
-import { Store } from "../EventStore/EventStore"
-import { Models } from "../models"
-import { User } from "../models/user"
+import { Store } from '../EventStore/EventStore'
+import { Models } from '../models'
+import { User } from '../models/user'
 import { DishProposer } from './DishProposer'
 
 export type WeekPlan = Array<{
@@ -10,12 +10,34 @@ export type WeekPlan = Array<{
 }>
 
 export type WeekplanController = {
-  getWeekplan(user: User, startingAt: string, inhibited: string[], today?: Date): WeekPlan
-  fixPlan(user: User, date: string, accepted: string[]): { accepted: string[], date: string }
+  getWeekplan(
+    user: User,
+    startingAt: string,
+    inhibited: string[],
+    today?: Date
+  ): WeekPlan
+  fixPlan(
+    user: User,
+    date: string,
+    accepted: string[]
+  ): { accepted: string[]; date: string }
 }
 
-export default ({ models, store, proposer }: { models: Models, store: Store, proposer: DishProposer}): WeekplanController => {
-  function getWeekplan(user: User, startingAt: string, inhibited: string[], today = new Date()): WeekPlan {
+export default ({
+  models,
+  store,
+  proposer,
+}: {
+  models: Models
+  store: Store
+  proposer: DishProposer
+}): WeekplanController => {
+  function getWeekplan(
+    user: User,
+    startingAt: string,
+    inhibited: string[],
+    today = new Date()
+  ): WeekPlan {
     today.setHours(0, 0, 0, 0)
     const history = Object.assign(
       {},
@@ -38,7 +60,11 @@ export default ({ models, store, proposer }: { models: Models, store: Store, pro
       })
   }
 
-  function fixPlan(user: User, date: string, accepted: string[]): { accepted: string[], date: string } {
+  function fixPlan(
+    user: User,
+    date: string,
+    accepted: string[]
+  ): { accepted: string[]; date: string } {
     accepted.forEach((id, index) => {
       const newDate = new Date(date)
       newDate.setDate(newDate.getDate() + index)

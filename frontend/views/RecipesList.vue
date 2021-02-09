@@ -13,9 +13,11 @@ export default Vue.extend({
     ...mapState(['dishes']),
 
     sortedDishes(): Array<{ id: string }> {
-      return [...this.dishes.filter((d: { alwaysOnList: boolean, name: string }) => !d.alwaysOnList)].sort((d1, d2) =>
-        d1.name.localeCompare(d2.name)
-      )
+      return [
+        ...this.dishes.filter(
+          (d: { alwaysOnList: boolean; name: string }) => !d.alwaysOnList
+        ),
+      ].sort((d1, d2) => d1.name.localeCompare(d2.name))
     },
   },
 

@@ -9,7 +9,10 @@ import Models from '../models/MockedModel'
 
 const store = Store()
 const models = Models({ store })
-const jsonResult = (func: (req: Request) => void) => async (req: Request, res: Response) => res.json(await func(req))
+const jsonResult = (func: (req: Request) => void) => async (
+  req: Request,
+  res: Response
+) => res.json(await func(req))
 const controller = Controller({ models, store })
 const router = Router({ controller, jsonResult })
 const app = express()

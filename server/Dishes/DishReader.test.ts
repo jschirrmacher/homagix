@@ -33,7 +33,11 @@ describe('DishReader', () => {
       .eventList()
       .find(event => event.type === 'dishAdded')
 
-    should(addedEvent).deepEqual({ type: 'dishAdded', name: 'test dish', id: '1' })
+    should(addedEvent).deepEqual({
+      type: 'dishAdded',
+      name: 'test dish',
+      id: '1',
+    })
   })
 
   it('should create new ingredients', () => {
@@ -52,7 +56,9 @@ describe('DishReader', () => {
   })
 
   it('should use existing ingredients', () => {
-    store.dispatch(events.ingredientAdded({ name: 'existing item', unit: 'g' } as Ingredient))
+    store.dispatch(
+      events.ingredientAdded({ name: 'existing item', unit: 'g' } as Ingredient)
+    )
     store.eventList().length = 0
     mockFS.setupFiles({
       'dishes/1.yaml': "name: 'test dish'\nitems:\n  - 500 g existing item",

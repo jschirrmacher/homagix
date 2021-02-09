@@ -6,7 +6,11 @@ export default class testMigration extends Transform {
     super(options)
   }
 
-  _transform(event: { name: string }, encoding: BufferEncoding, callback: TransformCallback): void {
+  _transform(
+    event: { name: string },
+    encoding: BufferEncoding,
+    callback: TransformCallback
+  ): void {
     event.name = 'Migrated event'
     this.push(event)
     callback()

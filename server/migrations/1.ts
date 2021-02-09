@@ -15,7 +15,11 @@ export default class mig1 extends Transform {
     super(options)
   }
 
-  _transform(event: DishEvent, encoding: BufferEncoding, callback: TransformCallback): void {
+  _transform(
+    event: DishEvent,
+    encoding: BufferEncoding,
+    callback: TransformCallback
+  ): void {
     if (event.type === 'dish-updated' || event.type === 'dishes-updated') {
       if (event.name !== 'last') {
         throw Error(

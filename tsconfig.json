@@ -1,20 +1,17 @@
 {
-	"compilerOptions": {
-		"target": "esnext",
-		"module": "esnext",
-		"moduleResolution": "node",
-		"allowJs": true,
-		"noEmit": true,
-		"strict": true,
-		"isolatedModules": true,
-		"esModuleInterop": true,
-		"noImplicitAny": false,
-		"allowSyntheticDefaultImports": true,
-		"sourceMap": true,
-		"lib": ["es2020"]
-	},
-	"include": [
-		"server",
-		"frontend"
-	]
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "noEmit": true,
+    "strict": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "noImplicitAny": false,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "lib": ["es2020"]
+  },
+  "include": ["server", "frontend"]
 }

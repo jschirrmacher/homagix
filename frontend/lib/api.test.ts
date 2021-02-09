@@ -17,7 +17,11 @@ const state = {
 
 describe('api', () => {
   before(() => {
-    global.fetch = (input: RequestInfo, init?: RequestInit) => fetch(input.toString(), init as FetchInit) as unknown as Promise<Response>
+    global.fetch = (input: RequestInfo, init?: RequestInit) =>
+      (fetch(
+        input.toString(),
+        init as FetchInit
+      ) as unknown) as Promise<Response>
   })
 
   describe('doFetch()', () => {
@@ -46,7 +50,7 @@ describe('api', () => {
       const request = nock(baseName)
         .post('/route', { data: 'true' })
         .reply(200, { success: true })
-      const response = (await api.doFetch('post', '/route', { data: 'true' }))
+      const response = await api.doFetch('post', '/route', { data: 'true' })
       should(response.error).be.undefined()
       response.should.have.property('success')
       should(response['success']).be.true()

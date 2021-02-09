@@ -18,7 +18,11 @@ export default class mig3 extends Transform {
     super(options)
   }
 
-  _transform(event: Record<string, unknown>, encoding: BufferEncoding, callback: TransformCallback): void {
+  _transform(
+    event: Record<string, unknown>,
+    encoding: BufferEncoding,
+    callback: TransformCallback
+  ): void {
     switch (event.type) {
       case 'dishAdded': {
         delete event.type
@@ -43,7 +47,10 @@ export default class mig3 extends Transform {
           throw Error(`Ingredient #${event.ingredientId} not found`)
         }
         dish.items = dish.items || []
-        dish.items.push({ amount: event.amount as number, id: event.ingredientId as string })
+        dish.items.push({
+          amount: event.amount as number,
+          id: event.ingredientId as string,
+        })
         addDish(modelWriter.writeDish, dish)
         break
       }

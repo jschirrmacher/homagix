@@ -1,4 +1,9 @@
-import { doFetch, fetchWeekplan, setFavorite, fetchIngredientsAndStandardItems } from '../lib/api'
+import {
+  doFetch,
+  fetchWeekplan,
+  setFavorite,
+  fetchIngredientsAndStandardItems,
+} from '../lib/api'
 import {
   GET_INGREDIENTS,
   INGREDIENTS_LOADED,
@@ -32,8 +37,8 @@ import {
 } from './action_types'
 import jwt_decode from 'jwt-decode'
 import { CompleteItem, Dish, Ingredient, Unit } from '../app-types'
-import { State } from "./state"
-import { ActionTree, Dispatch } from "vuex"
+import { State } from './state'
+import { ActionTree, Dispatch } from 'vuex'
 import { Getters } from './getters'
 
 type Context = {
@@ -81,7 +86,11 @@ export const actions: ActionTree<State, State> = {
   [INIT_APP](context: Context): void {
     const match = document.cookie.match(/\btoken=([^;]*)/)
     if (match) {
-      const token = jwt_decode(match[1]) as { exp: number; sub: string; firstName: string }
+      const token = jwt_decode(match[1]) as {
+        exp: number
+        sub: string
+        firstName: string
+      }
       if (token.exp && token.exp < +new Date()) {
         const currentUser = {
           id: token.sub,
@@ -92,21 +101,29 @@ export const actions: ActionTree<State, State> = {
     }
   },
 
-  async [CHANGE_STARTDATE](context: Context, { startDate }: { startDate: Date }): Promise<void> {
+  async [CHANGE_STARTDATE](
+    context: Context,
+    { startDate }: { startDate: Date }
+  ): Promise<void> {
     context.commit(STARTDATE_CHANGED, { startDate })
     await updateWeekplan(context)
   },
 
   async [LOAD_DISHES](context: Context): Promise<void> {
     await guardWithTryCatch(context, async () => {
-      const { dishes } = await doFetch('GET', '/dishes') as unknown as { dishes: Dish[] }
+      const { dishes } = ((await doFetch('GET', '/dishes')) as unknown) as {
+        dishes: Dish[]
+      }
       context.commit(DISHES_LOADED, { dishes })
     })
   },
 
   async [GET_INGREDIENTS](context: Context): Promise<void> {
     guardWithTryCatch(context, async () => {
-      const { allIngredients, standardItems } = await fetchIngredientsAndStandardItems()
+      const {
+        allIngredients,
+        standardItems,
+      } = await fetchIngredientsAndStandardItems()
       context.commit(INGREDIENTS_LOADED, { allIngredients })
       context.commit(STANDARD_ITEMS_LOADED, { standardItems })
     })
@@ -114,7 +131,10 @@ export const actions: ActionTree<State, State> = {
 
   async [GET_UNITS](context: Context): Promise<void> {
     await guardWithTryCatch(context, async () => {
-      const units = await doFetch('GET', '/ingredients/units') as unknown as Unit[]
+      const units = ((await doFetch(
+        'GET',
+        '/ingredients/units'
+      )) as unknown) as Unit[]
       context.commit(UNITS_LOADED, { units })
     })
   },
@@ -126,8 +146,11 @@ export const actions: ActionTree<State, State> = {
     context.commit(ACCEPTANCE_CHANGED, { accepted })
   },
 
-  async [DISH_DECLINED](context: Context, { dishId }: { dishId: string }): Promise<void> {
-    const declined = [ ...context.state.declined ]
+  async [DISH_DECLINED](
+    context: Context,
+    { dishId }: { dishId: string }
+  ): Promise<void> {
+    const declined = [...context.state.declined]
     if (!declined.includes(dishId)) {
       declined.push(dishId)
       context.commit(DECLINED_CHANGED, { declined })
@@ -152,10 +175,17 @@ export const actions: ActionTree<State, State> = {
     context.commit(CHANGES_CHANGED, { changes })
   },
 
-  async [ADD_ITEM](context: Context, { item }: { item: CompleteItem }): Promise<void> {
+  async [ADD_ITEM](
+    context: Context,
+    { item }: { item: CompleteItem }
+  ): Promise<void> {
     async function createNewItem(newItem) {
-      const item = await doFetch('post', '/ingredients', newItem) as Ingredient
-      const allIngredients = [ ...context.state.allIngredients, item ]
+      const item = (await doFetch(
+        'post',
+        '/ingredients',
+        newItem
+      )) as Ingredient
+      const allIngredients = [...context.state.allIngredients, item]
       context.commit(INGREDIENTS_LOADED, { allIngredients })
       return item
     }
@@ -181,7 +211,10 @@ export const actions: ActionTree<State, State> = {
     context.commit(CHANGES_CHANGED, { changes: await getChangedChanges(item) })
   },
 
-  async [UPDATE_AMOUNT](context: Context, { item, newAmount }: { item: Ingredient, newAmount: number }): Promise<void> {
+  async [UPDATE_AMOUNT](
+    context: Context,
+    { item, newAmount }: { item: Ingredient; newAmount: number }
+  ): Promise<void> {
     function getChangedChanges(item, amount) {
       if (context.state.changes.find(eqItem(item))) {
         return context.state.changes.map(i =>
@@ -214,40 +247,63 @@ export const actions: ActionTree<State, State> = {
     await updateWeekplan(context)
   },
 
-  async [CHANGE_GROUP](context: Context, { ingredient, group }: { ingredient: Ingredient, group: string }): Promise<void> {
+  async [CHANGE_GROUP](
+    context: Context,
+    { ingredient, group }: { ingredient: Ingredient; group: string }
+  ): Promise<void> {
     guardWithTryCatch(context, async () => {
       await doFetch('put', '/ingredients/' + ingredient.id, { group })
       ingredient.group = group
-      const allIngredients = context.state.allIngredients.map(i => i.id === ingredient.id ? ingredient : i)
+      const allIngredients = context.state.allIngredients.map(i =>
+        i.id === ingredient.id ? ingredient : i
+      )
       context.commit(INGREDIENTS_LOADED, { allIngredients })
     })
   },
 
-  async [ADD_FAVORITE](context: Context, { dishId }: { dishId: string }): Promise<void> {
+  async [ADD_FAVORITE](
+    context: Context,
+    { dishId }: { dishId: string }
+  ): Promise<void> {
     guardWithTryCatch(context, async () => {
       const dish = await setFavorite(dishId, true)
-      const dishes = context.state.dishes.map(d => (d.id === dish.id ? dish : d))
+      const dishes = context.state.dishes.map(d =>
+        d.id === dish.id ? dish : d
+      )
       context.commit(DISHES_LOADED, { dishes })
     })
   },
 
-  async [REMOVE_FAVORITE](context: Context, { dishId }: { dishId: string }) : Promise<void> {
+  async [REMOVE_FAVORITE](
+    context: Context,
+    { dishId }: { dishId: string }
+  ): Promise<void> {
     guardWithTryCatch(context, async () => {
       const dish = await setFavorite(dishId, false)
-      const dishes = context.state.dishes.map(d => (d.id === dish.id ? dish : d))
+      const dishes = context.state.dishes.map(d =>
+        d.id === dish.id ? dish : d
+      )
       context.commit(DISHES_LOADED, { dishes })
     })
   },
 
-  async [MODIFY_DISH](context: Context, { dish }: { dish: Dish }): Promise<void> {
+  async [MODIFY_DISH](
+    context: Context,
+    { dish }: { dish: Dish }
+  ): Promise<void> {
     guardWithTryCatch(context, async () => {
       await doFetch('PATCH', '/dishes/' + dish.id, dish)
-      context.commit(DISHES_LOADED, { dishes: context.state.dishes.map(d => d.id === dish.id ? dish : d)})
+      context.commit(DISHES_LOADED, {
+        dishes: context.state.dishes.map(d => (d.id === dish.id ? dish : d)),
+      })
     })
-  }
+  },
 }
 
-async function guardWithTryCatch(context: Context, func: () => Promise<unknown>): Promise<void> {
+async function guardWithTryCatch(
+  context: Context,
+  func: () => Promise<unknown>
+): Promise<void> {
   try {
     await func()
   } catch (error) {

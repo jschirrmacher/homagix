@@ -20,7 +20,7 @@ const defaultSettings = {
   amount: '1',
   unit: {
     name: 'Pkg',
-    step: 1
+    step: 1,
   },
 }
 
@@ -54,7 +54,7 @@ export default Vue.extend({
         ...this.item,
         ...item,
         unit:
-          this.$store.state.units.find((u) => u.name === item.unit) ||
+          this.$store.state.units.find(u => u.name === item.unit) ||
           this.item.unit,
       }
     },

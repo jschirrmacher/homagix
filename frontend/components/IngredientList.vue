@@ -92,7 +92,7 @@ ul {
   .groupTitle {
     border-top: 1px solid black;
   }
-  
+
   ul {
     li {
       max-height: 24px;

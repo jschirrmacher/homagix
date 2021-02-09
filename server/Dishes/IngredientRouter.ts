@@ -3,7 +3,13 @@ import { JSONHandler } from '../MainRouter'
 import units from '../models/units'
 import { IngredientController } from './IngredientController'
 
-export default function ({ controller, jsonResult }: { controller: IngredientController, jsonResult: JSONHandler }): Router {
+export default function ({
+  controller,
+  jsonResult,
+}: {
+  controller: IngredientController
+  jsonResult: JSONHandler
+}): Router {
   const router = express.Router()
 
   function getAvailableUnits() {

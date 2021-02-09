@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express"
+import { NextFunction, Request, Response } from 'express'
 
 export const testUser = { id: '42', listId: '007' }
 export const testAdmin = { id: '007', isAdmin: true }
@@ -30,13 +30,13 @@ const auth = {
     readToken(req)
     next()
   },
-  
+
   requireAuth,
 
   requireJWT: () => (req: Request, res: Response, next: NextFunction): void => {
     readToken(req)
     requireAuth(req, res, next)
-  }
+  },
 }
 
 export default auth

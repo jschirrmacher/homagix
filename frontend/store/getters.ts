@@ -1,9 +1,12 @@
-import { CompleteItem, Item, Proposal } from "../app-types"
+import { CompleteItem, Item, Proposal } from '../app-types'
 import { State } from './state'
 
 const logger = console
 
-function addIfNotAlreadyIn(array: CompleteItem[], element: CompleteItem): CompleteItem[] {
+function addIfNotAlreadyIn(
+  array: CompleteItem[],
+  element: CompleteItem
+): CompleteItem[] {
   const existing = array.findIndex(el => el.id === element.id)
   if (existing !== -1) {
     if (array[existing].unit !== element.unit) {
@@ -24,7 +27,10 @@ function addIfNotAlreadyIn(array: CompleteItem[], element: CompleteItem): Comple
 function addDetails(state: State) {
   const defaultIngredient = { name: '', group: 'other', unit: 'Pkg' }
   return function (item: Item): CompleteItem {
-    const ingredient = state.allIngredients.find(i => i.id === item.id) || { ...item, ...defaultIngredient }
+    const ingredient = state.allIngredients.find(i => i.id === item.id) || {
+      ...item,
+      ...defaultIngredient,
+    }
     return {
       ...item,
       name: ingredient.name,
@@ -40,7 +46,10 @@ function addDetails(state: State) {
 function getItemsFromWeekplan(state: State): Item[] {
   return state.weekplan
     .filter(p => p.dishId && state.accepted.includes(p.dishId))
-    .flatMap((p: Proposal) => state.dishes.find(d => d.id === p.dishId)?.items as Item[])
+    .flatMap(
+      (p: Proposal) =>
+        state.dishes.find(d => d.id === p.dishId)?.items as Item[]
+    )
 }
 
 function getProposedOrStandardItems(state: State): Item[] {
@@ -90,8 +99,12 @@ export const getters = {
   },
 
   maxServedDate(state: State): string {
-    const max = state.dishes.reduce((max, current) => Math.max(max, current.last ? +new Date(current.last) : 0), 0)
-    return (new Date(max)).toISOString().split('T')[0]
+    const max = state.dishes.reduce(
+      (max, current) =>
+        Math.max(max, current.last ? +new Date(current.last) : 0),
+      0
+    )
+    return new Date(max).toISOString().split('T')[0]
   },
 
   nextDayToServe(state: State, getters: Getters): string {

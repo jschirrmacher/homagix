@@ -2,7 +2,11 @@ import { Strategy } from 'passport'
 import { Request } from 'express'
 import { DoneFunction } from './auth'
 
-type VerifyFunction = (accessCode: string, id: string, done: DoneFunction) => void 
+type VerifyFunction = (
+  accessCode: string,
+  id: string,
+  done: DoneFunction
+) => void
 
 export default class AccessCodeStrategy extends Strategy {
   verify: VerifyFunction

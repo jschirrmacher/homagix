@@ -32,14 +32,14 @@ export default {
     listeners() {
       return {
         ...this.$listeners,
-        input: (e) => {
+        input: e => {
           this.$emit('input', e.target.innerText.trim())
         },
-        focus: (e) => {
+        focus: e => {
           this.hasFocus = true
           e.target.innerText = this.value
         },
-        blur: (e) => {
+        blur: e => {
           this.hasFocus = false
           if (!e.target.innerText.trim()) {
             e.target.innerText = this.placeholder
@@ -58,8 +58,8 @@ export default {
       },
       set(newValue) {
         this.value = newValue
-      }
-    }
+      },
+    },
   },
 }
 </script>
@@ -74,7 +74,7 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-  p {
-    margin-top: 0;
-  }
+p {
+  margin-top: 0;
+}
 </style>

@@ -14,7 +14,9 @@ import { dishes, ingredients } from './test_dishes'
 describe('Store getters', () => {
   beforeEach(() => {
     store.commit(RESET_STORE)
-    store.commit(INGREDIENTS_LOADED, { allIngredients: Object.values(ingredients) })
+    store.commit(INGREDIENTS_LOADED, {
+      allIngredients: Object.values(ingredients),
+    })
     store.commit(STANDARD_ITEMS_LOADED, { standardItems: [] })
     store.commit(DISHES_LOADED, { dishes: Object.values(dishes) })
     store.commit(WEEKPLAN_LOADED, {
@@ -81,13 +83,13 @@ describe('Store getters', () => {
       store.getters.itemsInShoppingList.should.be.true()
     })
   })
-  
+
   describe('maxServedDate', () => {
     it('should return the maximum served date from the dishes', () => {
       store.getters.maxServedDate.should.equal('2021-01-25')
     })
   })
-  
+
   describe('nextDayToServe', () => {
     it('should return the date of the next day when dishes should be served', () => {
       store.getters.nextDayToServe.should.equal('2021-01-26')

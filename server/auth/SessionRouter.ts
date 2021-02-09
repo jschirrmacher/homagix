@@ -1,7 +1,15 @@
 import express, { Request, Response, Router } from 'express'
 import { AuthUser, MiddleWare } from './auth'
 
-export default ({ auth }: { auth: { requireJWT: MiddleWare, requireLogin: MiddleWare, logout: (res: Response) => void } }): Router => {
+export default ({
+  auth,
+}: {
+  auth: {
+    requireJWT: MiddleWare
+    requireLogin: MiddleWare
+    logout: (res: Response) => void
+  }
+}): Router => {
   function getUserInfo(req: Request, res: Response) {
     const user = { ...(req.user || {}) } as AuthUser
     delete user.password

@@ -1,6 +1,6 @@
-import { Models } from "."
-import { Event, Store } from "../EventStore/EventStore"
-import { ModelWriter } from "./ModelWriter"
+import { Models } from '.'
+import { Event, Store } from '../EventStore/EventStore'
+import { ModelWriter } from './ModelWriter'
 
 export type User = {
   id: string
@@ -18,8 +18,21 @@ export type UserModel = {
   reset(): void
 }
 
-export default function ({ store, models, modelWriter }: { store: Store, models: Models, modelWriter: ModelWriter }): UserModel {
-  const { userAdded, userRemoved, userChanged, invitationAccepted } = models.getEvents()
+export default function ({
+  store,
+  models,
+  modelWriter,
+}: {
+  store: Store
+  models: Models
+  modelWriter: ModelWriter
+}): UserModel {
+  const {
+    userAdded,
+    userRemoved,
+    userChanged,
+    invitationAccepted,
+  } = models.getEvents()
   const byEmail = {} as Record<string, User>
   const users = {} as Record<string, User>
   let adminIsDefined = false
@@ -44,8 +57,8 @@ export default function ({ store, models, modelWriter }: { store: Store, models:
   })
 
   store.on(userChanged, (event: Event) => {
-    const { id, user } = event as { id: string, user: Partial<User> }
-    if ( user.email && users[id].email && byEmail[users[id].email] ) {
+    const { id, user } = event as { id: string; user: Partial<User> }
+    if (user.email && users[id].email && byEmail[users[id].email]) {
       delete byEmail[users[id].email]
     }
     Object.assign(users[id], { ...user, id })
@@ -56,7 +69,7 @@ export default function ({ store, models, modelWriter }: { store: Store, models:
   })
 
   store.on(invitationAccepted, (event: Event) => {
-    const { userId, listId } = event as { userId: string, listId: string }
+    const { userId, listId } = event as { userId: string; listId: string }
     users[userId].listId = listId
     modelWriter.writeUser(users[userId])
   })

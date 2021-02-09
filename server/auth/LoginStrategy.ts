@@ -2,7 +2,12 @@ import { Request } from 'express'
 import { Strategy } from 'passport'
 import { DoneFunction } from './auth'
 
-type VerifyFunction = (email: string, username: string, password: string, done: DoneFunction) => void 
+type VerifyFunction = (
+  email: string,
+  username: string,
+  password: string,
+  done: DoneFunction
+) => void
 
 export default class LoginStrategy extends Strategy {
   verify: VerifyFunction

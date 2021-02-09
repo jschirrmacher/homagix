@@ -73,7 +73,10 @@ export default Vue.extend({
       <li
         v-for="entry in weekplan"
         :key="entry.date"
-        :class="{ past: past(entry.date), planned: entry.date <= maxServedDate }"
+        :class="{
+          past: past(entry.date),
+          planned: entry.date <= maxServedDate,
+        }"
       >
         <span class="day">{{ formatDate(entry.date) }}</span>
         <Dish v-if="entry.dishId" :dish="dish(entry.dishId)">

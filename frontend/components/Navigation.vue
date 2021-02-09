@@ -69,11 +69,13 @@ export default Vue.extend({
     },
 
     openMenu(event: Event): void {
-      (event.target as HTMLElement).closest('.submenu')?.classList.add('open')
+      ;(event.target as HTMLElement).closest('.submenu')?.classList.add('open')
     },
 
     closeMenu(event: Event): void {
-      (event.target as HTMLElement).closest('.submenu')?.classList.remove('open')
+      ;(event.target as HTMLElement)
+        .closest('.submenu')
+        ?.classList.remove('open')
     },
   },
 })

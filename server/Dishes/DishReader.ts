@@ -17,7 +17,13 @@ type DishReader = {
   addItems(dishId: string, item: Item): void
 }
 
-export default function ({ store, models }: { store: Store, models: Models }): DishReader {
+export default function ({
+  store,
+  models,
+}: {
+  store: Store
+  models: Models
+}): DishReader {
   const { dishAdded, ingredientAdded, ingredientAssigned } = models.getEvents()
 
   function extractItemProperties(itemString: string): Item {
@@ -25,7 +31,10 @@ export default function ({ store, models }: { store: Store, models: Models }): D
     const amount = (matches ? +matches[1] : 1) || 1
     const hasUnit = matches && units.map(u => u.name).includes(matches[2])
     const unit = hasUnit && matches ? matches[2] : 'Stk'
-    const name = hasUnit && matches ? matches[3] : (matches && matches[2] + ' ' + matches[3]) || ''
+    const name =
+      hasUnit && matches
+        ? matches[3]
+        : (matches && matches[2] + ' ' + matches[3]) || ''
     return { amount, unit, name }
   }
 
@@ -35,7 +44,14 @@ export default function ({ store, models }: { store: Store, models: Models }): D
       store.dispatch(ingredientAssigned(dishId, existing.id, item.amount))
     } else {
       const id = uuid()
-      store.dispatch(ingredientAdded({ id, name: item.name, unit: item.unit, group: 'other' }))
+      store.dispatch(
+        ingredientAdded({
+          id,
+          name: item.name,
+          unit: item.unit,
+          group: 'other',
+        })
+      )
       store.dispatch(ingredientAssigned(dishId, id, item.amount))
     }
   }
@@ -70,7 +86,9 @@ export default function ({ store, models }: { store: Store, models: Models }): D
       delete dish.items
       store.dispatch(dishAdded(dish))
       if (items && items.map) {
-        items.map(extractItemProperties).forEach(item => addItems(dish.id, item))
+        items
+          .map(extractItemProperties)
+          .forEach(item => addItems(dish.id, item))
       }
     })
   }

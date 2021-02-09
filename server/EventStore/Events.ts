@@ -1,7 +1,7 @@
-import { Models } from "../models"
-import { User } from "../models/user"
-import { Dish } from "../models/dish"
-import { Ingredient } from "../models/ingredient"
+import { Models } from '../models'
+import { User } from '../models/user'
+import { Dish } from '../models/dish'
+import { Ingredient } from '../models/ingredient'
 
 export type Event = {
   type: string
@@ -11,7 +11,11 @@ export interface Events {
   dishAdded(dish: Dish): Event
   dishModified(dishPartial: Partial<Dish>): Event
   ingredientAdded(ingredient: Ingredient): Event
-  ingredientAssigned(dishId: string, ingredientId: string, amount: number): Event
+  ingredientAssigned(
+    dishId: string,
+    ingredientId: string,
+    amount: number
+  ): Event
   served(dishId: string, date: Date, listId: string): Event
   ingredientUpdated(ingredientId: string, name: string, value: unknown): Event
   userAdded(user: User): Event
@@ -27,18 +31,23 @@ export default function ({ models }: { models: Models }): Events {
     if (!condition) {
       const obj = { stack: '' }
       Error.captureStackTrace(obj)
-      const stack = obj.stack.split('\n').slice(1).map((line: string) => {
-        const m = line.match(/^\s*at ([\w.<>]*)\s*\(?(.*?):(\d+):(\d+)\)?/) as string[]
-        return { func: m[1], filename: m[2], lineNo: m[3], char: m[4] }
-      })
+      const stack = obj.stack
+        .split('\n')
+        .slice(1)
+        .map((line: string) => {
+          const m = line.match(
+            /^\s*at ([\w.<>]*)\s*\(?(.*?):(\d+):(\d+)\)?/
+          ) as string[]
+          return { func: m[1], filename: m[2], lineNo: m[3], char: m[4] }
+        })
       const type = stack[1].func
       const currentfile = stack[0].filename
-      const firstForeignFile = stack.slice(1)
+      const firstForeignFile = stack
+        .slice(1)
         .map(e => e.filename)
         .find(s => s !== currentfile)
-      const callerFile = firstForeignFile && firstForeignFile
-        .split(/[\\/]/)
-        .pop()
+      const callerFile =
+        firstForeignFile && firstForeignFile.split(/[\\/]/).pop()
       throw `Read model '${callerFile}', event '${type}': ${message}`
     }
   }

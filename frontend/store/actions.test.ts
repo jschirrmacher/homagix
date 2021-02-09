@@ -31,7 +31,9 @@ const standardItems = [
 ]
 
 function setupStore(standardItems) {
-  store.commit(INGREDIENTS_LOADED, { allIngredients: Object.values(ingredients) })
+  store.commit(INGREDIENTS_LOADED, {
+    allIngredients: Object.values(ingredients),
+  })
   store.commit(STANDARD_ITEMS_LOADED, { standardItems })
   store.commit(DISHES_LOADED, { dishes: Object.values(dishes) })
   store.commit(WEEKPLAN_LOADED, {
@@ -138,12 +140,16 @@ describe('Store actions', () => {
     })
 
     it('should create a change with negative amount for standard items', async () => {
-      store.commit(INGREDIENTS_LOADED, { allIngredients: Object.values(ingredients) })
+      store.commit(INGREDIENTS_LOADED, {
+        allIngredients: Object.values(ingredients),
+      })
       store.commit(STANDARD_ITEMS_LOADED, { standardItems })
       await store.dispatch(REMOVE_ITEM, { item: standardItems[0] })
       store.state.changes
         .map(item => ({ ...item }))
-        .should.deepEqual([{ ...standardItems[0], amount: -standardItems[0].amount }])
+        .should.deepEqual([
+          { ...standardItems[0], amount: -standardItems[0].amount },
+        ])
     })
 
     it('should create a change with the negative amount of an item which was both, proposed and standard', async () => {
@@ -190,7 +196,9 @@ describe('Store actions', () => {
     })
 
     it('should change amount of standard items', async () => {
-      store.commit(INGREDIENTS_LOADED, { allIngredients: Object.values(ingredients) })
+      store.commit(INGREDIENTS_LOADED, {
+        allIngredients: Object.values(ingredients),
+      })
       store.commit(STANDARD_ITEMS_LOADED, { standardItems })
       await store.dispatch(UPDATE_AMOUNT, {
         item: standardItems[0],

@@ -51,7 +51,12 @@ app.use('/', express.static(path.join(baseDir, 'public')))
 app.use('/images', express.static(path.join(dataDir, 'images')))
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-app.use(function (err: {code?: number, message?: string}, req: Request, res: Response, next: NextFunction) {
+app.use(function (
+  err: { code?: number; message?: string },
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   logger.error(err)
   res.status(err.code || 500).json({ error: err.message || err.toString() })
 })

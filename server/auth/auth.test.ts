@@ -14,15 +14,15 @@ const models = Models({ store })
 const users = [
   {
     id: '4711',
-    firstName: "Test",
+    firstName: 'Test',
     email: 'test@example.com',
     access_code: 'test-access-1',
     password: '$2a$10$5cblct/kPaZQ5uh9jNKIVu8.oGiOPDPGB4iZRdNp0E1miYl6jTqXm',
   },
-  { id: '4712', firstName: "Test2", email: 'test2@example.com' },
+  { id: '4712', firstName: 'Test2', email: 'test2@example.com' },
   {
     id: '4713',
-    firstName: "Test3",
+    firstName: 'Test3',
     email: 'test3@example.com',
     access_code: 'test-access',
     hash: 'test-hash',
@@ -43,7 +43,10 @@ describe('auth', () => {
   describe('requireLogin', () => {
     it('should authenticate with e-mail and password', done => {
       const middleware = auth.requireLogin()
-      const req = mockRequest({ body: { email: 'test@example.com', password: 'test-pwd' }, user: undefined as User | undefined })
+      const req = mockRequest({
+        body: { email: 'test@example.com', password: 'test-pwd' },
+        user: undefined as User | undefined,
+      })
       const res = mockResponse()
       middleware(req, res, (err: unknown) => {
         should(err).be.undefined()
@@ -54,22 +57,30 @@ describe('auth', () => {
 
     it('should generate a JWT if authenticated with e-mail and password', done => {
       const middleware = auth.requireLogin()
-      const req = mockRequest({ body: { email: 'test@example.com', password: 'test-pwd' } })
+      const req = mockRequest({
+        body: { email: 'test@example.com', password: 'test-pwd' },
+      })
       const res = mockResponse()
       middleware(req, res, () => {
         res.cookie.calledOnce.should.be.true()
         res.cookie.args[0][1].should.not.be.empty()
-        jsonwebtoken.verify(res.cookie.args[0][1], secretOrKey, (err: unknown, decoded) => {
-          should(err).be.null()
-          decoded?.should.have.properties(['iat', 'exp'])
-          done()
-        })
+        jsonwebtoken.verify(
+          res.cookie.args[0][1],
+          secretOrKey,
+          (err: unknown, decoded) => {
+            should(err).be.null()
+            decoded?.should.have.properties(['iat', 'exp'])
+            done()
+          }
+        )
       })
     })
 
-    it('should not authenticate with e-mail and wrong password', (done) => {
+    it('should not authenticate with e-mail and wrong password', done => {
       const middleware = auth.requireLogin()
-      const req = mockRequest({ body: { email: 'test@example.com', password: 'wrong-pwd' } })
+      const req = mockRequest({
+        body: { email: 'test@example.com', password: 'wrong-pwd' },
+      })
       const res = mockResponse()
       middleware(req, res, () => {
         should({}).fail()
@@ -84,7 +95,7 @@ describe('auth', () => {
   })
 
   describe('checkJWT', () => {
-    it('should add the user to the request if a valid JWT is found in the header', (done) => {
+    it('should add the user to the request if a valid JWT is found in the header', done => {
       const middleware = auth.checkJWT()
       const authorization = jsonwebtoken.sign({ sub: 4712 }, secretOrKey, {
         expiresIn: '24h',
@@ -92,7 +103,7 @@ describe('auth', () => {
       const req = mockRequest({
         body: { email: 'test3@example.com' },
         headers: { authorization },
-        user: undefined as User | undefined
+        user: undefined as User | undefined,
       })
       const res = mockResponse()
       middleware(req, res, (err: unknown) => {
@@ -107,7 +118,11 @@ describe('auth', () => {
       const token = jsonwebtoken.sign({ sub: 4712 }, secretOrKey, {
         expiresIn: '24h',
       })
-      const req = mockRequest({ body: { email: 'test3@example.com' }, cookies: { token }, user: undefined as User | undefined })
+      const req = mockRequest({
+        body: { email: 'test3@example.com' },
+        cookies: { token },
+        user: undefined as User | undefined,
+      })
       const res = mockResponse()
       middleware(req, res, (err: unknown) => {
         should(err).be.undefined()
@@ -126,7 +141,7 @@ describe('auth', () => {
       const req = mockRequest({
         body: { email: 'test3@example.com' },
         headers: { authorization },
-        user: undefined as User | undefined
+        user: undefined as User | undefined,
       })
       const res = mockResponse()
       middleware(req, res, (err: unknown) => {
@@ -141,7 +156,11 @@ describe('auth', () => {
       const token = jsonwebtoken.sign({ sub: 4712 }, secretOrKey, {
         expiresIn: '24h',
       })
-      const req = mockRequest({ body: { email: 'test3@example.com' }, cookies: { token }, user: undefined as User | undefined })
+      const req = mockRequest({
+        body: { email: 'test3@example.com' },
+        cookies: { token },
+        user: undefined as User | undefined,
+      })
       const res = mockResponse()
       middleware(req, res, (err: unknown) => {
         should(err).be.undefined()
@@ -211,6 +230,8 @@ describe('auth', () => {
     store.eventList().length = 0
     const user = models.user.getById('4713')
     auth.setPassword(user, 'new-password')
-    ;(store.eventList()[0].user as { accessCode: string }).accessCode.should.equal('')
+    ;(store.eventList()[0].user as {
+      accessCode: string
+    }).accessCode.should.equal('')
   })
 })

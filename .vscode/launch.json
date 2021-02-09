@@ -76,7 +76,7 @@
         "999999",
         "--colors",
         "${workspaceFolder}/server/**/*.test.ts",
-        "${workspaceFolder}/frontend/**/*.test.ts",
+        "${workspaceFolder}/frontend/**/*.test.ts"
       ],
       "internalConsoleOptions": "openOnSessionStart",
       "name": "All Tests",

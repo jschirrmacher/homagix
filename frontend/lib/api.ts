@@ -1,7 +1,5 @@
 import { CompleteItem, Dish, Ingredient, Proposal } from '../app-types'
-import {
-  ERROR_OCCURED,
-} from '../store/mutation_types'
+import { ERROR_OCCURED } from '../store/mutation_types'
 
 function encodeParameter([key, val]): string {
   const value = val instanceof Array ? val.join(',') : val
@@ -25,8 +23,15 @@ type FetchError = {
 
 type FetchResult = FetchError | Record<string, unknown>
 
-export async function doFetch(method: string, url: string, data?: Record<string, unknown>): Promise<FetchResult> {
-  const options = { method, headers: { accept: 'application/json' } } as RequestInit
+export async function doFetch(
+  method: string,
+  url: string,
+  data?: Record<string, unknown>
+): Promise<FetchResult> {
+  const options = {
+    method,
+    headers: { accept: 'application/json' },
+  } as RequestInit
   if (data && !['get', 'options'].includes(method.toLowerCase())) {
     options.headers['content-type'] = 'application/json'
     options.body = JSON.stringify(data)
@@ -47,7 +52,10 @@ export async function doFetch(method: string, url: string, data?: Record<string,
 }
 
 export function loadData(url: string, mutationType: string) {
-  return async function (context: { state: { accepted: any[]; declined: any[] }; commit: (arg0: string, arg1: unknown) => void }): Promise<void> {
+  return async function (context: {
+    state: { accepted: any[]; declined: any[] }
+    commit: (arg0: string, arg1: unknown) => void
+  }): Promise<void> {
     try {
       const params = {
         accepted: context.state.accepted.join(','),
@@ -68,26 +76,33 @@ export function loadData(url: string, mutationType: string) {
 }
 
 type CombinedIngredientsAndStandardItems = {
-  allIngredients: Ingredient[],
+  allIngredients: Ingredient[]
   standardItems: CompleteItem[]
 }
 
 export async function fetchIngredientsAndStandardItems(): Promise<CombinedIngredientsAndStandardItems> {
   try {
-    const result = await doFetch('get', '/ingredients') as { ingredients: Ingredient[], standards: CompleteItem[], error?: unknown }
+    const result = (await doFetch('get', '/ingredients')) as {
+      ingredients: Ingredient[]
+      standards: CompleteItem[]
+      error?: unknown
+    }
     if (result.error) {
       throw { message: result.error, details: result }
     }
     return {
       allIngredients: result.ingredients,
-      standardItems: result.standards
+      standardItems: result.standards,
     }
   } catch (error) {
     throw { message: 'Error accessing server', details: error }
   }
 }
 
-export async function fetchWeekplan(startDate: Date, declined: string[]): Promise<Proposal[]> {
+export async function fetchWeekplan(
+  startDate: Date,
+  declined: string[]
+): Promise<Proposal[]> {
   try {
     const result = await doFetch(
       'get',
@@ -97,20 +112,23 @@ export async function fetchWeekplan(startDate: Date, declined: string[]): Promis
     if (result.error) {
       throw { message: result.error, details: result }
     }
-    return result as unknown as Proposal[]
+    return (result as unknown) as Proposal[]
   } catch (error) {
     throw { message: 'Error accessing server', details: error }
   }
 }
 
-export async function setFavorite(dishId: string, isFavorite: boolean): Promise<Dish> {
+export async function setFavorite(
+  dishId: string,
+  isFavorite: boolean
+): Promise<Dish> {
   try {
     const result = await doFetch(
       isFavorite ? 'post' : 'delete',
       '/dishes/' + dishId + '/favorites'
     )
     if (result.error) {
-      throw  { message: result.error, details: result }
+      throw { message: result.error, details: result }
     }
     return result as Dish
   } catch (error) {

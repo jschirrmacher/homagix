@@ -1,4 +1,11 @@
-import { CompleteItem, Dish, Ingredient, Proposal, Unit, User } from '../app-types'
+import {
+  CompleteItem,
+  Dish,
+  Ingredient,
+  Proposal,
+  Unit,
+  User,
+} from '../app-types'
 import * as types from './mutation_types'
 import { getDefaultState, State } from './state'
 
@@ -7,11 +14,14 @@ export const mutations = {
     Object.assign(state, getDefaultState())
   },
 
-  [types.CURRENTUSER_SET](state: State, payload: { currentUser: User}): void {
+  [types.CURRENTUSER_SET](state: State, payload: { currentUser: User }): void {
     state.currentUser = payload.currentUser
   },
 
-  [types.ERROR_OCCURED](state: State, error: { message: string, details?: unknown }): void {
+  [types.ERROR_OCCURED](
+    state: State,
+    error: { message: string; details?: unknown }
+  ): void {
     state.error = error
   },
 
@@ -23,11 +33,17 @@ export const mutations = {
     state.alert = alert
   },
 
-  [types.STARTDATE_CHANGED](state: State, { startDate }: { startDate: string }): void {
+  [types.STARTDATE_CHANGED](
+    state: State,
+    { startDate }: { startDate: string }
+  ): void {
     state.startDate = new Date(startDate)
   },
 
-  [types.WEEKPLAN_LOADED](state: State, { weekplan }: { weekplan: Proposal[] }): void {
+  [types.WEEKPLAN_LOADED](
+    state: State,
+    { weekplan }: { weekplan: Proposal[] }
+  ): void {
     state.weekplan = weekplan
   },
 
@@ -35,15 +51,24 @@ export const mutations = {
     state.dishes = dishes
   },
 
-  [types.INGREDIENTS_LOADED](state: State, { allIngredients }: { allIngredients: Ingredient[], }): void {
+  [types.INGREDIENTS_LOADED](
+    state: State,
+    { allIngredients }: { allIngredients: Ingredient[] }
+  ): void {
     state.allIngredients = allIngredients
   },
 
-  [types.STANDARD_ITEMS_LOADED](state: State, { standardItems }: { standardItems: CompleteItem[] }): void {
+  [types.STANDARD_ITEMS_LOADED](
+    state: State,
+    { standardItems }: { standardItems: CompleteItem[] }
+  ): void {
     state.standardItems = standardItems
   },
 
-  [types.INGREDIENT_CHANGED](state: State, { ingredient }: { ingredient: Ingredient }): void {
+  [types.INGREDIENT_CHANGED](
+    state: State,
+    { ingredient }: { ingredient: Ingredient }
+  ): void {
     state.allIngredients = state.allIngredients.map(i =>
       i.id === ingredient.id ? ingredient : i
     )
@@ -53,11 +78,17 @@ export const mutations = {
     state.units = units
   },
 
-  [types.ACCEPTANCE_CHANGED](state: State, { accepted }: { accepted: string[] }): void {
+  [types.ACCEPTANCE_CHANGED](
+    state: State,
+    { accepted }: { accepted: string[] }
+  ): void {
     state.accepted = accepted
   },
 
-  [types.DECLINED_CHANGED](state: State, { declined }: { declined: string[] }): void {
+  [types.DECLINED_CHANGED](
+    state: State,
+    { declined }: { declined: string[] }
+  ): void {
     state.declined = declined
   },
 
@@ -67,7 +98,10 @@ export const mutations = {
     state.changes = []
   },
 
-  [types.CHANGES_CHANGED](state: State, { changes }: { changes: CompleteItem[] }): void {
+  [types.CHANGES_CHANGED](
+    state: State,
+    { changes }: { changes: CompleteItem[] }
+  ): void {
     state.changes = changes
   },
 

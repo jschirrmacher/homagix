@@ -8,14 +8,15 @@ function mapDishField(field, defaultValue = '') {
   return {
     [field]: {
       get() {
-        const getDish = () => (this.dishes && this.dishes.find(dish => dish.id === this.id)) || {}
+        const getDish = () =>
+          (this.dishes && this.dishes.find(dish => dish.id === this.id)) || {}
         return this.changes[field] || getDish()[field] || defaultValue
       },
       set(value) {
         this.changes[field] = value.trim()
         this.triggerSave()
-      }
-    }
+      },
+    },
   }
 }
 
@@ -27,7 +28,7 @@ export default Vue.extend({
   props: {
     id: String,
   },
-  
+
   data() {
     return {
       changes: {},
@@ -41,7 +42,9 @@ export default Vue.extend({
     ...mapDishField('recipe'),
 
     dish() {
-      return (this.dishes && this.dishes.find(dish => dish.id === this.id)) || {}
+      return (
+        (this.dishes && this.dishes.find(dish => dish.id === this.id)) || {}
+      )
     },
 
     editable() {
@@ -49,7 +52,11 @@ export default Vue.extend({
         if (this.currentUser.isAdmin) {
           return true
         }
-        if ([this.currentUser.listId, this.currentUser.id].includes(this.dish.ownedBy)) {
+        if (
+          [this.currentUser.listId, this.currentUser.id].includes(
+            this.dish.ownedBy
+          )
+        ) {
           return true
         }
       }
@@ -75,7 +82,7 @@ export default Vue.extend({
       const dish = {
         ...this.dish,
         ...this.changes,
-        ownedBy: this.currentUser.listId || this.currentUser.id
+        ownedBy: this.currentUser.listId || this.currentUser.id,
       }
       await this.$store.dispatch(MODIFY_DISH, { dish })
       this.changes = {}
@@ -92,8 +99,8 @@ export default Vue.extend({
     async goBack() {
       await this.save()
       this.$router.go(-1)
-    }
-  }
+    },
+  },
 })
 </script>
 
@@ -101,7 +108,12 @@ export default Vue.extend({
   <div>
     <img v-if="dish.image" :src="'/images/' + dish.image" />
 
-    <EditableField tag="h2" v-model="name" :editable="editable" placeholder="Name" />
+    <EditableField
+      tag="h2"
+      v-model="name"
+      :editable="editable"
+      placeholder="Name"
+    />
 
     <section id="ingredients">
       <h3>Zutaten</h3>
@@ -113,7 +125,10 @@ export default Vue.extend({
       <p v-if="dish.source" class="source">Quelle: {{ dish.source }}</p>
     </section>
 
-    <EditableField tag="article" v-model="recipe" :editable="editable"
+    <EditableField
+      tag="article"
+      v-model="recipe"
+      :editable="editable"
       placeholder="Es gibt bisher noch keine Beschreibung, wie das Gericht zubereitet wird."
     />
 

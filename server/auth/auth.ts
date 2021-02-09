@@ -6,13 +6,19 @@ import 'express-session'
 import bcrypt from 'bcryptjs'
 import jsonwebtoken from 'jsonwebtoken'
 import md5 from 'md5'
-import { NextFunction, Request, RequestHandler, Response, Router } from 'express'
+import {
+  NextFunction,
+  Request,
+  RequestHandler,
+  Response,
+  Router,
+} from 'express'
 import { Store } from '../EventStore/EventStore'
 import { Models } from '../models'
 import { User } from '../models/user'
 
 export type DoneFunction = (error: string | null, user: User | false) => void
-export type AuthUser = User & { accessCode?: string, password?: string }
+export type AuthUser = User & { accessCode?: string; password?: string }
 export type MiddleWare = (options?: Record<string, unknown>) => RequestHandler
 
 type NewUser = {
@@ -25,20 +31,33 @@ export type Auth = {
   signIn(user: User, req: Request, res: Response): void
   register(user: NewUser, req: Request, res: Response): User
   setPassword(user: AuthUser, newPassword: string): void
-  logout: (req: Response) => void,
+  logout: (req: Response) => void
   generateAccessCode(user: AuthUser): void
   resetAccessCode(user: AuthUser): void
 
-  authenticate(type: string | string[], options: { allowAnonymous?: boolean }): RequestHandler
-  requireCode: MiddleWare,
-  requireJWT: MiddleWare,
-  checkJWT: MiddleWare,
-  requireLogin: MiddleWare,
-  requireAuth: MiddleWare,
-  requireAdmin: MiddleWare,
+  authenticate(
+    type: string | string[],
+    options: { allowAnonymous?: boolean }
+  ): RequestHandler
+  requireCode: MiddleWare
+  requireJWT: MiddleWare
+  checkJWT: MiddleWare
+  requireLogin: MiddleWare
+  requireAuth: MiddleWare
+  requireAdmin: MiddleWare
 }
 
-export default ({ app, models, store, secretOrKey }: { app: Router, models: Models, store: Store, secretOrKey: string}): Auth => {
+export default ({
+  app,
+  models,
+  store,
+  secretOrKey,
+}: {
+  app: Router
+  models: Models
+  store: Store
+  secretOrKey: string
+}): Auth => {
   const { userAdded, userChanged } = models.getEvents()
 
   function signIn(user: User, req: Request, res: Response): void {
@@ -90,45 +109,60 @@ export default ({ app, models, store, secretOrKey }: { app: Router, models: Mode
   }
 
   passport.use(
-    new LoginStrategy((email: string, username: string, password: string, done: DoneFunction) => {
-      try {
-        const user = models.user.getByEMail(email) as AuthUser
-        bcrypt.compare(password, user.password || '', (err, isValid) => {
-          done(err && err.message, isValid ? user : false)
-        })
-      } catch (error) {
-        done(error, false)
-      }
-    })
-  )
-
-  passport.use(
-    new JwtStrategy({ jwtFromRequest, secretOrKey }, (payload: { sub: string }, done: DoneFunction) => {
-      try {
-        const user = models.user.getById(payload.sub)
-        done(null, user)
-      } catch (error) {
-        done(error, false)
-      }
-    })
-  )
-
-  passport.use(
-    new AccessCodeStrategy((accessCode: string, id: string, done: DoneFunction) => {
-      try {
-        const user = models.user.getById(id) as AuthUser
-        if (user && user.accessCode === accessCode) {
-          done(null, user)
-        } else {
-          done('unknown access code', false)
+    new LoginStrategy(
+      (
+        email: string,
+        username: string,
+        password: string,
+        done: DoneFunction
+      ) => {
+        try {
+          const user = models.user.getByEMail(email) as AuthUser
+          bcrypt.compare(password, user.password || '', (err, isValid) => {
+            done(err && err.message, isValid ? user : false)
+          })
+        } catch (error) {
+          done(error, false)
         }
-      } catch (error) {
-        done(error, false)
       }
-    })
+    )
   )
 
-  function authenticate(type: string | string[], options = {} as { allowAnonymous?: boolean }): RequestHandler {
+  passport.use(
+    new JwtStrategy(
+      { jwtFromRequest, secretOrKey },
+      (payload: { sub: string }, done: DoneFunction) => {
+        try {
+          const user = models.user.getById(payload.sub)
+          done(null, user)
+        } catch (error) {
+          done(error, false)
+        }
+      }
+    )
+  )
+
+  passport.use(
+    new AccessCodeStrategy(
+      (accessCode: string, id: string, done: DoneFunction) => {
+        try {
+          const user = models.user.getById(id) as AuthUser
+          if (user && user.accessCode === accessCode) {
+            done(null, user)
+          } else {
+            done('unknown access code', false)
+          }
+        } catch (error) {
+          done(error, false)
+        }
+      }
+    )
+  )
+
+  function authenticate(
+    type: string | string[],
+    options = {} as { allowAnonymous?: boolean }
+  ): RequestHandler {
     return function (req: Request, res: Response, next: NextFunction): void {
       passport.authenticate(type, { session: false }, (err, user) => {
         if (err) {
@@ -149,17 +183,22 @@ export default ({ app, models, store, secretOrKey }: { app: Router, models: Mode
   app.use(passport.session())
 
   const requireCode = (options = {}) => authenticate('access_code', options)
-  const checkJWT = (options = {}) => authenticate('jwt', { ...options, allowAnonymous: true })
+  const checkJWT = (options = {}) =>
+    authenticate('jwt', { ...options, allowAnonymous: true })
   const requireJWT = (options = {}) => authenticate('jwt', options)
   const requireLogin = (options = {}) => authenticate('login', options)
 
   function requireAuth() {
-    return (req: Request, res: Response, next: NextFunction) => req.user ? next() : next({ status: 401, message: 'Not authenticated' })
+    return (req: Request, res: Response, next: NextFunction) =>
+      req.user ? next() : next({ status: 401, message: 'Not authenticated' })
   }
 
   function requireAdmin() {
     return function (req: Request, res: Response, next: NextFunction) {
-      if ((!req.user || !(req.user as { isAdmin: boolean }).isAdmin) && models.user.adminIsDefined) {
+      if (
+        (!req.user || !(req.user as { isAdmin: boolean }).isAdmin) &&
+        models.user.adminIsDefined
+      ) {
         next({ status: 403, message: 'Not allowed' })
       } else {
         next()

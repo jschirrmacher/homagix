@@ -1,4 +1,12 @@
-import { User, Dish, Ingredient, CompleteItem, Unit, ItemGroup, Proposal } from "../app-types"
+import {
+  User,
+  Dish,
+  Ingredient,
+  CompleteItem,
+  Unit,
+  ItemGroup,
+  Proposal,
+} from '../app-types'
 
 export type State = {
   currentUser: User

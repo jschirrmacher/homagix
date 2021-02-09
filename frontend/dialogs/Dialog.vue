@@ -14,7 +14,7 @@ export default {
 
   methods: {
     close(): void {
-      (this.$refs.dialog as HTMLDialogElement).close()
+      ;(this.$refs.dialog as HTMLDialogElement).close()
     },
   },
 }

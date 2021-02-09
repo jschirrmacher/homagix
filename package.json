@@ -139,7 +139,7 @@
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown",
-    "*.{js,vue}": "eslint --cache --fix",
-    "*.{js,vue,css,md}": "prettier --write"
+    "*.{ts,js,vue}": "eslint --cache --fix",
+    "*.{ts,js,vue,css,md}": "prettier --write"
   }
 }

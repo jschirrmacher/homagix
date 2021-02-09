@@ -1,6 +1,6 @@
-import { Models } from "."
-import { Event, Store } from "../EventStore/EventStore"
-import { ModelWriter } from "./ModelWriter"
+import { Models } from '.'
+import { Event, Store } from '../EventStore/EventStore'
+import { ModelWriter } from './ModelWriter'
 
 type IngredientId = string
 
@@ -22,7 +22,7 @@ export type IngredientModel = {
 
 const ingredients = {
   byId: {} as Record<IngredientId, Ingredient>,
-  byName: {} as Record<IngredientId, Ingredient>
+  byName: {} as Record<IngredientId, Ingredient>,
 }
 
 const aliases = {} as Record<IngredientId, IngredientId>
@@ -49,7 +49,11 @@ export function addIngredient(writer: WriterFunction, event: Event): void {
 }
 
 export function updateIngredient(writer: WriterFunction, event: Event): void {
-  const { ingredientId, name, value } = event as { ingredientId: IngredientId, name: string, value: string }
+  const { ingredientId, name, value } = event as {
+    ingredientId: IngredientId
+    name: string
+    value: string
+  }
   if (!ingredientFields.includes(name)) {
     throw Error(`Trying to set an unknown field of ingredient`)
   }
@@ -76,7 +80,10 @@ export function getIngredientByName(name: string): Ingredient | undefined {
   return ingredients.byName[name]
 }
 
-function byExample(item: Partial<Ingredient>, strict = false): Ingredient | undefined {
+function byExample(
+  item: Partial<Ingredient>,
+  strict = false
+): Ingredient | undefined {
   if (item.id) {
     return ingredients.byId[item.id]
   }
@@ -90,11 +97,23 @@ function byExample(item: Partial<Ingredient>, strict = false): Ingredient | unde
   }
 }
 
-export default function ({ store, models, modelWriter }: { store: Store, models: Models, modelWriter: ModelWriter }): IngredientModel {
+export default function ({
+  store,
+  models,
+  modelWriter,
+}: {
+  store: Store
+  models: Models
+  modelWriter: ModelWriter
+}): IngredientModel {
   const { ingredientAdded, ingredientUpdated } = models.getEvents()
   store
-    .on(ingredientAdded, (event) => addIngredient(modelWriter.writeIngredient, event))
-    .on(ingredientUpdated, (event) => updateIngredient(modelWriter.writeIngredient, event))
+    .on(ingredientAdded, event =>
+      addIngredient(modelWriter.writeIngredient, event)
+    )
+    .on(ingredientUpdated, event =>
+      updateIngredient(modelWriter.writeIngredient, event)
+    )
 
   return {
     getAll,

@@ -1,9 +1,9 @@
-import { v4 as uuid } from "uuid"
-import { Models } from "."
-import { Store, Event } from "../EventStore/EventStore"
-import { ModelWriter } from "./ModelWriter"
+import { v4 as uuid } from 'uuid'
+import { Models } from '.'
+import { Store, Event } from '../EventStore/EventStore'
+import { ModelWriter } from './ModelWriter'
 
-type Item = { id: string, amount: number }
+type Item = { id: string; amount: number }
 
 export type DishModel = {
   getAll(): Dish[]
@@ -33,8 +33,26 @@ const dishes = {
 }
 
 export function addDish(writer: DishWriter, event: Event): void {
-  const { id, name, source, alwaysOnList, items, recipe, image, ownedBy } = event
-  const dish = { id, name, source, alwaysOnList, items, recipe, image, ownedBy } as Dish
+  const {
+    id,
+    name,
+    source,
+    alwaysOnList,
+    items,
+    recipe,
+    image,
+    ownedBy,
+  } = event
+  const dish = {
+    id,
+    name,
+    source,
+    alwaysOnList,
+    items,
+    recipe,
+    image,
+    ownedBy,
+  } as Dish
   dish.id = dish.id || uuid()
   dish.items = dish.items || []
   dishes.byId[dish.id] = dish
@@ -52,7 +70,9 @@ export function updateDish(writer: DishWriter, event: Event): void {
   }
   const { name, recipe, source } = event as Partial<Dish>
   const fields = { name, recipe, source }
-  const changes = Object.entries(fields).filter(([name, value]) => dish[name as keyof Dish] !== value)
+  const changes = Object.entries(fields).filter(
+    ([name, value]) => dish[name as keyof Dish] !== value
+  )
   if (changes) {
     Object.assign(dish, ...changes.map(([name, value]) => ({ [name]: value })))
     writer(dish)
@@ -60,7 +80,11 @@ export function updateDish(writer: DishWriter, event: Event): void {
 }
 
 export function assignIngredient(writer: DishWriter, event: Event): void {
-  const { dishId, ingredientId, amount } = event as { dishId: string, ingredientId: string, amount: number }
+  const { dishId, ingredientId, amount } = event as {
+    dishId: string
+    ingredientId: string
+    amount: number
+  }
   const dish = dishes.byId[dishId]
   dish.items = dish.items || []
   dish.items.push({ id: '' + ingredientId, amount })
@@ -68,7 +92,7 @@ export function assignIngredient(writer: DishWriter, event: Event): void {
 }
 
 export function serve(writer: DishWriter, event: Event): void {
-  const { dishId, date } = event as { dishId: string, date: Date }
+  const { dishId, date } = event as { dishId: string; date: Date }
   const dish = dishes.byId[dishId]
   dish.last = date
   writer(dish)
@@ -92,12 +116,29 @@ export function getStandardIngredients(): Item[] {
     .flatMap(dish => dish.items || [])
 }
 
-export default function ({ store, models, modelWriter }: { store: Store, models: Models, modelWriter: ModelWriter }): DishModel {
-  const { dishAdded, dishModified, ingredientAssigned, served } = models.getEvents()
+export default function ({
+  store,
+  models,
+  modelWriter,
+}: {
+  store: Store
+  models: Models
+  modelWriter: ModelWriter
+}): DishModel {
+  const {
+    dishAdded,
+    dishModified,
+    ingredientAssigned,
+    served,
+  } = models.getEvents()
   store
     .on(dishAdded, (event: Event) => addDish(modelWriter.writeDish, event))
-    .on(dishModified, (event: Event) => updateDish(modelWriter.writeDish, event))
-    .on(ingredientAssigned, (event: Event) => assignIngredient(modelWriter.writeDish, event))
+    .on(dishModified, (event: Event) =>
+      updateDish(modelWriter.writeDish, event)
+    )
+    .on(ingredientAssigned, (event: Event) =>
+      assignIngredient(modelWriter.writeDish, event)
+    )
     .on(served, (event: Event) => serve(modelWriter.writeDish, event))
 
   return {

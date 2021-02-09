@@ -2,7 +2,9 @@ import store from '../store'
 import { ALERT } from '../store/mutation_types'
 
 export function closeDialogs(): void {
-  document.querySelectorAll('dialog[open]').forEach(dialog => (dialog as HTMLDialogElement).close())
+  document
+    .querySelectorAll('dialog[open]')
+    .forEach(dialog => (dialog as HTMLDialogElement).close())
 }
 
 export function openDialog(id: string): HTMLDialogElement {

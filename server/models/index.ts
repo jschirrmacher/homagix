@@ -17,7 +17,13 @@ export type Models = {
   user: UserModel
 }
 
-export default function ({ store, modelWriter }: { store: Store, modelWriter: ModelWriter }): Models {
+export default function ({
+  store,
+  modelWriter,
+}: {
+  store: Store
+  modelWriter: ModelWriter
+}): Models {
   const models = {} as Models
   const events = EventsCreator({ models })
 

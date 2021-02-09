@@ -43,17 +43,25 @@ const dishLists = {
   24: { users: [24], dishes: ['8', '25'] },
 }
 
-const models = {
+const models = ({
   dish: {
     getAll: () => Object.values(allDishes),
     getDishById: id => allDishes[id],
   },
   ingredient: { byId: id => allIngredients[id] },
   dishList: { getById: listId => dishLists[listId].dishes },
-} as unknown as Models
+} as unknown) as Models
 
-const userA = { id: '7', firstName: 'Mario', email: 'mario@example.com' } as User
-const userB = { id: '24', firstName: 'Luigi', email: 'luigi@example.com' } as User
+const userA = {
+  id: '7',
+  firstName: 'Mario',
+  email: 'mario@example.com',
+} as User
+const userB = {
+  id: '24',
+  firstName: 'Luigi',
+  email: 'luigi@example.com',
+} as User
 
 describe('DishProposer', () => {
   it('should return a list of dish proposals', () => {
