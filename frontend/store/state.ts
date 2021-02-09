@@ -10,7 +10,7 @@ export type State = {
   changes: CompleteItem[]
   accepted: string[]
   declined: string[]
-  error: {
+  error?: {
     message: string
     details?: unknown
   }
