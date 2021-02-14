@@ -1,7 +1,7 @@
 <script>
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { MODIFY_DISH, LOAD_DISHES } from '../store/action_types'
+import { MODIFY_DISH } from '../store/action_types'
 import EditableField from '@/components/EditableField.vue'
 
 function mapDishField(field, defaultValue = '') {
@@ -12,6 +12,7 @@ function mapDishField(field, defaultValue = '') {
           (this.dishes && this.dishes.find(dish => dish.id === this.id)) || {}
         return this.changes[field] || getDish()[field] || defaultValue
       },
+
       set(value) {
         this.changes[field] = value.trim()
         this.triggerSave()
@@ -49,16 +50,10 @@ export default Vue.extend({
 
     editable() {
       if (this.currentUser.id) {
-        if (this.currentUser.isAdmin) {
-          return true
-        }
-        if (
-          [this.currentUser.listId, this.currentUser.id].includes(
-            this.dish.ownedBy
-          )
-        ) {
-          return true
-        }
+        const isAdmin = this.currentUser.isAdmin
+        const myIds = [this.currentUser.listId, this.currentUser.id]
+        const isOwner = myIds.includes(this.dish.ownedBy)
+        return isAdmin || isOwner
       }
       return false
     },

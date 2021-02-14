@@ -103,9 +103,8 @@ export default ({
 
   function dispatch(event: Event) {
     try {
-      ;(listeners[(event as { type: string }).type] || []).forEach(listener =>
-        listener(event)
-      )
+      const relevantListeners = listeners[(event as { type: string }).type] || []
+      relevantListeners.forEach(listener => listener(event))
     } catch (error) {
       logger.error(error)
       logger.debug(error.stack)

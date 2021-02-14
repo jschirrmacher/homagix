@@ -9,7 +9,7 @@ export type DishController = {
   addDish(data: Dish, user: User): Promise<Dish>
   updateDish(id: string, dishPartial: Partial<Dish>, user: User): Promise<Dish>
   setFavorite(user: User, dishId: string, isFavorite: boolean): Promise<Dish>
-  isOwner(user: User, dishId: string): boolean
+  canEdit(user: User, dishId: string): boolean
 }
 
 type DishReader = {
@@ -94,9 +94,9 @@ export default function ({
       return getSingleDish(dishId, user)
     },
 
-    isOwner(user: User, dishId: string): boolean {
+    canEdit(user: User, dishId: string): boolean {
       const dish = models.dish.byId(dishId)
-      return dish && [user.listId, user.id].includes(dish.ownedBy)
+      return dish && (user.isAdmin || [user.listId, user.id].includes(dish.ownedBy))
     },
   }
 }

@@ -9,5 +9,6 @@
   "mochaExplorer.logpanel": true,
   "mochaExplorer.mochaPath": "node_modules/mocha",
   "mochaExplorer.pruneFiles": true,
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.formatOnSave": true
 }

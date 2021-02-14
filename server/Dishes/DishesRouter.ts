@@ -22,7 +22,7 @@ export default function ({
     res: Response,
     next: NextFunction
   ) => {
-    if (dishController.isOwner(req.user as User, req.params.id)) {
+    if (dishController.canEdit(req.user as User, req.params.id)) {
       next()
     } else {
       res.status(403).json({ error: 'Not allowed to update a foreign dish' })

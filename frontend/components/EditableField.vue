@@ -1,4 +1,12 @@
 <script>
+import showdown from 'showdown'
+
+const converter = new showdown.Converter({
+  parseImgDimensions: true,
+  simplifiedAutoLink: true,
+  openLinksInNewWindow: true,
+})
+
 export default {
   props: {
     value: {
@@ -32,13 +40,15 @@ export default {
     listeners() {
       return {
         ...this.$listeners,
+
         input: e => {
-          this.$emit('input', e.target.innerText.trim())
+          this.$emit('input', converter.makeMarkdown(e.target.innerHTML).replace(/\n\n+/g, '\n'))
         },
+
         focus: e => {
           this.hasFocus = true
-          e.target.innerText = this.value
         },
+
         blur: e => {
           this.hasFocus = false
           if (!e.target.innerText.trim()) {
@@ -51,11 +61,12 @@ export default {
     content: {
       get() {
         if (this.value) {
-          return this.value.split(/\n+/).join('<br><br>')
+          return converter.makeHtml(this.value.replace(/\n/g, '\n\n'))
         } else {
           return (!this.hasFocus && this.placeholder) || ''
         }
       },
+
       set(newValue) {
         this.value = newValue
       },
