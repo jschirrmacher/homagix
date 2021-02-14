@@ -90,11 +90,13 @@ export const actions: ActionTree<State, State> = {
         exp: number
         sub: string
         firstName: string
+        roles?: string[]
       }
       if (token.exp && token.exp < +new Date()) {
         const currentUser = {
           id: token.sub,
           firstName: token.firstName,
+          isAdmin: token.roles && token.roles.includes("admin")
         }
         context.commit(CURRENTUSER_SET, { currentUser })
       }

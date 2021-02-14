@@ -61,10 +61,15 @@ export default ({
   const { userAdded, userChanged } = models.getEvents()
 
   function signIn(user: User, req: Request, res: Response): void {
+    const roles = [] as string[]
+    if (user.isAdmin) {
+      roles.push('admin')
+    }
     const token = jsonwebtoken.sign(
       {
         sub: user.id,
         firstName: user.firstName,
+        roles,
       },
       secretOrKey,
       { expiresIn: '24h' }

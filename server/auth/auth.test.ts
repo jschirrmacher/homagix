@@ -26,6 +26,7 @@ const users = [
     email: 'test3@example.com',
     access_code: 'test-access',
     hash: 'test-hash',
+    isAdmin: true
   },
 ]
 users.forEach(user => store.emit(models.getEvents().userAdded(user)))
