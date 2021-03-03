@@ -15,7 +15,7 @@ export default (): Store & { eventList: () => Event[] } => {
       return this
     },
 
-    dispatch(event: Event) {
+    async dispatch(event: Event) {
       eventList.push(event)
       ;(listeners[(event as { type: string }).type] || []).forEach(listener =>
         listener(event)
@@ -23,7 +23,7 @@ export default (): Store & { eventList: () => Event[] } => {
     },
 
     async emit(event: Event) {
-      this.dispatch(event)
+      await this.dispatch(event)
     },
 
     async replay() {

@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
+import { User } from '../models/user'
 
-export const testUser = { id: '42', listId: '007' }
-export const testAdmin = { id: '007', isAdmin: true }
+export const testUser: User = { id: '42', listId: '007', firstName: "Toni", email: "toni@localhost" }
+export const testAdmin: User = { id: '007', isAdmin: true, firstName: "Addi", email: "addi@localhost" }
 export const validToken = 'user-token'
 export const adminToken = 'admin-token'
 

@@ -1,4 +1,4 @@
-import 'should'
+import should from 'should'
 import nock from 'nock'
 import store from '.'
 import {
@@ -17,7 +17,7 @@ import {
 } from './mutation_types'
 import { dishes, ingredients } from './test_dishes'
 import { setBaseUrl } from '../lib/api'
-import { CHANGE_STARTDATE } from './action_types'
+import { CHANGE_STARTDATE, UPDATE_DISH_ITEM_AMOUNT } from './action_types'
 
 // globalThis.fetch = async (input: RequestInfo, init?: RequestInit): Promise<Response> => {
 //   return new Response(JSON.stringify({ input, init }))
@@ -184,7 +184,7 @@ describe('Store actions', () => {
     })
 
   describe('UPDATE_AMOUNT', () => {
-    it('should change amount of proposed items', async () => {
+    it('should change the amount of proposed items', async () => {
       setupStore(standardItems)
       await store.dispatch(UPDATE_AMOUNT, {
         item: ingredients.hefe,
@@ -228,6 +228,44 @@ describe('Store actions', () => {
       store.state.changes
         .map(item => ({ id: item.id, amount: item.amount }))
         .should.deepEqual([{ id: '9', amount: 3 }])
+    })
+  })
+
+  describe('UPDATE_DISH_ITEM_AMOUNT', () => {
+    const dishId = dishes.brot.id
+    const itemId = ingredients.hefe.id
+    const amount = 3
+
+    it('should call PATCH /dish/:dishId/items/:itemId with the new amount', async () => {
+      setupStore(standardItems)
+      const request = nock(baseName)
+        .patch(`/dishes/${dishId}/items/${itemId}`, { amount })
+        .reply(200)
+
+      await store.dispatch(UPDATE_DISH_ITEM_AMOUNT, { dishId, itemId, amount })
+
+      request.isDone().should.be.true()
+    })
+
+    it('should update the amount of an ingredient', async () => {
+      setupStore(standardItems)
+      const modifiedDish = {
+        ...dishes.brot,
+        items: dishes.brot.items.map(item =>
+          item.id === itemId
+            ? { ...ingredients.hefe, amount }
+            : item
+        ),
+      }
+      nock(baseName)
+        .patch(`/dishes/${dishId}/items/${itemId}`, { amount })
+        .reply(200, modifiedDish)
+
+      await store.dispatch(UPDATE_DISH_ITEM_AMOUNT, { dishId, itemId, amount })
+
+      const dish = store.state.dishes.find(dish => dish.id === dishId)
+      const item = dish?.items.find(item => item.id === itemId)
+      should(item?.amount).equal(3)
     })
   })
 })

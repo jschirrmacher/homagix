@@ -2,14 +2,14 @@
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import Ingredient from './Ingredient.vue'
-import { SET_ACTIVE_ITEM } from '../store/mutation_types'
+import { SET_ACTIVE_ITEM, UPDATE_AMOUNT } from '../store/mutation_types'
 
 type IngredientGroup = {
   id: string
   title: string
 }
 
-type Item = {
+export type Item = {
   id: string
   name: string
   group: IngredientGroup
@@ -58,6 +58,10 @@ export default Vue.extend({
     canEdit(item: Item): boolean {
       return this.canEditAmount && item.id === this.activeItemId
     },
+
+    updateAmount(item: Item, newAmount: number) {
+      return this.$store.dispatch(UPDATE_AMOUNT, { item, newAmount })
+    }
   },
 })
 </script>
@@ -75,6 +79,7 @@ export default Vue.extend({
           :canEditAmount="canEdit(item)"
           @click="setActive(item)"
           @blur="setInactive()"
+          @update="amount => updateAmount(item, amount)"
         >
           <slot v-bind:item="item" />
         </Ingredient>

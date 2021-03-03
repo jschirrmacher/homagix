@@ -6,15 +6,15 @@ import units from '../models/units'
 import { Store } from '../EventStore/EventStore'
 import { Models } from '../models'
 
-type Item = {
+export type ReadableItem = {
   amount: number
   unit: string
   name: string
 }
 
-type DishReader = {
-  loadData(basePath: string): void
-  addItems(dishId: string, item: Item): void
+export interface DishReader {
+  loadData(basePath: string): Promise<void>
+  addItem(dishId: string, item: ReadableItem): Promise<void>
 }
 
 export default function ({
@@ -24,9 +24,10 @@ export default function ({
   store: Store
   models: Models
 }): DishReader {
-  const { dishAdded, ingredientAdded, ingredientAssigned } = models.getEvents()
+  const { dishAdded, ingredientAssigned } = models.dish.events
+  const { ingredientAdded } = models.ingredient.events
 
-  function extractItemProperties(itemString: string): Item {
+  function extractItemProperties(itemString: string): ReadableItem {
     const matches = itemString.match(/^\s*([\d.,]*)\s*(\w+)\.?\s*(.*)$/)
     const amount = (matches ? +matches[1] : 1) || 1
     const hasUnit = matches && units.map(u => u.name).includes(matches[2])
@@ -38,13 +39,17 @@ export default function ({
     return { amount, unit, name }
   }
 
-  function addItems(dishId: string, item: Item): void {
+  async function addItem(
+    dishId: string,
+    item: ReadableItem,
+    emitter = store.emit.bind(store)
+  ) {
     const existing = models.ingredient.byExample(item, true)
     if (existing && existing.id) {
-      store.dispatch(ingredientAssigned(dishId, existing.id, item.amount))
+      await emitter(ingredientAssigned(dishId, existing.id, item.amount))
     } else {
       const id = uuid()
-      store.dispatch(
+      await emitter(
         ingredientAdded({
           id,
           name: item.name,
@@ -52,7 +57,7 @@ export default function ({
           group: 'other',
         })
       )
-      store.dispatch(ingredientAssigned(dishId, id, item.amount))
+      await emitter(ingredientAssigned(dishId, id, item.amount))
     }
   }
 
@@ -71,33 +76,37 @@ export default function ({
     })
   }
 
-  function loadDishes(basePath: string) {
+  async function loadDishes(basePath: string) {
     const dir = path.resolve(basePath, 'dishes')
     if (!fs.existsSync(dir)) {
       return
     }
-    fs.readdirSync(dir).map(file => {
-      const content = fs
-        .readFileSync(path.resolve(basePath, 'dishes', file))
-        .toString()
-      const dish = YAML.parse(content)
-      dish.id = file.replace(/\.\w+$/, '')
-      const items = dish.items as string[]
-      delete dish.items
-      store.dispatch(dishAdded(dish))
-      if (items && items.map) {
-        items
-          .map(extractItemProperties)
-          .forEach(item => addItems(dish.id, item))
-      }
-    })
+    await Promise.all(
+      fs.readdirSync(dir).map(async file => {
+        const content = fs
+          .readFileSync(path.resolve(basePath, 'dishes', file))
+          .toString()
+        const dish = YAML.parse(content)
+        dish.id = file.replace(/\.\w+$/, '')
+        const items = dish.items as string[]
+        delete dish.items
+        store.dispatch(dishAdded(dish))
+        if (items && items.map) {
+          await Promise.all(
+            items
+              .map(extractItemProperties)
+              .map(item => addItem(dish.id, item, store.dispatch.bind(store)))
+          )
+        }
+      })
+    )
   }
 
   return {
-    loadData(basePath: string) {
+    async loadData(basePath: string) {
       loadIngredients(basePath)
       loadDishes(basePath)
     },
-    addItems,
+    addItem,
   }
 }

@@ -12,7 +12,7 @@ const testPerson = {
   firstName: 'Tom',
 }
 
-const { userAdded } = models.getEvents()
+const { userAdded } = models.user.events
 
 describe('Models.user', () => {
   beforeEach(() => models.user.reset())

@@ -3,6 +3,8 @@ import { MiddleWare } from '../auth/auth'
 import { User } from '../models/user'
 import { DishController } from './DishController'
 import { JSONHandler } from '../MainRouter'
+import { Dish } from '../models/dish'
+import { ReadableItem } from './DishReader'
 
 type Auth = { checkJWT: MiddleWare; requireJWT: MiddleWare }
 
@@ -33,8 +35,8 @@ export default function ({
     return { dishes: dishController.getAll(req.user as User) }
   }
 
-  function addDish(req: Request) {
-    return dishController.addDish(req.body, req.user as User)
+  async function addDish(req: Request): Promise<Dish> {
+    return await dishController.addDish(req.body, req.user as User)
   }
 
   function updateDish(req: Request) {
@@ -49,11 +51,51 @@ export default function ({
     return dishController.setFavorite(req.user as User, req.params.id, false)
   }
 
+  function addItem(req: Request): Promise<Dish> {
+    return dishController.addItem(
+      req.params.id,
+      req.body as ReadableItem,
+      req.user as User
+    )
+  }
+
+  function updateItem(req: Request): Promise<Dish> {
+    return dishController.updateItemAmount(
+      req.params.id,
+      req.params.itemId,
+      req.body.amount,
+      req.user as User
+    )
+  }
+
+  function removeItem(req: Request): Promise<Dish> {
+    return dishController.removeItem(
+      req.params.id,
+      req.params.itemId,
+      req.user as User
+    )
+  }
+
   router.get('/', checkJWT(), jsonResult(getAllDishes))
   router.post('/', requireJWT(), jsonResult(addDish))
   router.patch('/:id', requireJWT(), assertOwner(), jsonResult(updateDish))
+
   router.post('/:id/favorites', requireJWT(), jsonResult(addFavorite))
   router.delete('/:id/favorites', requireJWT(), jsonResult(removeFavorite))
+
+  router.post('/:id/items', requireJWT(), assertOwner(), jsonResult(addItem))
+  router.patch(
+    '/:id/items/:itemId',
+    requireJWT(),
+    assertOwner(),
+    jsonResult(updateItem)
+  )
+  router.delete(
+    '/:id/items/:itemId',
+    requireJWT(),
+    assertOwner(),
+    jsonResult(removeItem)
+  )
 
   return router
 }

@@ -15,7 +15,7 @@ export type Event = Record<string, unknown>
 export type Listener = (event: Event) => void
 
 export type Store = {
-  dispatch(event: Event): void
+  dispatch(event: Event): Promise<void>
   replay(): Promise<void>
   on(type: EventType, func: Listener): Store
   emit(event: Event): Promise<void>
@@ -101,9 +101,10 @@ export default ({
     return resolve(basePath, `events-${versionNo}.json`)
   }
 
-  function dispatch(event: Event) {
+  async function dispatch(event: Event) {
     try {
-      const relevantListeners = listeners[(event as { type: string }).type] || []
+      const relevantListeners =
+        listeners[(event as { type: string }).type] || []
       relevantListeners.forEach(listener => listener(event))
     } catch (error) {
       logger.error(error)

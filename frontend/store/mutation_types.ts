@@ -31,3 +31,5 @@ export const UPDATE_AMOUNT = 'UPDATE_AMOUNT'
 export const SHOPPING_DONE = 'SHOPPING_DONE'
 
 export const RESET_STORE = 'RESET_STORE'
+
+export const DISH_SELECTED = 'DISH_SELECTED'

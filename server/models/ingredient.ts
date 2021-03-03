@@ -1,4 +1,5 @@
 import { Models } from '.'
+import { assert } from '../EventStore/Events'
 import { Event, Store } from '../EventStore/EventStore'
 import { ModelWriter } from './ModelWriter'
 
@@ -18,6 +19,10 @@ export type IngredientModel = {
   byId(id: IngredientId): Ingredient | undefined
   byName(name: string): Ingredient | undefined
   byExample(item: Partial<Ingredient>, strict?: boolean): Ingredient | undefined
+  events: {
+    ingredientAdded(ingredient: Ingredient): Event
+    ingredientUpdated(ingredientId: string, name: string, value: unknown): Event
+  }
 }
 
 const ingredients = {
@@ -106,12 +111,32 @@ export default function ({
   models: Models
   modelWriter: ModelWriter
 }): IngredientModel {
-  const { ingredientAdded, ingredientUpdated } = models.getEvents()
+  const events = {
+    ingredientAdded(ingredient: Ingredient) {
+      assert(ingredient, 'No ingredient')
+      assert(ingredient.name, 'Missing name')
+      return {
+        type: 'ingredientAdded',
+        id: ingredient.id,
+        unit: ingredient.unit,
+        name: ingredient.name,
+        group: ingredient.group,
+      }
+    },
+
+    ingredientUpdated(ingredientId: string, name: string, value: unknown) {
+      assert(ingredientId, 'No ingredientId')
+      assert(name !== '', 'No attribute Name')
+      assert(models.ingredient.byId(ingredientId), 'Ingredient not found')
+      return { type: 'ingredientUpdated', ingredientId, name, value }
+    },
+  }
+
   store
-    .on(ingredientAdded, event =>
+    .on(events.ingredientAdded, event =>
       addIngredient(modelWriter.writeIngredient, event)
     )
-    .on(ingredientUpdated, event =>
+    .on(events.ingredientUpdated, event =>
       updateIngredient(modelWriter.writeIngredient, event)
     )
 
@@ -120,5 +145,6 @@ export default function ({
     byId: getIngredientById,
     byName: getIngredientByName,
     byExample,
+    events,
   }
 }

@@ -33,14 +33,14 @@ export async function doFetch(
     headers: { accept: 'application/json' },
   } as RequestInit
   if (data && !['get', 'options'].includes(method.toLowerCase())) {
-    options.headers['content-type'] = 'application/json'
+    options.headers = { ...options.headers, ['content-type']: 'application/json' }
     options.body = JSON.stringify(data)
   } else if (data && method.toLowerCase() === 'get') {
     url += '?' + prepareQueryParamers(data)
   }
   try {
     const response = await (global || window).fetch(baseUrl + url, options)
-    const content = response.headers.get('content-type').match(/json/)
+    const content = (response.headers.get('content-type') || '').match(/json/)
       ? await response.json()
       : await response.text()
     return response.ok

@@ -26,10 +26,10 @@ const users = [
     email: 'test3@example.com',
     access_code: 'test-access',
     hash: 'test-hash',
-    isAdmin: true
+    isAdmin: true,
   },
 ]
-users.forEach(user => store.emit(models.getEvents().userAdded(user)))
+users.forEach(user => store.emit(models.user.events.userAdded(user)))
 
 const secretOrKey = 'secret-key'
 const auth = AuthFactory({ app, models, store, secretOrKey })

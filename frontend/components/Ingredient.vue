@@ -1,13 +1,14 @@
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
+import { Ingredient } from '../../server/models/ingredient'
 import { UPDATE_AMOUNT } from '../store/mutation_types'
 
 export default Vue.extend({
   props: {
     item: {
       type: Object,
-      default: () => {},
+      default: () => ({}) as PropType<Ingredient>,
     },
     canEditAmount: {
       type: Boolean,
@@ -28,10 +29,6 @@ export default Vue.extend({
       const entry = this.units.find(u => u.name === unit)
       return entry ? entry.step : 1
     },
-
-    amountChanged(item, newAmount: number): void {
-      this.$store.dispatch(UPDATE_AMOUNT, { item, newAmount })
-    },
   },
 })
 </script>
@@ -45,7 +42,7 @@ export default Vue.extend({
       :step="getStep(item.unit)"
       :value="item.amount"
       :disabled="!canEditAmount"
-      @change="event => amountChanged(item, +event.target.value)"
+      @change="event => $emit('update', +event.target.value)"
       @blur="$emit('blur')"
     />
     <span class="unit">{{ item.unit }}</span>

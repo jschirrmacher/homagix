@@ -1,4 +1,4 @@
-import { Models } from '.'
+import { assert } from '../EventStore/Events'
 import { Event, Store } from '../EventStore/EventStore'
 import { ModelWriter } from './ModelWriter'
 
@@ -15,29 +15,58 @@ export type UserModel = {
   getById(userId: string): User
   getByEMail(email: string, throwIfNotFound?: boolean): User
   adminIsDefined: boolean
+  events: {
+    userAdded(user: User): Event
+    userRemoved(id: string): Event
+    userChanged(id: string, user: User): Event
+    invitationAccepted(user: User, listId: string): Event
+  }
   reset(): void
 }
 
 export default function ({
   store,
-  models,
   modelWriter,
 }: {
   store: Store
-  models: Models
   modelWriter: ModelWriter
 }): UserModel {
-  const {
-    userAdded,
-    userRemoved,
-    userChanged,
-    invitationAccepted,
-  } = models.getEvents()
+  const events = {
+    userAdded(user: User) {
+      assert(user, 'No user')
+      assert(user.id, 'No id')
+      assert(user.email, 'No email')
+      assert(user.email.match(/.+@.+\..+/), 'email has wrong format')
+      return { type: 'userAdded', user }
+    },
+
+    userRemoved(id: string) {
+      assert(id, 'No id')
+      return { type: 'userRemoved', id }
+    },
+
+    userChanged(id: string, user: User) {
+      assert(id, 'No id')
+      assert(
+        !user.email || user.email.match(/.+@.+\..+/),
+        'email has wrong format'
+      )
+      return { type: 'userChanged', id, user }
+    },
+
+    invitationAccepted(user: User, listId: string) {
+      assert(user, 'no user')
+      assert(user.id, 'no user id')
+      assert(listId, 'no list id')
+      return { type: 'invitationAccepted', userId: user.id, listId }
+    },
+  }
+
   const byEmail = {} as Record<string, User>
   const users = {} as Record<string, User>
   let adminIsDefined = false
 
-  store.on(userAdded, (event: Event) => {
+  store.on(events.userAdded, (event: Event) => {
     const { user } = event as { user: User }
     users[user.id] = user
     if (user.email) {
@@ -49,14 +78,14 @@ export default function ({
     modelWriter.writeUser(user)
   })
 
-  store.on(userRemoved, (event: Event) => {
+  store.on(events.userRemoved, (event: Event) => {
     const { id } = event as { id: string }
     delete byEmail[users[id].email]
     delete users[id]
     modelWriter.removeUser(id)
   })
 
-  store.on(userChanged, (event: Event) => {
+  store.on(events.userChanged, (event: Event) => {
     const { id, user } = event as { id: string; user: Partial<User> }
     if (user.email && users[id].email && byEmail[users[id].email]) {
       delete byEmail[users[id].email]
@@ -68,7 +97,7 @@ export default function ({
     modelWriter.writeUser(users[id])
   })
 
-  store.on(invitationAccepted, (event: Event) => {
+  store.on(events.invitationAccepted, (event: Event) => {
     const { userId, listId } = event as { userId: string; listId: string }
     users[userId].listId = listId
     modelWriter.writeUser(users[userId])
@@ -96,6 +125,7 @@ export default function ({
     },
 
     adminIsDefined,
+    events,
 
     reset() {
       function clear(obj: Record<string, unknown>) {

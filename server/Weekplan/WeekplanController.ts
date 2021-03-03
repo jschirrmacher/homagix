@@ -68,7 +68,7 @@ export default ({
     accepted.forEach((id, index) => {
       const newDate = new Date(date)
       newDate.setDate(newDate.getDate() + index)
-      store.emit(models.getEvents().served(id, newDate, user.listId || user.id))
+      store.emit(models.dish.events.served(id, newDate, user.listId || user.id))
     })
     return { accepted, date }
   }

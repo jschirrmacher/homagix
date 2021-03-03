@@ -58,7 +58,7 @@ export default ({
   store: Store
   secretOrKey: string
 }): Auth => {
-  const { userAdded, userChanged } = models.getEvents()
+  const { userAdded, userChanged } = models.user.events
 
   function signIn(user: User, req: Request, res: Response): void {
     const roles = [] as string[]

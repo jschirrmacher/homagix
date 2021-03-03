@@ -1,5 +1,5 @@
 import { Transform, TransformOptions, TransformCallback } from 'stream'
-import { addDish, getDishById } from '../models/dish'
+import Dish, { DishModel, DishMutators, getDishById } from '../models/dish'
 import {
   addIngredient,
   updateIngredient,
@@ -11,6 +11,7 @@ import Config from '../Config'
 
 const { dataDir: basePath } = Config()
 const modelWriter = ModelWriter({ basePath })
+const dishMutator = DishMutators(modelWriter.writeDish)
 
 export default class mig3 extends Transform {
   constructor(options = {} as TransformOptions) {
@@ -27,7 +28,7 @@ export default class mig3 extends Transform {
       case 'dishAdded': {
         delete event.type
         event.items = event.items || []
-        addDish(modelWriter.writeDish, event)
+        dishMutator.addDish(event)
         break
       }
 
@@ -51,7 +52,7 @@ export default class mig3 extends Transform {
           amount: event.amount as number,
           id: event.ingredientId as string,
         })
-        addDish(modelWriter.writeDish, dish)
+        dishMutator.addDish(dish)
         break
       }
 

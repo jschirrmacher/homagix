@@ -21,13 +21,12 @@ app.use(router)
 
 describe('IngredientRouter', () => {
   before(() => {
-    const {
-      dishAdded,
-      ingredientAdded,
-      ingredientAssigned,
-    } = models.getEvents()
+    const { dishAdded, ingredientAssigned } = models.dish.events
+    const { ingredientAdded } = models.ingredient.events
     models.dish.reset()
-    store.dispatch(dishAdded({ id: '_', name: 'default', alwaysOnList: true }))
+    store.dispatch(
+      dishAdded({ id: '_', name: 'default', alwaysOnList: true, items: [] })
+    )
     store.dispatch(
       ingredientAdded({ id: '1', name: 'Milch', unit: 'L', group: 'cooled' })
     )

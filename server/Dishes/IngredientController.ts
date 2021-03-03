@@ -21,7 +21,7 @@ export default ({
   models: Models
   store: Store
 }): IngredientController => {
-  const { ingredientUpdated, ingredientAdded } = models.getEvents()
+  const { ingredientUpdated, ingredientAdded } = models.ingredient.events
 
   async function getIngredients(): Promise<IngredientListResult> {
     return {

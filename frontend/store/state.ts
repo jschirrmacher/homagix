@@ -29,6 +29,7 @@ export type State = {
   units: Unit[]
   activeItemId?: string
   itemGroups: Record<string, ItemGroup>
+  currentDishId: string
 }
 
 export const itemGroups: Record<string, ItemGroup> = {
@@ -61,6 +62,7 @@ export function getDefaultState(): State {
     units: [],
     activeItemId: undefined,
     itemGroups,
+    currentDishId: '',
   }
 }
 

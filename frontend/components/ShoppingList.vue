@@ -5,6 +5,7 @@ import IngredientList from './IngredientList.vue'
 import NewItem from './NewItem.vue'
 import { REMOVE_ITEM, RESTORE_ITEM } from '../store/mutation_types'
 import { CHANGE_GROUP } from '../store/action_types'
+import RemoveButton from './RemoveButton.vue'
 
 export default Vue.extend({
   data() {
@@ -13,7 +14,7 @@ export default Vue.extend({
     }
   },
 
-  components: { IngredientList, NewItem },
+  components: { IngredientList, NewItem, RemoveButton },
 
   computed: {
     ...mapState(['itemGroups', 'activeItemId']),
@@ -46,19 +47,14 @@ export default Vue.extend({
     </h2>
 
     <IngredientList
-      v-if="itemsInShoppingList"
       :items="shoppinglist"
       v-slot:default="slotProps"
       :canEditAmount="true"
     >
-      <button
+      <RemoveButton
         v-if="slotProps.item.amount > 0"
-        class="inline delete"
-        title="Von der Liste streichen"
         @click="remove(slotProps.item)"
-      >
-        ×
-      </button>
+      />
       <button
         v-if="slotProps.item.amount <= 0"
         class="inline restore"

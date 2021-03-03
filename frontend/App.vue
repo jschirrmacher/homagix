@@ -10,9 +10,16 @@ import Navigation from './components/Navigation.vue'
 import LoginDialog from './AuthDialogs/LoginDialog.vue'
 import LostPasswordDialog from './AuthDialogs/LostPasswordDialog.vue'
 import Alert from './dialogs/Alert.vue'
+import EditableIngredientList from './dialogs/EditableIngredientList.vue'
 
 export default {
-  components: { Navigation, LoginDialog, LostPasswordDialog, Alert },
+  components: {
+    Navigation,
+    LoginDialog,
+    LostPasswordDialog,
+    Alert,
+    EditableIngredientList,
+  },
 
   computed: {
     ...mapState(['error']),
@@ -54,6 +61,7 @@ export default {
     <Alert />
     <LoginDialog />
     <LostPasswordDialog />
+    <EditableIngredientList />
   </div>
 </template>
 

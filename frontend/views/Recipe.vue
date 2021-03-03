@@ -1,7 +1,7 @@
 <script>
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { MODIFY_DISH } from '../store/action_types'
+import { EDIT_INGREDIENT_LIST, MODIFY_DISH } from '../store/action_types'
 import EditableField from '@/components/EditableField.vue'
 
 function mapDishField(field, defaultValue = '') {
@@ -95,6 +95,12 @@ export default Vue.extend({
       await this.save()
       this.$router.go(-1)
     },
+
+    editItems() {
+      if (this.editable) {
+        this.$store.dispatch(EDIT_INGREDIENT_LIST, this.id)
+      }
+    }
   },
 })
 </script>
@@ -110,7 +116,7 @@ export default Vue.extend({
       placeholder="Name"
     />
 
-    <section id="ingredients">
+    <section id="ingredients" @click="editItems">
       <h3>Zutaten</h3>
       <ul>
         <li v-for="ingredient in ingredients" :key="ingredient.id">

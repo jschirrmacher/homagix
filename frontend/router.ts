@@ -45,7 +45,7 @@ export default new VueRouter({
           next('/unknown-dish')
         }
       },
-      beforeUpdate(to, from, next) {
+    beforeUpdate(to, from, next) {
         next(dishExists(to.params.id))
       },
     },

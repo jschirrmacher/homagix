@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": "/",
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
@@ -13,5 +14,9 @@
     "sourceMap": true,
     "lib": ["es2020"]
   },
-  "include": ["server", "frontend"]
+  "include": ["server", "frontend"],
+  "paths": {
+    "@/*": ["frontend/*"],
+  },
+
 }

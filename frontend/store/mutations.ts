@@ -105,6 +105,10 @@ export const mutations = {
     state.changes = changes
   },
 
+  [types.DISH_SELECTED](state: State, { currentDishId }: { currentDishId: string }): void {
+    state.currentDishId = currentDishId
+  },
+
   [types.SET_ACTIVE_ITEM](state: State, { itemId }: { itemId: string }): void {
     state.activeItemId = itemId
   },

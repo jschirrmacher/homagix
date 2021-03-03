@@ -39,13 +39,11 @@ export default Vue.extend({
 
   methods: {
     addItem(): void {
-      const item = {
-        id: this.item.id,
+      this.$emit('create', {
         name: this.item.name,
-        amount: this.item.amount,
+        amount: +this.item.amount,
         unit: this.item.unit.name,
-      }
-      this.$store.dispatch(ADD_ITEM, { item })
+      })
       this.reset()
     },
 
@@ -106,6 +104,10 @@ select {
 <style lang="scss" scoped>
 .newItem {
   margin-bottom: 1em;
+
+  button {
+    margin: 0;
+  }
 
   @media print {
     display: none;

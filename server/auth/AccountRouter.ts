@@ -23,7 +23,7 @@ export default ({
   store: Store
   mailer: Mailer
 }): Router => {
-  const { invitationAccepted } = models.getEvents()
+  const { invitationAccepted } = models.user.events
 
   async function registerNewUser(
     req: Request,

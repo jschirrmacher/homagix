@@ -4,12 +4,14 @@ import { mapGetters, mapState } from 'vuex'
 import Dish from './Dish.vue'
 import { DISH_DECLINED, CHANGE_STARTDATE } from '../store/action_types'
 import { TOGGLE_ACCEPTANCE } from '../store/mutation_types'
+import RemoveButton from './RemoveButton.vue'
 
 type DishData = {}
 
 export default Vue.extend({
   components: {
     Dish,
+    RemoveButton,
   },
 
   computed: {
@@ -80,13 +82,10 @@ export default Vue.extend({
       >
         <span class="day">{{ formatDate(entry.date) }}</span>
         <Dish v-if="entry.dishId" :dish="dish(entry.dishId)">
-          <button
-            class="inline delete"
+          <RemoveButton
             title="Ablehnen"
             @click="() => decline(entry.dishId)"
-          >
-            ×
-          </button>
+          />
           <button
             class="inline accept"
             title="Annehmen"

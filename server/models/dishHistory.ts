@@ -33,8 +33,7 @@ export default function ({
   store: Store
   models: Models
 }): HistoryModel {
-  const events = models.getEvents()
-  store.on(events.served, served)
+  store.on(models.dish.events.served, served)
 
   return {
     getFrom,

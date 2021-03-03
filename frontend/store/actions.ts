@@ -24,6 +24,7 @@ import {
   WEEKPLAN_LOADED,
   DECLINED_CHANGED,
   STANDARD_ITEMS_LOADED,
+  DISH_SELECTED,
 } from './mutation_types'
 import {
   ADD_FAVORITE,
@@ -34,12 +35,18 @@ import {
   LOAD_DISHES,
   REMOVE_FAVORITE,
   DISH_DECLINED,
+  EDIT_INGREDIENT_LIST,
+  REMOVE_DISH_ITEM,
+  ADD_DISH_ITEM,
+  UPDATE_DISH_ITEM_AMOUNT,
 } from './action_types'
 import jwt_decode from 'jwt-decode'
 import { CompleteItem, Dish, Ingredient, Unit } from '../app-types'
 import { State } from './state'
 import { ActionTree, Dispatch } from 'vuex'
 import { Getters } from './getters'
+import { openDialog } from '../lib/dialogs'
+import { ReadableItem } from '../../server/Dishes/DishReader'
 
 type Context = {
   commit: (type: string, state: Partial<State>) => void
@@ -96,7 +103,7 @@ export const actions: ActionTree<State, State> = {
         const currentUser = {
           id: token.sub,
           firstName: token.firstName,
-          isAdmin: token.roles && token.roles.includes("admin")
+          isAdmin: token.roles && token.roles.includes('admin'),
         }
         context.commit(CURRENTUSER_SET, { currentUser })
       }
@@ -299,6 +306,60 @@ export const actions: ActionTree<State, State> = {
         dishes: context.state.dishes.map(d => (d.id === dish.id ? dish : d)),
       })
     })
+  },
+
+  async [REMOVE_DISH_ITEM](
+    context: Context,
+    { dishId, itemId }: { dishId: string; itemId: string }
+  ): Promise<void> {
+    guardWithTryCatch(context, async () => {
+      const dish = (await doFetch(
+        'DELETE',
+        '/dishes/' + dishId + '/items/' + itemId
+      )) as Dish
+      context.commit(DISHES_LOADED, {
+        dishes: context.state.dishes.map(d => (d.id === dishId ? dish : d)),
+      })
+    })
+  },
+
+  async [ADD_DISH_ITEM](
+    context: Context,
+    { dishId, item }: { dishId: string; item: ReadableItem }
+  ): Promise<void> {
+    guardWithTryCatch(context, async () => {
+      const dish = (await doFetch(
+        'POST',
+        '/dishes/' + dishId + '/items',
+        item
+      )) as Dish
+      context.commit(DISHES_LOADED, {
+        dishes: context.state.dishes.map(d => (d.id === dishId ? dish : d)),
+      })
+    })
+  },
+
+  async [UPDATE_DISH_ITEM_AMOUNT](
+    context: Context,
+    {
+      dishId,
+      itemId,
+      amount,
+    }: { dishId: string; itemId: string; amount: number }
+  ): Promise<void> {
+    const dish = (await doFetch(
+      'PATCH',
+      '/dishes/' + dishId + '/items/' + itemId,
+      { amount }
+    )) as Dish
+    context.commit(DISHES_LOADED, {
+      dishes: context.state.dishes.map(d => (d.id === dishId ? dish : d)),
+    })
+  },
+
+  [EDIT_INGREDIENT_LIST](context: Context, dishId: string): void {
+    context.commit(DISH_SELECTED, { currentDishId: dishId })
+    openDialog('EditableIngredientList')
   },
 }
 
