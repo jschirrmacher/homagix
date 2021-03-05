@@ -1,5 +1,5 @@
 import { Transform, TransformOptions, TransformCallback } from 'stream'
-import Dish, { DishModel, DishMutators, getDishById } from '../models/dish'
+import { DishMutators, getDishById } from '../models/dish'
 import {
   addIngredient,
   updateIngredient,
