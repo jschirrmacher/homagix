@@ -3,7 +3,7 @@ import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import IngredientList from './IngredientList.vue'
 import NewItem from './NewItem.vue'
-import { REMOVE_ITEM, RESTORE_ITEM } from '../store/mutation_types'
+import { ADD_ITEM, REMOVE_ITEM, RESTORE_ITEM } from '../store/mutation_types'
 import { CHANGE_GROUP } from '../store/action_types'
 import RemoveButton from './RemoveButton.vue'
 
@@ -34,6 +34,10 @@ export default Vue.extend({
 
     changeGroup(ingredient, group: string): void {
       this.$store.dispatch(CHANGE_GROUP, { ingredient, group })
+    },
+
+    addItem(item: ReadableItem) {
+      this.$store.dispatch(ADD_ITEM, { item })
     },
   },
 })
@@ -78,7 +82,7 @@ export default Vue.extend({
       </select>
     </IngredientList>
 
-    <NewItem />
+    <NewItem @create="addItem" />
   </div>
 </template>
 
