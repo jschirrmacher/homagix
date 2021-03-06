@@ -6,6 +6,7 @@ import NewItem from './NewItem.vue'
 import { ADD_ITEM, REMOVE_ITEM, RESTORE_ITEM } from '../store/mutation_types'
 import { CHANGE_GROUP } from '../store/action_types'
 import RemoveButton from './RemoveButton.vue'
+import { ReadableItem } from '../../server/Dishes/DishReader'
 
 export default Vue.extend({
   data() {
