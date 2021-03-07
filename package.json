@@ -102,7 +102,7 @@
     "mock-req-res": "1.2.0",
     "nock": "13.0.10",
     "node-fetch": "2.6.1",
-    "node-sass": "4.14.1",
+    "node-sass": "5.0.0",
     "nyc": "15.1.0",
     "pinst": "2.1.6",
     "prettier": "2.2.1",
