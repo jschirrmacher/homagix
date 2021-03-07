@@ -161,11 +161,21 @@ export default Vue.extend({
   @media print {
     & > ul > li {
       min-height: 0;
-      padding-bottom: 2px;
+      display: flex;
+      border-bottom: 1px solid grey;
 
       .day {
-        display: inline;
         background: transparent;
+        width: 60px;
+        margin: 4px 4px 0 0;
+      }
+
+      .dish {
+        width: calc(100% - 60px);
+      }
+
+      .ingredient-list {
+        display: none;
       }
     }
 

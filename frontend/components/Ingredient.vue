@@ -46,7 +46,7 @@ export default Vue.extend({
       @blur="$emit('blur')"
     />
     <span class="unit">{{ item.unit }}</span>
-    {{ item.name }}
+    <span>{{ item.name }}</span>
     <slot v-bind:item="item" />
   </li>
 </template>
@@ -89,6 +89,13 @@ li {
 
   @media print {
     display: none;
+  }
+}
+
+@media print {
+  .amount {
+    width: 30px;
+    padding: 0 2px 0 0;
   }
 }
 </style>
