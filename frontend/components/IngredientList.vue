@@ -3,6 +3,7 @@ import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import Ingredient from './Ingredient.vue'
 import { SET_ACTIVE_ITEM, UPDATE_AMOUNT } from '../store/mutation_types'
+import { CompleteItem } from '../app-types'
 
 type IngredientGroup = {
   id: string
@@ -61,7 +62,15 @@ export default Vue.extend({
 
     updateAmount(item: Item, newAmount: number) {
       return this.$store.dispatch(UPDATE_AMOUNT, { item, newAmount })
-    }
+    },
+
+    cssClass(groupId: string, items: CompleteItem[]): Record<string, boolean> {
+      return {
+        groupTitle: true,
+        groupId: !!groupId,
+        empty: !items.some(i => i.amount > 0)
+      }
+    },
   },
 })
 </script>
@@ -69,7 +78,9 @@ export default Vue.extend({
 <template>
   <div>
     <div v-for="(group, groupId) in itemGroups" :key="groupId">
-      <div class="groupTitle" :class="groupId">{{ group.title }}</div>
+      <div :class="cssClass(groupId, group.items)">
+        {{ group.title }}
+      </div>
       <ul>
         <Ingredient
           v-for="item in group.items"
@@ -96,12 +107,15 @@ ul {
 @media print {
   .groupTitle {
     border-top: 1px solid black;
+
+    &.empty {
+      display: none;
+    }
   }
 
   ul {
     li {
-      max-height: 24px;
-      display: inline-block;
+      display: inline-flex;
       width: 50%;
     }
   }

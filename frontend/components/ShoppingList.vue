@@ -143,6 +143,12 @@ export default Vue.extend({
       background-color: blue;
       color: white;
     }
+
+    &.other {
+      background-color: transparent;
+      color: black;
+      border: 1px solid grey;
+    }
   }
 }
 
