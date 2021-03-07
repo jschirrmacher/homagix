@@ -1,8 +1,0 @@
-GET http://localhost:8200/session/
-
-###
-
-POST http://localhost:8200/session/
-Content-Type: application/json
-
-{"email": "joachim@dilab.co", "password": "test123!"}
