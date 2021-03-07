@@ -1,11 +1,11 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Planner from './views/Planner'
-import RecipesList from '@/views/RecipesList'
-import Recipe from '@/views/Recipe'
-import ChangePasswordView from '@/views/ChangePasswordView'
-import RegisterView from '@/views/RegisterView'
-import NotFoundComponent from '@/views/NotFoundComponent'
+import VueRouter, { RouteConfig } from 'vue-router'
+import Planner from './views/Planner.vue'
+import RecipesList from '@/views/RecipesList.vue'
+import Recipe from '@/views/Recipe.vue'
+import ChangePasswordView from '@/views/ChangePasswordView.vue'
+import RegisterView from '@/views/RegisterView.vue'
+import NotFoundComponent from '@/views/NotFoundComponent.vue'
 import store from './store/index'
 import { LOAD_DISHES } from './store/action_types'
 import { openDialog } from './lib/dialogs'
@@ -37,6 +37,7 @@ export default new VueRouter({
       path: '/recipes/:id/*',
       component: Recipe,
       props: true,
+      
       async beforeEnter(to, from, next) {
         await store.dispatch(LOAD_DISHES)
         if (dishExists(to.params.id)) {
@@ -45,10 +46,11 @@ export default new VueRouter({
           next('/unknown-dish')
         }
       },
-    beforeUpdate(to, from, next) {
+
+      beforeUpdate(to, from, next) {
         next(dishExists(to.params.id))
       },
-    },
+    } as RouteConfig,
     {
       name: 'set-password',
       path: '/setPassword',

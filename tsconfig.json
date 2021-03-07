@@ -15,8 +15,8 @@
     "lib": ["es2020"]
   },
   "include": ["server", "frontend"],
+  "files": ["frontend/ts-shim.d.ts"],
   "paths": {
     "@/*": ["frontend/*"],
   },
-
 }
