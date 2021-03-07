@@ -11,7 +11,8 @@
     "esModuleInterop": true,
     "noImplicitAny": false,
     "allowSyntheticDefaultImports": true,
-    "sourceMap": true,
+    "inlineSourceMap": true,
+    "inlineSources": true,
     "lib": ["es2020"]
   },
   "include": ["server", "frontend"],

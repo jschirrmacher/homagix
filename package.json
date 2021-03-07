@@ -17,7 +17,7 @@
   },
   "scripts": {
     "start": "NODE_ENV=production BASEDIR=$(pwd) node -r dotenv-flow/config build/server",
-    "start:dev": "babel-node -x .ts -r dotenv-flow/config -- server/index.ts",
+    "start:dev": "NODE_ENV=development babel-node -x .ts -r dotenv-flow/config -- server/index.ts",
     "build": "npm run build:babel && npm run build:webpack",
     "build:babel": "babel server -d build --extensions '.ts' --out-dir build/server",
     "build:webpack": "webpack --config config/webpack.config.js",
