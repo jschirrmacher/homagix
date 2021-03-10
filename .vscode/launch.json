@@ -39,6 +39,27 @@
         "node_modules/.bin/mocha",
         "--no-timeout",
         "--colors",
+        "--grep",
+        "${fileBasenameNoExtension}"
+      ],
+      "internalConsoleOptions": "openOnSessionStart",
+      "name": "Test current file",
+      "program": "${workspaceFolder}/node_modules/.bin/babel-node",
+      "request": "launch",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "pwa-node",
+      "env": {
+        "NODE_ENV": "test"
+      }
+    },
+    {
+      "args": [
+        "-x",
+        ".ts",
+        "--",
+        "node_modules/.bin/mocha",
+        "--no-timeout",
+        "--colors",
         "${workspaceFolder}/frontend/**/*.test.ts"
       ],
       "internalConsoleOptions": "openOnSessionStart",

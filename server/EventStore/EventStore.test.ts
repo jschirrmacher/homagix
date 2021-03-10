@@ -24,7 +24,7 @@ function testEvent(param1?: number, param2?: string) {
 
 let store: Store
 
-describe('EventStore', () => {
+describe('EventStore.test', () => {
   beforeEach(() => {
     logger.reset()
     mockFS.cleanup()
@@ -96,6 +96,7 @@ describe('EventStore', () => {
   })
 
   it('should deliver events', async () => {
+    mockFS.setupFiles({ 'events-0.json': events })
     store = EventStore({ basePath, migrationsPath })
     let delivered = false
     store.on(testEvent, () => (delivered = true))
@@ -105,6 +106,7 @@ describe('EventStore', () => {
   })
 
   it('should keep event data', async () => {
+    mockFS.setupFiles({ 'events-0.json': events })
     store = EventStore({ basePath, migrationsPath })
     let data
     store.on(testEvent, (event: unknown) => (data = event))
