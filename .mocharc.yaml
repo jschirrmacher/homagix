@@ -1,0 +1,9 @@
+require:
+  - 'dotenv-flow/config'
+extension:
+  - '.ts'
+exit: true
+spec:
+  - 'frontend/**/*.test.ts'
+  - 'server/**/*.test.ts'
+ui: bdd
