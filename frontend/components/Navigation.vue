@@ -19,7 +19,7 @@ Viele Grüße
 export default Vue.extend({
   data() {
     return {
-      version: process.env.PACKAGE_VERSION,
+      version: import.meta.env.VITE_PACKAGE_VERSION,
     }
   },
 

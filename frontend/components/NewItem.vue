@@ -77,16 +77,16 @@ export default Vue.extend({
       id="newItem-amount"
     />
 
-    <select v-model="item.unit" id="newItem-unit" :disabled="!!item.id">
-      <option v-for="(unit, index) in units" :key="index" :value="unit">
-        {{ unit.name }}
+    <select v-model="item.unit" id="newItem-unit" :disabled="!!item.id" v-if="units">
+      <option v-for="unit in units" :key="unit.name" :value="unit">
+        {{ unit && unit.name }}
       </option>
     </select>
 
     <Autocomplete
       id="newItem-name"
-      :list="this.allIngredients"
-      :value="this.item.name"
+      :list="allIngredients"
+      :value="item.name"
       @input="nameFieldChanged"
       @enter-pressed="addItem"
     />

@@ -1,7 +1,6 @@
 import path from 'path'
 import express, { NextFunction, Request, Response } from 'express'
 import cookieParser from 'cookie-parser'
-import bodyParser from 'body-parser'
 import Models from './models/index'
 import EventStore from './EventStore/EventStore'
 import DishReader from './Dishes/DishReader'
@@ -25,18 +24,18 @@ const dishReader = DishReader({ store, models })
 const app = express()
 app.set('json spaces', 2)
 app.use(cookieParser())
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(express.urlencoded({ extended: false }))
+app.use(express.json())
 const auth = Auth({ app, models, store, secretOrKey: process.env.SECRET || '' })
 const router = MainRouter({ models, store, auth })
 
-async function setupHotLoading() {
-  const webpack = await import('./WebpackAdapter')
-  webpack.setup(app)
-}
-
 if (process.env.NODE_ENV === 'development') {
-  setupHotLoading()
+  app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*")
+    res.header("Access-Control-Allow-Methods", "*")
+    res.header("Access-Control-Allow-Headers", "*")
+    next()
+  })
 }
 
 app.use((req, res, next) => {
@@ -64,7 +63,8 @@ app.use(function (
 app.listen(PORT, async () => {
   dishReader.loadData(dataDir)
   await store.replay()
-  logger.info(`Listening on http://localhost:${PORT} (NODE_ENV=${nodeEnv})`)
+  logger.info(`  > Server:   http://localhost:${PORT}/`)
+  logger.info(`  > NODE_ENV: ${nodeEnv}`)
 })
 
 console.log(listRoutes(app))

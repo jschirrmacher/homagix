@@ -1,8 +1,8 @@
 <script>
-import Dialog from '@/dialogs/Dialog'
+import Dialog from '@/dialogs/Dialog.vue'
 import { alert } from '../lib/dialogs'
 import sendForm from '../lib/sendForm'
-import DialogFormField from '@/dialogs/DialogFormField'
+import DialogFormField from '@/dialogs/DialogFormField.vue'
 
 const defaultMessage =
   'Gib deine E-Mail-Adresse ein, Du erhältst dann eine E-Mail mit einem Link, über den Du Dein Passwort neu setzen kannst.'

@@ -13,7 +13,7 @@ export default Vue.extend({
     ...mapState(['dishes']),
 
     sortedDishes(): Array<{ id: string }> {
-      return [
+      return this.dishes && [
         ...this.dishes.filter(
           (d: { alwaysOnList: boolean; name: string }) => !d.alwaysOnList
         ),

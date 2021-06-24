@@ -7,11 +7,12 @@ import { INIT_APP } from './store/action_types'
 Vue.config.productionTip = false
 
 new Vue({
-  el: '#root',
+  components: { App },
   router,
   store,
-  components: { App },
-  template: '<App/>',
-})
+  render(createElement) {
+    return createElement(App)
+  },
+}).$mount("#root")
 
 store.dispatch(INIT_APP)

@@ -39,7 +39,7 @@ export async function doFetch(
     url += '?' + prepareQueryParamers(data)
   }
   try {
-    const response = await (global || window).fetch(baseUrl + url, options)
+    const response = await fetch(baseUrl + url, options)
     const content = (response.headers.get('content-type') || '').match(/json/)
       ? await response.json()
       : await response.text()

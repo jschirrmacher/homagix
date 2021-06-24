@@ -1,9 +1,9 @@
 <script>
-import Dialog from '@/dialogs/Dialog'
+import Dialog from '@/dialogs/Dialog.vue'
 import { openDialog, closeDialogs } from '../lib/dialogs'
 import { CURRENTUSER_SET } from '../store/mutation_types'
 import sendForm from '../lib/sendForm'
-import DialogFormField from '@/dialogs/DialogFormField'
+import DialogFormField from '@/dialogs/DialogFormField.vue'
 
 const defaultMessage =
   'Gib deine E-Mail-Adresse und dein Passwort ein, um Zugriff auf deine Daten zu erhalten'

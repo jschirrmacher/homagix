@@ -14,7 +14,7 @@ Vue.use(VueRouter)
 
 export default new VueRouter({
   mode: 'history',
-  base: __dirname,
+  base: '/frontend',
   routes: [
     { name: 'home', path: '/', redirect: '/recipes' },
     {
@@ -37,7 +37,7 @@ export default new VueRouter({
       path: '/recipes/:id/*',
       component: Recipe,
       props: true,
-      
+
       async beforeEnter(to, from, next) {
         await store.dispatch(LOAD_DISHES)
         if (dishExists(to.params.id)) {
