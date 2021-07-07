@@ -78,7 +78,7 @@
     "@types/node-fetch": "2.5.11",
     "@types/nodemailer": "6.4.3",
     "@types/passport": "1.0.7",
-    "@types/passport-jwt": "3.0.5",
+    "@types/passport-jwt": "3.0.6",
     "@types/showdown": "1.9.4",
     "@types/supertest": "2.0.11",
     "@types/uuid": "8.3.1",
