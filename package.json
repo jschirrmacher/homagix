@@ -122,7 +122,7 @@
     "vuex": "3.6.2",
     "webpack": "4.46.0",
     "webpack-cli": "4.8.0",
-    "webpack-dev-middleware": "5.0.0",
+    "webpack-dev-middleware": "5.1.0",
     "webpack-hot-middleware": "2.25.0"
   },
   "esm": {
