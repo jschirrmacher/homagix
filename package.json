@@ -86,7 +86,7 @@
     "@types/webpack-hot-middleware": "2.25.5",
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "@typescript-eslint/parser": "4.33.0",
-    "babel-loader": "8.2.2",
+    "babel-loader": "8.2.3",
     "babel-preset-typescript-vue": "1.1.1",
     "css-loader": "5.2.7",
     "eslint": "7.32.0",
