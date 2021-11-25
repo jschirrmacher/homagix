@@ -104,7 +104,7 @@
     "node-fetch": "2.6.6",
     "nyc": "15.1.0",
     "pinst": "2.1.6",
-    "prettier": "2.4.1",
+    "prettier": "2.5.0",
     "sass": "1.43.5",
     "sass-loader": "9.0.3",
     "should": "13.2.3",
