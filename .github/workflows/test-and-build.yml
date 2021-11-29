@@ -20,7 +20,7 @@ jobs:
 
       - name: Docker meta
         id: docker_meta
-        uses: crazy-max/ghaction-docker-meta@548e2346a9987b56d8a4104fe776321ff8e23440 # renovate: tag=v3
+        uses: crazy-max/ghaction-docker-meta@a2e02890a0d28163b34ac2e4b575b9264a5ee3e2 # renovate: tag=v3
         with:
           images: joschi64/homagix
 
