@@ -39,10 +39,12 @@ export default Vue.extend({
 
   methods: {
     addItem(): void {
+      const knownItem = this.allIngredients.find(i => i.name === this.item.name)
       this.$emit('create', {
         name: this.item.name,
         amount: +this.item.amount,
         unit: this.item.unit.name,
+        group: knownItem && knownItem.group,
       })
       this.reset()
     },

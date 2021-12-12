@@ -42,7 +42,7 @@ export default ({
 
   async function addIngredient(ingredient: Ingredient): Promise<Ingredient> {
     ingredient.id = uuid()
-    ingredient.group = 'other'
+    ingredient.group = ingredient.group || 'other'
     await store.emit(ingredientAdded(ingredient))
     return ingredient
   }
