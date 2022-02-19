@@ -23,6 +23,11 @@
       "datasources": ["docker"],
       "packageNames": ["node"],
       "allowedVersions": "!/^15\\./"
+    },
+    {
+      "datasources": ["npm"],
+      "packageNames": ["passport"],
+      "allowedVersions": "!/^0\\.5\\.0/"
     }
   ]
 }

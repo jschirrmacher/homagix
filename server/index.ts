@@ -11,6 +11,7 @@ import history from 'connect-history-api-fallback'
 import Auth from './auth/auth'
 import listRoutes from './lib/listRoutes'
 import Config from './Config'
+import cors from "cors"
 
 const logger = console
 
@@ -27,6 +28,7 @@ app.set('json spaces', 2)
 app.use(cookieParser())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use(cors())
 const auth = Auth({ app, models, store, secretOrKey: process.env.SECRET || '' })
 const router = MainRouter({ models, store, auth })
 
