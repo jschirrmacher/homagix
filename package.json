@@ -92,7 +92,7 @@
     "babel-preset-typescript-vue": "1.1.1",
     "css-loader": "5.2.7",
     "eslint": "8.9.0",
-    "eslint-config-prettier": "8.3.0",
+    "eslint-config-prettier": "8.4.0",
     "eslint-loader": "4.0.2",
     "eslint-plugin-prettier": "4.0.0",
     "file-loader": "6.2.0",
