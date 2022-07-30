@@ -101,7 +101,7 @@
     "mini-css-extract-plugin": "2.6.1",
     "mocha": "10.0.0",
     "mock-fs": "5.1.2",
-    "mock-req-res": "1.2.0",
+    "mock-req-res": "1.2.1",
     "nock": "13.2.9",
     "node-fetch": "2.6.7",
     "nyc": "15.1.0",
