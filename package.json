@@ -103,7 +103,7 @@
     "mock-fs": "5.2.0",
     "mock-req-res": "1.2.1",
     "nock": "13.3.0",
-    "node-fetch": "2.6.8",
+    "node-fetch": "2.6.9",
     "nyc": "15.1.0",
     "pinst": "3.0.0",
     "prettier": "2.8.3",
